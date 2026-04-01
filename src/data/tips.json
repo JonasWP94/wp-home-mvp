@@ -1,0 +1,3079 @@
+[
+  {
+    "id": 1,
+    "title": "Wärmepumpe statt Gasheizung",
+    "category": "Energie",
+    "hg_range": "3-4",
+    "hg_levels": [
+      3,
+      4
+    ],
+    "property": "efh",
+    "tenure": "eigentum",
+    "timing": "langfristig",
+    "effort": "zeitintensiv",
+    "investment": "grosse_invest",
+    "wp_plan": "plus",
+    "description": "Wärmepumpe (COP 3,5) statt Gas: ~700 EUR Ersparnis + 800 EUR CO2-Abgabe. 70% BAFA-Förderung möglich. Amortisation ~10 J.",
+    "savings_eur": 700,
+    "savings_by_hg": {
+      "hg1": null,
+      "hg2": null,
+      "hg3": 700,
+      "hg4": 700
+    }
+  },
+  {
+    "id": 2,
+    "title": "Solaranlage 10 kWp + Speicher",
+    "category": "Energie",
+    "hg_range": "2-4",
+    "hg_levels": [
+      2,
+      3,
+      4
+    ],
+    "property": "efh",
+    "tenure": "eigentum",
+    "timing": "langfristig",
+    "effort": "zeitintensiv",
+    "investment": "grosse_invest",
+    "wp_plan": "plus",
+    "description": "10 kWp = ~9.500 kWh/J. 30% Eigenverbrauch + 70% Einspeisung. Amortisation ~12 J.",
+    "savings_eur": 300,
+    "savings_by_hg": {
+      "hg1": null,
+      "hg2": 300,
+      "hg3": 300,
+      "hg4": 300
+    }
+  },
+  {
+    "id": 3,
+    "title": "Carsharing statt Zweitwagen",
+    "category": "Mobilitaet",
+    "hg_range": "2-4",
+    "hg_levels": [
+      2,
+      3,
+      4
+    ],
+    "property": "gross_miet",
+    "tenure": "miete",
+    "timing": "mittel",
+    "effort": "aufwand",
+    "investment": "kostenlos",
+    "wp_plan": "nein",
+    "description": "Zweitwagen Vollkosten: ~4.450 EUR/J. Carsharing 3.000 km: ~1.500 EUR. Diff: ~2.950 EUR.",
+    "savings_eur": 2950,
+    "savings_by_hg": {
+      "hg1": null,
+      "hg2": 2950,
+      "hg3": 2950,
+      "hg4": 2950
+    }
+  },
+  {
+    "id": 4,
+    "title": "Zimmer oder Parkplatz untervermieten",
+    "category": "Wohnen",
+    "hg_range": "1-4",
+    "hg_levels": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "property": "gross_miet",
+    "tenure": "eigentum",
+    "timing": "mittel",
+    "effort": "aufwand",
+    "investment": "kostenlos",
+    "wp_plan": "nein",
+    "description": "Gaestezimmer WG: 400-600 EUR/Mo. Parkplatz: 80-150 EUR/Mo. Steuerfrei bis 520 EUR/J.",
+    "savings_eur": 6000,
+    "savings_by_hg": {
+      "hg1": 6000,
+      "hg2": 6000,
+      "hg3": 6000,
+      "hg4": 6000
+    }
+  },
+  {
+    "id": 5,
+    "title": "Strom+Gas automatisch wechseln",
+    "category": "Energie",
+    "hg_range": "2-4",
+    "hg_levels": [
+      2,
+      3,
+      4
+    ],
+    "property": "mittel_miet",
+    "tenure": "miete",
+    "timing": "sofort",
+    "effort": "muehelos",
+    "investment": "kostenlos",
+    "wp_plan": "core",
+    "description": "4-Pers-HH: ~836 EUR netto/J nach 20% Fee.",
+    "savings_eur": 836,
+    "savings_by_hg": {
+      "hg1": null,
+      "hg2": 836,
+      "hg3": 836,
+      "hg4": 836
+    }
+  },
+  {
+    "id": 6,
+    "title": "Mittagessen mitnehmen statt Kantine",
+    "category": "Essen",
+    "hg_range": "1-4",
+    "hg_levels": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "property": "klein_miet",
+    "tenure": "miete",
+    "timing": "sofort",
+    "effort": "aufwand",
+    "investment": "kostenlos",
+    "wp_plan": "nein",
+    "description": "Kantine 7 EUR/Tag x 220 Tage = 1.540 EUR. Selbst kochen: ~660 EUR. Ersparnis: ~880 EUR/J.",
+    "savings_eur": 880,
+    "savings_by_hg": {
+      "hg1": 880,
+      "hg2": 880,
+      "hg3": 880,
+      "hg4": 880
+    }
+  },
+  {
+    "id": 7,
+    "title": "Steuererklaerung machen",
+    "category": "Steuern",
+    "hg_range": "1-4",
+    "hg_levels": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "property": "mittel_miet",
+    "tenure": "miete",
+    "timing": "mittel",
+    "effort": "aufwand",
+    "investment": "kostenlos",
+    "wp_plan": "plus",
+    "description": "88% aller Erklaerungen = Erstattung. Ø 1.095 EUR. Stundenlohn: 274-548 EUR/h.",
+    "savings_eur": 1095,
+    "savings_by_hg": {
+      "hg1": 1095,
+      "hg2": 1095,
+      "hg3": 1095,
+      "hg4": 1095
+    }
+  },
+  {
+    "id": 8,
+    "title": "Doppelte Haushaltsfuehrung absetzen",
+    "category": "Steuern",
+    "hg_range": "1-4",
+    "hg_levels": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "property": "klein_miet",
+    "tenure": "miete",
+    "timing": "mittel",
+    "effort": "aufwand",
+    "investment": "kostenlos",
+    "wp_plan": "plus",
+    "description": "Zweitwohnung max 1.000 EUR/Mo absetzbar. Bei 42% Steuersatz: bis 5.040 EUR/J.",
+    "savings_eur": 5040,
+    "savings_by_hg": {
+      "hg1": 5040,
+      "hg2": 5040,
+      "hg3": 5040,
+      "hg4": 5040
+    }
+  },
+  {
+    "id": 9,
+    "title": "Mietpreisbremse pruefen",
+    "category": "Wohnen",
+    "hg_range": "1-4",
+    "hg_levels": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "property": "gross_miet",
+    "tenure": "miete",
+    "timing": "mittel",
+    "effort": "aufwand",
+    "investment": "kostenlos",
+    "wp_plan": "plus",
+    "description": "Laut Mieterbund jede 2. Abrechnung fehlerhaft. Ø Rueckerstattung: 220 EUR.",
+    "savings_eur": 220,
+    "savings_by_hg": {
+      "hg1": 220,
+      "hg2": 220,
+      "hg3": 220,
+      "hg4": 220
+    }
+  },
+  {
+    "id": 10,
+    "title": "Deutschlandticket statt Auto",
+    "category": "Mobilitaet",
+    "hg_range": "1-4",
+    "hg_levels": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "property": "mittel_miet",
+    "tenure": "miete",
+    "timing": "sofort",
+    "effort": "muehelos",
+    "investment": "kostenlos",
+    "wp_plan": "nein",
+    "description": "Auto-Pendeln 30 km: ~360 EUR/Mo. D-Ticket: 63 EUR. Diff: ~297 EUR/Mo = 3.564 EUR/J.",
+    "savings_eur": 3564,
+    "savings_by_hg": {
+      "hg1": 3564,
+      "hg2": 3564,
+      "hg3": 3564,
+      "hg4": 3564
+    }
+  },
+  {
+    "id": 11,
+    "title": "Balkonkraftwerk installieren",
+    "category": "Energie",
+    "hg_range": "1-4",
+    "hg_levels": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "property": "mittel_miet",
+    "tenure": "eigentum",
+    "timing": "mittel",
+    "effort": "aufwand",
+    "investment": "kleine_invest",
+    "wp_plan": "plus",
+    "description": "800 Wp = ~600-750 kWh/J. 80% Eigenverbrauch x 35ct = ~168 EUR/J. Invest: 400-600 EUR. Amort: 2,5-3,5 J.",
+    "savings_eur": 168,
+    "savings_by_hg": {
+      "hg1": 168,
+      "hg2": 168,
+      "hg3": 168,
+      "hg4": 168
+    }
+  },
+  {
+    "id": 12,
+    "title": "Gasanbieter wechseln",
+    "category": "Energie",
+    "hg_range": "2-4",
+    "hg_levels": [
+      2,
+      3,
+      4
+    ],
+    "property": "efh",
+    "tenure": "eigentum",
+    "timing": "sofort",
+    "effort": "muehelos",
+    "investment": "kostenlos",
+    "wp_plan": "core",
+    "description": "20k kWh Gas Grundvers. ~2.460 EUR. Alternativ ~1.600 EUR. Ersparnis: bis 860 EUR.",
+    "savings_eur": 860,
+    "savings_by_hg": {
+      "hg1": null,
+      "hg2": 860,
+      "hg3": 860,
+      "hg4": 860
+    }
+  },
+  {
+    "id": 13,
+    "title": "Stromanbieter wechseln",
+    "category": "Energie",
+    "hg_range": "2-4",
+    "hg_levels": [
+      2,
+      3,
+      4
+    ],
+    "property": "mittel_miet",
+    "tenure": "miete",
+    "timing": "sofort",
+    "effort": "muehelos",
+    "investment": "kostenlos",
+    "wp_plan": "core",
+    "description": "3.500 kWh: Grundversorger ~1.225 EUR. Guenstig ~980 EUR. Ersparnis: ~245 EUR.",
+    "savings_eur": 1225,
+    "savings_by_hg": {
+      "hg1": null,
+      "hg2": 1225,
+      "hg3": 1225,
+      "hg4": 1225
+    }
+  },
+  {
+    "id": 14,
+    "title": "KFZ-Versicherung jaehrlich wechseln",
+    "category": "Versicherungen",
+    "hg_range": "1-4",
+    "hg_levels": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "property": "mittel_miet",
+    "tenure": "miete",
+    "timing": "sofort",
+    "effort": "aufwand",
+    "investment": "kostenlos",
+    "wp_plan": "plus",
+    "description": "Ø Vollkasko: 800 EUR. Guenstigster gleiche Leistung: 400-500 EUR.",
+    "savings_eur": 800,
+    "savings_by_hg": {
+      "hg1": 800,
+      "hg2": 800,
+      "hg3": 800,
+      "hg4": 800
+    }
+  },
+  {
+    "id": 15,
+    "title": "Thermoskanne statt Coffee-to-go",
+    "category": "Essen",
+    "hg_range": "1-4",
+    "hg_levels": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "property": "klein_miet",
+    "tenure": "miete",
+    "timing": "sofort",
+    "effort": "muehelos",
+    "investment": "kostenlos",
+    "wp_plan": "nein",
+    "description": "1 Kaffee to go 3 EUR x 220 Tage = 660 EUR/J. Selbst: 33 EUR. Ersparnis: ~600 EUR.",
+    "savings_eur": 660,
+    "savings_by_hg": {
+      "hg1": 660,
+      "hg2": 660,
+      "hg3": 660,
+      "hg4": 660
+    }
+  },
+  {
+    "id": 16,
+    "title": "No-Name statt Markenprodukte",
+    "category": "Essen",
+    "hg_range": "2-4",
+    "hg_levels": [
+      2,
+      3,
+      4
+    ],
+    "property": "mittel_miet",
+    "tenure": "miete",
+    "timing": "sofort",
+    "effort": "muehelos",
+    "investment": "kostenlos",
+    "wp_plan": "nein",
+    "description": "Wocheneinkauf Familie: 120 EUR Marke vs. 80 EUR Eigenmarke. Realistisch: ~400 EUR.",
+    "savings_eur": 120,
+    "savings_by_hg": {
+      "hg1": null,
+      "hg2": 120,
+      "hg3": 120,
+      "hg4": 120
+    }
+  },
+  {
+    "id": 17,
+    "title": "Fitnessstudio kuendigen oder guenstiger",
+    "category": "Vertraege",
+    "hg_range": "1-4",
+    "hg_levels": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "property": "klein_miet",
+    "tenure": "miete",
+    "timing": "sofort",
+    "effort": "muehelos",
+    "investment": "kostenlos",
+    "wp_plan": "plus",
+    "description": "Premium 50 EUR/Mo = 600 EUR/J. McFit 20 EUR = 240 EUR. Home-Workout = 0 EUR.",
+    "savings_eur": 50,
+    "savings_by_hg": {
+      "hg1": 50,
+      "hg2": 50,
+      "hg3": 50,
+      "hg4": 50
+    }
+  },
+  {
+    "id": 18,
+    "title": "Sondertilgung Baukredit vs. Festgeld",
+    "category": "Steuern",
+    "hg_range": "1-4",
+    "hg_levels": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "property": "efh",
+    "tenure": "eigentum",
+    "timing": "langfristig",
+    "effort": "aufwand",
+    "investment": "kostenlos",
+    "wp_plan": "nein",
+    "description": "Baukredit 1,5% Zins. Festgeld aktuell 3,5%. Differenz auf 100k: 2.000 EUR/J Zinsvorteil.",
+    "savings_eur": 2000,
+    "savings_by_hg": {
+      "hg1": 2000,
+      "hg2": 2000,
+      "hg3": 2000,
+      "hg4": 2000
+    }
+  },
+  {
+    "id": 19,
+    "title": "Kirchensteuer: Austritt",
+    "category": "Steuern",
+    "hg_range": "1-4",
+    "hg_levels": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "property": "mittel_miet",
+    "tenure": "miete",
+    "timing": "mittel",
+    "effort": "aufwand",
+    "investment": "kostenlos",
+    "wp_plan": "nein",
+    "description": "Bei 40.000 EUR Einkommen: ~585 EUR Kirchensteuer/J. Austritt beim Standesamt: 30 EUR einmalig.",
+    "savings_eur": 40000,
+    "savings_by_hg": {
+      "hg1": 40000,
+      "hg2": 40000,
+      "hg3": 40000,
+      "hg4": 40000
+    }
+  },
+  {
+    "id": 20,
+    "title": "Handwerkerleistungen absetzen (§35a)",
+    "category": "Steuern",
+    "hg_range": "2-4",
+    "hg_levels": [
+      2,
+      3,
+      4
+    ],
+    "property": "efh",
+    "tenure": "eigentum",
+    "timing": "mittel",
+    "effort": "aufwand",
+    "investment": "kostenlos",
+    "wp_plan": "plus",
+    "description": "20% direkt von Steuer ab. Max: 1.200 EUR/J.",
+    "savings_eur": 1200,
+    "savings_by_hg": {
+      "hg1": null,
+      "hg2": 1200,
+      "hg3": 1200,
+      "hg4": 1200
+    }
+  },
+  {
+    "id": 21,
+    "title": "Fahrgemeinschaft zur Arbeit",
+    "category": "Mobilitaet",
+    "hg_range": "1-4",
+    "hg_levels": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "property": "gross_miet",
+    "tenure": "miete",
+    "timing": "sofort",
+    "effort": "aufwand",
+    "investment": "kostenlos",
+    "wp_plan": "nein",
+    "description": "30 km Pendeln alleine: ~1.795 EUR/J. Zu zweit: 898 EUR. Ersparnis: ~897 EUR.",
+    "savings_eur": 1795,
+    "savings_by_hg": {
+      "hg1": 1795,
+      "hg2": 1795,
+      "hg3": 1795,
+      "hg4": 1795
+    }
+  },
+  {
+    "id": 22,
+    "title": "Pendlerpauschale absetzen",
+    "category": "Steuern",
+    "hg_range": "1-4",
+    "hg_levels": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "property": "efh",
+    "tenure": "eigentum",
+    "timing": "mittel",
+    "effort": "muehelos",
+    "investment": "kostenlos",
+    "wp_plan": "nein",
+    "description": "30 km x 0,30 EUR x 220 Tage = 1.980 EUR Werbungskosten. Ab km 21: 0,38 EUR.",
+    "savings_eur": 30,
+    "savings_by_hg": {
+      "hg1": 30,
+      "hg2": 30,
+      "hg3": 30,
+      "hg4": 30
+    }
+  },
+  {
+    "id": 23,
+    "title": "Nebenkostenabrechnung pruefen",
+    "category": "Wohnen",
+    "hg_range": "1-4",
+    "hg_levels": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "property": "gross_miet",
+    "tenure": "miete",
+    "timing": "sofort",
+    "effort": "aufwand",
+    "investment": "kostenlos",
+    "wp_plan": "plus",
+    "description": "Laut Mieterbund jede 2. Abrechnung fehlerhaft. Ø Rueckerstattung: 220 EUR.",
+    "savings_eur": 220,
+    "savings_by_hg": {
+      "hg1": 220,
+      "hg2": 220,
+      "hg3": 220,
+      "hg4": 220
+    }
+  },
+  {
+    "id": 24,
+    "title": "Urlaub in der Nebensaison buchen",
+    "category": "Freizeit",
+    "hg_range": "2-4",
+    "hg_levels": [
+      2,
+      3,
+      4
+    ],
+    "property": "mittel_miet",
+    "tenure": "miete",
+    "timing": "mittel",
+    "effort": "muehelos",
+    "investment": "kostenlos",
+    "wp_plan": "nein",
+    "description": "Familienurlaub Sommerferien: 3.000 EUR. Sep/Okt: 1.800 EUR. Diff: 1.200 EUR.",
+    "savings_eur": 1200,
+    "savings_by_hg": {
+      "hg1": null,
+      "hg2": 1200,
+      "hg3": 1200,
+      "hg4": 1200
+    }
+  },
+  {
+    "id": 25,
+    "title": "30-Tage-Regel bei Spontankaeufen",
+    "category": "Freizeit",
+    "hg_range": "1-4",
+    "hg_levels": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "property": "klein_miet",
+    "tenure": "miete",
+    "timing": "sofort",
+    "effort": "muehelos",
+    "investment": "kostenlos",
+    "wp_plan": "nein",
+    "description": "Ø Spontankaeufe in DE: 3.300 EUR/J. 30 Tage warten → 60% vergehen. Konservativ: 500 EUR.",
+    "savings_eur": 3300,
+    "savings_by_hg": {
+      "hg1": 3300,
+      "hg2": 3300,
+      "hg3": 3300,
+      "hg4": 3300
+    }
+  },
+  {
+    "id": 26,
+    "title": "Daemmung oberste Geschossdecke",
+    "category": "Energie",
+    "hg_range": "2-4",
+    "hg_levels": [
+      2,
+      3,
+      4
+    ],
+    "property": "efh",
+    "tenure": "eigentum",
+    "timing": "langfristig",
+    "effort": "zeitintensiv",
+    "investment": "grosse_invest",
+    "wp_plan": "plus",
+    "description": "Ungedaemmtes Dach: 15-20% Waermeverlust. Bei 1.800 EUR: 270-360 EUR/J. Amort: 8-15 J.",
+    "savings_eur": 315,
+    "savings_by_hg": {
+      "hg1": null,
+      "hg2": 315,
+      "hg3": 315,
+      "hg4": 315
+    }
+  },
+  {
+    "id": 27,
+    "title": "Fenstertausch auf 3-fach-Verglasung",
+    "category": "Energie",
+    "hg_range": "2-4",
+    "hg_levels": [
+      2,
+      3,
+      4
+    ],
+    "property": "efh",
+    "tenure": "eigentum",
+    "timing": "langfristig",
+    "effort": "zeitintensiv",
+    "investment": "grosse_invest",
+    "wp_plan": "plus",
+    "description": "Alte 2-fach: U-Wert 2,8. Neue 3-fach: U-Wert 0,6. Waermeverlust sinkt ~75%. Invest: 8-15k EUR.",
+    "savings_eur": 400,
+    "savings_by_hg": {
+      "hg1": null,
+      "hg2": 400,
+      "hg3": 400,
+      "hg4": 400
+    }
+  },
+  {
+    "id": 28,
+    "title": "Smarte Thermostate installieren",
+    "category": "Energie",
+    "hg_range": "2-4",
+    "hg_levels": [
+      2,
+      3,
+      4
+    ],
+    "property": "efh",
+    "tenure": "eigentum",
+    "timing": "sofort",
+    "effort": "aufwand",
+    "investment": "kleine_invest",
+    "wp_plan": "plus",
+    "description": "10-15% Heizkosten. 5 Stueck x 50 EUR = 250 EUR Invest. Amort: 1-1,5 J.",
+    "savings_eur": 50,
+    "savings_by_hg": {
+      "hg1": null,
+      "hg2": 50,
+      "hg3": 50,
+      "hg4": 50
+    }
+  },
+  {
+    "id": 29,
+    "title": "LED-Lampen ueberall einsetzen",
+    "category": "Energie",
+    "hg_range": "2-4",
+    "hg_levels": [
+      2,
+      3,
+      4
+    ],
+    "property": "efh",
+    "tenure": "eigentum",
+    "timing": "sofort",
+    "effort": "muehelos",
+    "investment": "kleine_invest",
+    "wp_plan": "free",
+    "description": "10x 60W-Gluehbirnen: 307 EUR/J. LED: 36 EUR. Ersparnis: 271 EUR/J. Amort: 6 Wochen.",
+    "savings_eur": 271,
+    "savings_by_hg": {
+      "hg1": null,
+      "hg2": 271,
+      "hg3": 271,
+      "hg4": 271
+    }
+  },
+  {
+    "id": 30,
+    "title": "Internetanbieter jaehrlich wechseln",
+    "category": "Vertraege",
+    "hg_range": "1-4",
+    "hg_levels": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "property": "mittel_miet",
+    "tenure": "miete",
+    "timing": "sofort",
+    "effort": "aufwand",
+    "investment": "kostenlos",
+    "wp_plan": "plus",
+    "description": "Bestandskunde 45 EUR/Mo. Neukunde: 25 EUR fuer 250 Mbit. Diff: 20 EUR/Mo = 240 EUR/J.",
+    "savings_eur": 240,
+    "savings_by_hg": {
+      "hg1": 240,
+      "hg2": 240,
+      "hg3": 240,
+      "hg4": 240
+    }
+  },
+  {
+    "id": 31,
+    "title": "Streaming-Abos konsolidieren",
+    "category": "Vertraege",
+    "hg_range": "1-4",
+    "hg_levels": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "property": "mittel_miet",
+    "tenure": "miete",
+    "timing": "sofort",
+    "effort": "muehelos",
+    "investment": "kostenlos",
+    "wp_plan": "plus",
+    "description": "Netflix+Disney++Sky+Amazon+Spotify = 57 EUR/Mo. Auf 2 reduziert: 300 EUR. Ersparnis: 384 EUR/J.",
+    "savings_eur": 384,
+    "savings_by_hg": {
+      "hg1": 384,
+      "hg2": 384,
+      "hg3": 384,
+      "hg4": 384
+    }
+  },
+  {
+    "id": 32,
+    "title": "Handyvertrag optimieren",
+    "category": "Vertraege",
+    "hg_range": "1-4",
+    "hg_levels": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "property": "klein_miet",
+    "tenure": "miete",
+    "timing": "sofort",
+    "effort": "aufwand",
+    "investment": "kostenlos",
+    "wp_plan": "plus",
+    "description": "Alter Vertrag 30 EUR/Mo. Neu: 10 EUR fuer 15 GB. Diff: 20 EUR/Mo = 240 EUR/J.",
+    "savings_eur": 240,
+    "savings_by_hg": {
+      "hg1": 240,
+      "hg2": 240,
+      "hg3": 240,
+      "hg4": 240
+    }
+  },
+  {
+    "id": 33,
+    "title": "Krankenkasse wechseln",
+    "category": "Versicherungen",
+    "hg_range": "1-4",
+    "hg_levels": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "property": "mittel_miet",
+    "tenure": "miete",
+    "timing": "mittel",
+    "effort": "aufwand",
+    "investment": "kostenlos",
+    "wp_plan": "nein",
+    "description": "Zusatzbeitrag 0,9-2,7%. Bei 4k Brutto: Diff bis 72 EUR/Mo. Realistisch: 20-30 EUR/Mo.",
+    "savings_eur": 300,
+    "savings_by_hg": {
+      "hg1": 300,
+      "hg2": 300,
+      "hg3": 300,
+      "hg4": 300
+    }
+  },
+  {
+    "id": 34,
+    "title": "Leitungswasser statt Flaschenwasser",
+    "category": "Essen",
+    "hg_range": "2-4",
+    "hg_levels": [
+      2,
+      3,
+      4
+    ],
+    "property": "mittel_miet",
+    "tenure": "miete",
+    "timing": "sofort",
+    "effort": "muehelos",
+    "investment": "kostenlos",
+    "wp_plan": "nein",
+    "description": "Flaschenwasser 0,50 EUR/L. Leitungswasser: 0,005 EUR/L. Familie: 500-800 EUR/J.",
+    "savings_eur": 650,
+    "savings_by_hg": {
+      "hg1": null,
+      "hg2": 650,
+      "hg3": 650,
+      "hg4": 650
+    }
+  },
+  {
+    "id": 35,
+    "title": "Meal-Prep fuer die Woche",
+    "category": "Essen",
+    "hg_range": "1-4",
+    "hg_levels": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "property": "mittel_miet",
+    "tenure": "miete",
+    "timing": "sofort",
+    "effort": "aufwand",
+    "investment": "kostenlos",
+    "wp_plan": "nein",
+    "description": "Spontan + Lieferdienst: 250 EUR/Mo. Geplant: 150 EUR/Mo. Diff: 100 EUR/Mo = 1.200 EUR/J.",
+    "savings_eur": 1200,
+    "savings_by_hg": {
+      "hg1": 1200,
+      "hg2": 1200,
+      "hg3": 1200,
+      "hg4": 1200
+    }
+  },
+  {
+    "id": 36,
+    "title": "Sparduschkopf einbauen",
+    "category": "Energie",
+    "hg_range": "2-4",
+    "hg_levels": [
+      2,
+      3,
+      4
+    ],
+    "property": "mittel_miet",
+    "tenure": "miete",
+    "timing": "sofort",
+    "effort": "muehelos",
+    "investment": "kleine_invest",
+    "wp_plan": "free",
+    "description": "50% weniger Wasser. 4 Pers x 365 Tage: 93.440L weniger. Realistisch: 150-200 EUR.",
+    "savings_eur": 200,
+    "savings_by_hg": {
+      "hg1": null,
+      "hg2": 200,
+      "hg3": 200,
+      "hg4": 200
+    }
+  },
+  {
+    "id": 37,
+    "title": "Duschen statt Baden",
+    "category": "Energie",
+    "hg_range": "2-4",
+    "hg_levels": [
+      2,
+      3,
+      4
+    ],
+    "property": "mittel_miet",
+    "tenure": "miete",
+    "timing": "sofort",
+    "effort": "muehelos",
+    "investment": "kostenlos",
+    "wp_plan": "free",
+    "description": "Vollbad 150L = 1,75 EUR. Dusche 50L = 0,60 EUR. 3x/Wo statt Baden: 179 EUR/J.",
+    "savings_eur": 75,
+    "savings_by_hg": {
+      "hg1": null,
+      "hg2": 75,
+      "hg3": 75,
+      "hg4": 75
+    }
+  },
+  {
+    "id": 38,
+    "title": "Stosslueften statt Kipplueften",
+    "category": "Energie",
+    "hg_range": "2-4",
+    "hg_levels": [
+      2,
+      3,
+      4
+    ],
+    "property": "gross_miet",
+    "tenure": "miete",
+    "timing": "sofort",
+    "effort": "muehelos",
+    "investment": "kostenlos",
+    "wp_plan": "free",
+    "description": "Kipplueften Winter: ~200 EUR Mehrkosten/Heizsaison. Stosslueften 3x5Min tauscht komplett aus.",
+    "savings_eur": 200,
+    "savings_by_hg": {
+      "hg1": null,
+      "hg2": 200,
+      "hg3": 200,
+      "hg4": 200
+    }
+  },
+  {
+    "id": 39,
+    "title": "Heizung nachts/bei Abwesenheit runter",
+    "category": "Energie",
+    "hg_range": "1-4",
+    "hg_levels": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "property": "mittel_miet",
+    "tenure": "miete",
+    "timing": "sofort",
+    "effort": "muehelos",
+    "investment": "kostenlos",
+    "wp_plan": "free",
+    "description": "21→17°C nachts spart ~10% Heizkosten. Bei 1.200 EUR/J = 120 EUR. +80 EUR Tagesabsenkung.",
+    "savings_eur": 1200,
+    "savings_by_hg": {
+      "hg1": 1200,
+      "hg2": 1200,
+      "hg3": 1200,
+      "hg4": 1200
+    }
+  },
+  {
+    "id": 40,
+    "title": "Hydraulischer Abgleich der Heizung",
+    "category": "Energie",
+    "hg_range": "2-4",
+    "hg_levels": [
+      2,
+      3,
+      4
+    ],
+    "property": "efh",
+    "tenure": "eigentum",
+    "timing": "mittel",
+    "effort": "aufwand",
+    "investment": "kleine_invest",
+    "wp_plan": "plus",
+    "description": "Ungeglichene Heizung: 15-20% Mehrkosten. Abgleich: 400-800 EUR. BAFA 15%. Amort: 2-4 J.",
+    "savings_eur": 800,
+    "savings_by_hg": {
+      "hg1": null,
+      "hg2": 800,
+      "hg3": 800,
+      "hg4": 800
+    }
+  },
+  {
+    "id": 41,
+    "title": "Heizungswartung jaehrlich",
+    "category": "Energie",
+    "hg_range": "2-4",
+    "hg_levels": [
+      2,
+      3,
+      4
+    ],
+    "property": "efh",
+    "tenure": "eigentum",
+    "timing": "mittel",
+    "effort": "aufwand",
+    "investment": "kleine_invest",
+    "wp_plan": "plus",
+    "description": "Nicht gewartet: 10-15% hoehere Kosten. Wartung: 150-250 EUR. Netto: 30-120 EUR/J + laengere Lebensdauer.",
+    "savings_eur": 75,
+    "savings_by_hg": {
+      "hg1": null,
+      "hg2": 75,
+      "hg3": 75,
+      "hg4": 75
+    }
+  },
+  {
+    "id": 42,
+    "title": "Alte Heizungspumpe tauschen (BAFA)",
+    "category": "Energie",
+    "hg_range": "2-4",
+    "hg_levels": [
+      2,
+      3,
+      4
+    ],
+    "property": "efh",
+    "tenure": "eigentum",
+    "timing": "mittel",
+    "effort": "aufwand",
+    "investment": "kleine_invest",
+    "wp_plan": "plus",
+    "description": "Alte Pumpe: 500-800 kWh/J. Neue: 50-100 kWh. BAFA 15%. Amort: 1,5-2,5 J.",
+    "savings_eur": 200,
+    "savings_by_hg": {
+      "hg1": null,
+      "hg2": 200,
+      "hg3": 200,
+      "hg4": 200
+    }
+  },
+  {
+    "id": 43,
+    "title": "Standby eliminieren (Steckerleisten)",
+    "category": "Energie",
+    "hg_range": "1-4",
+    "hg_levels": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "property": "mittel_miet",
+    "tenure": "miete",
+    "timing": "sofort",
+    "effort": "muehelos",
+    "investment": "kleine_invest",
+    "wp_plan": "free",
+    "description": "Ø Standby: 300 kWh/J (UBA). Bei 35ct = 105 EUR/J. Amort: 5 Monate.",
+    "savings_eur": 105,
+    "savings_by_hg": {
+      "hg1": 105,
+      "hg2": 105,
+      "hg3": 105,
+      "hg4": 105
+    }
+  },
+  {
+    "id": 44,
+    "title": "Waschmaschine auf 30°C statt 60°C",
+    "category": "Energie",
+    "hg_range": "2-4",
+    "hg_levels": [
+      2,
+      3,
+      4
+    ],
+    "property": "mittel_miet",
+    "tenure": "miete",
+    "timing": "sofort",
+    "effort": "muehelos",
+    "investment": "kostenlos",
+    "wp_plan": "free",
+    "description": "60°C: 1,2 kWh. 30°C: 0,4 kWh. Diff x 200 Waschgaenge = 56 EUR/J.",
+    "savings_eur": 56,
+    "savings_by_hg": {
+      "hg1": null,
+      "hg2": 56,
+      "hg3": 56,
+      "hg4": 56
+    }
+  },
+  {
+    "id": 45,
+    "title": "Waeschetrockner vermeiden",
+    "category": "Energie",
+    "hg_range": "2-4",
+    "hg_levels": [
+      2,
+      3,
+      4
+    ],
+    "property": "mittel_miet",
+    "tenure": "miete",
+    "timing": "sofort",
+    "effort": "muehelos",
+    "investment": "kostenlos",
+    "wp_plan": "free",
+    "description": "Trockner: 3,5 kWh x 150 Ladungen = 184 EUR/J. Waeschestaender: 0 EUR. Invest: 15 EUR.",
+    "savings_eur": 184,
+    "savings_by_hg": {
+      "hg1": null,
+      "hg2": 184,
+      "hg3": 184,
+      "hg4": 184
+    }
+  },
+  {
+    "id": 46,
+    "title": "Heizung 1°C runterdrehen",
+    "category": "Energie",
+    "hg_range": "1-4",
+    "hg_levels": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "property": "mittel_miet",
+    "tenure": "miete",
+    "timing": "sofort",
+    "effort": "muehelos",
+    "investment": "kostenlos",
+    "wp_plan": "free",
+    "description": "Heizkosten 1.200 EUR/J. 1°C weniger = 6% = 72 EUR. 2°C = 12% = 144 EUR.",
+    "savings_eur": 1200,
+    "savings_by_hg": {
+      "hg1": 1200,
+      "hg2": 1200,
+      "hg3": 1200,
+      "hg4": 1200
+    }
+  },
+  {
+    "id": 47,
+    "title": "Fenster und Tueren abdichten",
+    "category": "Energie",
+    "hg_range": "1-4",
+    "hg_levels": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "property": "mittel_miet",
+    "tenure": "miete",
+    "timing": "sofort",
+    "effort": "muehelos",
+    "investment": "kleine_invest",
+    "wp_plan": "free",
+    "description": "Undichte Fenster: bis 20% Waermeverlust. Dichtstreifen 5 EUR/Fenster. Amort: 4 Monate.",
+    "savings_eur": 60,
+    "savings_by_hg": {
+      "hg1": 60,
+      "hg2": 60,
+      "hg3": 60,
+      "hg4": 60
+    }
+  },
+  {
+    "id": 48,
+    "title": "Rollladen nachts schliessen",
+    "category": "Energie",
+    "hg_range": "2-4",
+    "hg_levels": [
+      2,
+      3,
+      4
+    ],
+    "property": "efh",
+    "tenure": "eigentum",
+    "timing": "sofort",
+    "effort": "muehelos",
+    "investment": "kostenlos",
+    "wp_plan": "free",
+    "description": "Geschlossene Rollladan: -20% Fensterverlust. 10 Fenster: ~108 EUR/J.",
+    "savings_eur": 108,
+    "savings_by_hg": {
+      "hg1": null,
+      "hg2": 108,
+      "hg3": 108,
+      "hg4": 108
+    }
+  },
+  {
+    "id": 49,
+    "title": "Heizkoerper freihalten",
+    "category": "Energie",
+    "hg_range": "1-4",
+    "hg_levels": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "property": "mittel_miet",
+    "tenure": "miete",
+    "timing": "sofort",
+    "effort": "muehelos",
+    "investment": "kostenlos",
+    "wp_plan": "free",
+    "description": "Sofa vor Heizkoerper: bis 15% weniger Waermeabgabe. Realistisch: 50-80 EUR.",
+    "savings_eur": 80,
+    "savings_by_hg": {
+      "hg1": 80,
+      "hg2": 80,
+      "hg3": 80,
+      "hg4": 80
+    }
+  },
+  {
+    "id": 50,
+    "title": "Heizkoerper entlueften",
+    "category": "Energie",
+    "hg_range": "1-4",
+    "hg_levels": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "property": "mittel_miet",
+    "tenure": "miete",
+    "timing": "sofort",
+    "effort": "muehelos",
+    "investment": "kostenlos",
+    "wp_plan": "free",
+    "description": "Luft im Heizkoerper: 3-5% Mehrkosten. Schluessel: 2 EUR. 36-60 EUR/J gespart.",
+    "savings_eur": 48,
+    "savings_by_hg": {
+      "hg1": 48,
+      "hg2": 48,
+      "hg3": 48,
+      "hg4": 48
+    }
+  },
+  {
+    "id": 51,
+    "title": "Eco-Programm Spuelmaschine",
+    "category": "Energie",
+    "hg_range": "1-4",
+    "hg_levels": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "property": "mittel_miet",
+    "tenure": "miete",
+    "timing": "sofort",
+    "effort": "muehelos",
+    "investment": "kostenlos",
+    "wp_plan": "free",
+    "description": "Standard 65°C: 1,2 kWh + 12L. Eco 50°C: 0,8 kWh + 9L. Diff: ~50 EUR/J.",
+    "savings_eur": 50,
+    "savings_by_hg": {
+      "hg1": 50,
+      "hg2": 50,
+      "hg3": 50,
+      "hg4": 50
+    }
+  },
+  {
+    "id": 52,
+    "title": "Wasserkocher statt Herdplatte",
+    "category": "Energie",
+    "hg_range": "1-4",
+    "hg_levels": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "property": "mittel_miet",
+    "tenure": "miete",
+    "timing": "sofort",
+    "effort": "muehelos",
+    "investment": "kostenlos",
+    "wp_plan": "free",
+    "description": "Bei 700 Mal/J: 12 EUR gespart. Plus: 3 Min schneller.",
+    "savings_eur": 12,
+    "savings_by_hg": {
+      "hg1": 12,
+      "hg2": 12,
+      "hg3": 12,
+      "hg4": 12
+    }
+  },
+  {
+    "id": 53,
+    "title": "Kochen mit Deckel",
+    "category": "Energie",
+    "hg_range": "1-4",
+    "hg_levels": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "property": "mittel_miet",
+    "tenure": "miete",
+    "timing": "sofort",
+    "effort": "muehelos",
+    "investment": "kostenlos",
+    "wp_plan": "free",
+    "description": "Ohne Deckel: 3x mehr Energie. ~28 EUR/J Diff.",
+    "savings_eur": 28,
+    "savings_by_hg": {
+      "hg1": 28,
+      "hg2": 28,
+      "hg3": 28,
+      "hg4": 28
+    }
+  },
+  {
+    "id": 54,
+    "title": "Spuelmaschine statt Handwaesche",
+    "category": "Energie",
+    "hg_range": "1-4",
+    "hg_levels": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "property": "mittel_miet",
+    "tenure": "miete",
+    "timing": "sofort",
+    "effort": "muehelos",
+    "investment": "kostenlos",
+    "wp_plan": "free",
+    "description": "Handwaesche: 40-50L/Spuelgang. Spuelmaschine: 9-12L. ~50 EUR/J realistisch.",
+    "savings_eur": 50,
+    "savings_by_hg": {
+      "hg1": 50,
+      "hg2": 50,
+      "hg3": 50,
+      "hg4": 50
+    }
+  },
+  {
+    "id": 55,
+    "title": "WC-Spuelung mit Spuelstop",
+    "category": "Energie",
+    "hg_range": "1-4",
+    "hg_levels": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "property": "mittel_miet",
+    "tenure": "miete",
+    "timing": "sofort",
+    "effort": "muehelos",
+    "investment": "kostenlos",
+    "wp_plan": "free",
+    "description": "Normal: 9L/Spuelung. Spuelstop: 4,5L. Realistisch: 30-40 EUR/J.",
+    "savings_eur": 35,
+    "savings_by_hg": {
+      "hg1": 35,
+      "hg2": 35,
+      "hg3": 35,
+      "hg4": 35
+    }
+  },
+  {
+    "id": 56,
+    "title": "Waschmaschine nur voll beladen",
+    "category": "Energie",
+    "hg_range": "2-4",
+    "hg_levels": [
+      2,
+      3,
+      4
+    ],
+    "property": "mittel_miet",
+    "tenure": "miete",
+    "timing": "sofort",
+    "effort": "muehelos",
+    "investment": "kostenlos",
+    "wp_plan": "free",
+    "description": "Halbvoll braucht fast gleich viel. 50 Gaenge weniger/J: ~43 EUR.",
+    "savings_eur": 43,
+    "savings_by_hg": {
+      "hg1": null,
+      "hg2": 43,
+      "hg3": 43,
+      "hg4": 43
+    }
+  },
+  {
+    "id": 57,
+    "title": "Homeoffice-Pauschale",
+    "category": "Steuern",
+    "hg_range": "1-4",
+    "hg_levels": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "property": "mittel_miet",
+    "tenure": "miete",
+    "timing": "mittel",
+    "effort": "muehelos",
+    "investment": "kostenlos",
+    "wp_plan": "plus",
+    "description": "200 HO-Tage x 6 EUR = 1.200 EUR Pauschale. Bei 42% Steuersatz: 504 EUR.",
+    "savings_eur": 1200,
+    "savings_by_hg": {
+      "hg1": 1200,
+      "hg2": 1200,
+      "hg3": 1200,
+      "hg4": 1200
+    }
+  },
+  {
+    "id": 58,
+    "title": "Haushaltsnahe Dienstleistungen absetzen",
+    "category": "Steuern",
+    "hg_range": "2-4",
+    "hg_levels": [
+      2,
+      3,
+      4
+    ],
+    "property": "efh",
+    "tenure": "eigentum",
+    "timing": "mittel",
+    "effort": "aufwand",
+    "investment": "kostenlos",
+    "wp_plan": "plus",
+    "description": "Putzhilfe 200 EUR/Mo: 480 EUR Steuerermaeßigung. Max: 800 EUR/J.",
+    "savings_eur": 200,
+    "savings_by_hg": {
+      "hg1": null,
+      "hg2": 200,
+      "hg3": 200,
+      "hg4": 200
+    }
+  },
+  {
+    "id": 59,
+    "title": "Vermoegenswirksame Leistungen nutzen",
+    "category": "Steuern",
+    "hg_range": "1-4",
+    "hg_levels": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "property": "klein_miet",
+    "tenure": "miete",
+    "timing": "mittel",
+    "effort": "aufwand",
+    "investment": "kostenlos",
+    "wp_plan": "nein",
+    "description": "Arbeitgeber zahlt bis 40 EUR/Mo = 480 EUR/J geschenkt.",
+    "savings_eur": 40,
+    "savings_by_hg": {
+      "hg1": 40,
+      "hg2": 40,
+      "hg3": 40,
+      "hg4": 40
+    }
+  },
+  {
+    "id": 60,
+    "title": "Flugentschaedigung einfordern",
+    "category": "Steuern",
+    "hg_range": "1-4",
+    "hg_levels": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "property": "mittel_miet",
+    "tenure": "miete",
+    "timing": "sofort",
+    "effort": "aufwand",
+    "investment": "kostenlos",
+    "wp_plan": "nein",
+    "description": "Verspaetung >3h oder Annullierung <14 Tage: 250-600 EUR. Flightright uebernimmt fuer 25-30% Provision.",
+    "savings_eur": 600,
+    "savings_by_hg": {
+      "hg1": 600,
+      "hg2": 600,
+      "hg3": 600,
+      "hg4": 600
+    }
+  },
+  {
+    "id": 61,
+    "title": "Zirkulationspumpe mit Zeitschaltuhr",
+    "category": "Energie",
+    "hg_range": "2-4",
+    "hg_levels": [
+      2,
+      3,
+      4
+    ],
+    "property": "efh",
+    "tenure": "eigentum",
+    "timing": "sofort",
+    "effort": "aufwand",
+    "investment": "kleine_invest",
+    "wp_plan": "free",
+    "description": "Pumpe 24/7: ~500 kWh/J Verlust. Zeitschaltuhr (2h morgens+abends): spart ~122 EUR.",
+    "savings_eur": 122,
+    "savings_by_hg": {
+      "hg1": null,
+      "hg2": 122,
+      "hg3": 122,
+      "hg4": 122
+    }
+  },
+  {
+    "id": 62,
+    "title": "Kellerdecke daemmen (DIY)",
+    "category": "Energie",
+    "hg_range": "2-4",
+    "hg_levels": [
+      2,
+      3,
+      4
+    ],
+    "property": "efh",
+    "tenure": "eigentum",
+    "timing": "langfristig",
+    "effort": "aufwand",
+    "investment": "kleine_invest",
+    "wp_plan": "plus",
+    "description": "Ungedaemmt: 5-10% Waermeverlust. DIY-Platten 15-25 EUR/m². Amort: 7-15 J.",
+    "savings_eur": 25,
+    "savings_by_hg": {
+      "hg1": null,
+      "hg2": 25,
+      "hg3": 25,
+      "hg4": 25
+    }
+  },
+  {
+    "id": 63,
+    "title": "Energieausweis + iSFP Sanierungsfahrplan",
+    "category": "Energie",
+    "hg_range": "2-4",
+    "hg_levels": [
+      2,
+      3,
+      4
+    ],
+    "property": "efh",
+    "tenure": "eigentum",
+    "timing": "langfristig",
+    "effort": "zeitintensiv",
+    "investment": "kleine_invest",
+    "wp_plan": "plus",
+    "description": "BAFA 80% (Eigenanteil 300-500 EUR). +5% Extra-Foerderung auf Einzelmassnahmen.",
+    "savings_eur": 500,
+    "savings_by_hg": {
+      "hg1": null,
+      "hg2": 500,
+      "hg3": 500,
+      "hg4": 500
+    }
+  },
+  {
+    "id": 64,
+    "title": "Einkaufsliste schreiben",
+    "category": "Essen",
+    "hg_range": "1-4",
+    "hg_levels": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "property": "mittel_miet",
+    "tenure": "miete",
+    "timing": "sofort",
+    "effort": "muehelos",
+    "investment": "kostenlos",
+    "wp_plan": "nein",
+    "description": "Ø Impulskauf im Supermarkt: 5-10 EUR/Einkauf. Mit Liste: ~50% weniger. Konservativ: 100 EUR.",
+    "savings_eur": 100,
+    "savings_by_hg": {
+      "hg1": 100,
+      "hg2": 100,
+      "hg3": 100,
+      "hg4": 100
+    }
+  },
+  {
+    "id": 65,
+    "title": "Saisonales Obst und Gemuese kaufen",
+    "category": "Essen",
+    "hg_range": "2-4",
+    "hg_levels": [
+      2,
+      3,
+      4
+    ],
+    "property": "mittel_miet",
+    "tenure": "miete",
+    "timing": "sofort",
+    "effort": "muehelos",
+    "investment": "kostenlos",
+    "wp_plan": "nein",
+    "description": "Erdbeeren im Winter: 5 EUR/500g. Im Juni: 2 EUR. 10-15% Ersparnis auf Obst/Gemuese.",
+    "savings_eur": 100,
+    "savings_by_hg": {
+      "hg1": null,
+      "hg2": 100,
+      "hg3": 100,
+      "hg4": 100
+    }
+  },
+  {
+    "id": 66,
+    "title": "Too Good To Go / Lebensmittel-Rettungs-Apps",
+    "category": "Essen",
+    "hg_range": "1-4",
+    "hg_levels": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "property": "mittel_miet",
+    "tenure": "miete",
+    "timing": "sofort",
+    "effort": "muehelos",
+    "investment": "kostenlos",
+    "wp_plan": "nein",
+    "description": "TGTG-Tuete: 4 EUR fuer 12-15 EUR Warenwert. Ersparnis: 468 EUR/J.",
+    "savings_eur": 468,
+    "savings_by_hg": {
+      "hg1": 468,
+      "hg2": 468,
+      "hg3": 468,
+      "hg4": 468
+    }
+  },
+  {
+    "id": 67,
+    "title": "Reste einfrieren statt wegwerfen",
+    "category": "Essen",
+    "hg_range": "2-4",
+    "hg_levels": [
+      2,
+      3,
+      4
+    ],
+    "property": "mittel_miet",
+    "tenure": "miete",
+    "timing": "sofort",
+    "effort": "muehelos",
+    "investment": "kostenlos",
+    "wp_plan": "nein",
+    "description": "Ø Lebensmittelverschwendung in DE: 75 kg/Pers/J = ~230 EUR. Familie: 920 EUR. 50% durch Einfrieren vermeiden = 460 EUR. Konservativ: 150 EUR.",
+    "savings_eur": 230,
+    "savings_by_hg": {
+      "hg1": null,
+      "hg2": 230,
+      "hg3": 230,
+      "hg4": 230
+    }
+  },
+  {
+    "id": 68,
+    "title": "Kraeutergarten auf Balkon/Fensterbank",
+    "category": "Essen",
+    "hg_range": "1-4",
+    "hg_levels": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "property": "klein_miet",
+    "tenure": "miete",
+    "timing": "mittel",
+    "effort": "aufwand",
+    "investment": "kleine_invest",
+    "wp_plan": "nein",
+    "description": "Realistisch: 50 EUR/J durch frische Kraeuter statt Kauf.",
+    "savings_eur": 50,
+    "savings_by_hg": {
+      "hg1": 50,
+      "hg2": 50,
+      "hg3": 50,
+      "hg4": 50
+    }
+  },
+  {
+    "id": 69,
+    "title": "Hausratversicherung vergleichen und wechseln",
+    "category": "Versicherungen",
+    "hg_range": "1-4",
+    "hg_levels": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "property": "mittel_miet",
+    "tenure": "miete",
+    "timing": "sofort",
+    "effort": "aufwand",
+    "investment": "kostenlos",
+    "wp_plan": "plus",
+    "description": "Alter Vertrag: 150 EUR/J. Online-Vergleich: gleicher Schutz ab 50 EUR. Ersparnis: bis 100 EUR/J.",
+    "savings_eur": 100,
+    "savings_by_hg": {
+      "hg1": 100,
+      "hg2": 100,
+      "hg3": 100,
+      "hg4": 100
+    }
+  },
+  {
+    "id": 70,
+    "title": "Privathaftpflicht wechseln",
+    "category": "Versicherungen",
+    "hg_range": "1-4",
+    "hg_levels": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "property": "klein_miet",
+    "tenure": "miete",
+    "timing": "sofort",
+    "effort": "aufwand",
+    "investment": "kostenlos",
+    "wp_plan": "plus",
+    "description": "Teurer Tarif: 100 EUR/J. Guenstig mit 50 Mio Deckung: 40 EUR/J. Ersparnis: 60 EUR.",
+    "savings_eur": 60,
+    "savings_by_hg": {
+      "hg1": 60,
+      "hg2": 60,
+      "hg3": 60,
+      "hg4": 60
+    }
+  },
+  {
+    "id": 71,
+    "title": "Bankgebuehren eliminieren",
+    "category": "Steuern",
+    "hg_range": "1-4",
+    "hg_levels": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "property": "klein_miet",
+    "tenure": "miete",
+    "timing": "sofort",
+    "effort": "aufwand",
+    "investment": "kostenlos",
+    "wp_plan": "nein",
+    "description": "Sparkasse/VR-Bank: 5-10 EUR/Mo Kontofuehrung = 60-120 EUR/J. DKB/ING/Comdirect: 0 EUR.",
+    "savings_eur": 84,
+    "savings_by_hg": {
+      "hg1": 84,
+      "hg2": 84,
+      "hg3": 84,
+      "hg4": 84
+    }
+  },
+  {
+    "id": 72,
+    "title": "Eco-Fahrmodus nutzen",
+    "category": "Mobilitaet",
+    "hg_range": "1-4",
+    "hg_levels": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "property": "gross_miet",
+    "tenure": "miete",
+    "timing": "sofort",
+    "effort": "muehelos",
+    "investment": "kostenlos",
+    "wp_plan": "nein",
+    "description": "15.000 km/J, 8L/100km = 1.200L x 1,70 EUR = 2.040 EUR. Eco spart 15%: 306 EUR/J.",
+    "savings_eur": 70,
+    "savings_by_hg": {
+      "hg1": 70,
+      "hg2": 70,
+      "hg3": 70,
+      "hg4": 70
+    }
+  },
+  {
+    "id": 73,
+    "title": "Spritpreise vergleichen (Tankerkoenig-App)",
+    "category": "Mobilitaet",
+    "hg_range": "1-4",
+    "hg_levels": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "property": "gross_miet",
+    "tenure": "miete",
+    "timing": "sofort",
+    "effort": "muehelos",
+    "investment": "kostenlos",
+    "wp_plan": "nein",
+    "description": "Preisdifferenz innerhalb einer Stadt: bis 20ct/L. Bei 1.000L/J Verbrauch: 200 EUR.",
+    "savings_eur": 200,
+    "savings_by_hg": {
+      "hg1": 200,
+      "hg2": 200,
+      "hg3": 200,
+      "hg4": 200
+    }
+  },
+  {
+    "id": 74,
+    "title": "Bahn-Sparpreise fruehzeitig buchen",
+    "category": "Mobilitaet",
+    "hg_range": "1-4",
+    "hg_levels": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "property": "mittel_miet",
+    "tenure": "miete",
+    "timing": "sofort",
+    "effort": "muehelos",
+    "investment": "kostenlos",
+    "wp_plan": "nein",
+    "description": "Flexpreis Hamburg-Muenchen: 150 EUR. Sparpreis 6 Wo vorher: 30 EUR. Bei 5 Fahrten/J: 600 EUR.",
+    "savings_eur": 150,
+    "savings_by_hg": {
+      "hg1": 150,
+      "hg2": 150,
+      "hg3": 150,
+      "hg4": 150
+    }
+  },
+  {
+    "id": 75,
+    "title": "BahnCard 25/50 fuer Vielfahrer",
+    "category": "Mobilitaet",
+    "hg_range": "1-4",
+    "hg_levels": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "property": "mittel_miet",
+    "tenure": "miete",
+    "timing": "mittel",
+    "effort": "muehelos",
+    "investment": "kleine_invest",
+    "wp_plan": "nein",
+    "description": "BC25: 62 EUR, spart 25% auf Flexpreis. Ab 250 EUR Tickets/J rentabel.",
+    "savings_eur": 62,
+    "savings_by_hg": {
+      "hg1": 62,
+      "hg2": 62,
+      "hg3": 62,
+      "hg4": 62
+    }
+  },
+  {
+    "id": 76,
+    "title": "Fahrrad statt Auto fuer Strecken <5 km",
+    "category": "Mobilitaet",
+    "hg_range": "1-4",
+    "hg_levels": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "property": "mittel_miet",
+    "tenure": "miete",
+    "timing": "sofort",
+    "effort": "muehelos",
+    "investment": "kostenlos",
+    "wp_plan": "nein",
+    "description": "Kurzstrecke Auto: 50ct/km Vollkosten. 10 km/Tag x 250 Tage = 1.250 EUR. Fahrrad: ~50 EUR Wartung/J. Diff: ~1.200 EUR.",
+    "savings_eur": 1200,
+    "savings_by_hg": {
+      "hg1": 1200,
+      "hg2": 1200,
+      "hg3": 1200,
+      "hg4": 1200
+    }
+  },
+  {
+    "id": 77,
+    "title": "E-Auto an Gratis-Ladern laden",
+    "category": "Mobilitaet",
+    "hg_range": "1-4",
+    "hg_levels": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "property": "efh",
+    "tenure": "eigentum",
+    "timing": "sofort",
+    "effort": "muehelos",
+    "investment": "kostenlos",
+    "wp_plan": "nein",
+    "description": "10.000 km/J x 18 kWh/100km = 1.800 kWh. Zu Hause: 630 EUR. Gratis-Lader: 0 EUR. Realistisch 50%: 315 EUR.",
+    "savings_eur": 630,
+    "savings_by_hg": {
+      "hg1": 630,
+      "hg2": 630,
+      "hg3": 630,
+      "hg4": 630
+    }
+  },
+  {
+    "id": 78,
+    "title": "Wasch-/Putzmittel sparsam dosieren",
+    "category": "Wohnen",
+    "hg_range": "2-4",
+    "hg_levels": [
+      2,
+      3,
+      4
+    ],
+    "property": "mittel_miet",
+    "tenure": "miete",
+    "timing": "sofort",
+    "effort": "muehelos",
+    "investment": "kostenlos",
+    "wp_plan": "free",
+    "description": "Ø Haushalt: 200 EUR/J Reinigungsmittel. 50% Dosierung reicht. Ersparnis: 100 EUR. Konservativ: 40 EUR.",
+    "savings_eur": 100,
+    "savings_by_hg": {
+      "hg1": null,
+      "hg2": 100,
+      "hg3": 100,
+      "hg4": 100
+    }
+  },
+  {
+    "id": 79,
+    "title": "Leihen statt kaufen (Werkzeug etc.)",
+    "category": "Wohnen",
+    "hg_range": "1-4",
+    "hg_levels": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "property": "mittel_miet",
+    "tenure": "miete",
+    "timing": "sofort",
+    "effort": "muehelos",
+    "investment": "kostenlos",
+    "wp_plan": "plus",
+    "description": "Hochdruckreiniger: 200 EUR kaufen vs. 20 EUR leihen. 3x/J leihen: 150-400 EUR gespart.",
+    "savings_eur": 200,
+    "savings_by_hg": {
+      "hg1": 200,
+      "hg2": 200,
+      "hg3": 200,
+      "hg4": 200
+    }
+  },
+  {
+    "id": 80,
+    "title": "Reparieren statt ersetzen (Repair-Cafes)",
+    "category": "Wohnen",
+    "hg_range": "1-4",
+    "hg_levels": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "property": "mittel_miet",
+    "tenure": "miete",
+    "timing": "sofort",
+    "effort": "aufwand",
+    "investment": "kostenlos",
+    "wp_plan": "plus",
+    "description": "Waschmaschine defekt: Reparatur 150 EUR vs. Neukauf 500 EUR. 2 Reparaturen/J: 700 EUR gespart.",
+    "savings_eur": 150,
+    "savings_by_hg": {
+      "hg1": 150,
+      "hg2": 150,
+      "hg3": 150,
+      "hg4": 150
+    }
+  },
+  {
+    "id": 81,
+    "title": "Rundfunkbeitrag: Befreiung pruefen",
+    "category": "Wohnen",
+    "hg_range": "1-4",
+    "hg_levels": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "property": "klein_miet",
+    "tenure": "miete",
+    "timing": "sofort",
+    "effort": "aufwand",
+    "investment": "kostenlos",
+    "wp_plan": "nein",
+    "description": "18,36 EUR/Mo = 220 EUR/J. Befreiung bei Buergergeld, BAfoG, Grundsicherung moeglich.",
+    "savings_eur": 36,
+    "savings_by_hg": {
+      "hg1": 36,
+      "hg2": 36,
+      "hg3": 36,
+      "hg4": 36
+    }
+  },
+  {
+    "id": 82,
+    "title": "Buecherei-Ausweis statt Buecher kaufen",
+    "category": "Freizeit",
+    "hg_range": "1-4",
+    "hg_levels": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "property": "mittel_miet",
+    "tenure": "miete",
+    "timing": "sofort",
+    "effort": "muehelos",
+    "investment": "kleine_invest",
+    "wp_plan": "nein",
+    "description": "20 Buecher/J x 15 EUR = 300 EUR. Buecherei-Ausweis: 10-30 EUR/J. Ersparnis: 270 EUR.",
+    "savings_eur": 270,
+    "savings_by_hg": {
+      "hg1": 270,
+      "hg2": 270,
+      "hg3": 270,
+      "hg4": 270
+    }
+  },
+  {
+    "id": 83,
+    "title": "Familycard / Familien-Rabatte nutzen",
+    "category": "Freizeit",
+    "hg_range": "2-4",
+    "hg_levels": [
+      2,
+      3,
+      4
+    ],
+    "property": "mittel_miet",
+    "tenure": "miete",
+    "timing": "sofort",
+    "effort": "muehelos",
+    "investment": "kostenlos",
+    "wp_plan": "nein",
+    "description": "Zoo/Museum/Schwimmbad: Familie zahlt 50% mit Familycard. 20 Ausfluege/J x 15 EUR = 300 EUR.",
+    "savings_eur": 300,
+    "savings_by_hg": {
+      "hg1": null,
+      "hg2": 300,
+      "hg3": 300,
+      "hg4": 300
+    }
+  },
+  {
+    "id": 84,
+    "title": "Gratisangebote (Open-Air, Museen am Sonntag)",
+    "category": "Freizeit",
+    "hg_range": "1-4",
+    "hg_levels": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "property": "mittel_miet",
+    "tenure": "miete",
+    "timing": "sofort",
+    "effort": "muehelos",
+    "investment": "kostenlos",
+    "wp_plan": "nein",
+    "description": "Viele Museen: 1. Sonntag/Mo gratis. 2 Gratis-Aktivitaeten/Monat statt 20 EUR-Events: 480 EUR/J.",
+    "savings_eur": 20,
+    "savings_by_hg": {
+      "hg1": 20,
+      "hg2": 20,
+      "hg3": 20,
+      "hg4": 20
+    }
+  },
+  {
+    "id": 85,
+    "title": "Flugtickets 6-8 Wochen vorher buchen",
+    "category": "Freizeit",
+    "hg_range": "1-4",
+    "hg_levels": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "property": "mittel_miet",
+    "tenure": "miete",
+    "timing": "mittel",
+    "effort": "muehelos",
+    "investment": "kostenlos",
+    "wp_plan": "nein",
+    "description": "Last-Minute HH-Barcelona: 250 EUR. 6 Wo vorher: 80 EUR. Diff: 170 EUR. Bei 3 Fluegen/J: 510 EUR.",
+    "savings_eur": 170,
+    "savings_by_hg": {
+      "hg1": 170,
+      "hg2": 170,
+      "hg3": 170,
+      "hg4": 170
+    }
+  },
+  {
+    "id": 86,
+    "title": "Cashback-Portale nutzen",
+    "category": "Freizeit",
+    "hg_range": "1-4",
+    "hg_levels": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "property": "klein_miet",
+    "tenure": "miete",
+    "timing": "sofort",
+    "effort": "muehelos",
+    "investment": "kostenlos",
+    "wp_plan": "nein",
+    "description": "1-10% Cashback auf Online-Einkauefe. Bei 3.000 EUR Online-Ausgaben/J: 90-300 EUR zurueck.",
+    "savings_eur": 3000,
+    "savings_by_hg": {
+      "hg1": 3000,
+      "hg2": 3000,
+      "hg3": 3000,
+      "hg4": 3000
+    }
+  },
+  {
+    "id": 87,
+    "title": "Black Friday/Prime Day gezielt nutzen",
+    "category": "Freizeit",
+    "hg_range": "1-4",
+    "hg_levels": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "property": "mittel_miet",
+    "tenure": "miete",
+    "timing": "mittel",
+    "effort": "muehelos",
+    "investment": "kostenlos",
+    "wp_plan": "nein",
+    "description": "Geplante Anschaffungen auf BF verschieben: 20-40% Rabatt. Waschmaschine 600 → 400 EUR.",
+    "savings_eur": 400,
+    "savings_by_hg": {
+      "hg1": 400,
+      "hg2": 400,
+      "hg3": 400,
+      "hg4": 400
+    }
+  },
+  {
+    "id": 88,
+    "title": "Gutschein-Codes vor jedem Online-Kauf suchen",
+    "category": "Freizeit",
+    "hg_range": "1-4",
+    "hg_levels": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "property": "klein_miet",
+    "tenure": "miete",
+    "timing": "sofort",
+    "effort": "muehelos",
+    "investment": "kostenlos",
+    "wp_plan": "nein",
+    "description": "5-15% auf viele Shops. Bei 2.000 EUR Online/J: 100-300 EUR.",
+    "savings_eur": 2000,
+    "savings_by_hg": {
+      "hg1": 2000,
+      "hg2": 2000,
+      "hg3": 2000,
+      "hg4": 2000
+    }
+  },
+  {
+    "id": 89,
+    "title": "Preisalarme setzen (Idealo, Geizhals)",
+    "category": "Freizeit",
+    "hg_range": "1-4",
+    "hg_levels": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "property": "mittel_miet",
+    "tenure": "miete",
+    "timing": "sofort",
+    "effort": "muehelos",
+    "investment": "kostenlos",
+    "wp_plan": "nein",
+    "description": "Preisschwankung oft 20-30%. 3 Produkte/J mit Alarm: 150-300 EUR.",
+    "savings_eur": 300,
+    "savings_by_hg": {
+      "hg1": 300,
+      "hg2": 300,
+      "hg3": 300,
+      "hg4": 300
+    }
+  },
+  {
+    "id": 90,
+    "title": "Zuzahlungs-Befreiung bei Krankenkasse",
+    "category": "Gesundheit",
+    "hg_range": "1-4",
+    "hg_levels": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "property": "mittel_miet",
+    "tenure": "miete",
+    "timing": "mittel",
+    "effort": "aufwand",
+    "investment": "kostenlos",
+    "wp_plan": "nein",
+    "description": "Belastungsgrenze: 2% der Bruttoeinnahmen. Darueber: alle Zuzahlungen frei.",
+    "savings_eur": 200,
+    "savings_by_hg": {
+      "hg1": 200,
+      "hg2": 200,
+      "hg3": 200,
+      "hg4": 200
+    }
+  },
+  {
+    "id": 91,
+    "title": "Generika statt Original-Medikamente",
+    "category": "Gesundheit",
+    "hg_range": "1-4",
+    "hg_levels": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "property": "klein_miet",
+    "tenure": "miete",
+    "timing": "sofort",
+    "effort": "muehelos",
+    "investment": "kostenlos",
+    "wp_plan": "nein",
+    "description": "Ibuprofen Marke: 8 EUR/20 Stueck. Generikum: 2 EUR. Bei 5 Medikamenten/J: 30-100 EUR.",
+    "savings_eur": 100,
+    "savings_by_hg": {
+      "hg1": 100,
+      "hg2": 100,
+      "hg3": 100,
+      "hg4": 100
+    }
+  },
+  {
+    "id": 92,
+    "title": "Zahnreinigung: Kasse mit Zuschuss waehlen",
+    "category": "Gesundheit",
+    "hg_range": "1-4",
+    "hg_levels": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "property": "mittel_miet",
+    "tenure": "miete",
+    "timing": "mittel",
+    "effort": "aufwand",
+    "investment": "kostenlos",
+    "wp_plan": "plus",
+    "description": "Professionelle Zahnreinigung: 80-120 EUR. Manche GKV zahlen 40-80 EUR Zuschuss.",
+    "savings_eur": 120,
+    "savings_by_hg": {
+      "hg1": 120,
+      "hg2": 120,
+      "hg3": 120,
+      "hg4": 120
+    }
+  },
+  {
+    "id": 93,
+    "title": "Kinderkleidung secondhand kaufen",
+    "category": "Gesundheit",
+    "hg_range": "2-4",
+    "hg_levels": [
+      2,
+      3,
+      4
+    ],
+    "property": "mittel_miet",
+    "tenure": "miete",
+    "timing": "sofort",
+    "effort": "muehelos",
+    "investment": "kostenlos",
+    "wp_plan": "nein",
+    "description": "Neue Jacke: 40 EUR, secondhand: 10 EUR. 20 Kleidungsstuecke/J x 25 EUR = 500 EUR pro Kind.",
+    "savings_eur": 40,
+    "savings_by_hg": {
+      "hg1": null,
+      "hg2": 40,
+      "hg3": 40,
+      "hg4": 40
+    }
+  },
+  {
+    "id": 94,
+    "title": "Spielzeug tauschen statt neu kaufen",
+    "category": "Gesundheit",
+    "hg_range": "2-4",
+    "hg_levels": [
+      2,
+      3,
+      4
+    ],
+    "property": "mittel_miet",
+    "tenure": "miete",
+    "timing": "sofort",
+    "effort": "muehelos",
+    "investment": "kostenlos",
+    "wp_plan": "nein",
+    "description": "Ø Spielzeug-Ausgaben: 300 EUR/Kind/J. Tauschboersen: 50% gespart = 150 EUR/Kind.",
+    "savings_eur": 300,
+    "savings_by_hg": {
+      "hg1": null,
+      "hg2": 300,
+      "hg3": 300,
+      "hg4": 300
+    }
+  },
+  {
+    "id": 95,
+    "title": "Kinderzuschlag pruefen",
+    "category": "Gesundheit",
+    "hg_range": "2-4",
+    "hg_levels": [
+      2,
+      3,
+      4
+    ],
+    "property": "mittel_miet",
+    "tenure": "miete",
+    "timing": "mittel",
+    "effort": "aufwand",
+    "investment": "kostenlos",
+    "wp_plan": "nein",
+    "description": "Fuer Familien mit niedrigem Einkommen: bis 292 EUR/Kind/Mo = 7.008 EUR/J.",
+    "savings_eur": 292,
+    "savings_by_hg": {
+      "hg1": null,
+      "hg2": 292,
+      "hg3": 292,
+      "hg4": 292
+    }
+  },
+  {
+    "id": 96,
+    "title": "Kreditkarte mit Cashback/Meilen nutzen",
+    "category": "Steuern",
+    "hg_range": "1-4",
+    "hg_levels": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "property": "mittel_miet",
+    "tenure": "miete",
+    "timing": "sofort",
+    "effort": "muehelos",
+    "investment": "kostenlos",
+    "wp_plan": "nein",
+    "description": "1% Cashback auf alle Kaeufe. Bei 1.500 EUR/Mo Kartenumsatz: 180 EUR/J zurueck.",
+    "savings_eur": 1500,
+    "savings_by_hg": {
+      "hg1": 1500,
+      "hg2": 1500,
+      "hg3": 1500,
+      "hg4": 1500
+    }
+  },
+  {
+    "id": 97,
+    "title": "Arbeitsmittel absetzen (Laptop, Bueromoebel)",
+    "category": "Steuern",
+    "hg_range": "1-4",
+    "hg_levels": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "property": "mittel_miet",
+    "tenure": "miete",
+    "timing": "mittel",
+    "effort": "aufwand",
+    "investment": "kostenlos",
+    "wp_plan": "plus",
+    "description": "Laptop 1.200 EUR sofort voll absetzen. Buerostuhl 500 EUR. Bei 42% Steuersatz: 714 EUR Erstattung.",
+    "savings_eur": 1200,
+    "savings_by_hg": {
+      "hg1": 1200,
+      "hg2": 1200,
+      "hg3": 1200,
+      "hg4": 1200
+    }
+  },
+  {
+    "id": 98,
+    "title": "Spenden absetzen (Spendenquittung)",
+    "category": "Steuern",
+    "hg_range": "1-4",
+    "hg_levels": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "property": "mittel_miet",
+    "tenure": "miete",
+    "timing": "mittel",
+    "effort": "muehelos",
+    "investment": "kostenlos",
+    "wp_plan": "nein",
+    "description": "500 EUR Spende x 42% = 210 EUR Steuererstattung. Ab 300 EUR Spendenquittung noetig.",
+    "savings_eur": 500,
+    "savings_by_hg": {
+      "hg1": 500,
+      "hg2": 500,
+      "hg3": 500,
+      "hg4": 500
+    }
+  },
+  {
+    "id": 99,
+    "title": "Kindererziehungszeiten bei Rente melden",
+    "category": "Steuern",
+    "hg_range": "2-4",
+    "hg_levels": [
+      2,
+      3,
+      4
+    ],
+    "property": "mittel_miet",
+    "tenure": "miete",
+    "timing": "langfristig",
+    "effort": "aufwand",
+    "investment": "kostenlos",
+    "wp_plan": "nein",
+    "description": "Pro Kind (nach 1992): ~3 Rentenpunkte = ~111 EUR/Mo mehr Rente. Muss aktiv beantragt werden!",
+    "savings_eur": 1332,
+    "savings_by_hg": {
+      "hg1": null,
+      "hg2": 1332,
+      "hg3": 1332,
+      "hg4": 1332
+    }
+  },
+  {
+    "id": 100,
+    "title": "ETF-Sparplan statt Sparbuch",
+    "category": "Steuern",
+    "hg_range": "1-4",
+    "hg_levels": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "property": "klein_miet",
+    "tenure": "miete",
+    "timing": "langfristig",
+    "effort": "muehelos",
+    "investment": "kleine_invest",
+    "wp_plan": "nein",
+    "description": "100 EUR/Mo x 7% Rendite x 20 Jahre = ~52.000 EUR. Auf Sparbuch (0,5%): ~25.200 EUR. Diff: ~26.800 EUR.",
+    "savings_eur": 26800,
+    "savings_by_hg": {
+      "hg1": 26800,
+      "hg2": 26800,
+      "hg3": 26800,
+      "hg4": 26800
+    }
+  },
+  {
+    "id": 101,
+    "title": "Energieausweis + iSFP (BAFA-gefoerdert)",
+    "category": "Energie",
+    "hg_range": "2-4",
+    "hg_levels": [
+      2,
+      3,
+      4
+    ],
+    "property": "efh",
+    "tenure": "eigentum",
+    "timing": "langfristig",
+    "effort": "zeitintensiv",
+    "investment": "kleine_invest",
+    "wp_plan": "plus",
+    "description": "iSFP: alle Massnahmen priorisiert. BAFA 80% (Eigenanteil 300-500 EUR). +5% Extra-Foerderung.",
+    "savings_eur": 500,
+    "savings_by_hg": {
+      "hg1": null,
+      "hg2": 500,
+      "hg3": 500,
+      "hg4": 500
+    }
+  },
+  {
+    "id": 102,
+    "title": "Doppelte Haushaltsfuehrung absetzen",
+    "category": "Steuern",
+    "hg_range": "1-4",
+    "hg_levels": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "property": "klein_miet",
+    "tenure": "miete",
+    "timing": "mittel",
+    "effort": "aufwand",
+    "investment": "kostenlos",
+    "wp_plan": "plus",
+    "description": "Zweitwohnung 600 EUR/Mo. Max 1.000 EUR/Mo absetzbar. Bei 42%: bis 5.040 EUR/J.",
+    "savings_eur": 5040,
+    "savings_by_hg": {
+      "hg1": 5040,
+      "hg2": 5040,
+      "hg3": 5040,
+      "hg4": 5040
+    }
+  },
+  {
+    "id": 103,
+    "title": "Mietpreisbremse pruefen",
+    "category": "Wohnen",
+    "hg_range": "1-4",
+    "hg_levels": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "property": "gross_miet",
+    "tenure": "miete",
+    "timing": "mittel",
+    "effort": "aufwand",
+    "investment": "kostenlos",
+    "wp_plan": "plus",
+    "description": "Miete 12 EUR/m², Vergleich 10 EUR. 80m² = 160 EUR/Mo = 1.920 EUR/J Rueckforderung bis 30 Mo.",
+    "savings_eur": 160,
+    "savings_by_hg": {
+      "hg1": 160,
+      "hg2": 160,
+      "hg3": 160,
+      "hg4": 160
+    }
+  },
+  {
+    "id": 104,
+    "title": "Rundfunkbeitrag-Befreiung pruefen",
+    "category": "Wohnen",
+    "hg_range": "1-4",
+    "hg_levels": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "property": "klein_miet",
+    "tenure": "miete",
+    "timing": "sofort",
+    "effort": "aufwand",
+    "investment": "kostenlos",
+    "wp_plan": "nein",
+    "description": "18,36 EUR/Mo = 220 EUR/J. Befreiung bei Buergergeld, Grundsicherung moeglich.",
+    "savings_eur": 36,
+    "savings_by_hg": {
+      "hg1": 36,
+      "hg2": 36,
+      "hg3": 36,
+      "hg4": 36
+    }
+  },
+  {
+    "id": 105,
+    "title": "Secondhand kaufen (Moebel, Elektronik, Kleidung)",
+    "category": "Wohnen",
+    "hg_range": "1-4",
+    "hg_levels": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "property": "mittel_miet",
+    "tenure": "miete",
+    "timing": "sofort",
+    "effort": "aufwand",
+    "investment": "kostenlos",
+    "wp_plan": "nein",
+    "description": "Neues Sofa: 800 EUR. Kleinanzeigen: 200 EUR. Laptop refurbished: 500 statt 1.000 EUR. 800-2.000 EUR gespart.",
+    "savings_eur": 800,
+    "savings_by_hg": {
+      "hg1": 800,
+      "hg2": 800,
+      "hg3": 800,
+      "hg4": 800
+    }
+  },
+  {
+    "id": 106,
+    "title": "Nicht genutzte Dinge online verkaufen",
+    "category": "Wohnen",
+    "hg_range": "1-4",
+    "hg_levels": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "property": "mittel_miet",
+    "tenure": "miete",
+    "timing": "sofort",
+    "effort": "aufwand",
+    "investment": "kostenlos",
+    "wp_plan": "nein",
+    "description": "Ø Haushalt hat 10.000+ EUR ungenutzten Besitz. Abends 1h = 50-100 EUR/h.",
+    "savings_eur": 100,
+    "savings_by_hg": {
+      "hg1": 100,
+      "hg2": 100,
+      "hg3": 100,
+      "hg4": 100
+    }
+  },
+  {
+    "id": 107,
+    "title": "WP Home: Alle Tipps automatisieren",
+    "category": "Vertraege",
+    "hg_range": "2-4",
+    "hg_levels": [
+      2,
+      3,
+      4
+    ],
+    "property": "mittel_miet",
+    "tenure": "miete",
+    "timing": "sofort",
+    "effort": "muehelos",
+    "investment": "kostenlos",
+    "wp_plan": "core",
+    "description": "WP Home Free: Strom+Gas automatisch + Spartipps + Vertragsradar. Gesamtpotenzial: 2.000-5.000+ EUR/J.",
+    "savings_eur": 3500,
+    "savings_by_hg": {
+      "hg1": null,
+      "hg2": 3500,
+      "hg3": 3500,
+      "hg4": 3500
+    }
+  },
+  {
+    "id": 108,
+    "title": "Stromspar-Check nutzen",
+    "category": "Strom",
+    "hg_range": "1-4",
+    "hg_levels": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "property": "mittel_miet",
+    "tenure": "miete",
+    "timing": "sofort",
+    "effort": "muehelos",
+    "investment": "kostenlos",
+    "wp_plan": "plus",
+    "description": "Kostenlos fuer Buergergeld/Wohngeld. Soforthilfen ~70 EUR. HG1: ~90 EUR/J, HG3-4: ~250 EUR/J.",
+    "savings_eur": 90,
+    "savings_by_hg": {
+      "hg1": 90,
+      "hg2": 90,
+      "hg3": 90,
+      "hg4": 90
+    }
+  },
+  {
+    "id": 200,
+    "title": "Smarte Thermostate nachrüsten",
+    "category": "Heizung",
+    "hg_range": "1-4",
+    "hg_levels": [1, 2, 3, 4],
+    "property": "mittel_miet",
+    "tenure": "miete",
+    "timing": "sofort",
+    "effort": "aufwand",
+    "investment": "kleine_invest",
+    "wp_plan": "plus",
+    "description": "Smarte Thermostate lernen dein Heizverhalten und regeln automatisch. 10-15% Heizkosten sparen. Invest: 40-60 EUR/Stueck. Amort: 1 Jahr.",
+    "savings_eur": 180,
+    "savings_by_hg": { "hg1": 120, "hg2": 180, "hg3": 220, "hg4": 280 },
+    "heating_types": ["gas", "oil", "district"],
+    "building_age_relevant": ["pre1990", "1990to2010", "post2010"],
+    "income_level_min": "low"
+  },
+  {
+    "id": 201,
+    "title": "Heizkoerper entlueften",
+    "category": "Heizung",
+    "hg_range": "1-4",
+    "hg_levels": [1, 2, 3, 4],
+    "property": "mittel_miet",
+    "tenure": "miete",
+    "timing": "sofort",
+    "effort": "muehelos",
+    "investment": "kostenlos",
+    "wp_plan": "free",
+    "description": "Luft im Heizkoerper verhindert Waermeverteilung. Regelmaessig entlueften spart 5-10% Heizkosten. Kostenlos mit Entlueftungsschluessel.",
+    "savings_eur": 80,
+    "savings_by_hg": { "hg1": 50, "hg2": 80, "hg3": 100, "hg4": 130 },
+    "heating_types": ["gas", "oil", "district"],
+    "building_age_relevant": ["pre1990", "1990to2010"],
+    "income_level_min": "low"
+  },
+  {
+    "id": 202,
+    "title": "Nachtabsenkung aktivieren",
+    "category": "Heizung",
+    "hg_range": "1-4",
+    "hg_levels": [1, 2, 3, 4],
+    "property": "mittel_miet",
+    "tenure": "miete",
+    "timing": "sofort",
+    "effort": "muehelos",
+    "investment": "kostenlos",
+    "wp_plan": "free",
+    "description": "Heizung nachts auf 16-17°C senken spart 5-10% Heizkosten. Einfach am Thermostat oder Regler einstellen. Kein Invest noetig.",
+    "savings_eur": 150,
+    "savings_by_hg": { "hg1": 90, "hg2": 150, "hg3": 200, "hg4": 260 },
+    "heating_types": ["gas", "oil", "district", "electric"],
+    "building_age_relevant": ["pre1990", "1990to2010", "post2010"],
+    "income_level_min": "low"
+  },
+  {
+    "id": 203,
+    "title": "Fenster und Tueren abdichten (Profi)",
+    "category": "Heizung",
+    "hg_range": "1-4",
+    "hg_levels": [1, 2, 3, 4],
+    "property": "mittel_miet",
+    "tenure": "miete",
+    "timing": "sofort",
+    "effort": "aufwand",
+    "investment": "kleine_invest",
+    "wp_plan": "free",
+    "description": "Professionelle Dichtungsbaender und Zugluftstopper reduzieren Waermeverlust um 10-15%. Material: 30-80 EUR. Amort: 3-6 Monate.",
+    "savings_eur": 120,
+    "savings_by_hg": { "hg1": 80, "hg2": 120, "hg3": 160, "hg4": 200 },
+    "heating_types": ["gas", "oil", "district", "electric", "heat_pump"],
+    "building_age_relevant": ["pre1990", "1990to2010"],
+    "income_level_min": "low"
+  },
+  {
+    "id": 204,
+    "title": "Heizungswartung durchfuehren lassen",
+    "category": "Heizung",
+    "hg_range": "2-4",
+    "hg_levels": [2, 3, 4],
+    "property": "efh",
+    "tenure": "eigentum",
+    "timing": "mittel",
+    "effort": "aufwand",
+    "investment": "kleine_invest",
+    "wp_plan": "plus",
+    "description": "Jaehrliche Wartung haelt Heizung effizient. Ungewartete Anlagen verbrauchen 10-15% mehr. Kosten: 150-250 EUR. Netto-Ersparnis: 100-200 EUR/J.",
+    "savings_eur": 150,
+    "savings_by_hg": { "hg1": null, "hg2": 150, "hg3": 200, "hg4": 250 },
+    "heating_types": ["gas", "oil"],
+    "building_age_relevant": ["pre1990", "1990to2010"],
+    "income_level_min": "medium"
+  },
+  {
+    "id": 205,
+    "title": "Sparduschkopf einbauen",
+    "category": "Warmwasser",
+    "hg_range": "1-4",
+    "hg_levels": [1, 2, 3, 4],
+    "property": "mittel_miet",
+    "tenure": "miete",
+    "timing": "sofort",
+    "effort": "muehelos",
+    "investment": "kleine_invest",
+    "wp_plan": "free",
+    "description": "Reduziert Wasserverbrauch um 50% bei gleichem Komfort. Invest: 20-40 EUR. Familie 4 Pers: ~200 EUR/J Ersparnis an Wasser+Energie.",
+    "savings_eur": 200,
+    "savings_by_hg": { "hg1": 80, "hg2": 150, "hg3": 200, "hg4": 260 },
+    "heating_types": ["gas", "oil", "district", "electric", "heat_pump", "other"],
+    "building_age_relevant": ["pre1990", "1990to2010", "post2010"],
+    "income_level_min": "low"
+  },
+  {
+    "id": 206,
+    "title": "Warmwasser-Temperatur senken",
+    "category": "Warmwasser",
+    "hg_range": "1-4",
+    "hg_levels": [1, 2, 3, 4],
+    "property": "mittel_miet",
+    "tenure": "miete",
+    "timing": "sofort",
+    "effort": "muehelos",
+    "investment": "kostenlos",
+    "wp_plan": "free",
+    "description": "Boiler von 60°C auf 50°C senken spart 10-15% Warmwasserkosten. Legionellen-Schutz: 1x/Woche auf 60°C aufheizen. Ersparnis: ~100 EUR/J.",
+    "savings_eur": 100,
+    "savings_by_hg": { "hg1": 60, "hg2": 100, "hg3": 130, "hg4": 160 },
+    "heating_types": ["gas", "oil", "electric", "heat_pump"],
+    "building_age_relevant": ["pre1990", "1990to2010", "post2010"],
+    "income_level_min": "low"
+  },
+  {
+    "id": 207,
+    "title": "Durchlauferhitzer statt Boiler",
+    "category": "Warmwasser",
+    "hg_range": "2-4",
+    "hg_levels": [2, 3, 4],
+    "property": "efh",
+    "tenure": "eigentum",
+    "timing": "mittel",
+    "effort": "zeitintensiv",
+    "investment": "grosse_invest",
+    "wp_plan": "plus",
+    "description": "Alter Boiler verbraucht Standby-Energie. Moderner Durchlauferhitzer spart 15-20% Warmwasserkosten. Invest: 300-600 EUR. Amort: 2-3 J.",
+    "savings_eur": 180,
+    "savings_by_hg": { "hg1": null, "hg2": 140, "hg3": 180, "hg4": 230 },
+    "heating_types": ["electric"],
+    "building_age_relevant": ["pre1990", "1990to2010"],
+    "income_level_min": "medium"
+  },
+  {
+    "id": 208,
+    "title": "Dach daemmen (oberste Geschossdecke)",
+    "category": "Gebaeude",
+    "hg_range": "2-4",
+    "hg_levels": [2, 3, 4],
+    "property": "efh",
+    "tenure": "eigentum",
+    "timing": "langfristig",
+    "effort": "zeitintensiv",
+    "investment": "grosse_invest",
+    "wp_plan": "plus",
+    "description": "Ungedaemmtes Dach: 15-20% Waermeverlust. Daemmung oberste Geschossdecke: 30-50 EUR/m². BAFA-Foerderung 15%. Amort: 5-10 J. Ersparnis: 300-500 EUR/J.",
+    "savings_eur": 400,
+    "savings_by_hg": { "hg1": null, "hg2": 350, "hg3": 400, "hg4": 500 },
+    "heating_types": ["gas", "oil", "heat_pump", "district", "electric"],
+    "building_age_relevant": ["pre1990"],
+    "income_level_min": "high"
+  },
+  {
+    "id": 209,
+    "title": "Fenster tauschen (3-fach Verglasung)",
+    "category": "Gebaeude",
+    "hg_range": "2-4",
+    "hg_levels": [2, 3, 4],
+    "property": "efh",
+    "tenure": "eigentum",
+    "timing": "langfristig",
+    "effort": "zeitintensiv",
+    "investment": "grosse_invest",
+    "wp_plan": "plus",
+    "description": "Alte Fenster (U-Wert 2,8) durch 3-fach (U-Wert 0,6) ersetzen. Waermeverlust sinkt 75%. Invest: 8-15k EUR. BAFA 15%. Amort: 10-15 J.",
+    "savings_eur": 350,
+    "savings_by_hg": { "hg1": null, "hg2": 300, "hg3": 350, "hg4": 450 },
+    "heating_types": ["gas", "oil", "heat_pump", "district", "electric"],
+    "building_age_relevant": ["pre1990"],
+    "income_level_min": "high"
+  },
+  {
+    "id": 210,
+    "title": "Kellerdaemmung nachholen",
+    "category": "Gebaeude",
+    "hg_range": "2-4",
+    "hg_levels": [2, 3, 4],
+    "property": "efh",
+    "tenure": "eigentum",
+    "timing": "langfristig",
+    "effort": "zeitintensiv",
+    "investment": "grosse_invest",
+    "wp_plan": "plus",
+    "description": "Ungedaemmte Kellerdecke: 5-10% Waermeverlust. Daemmplatten von unten: 20-40 EUR/m². BAFA-Foerderung moeglich. Amort: 5-8 J.",
+    "savings_eur": 250,
+    "savings_by_hg": { "hg1": null, "hg2": 200, "hg3": 250, "hg4": 320 },
+    "heating_types": ["gas", "oil", "heat_pump", "district", "electric"],
+    "building_age_relevant": ["pre1990", "1990to2010"],
+    "income_level_min": "high"
+  },
+  {
+    "id": 211,
+    "title": "PV-Anlage installieren",
+    "category": "Solar",
+    "hg_range": "2-4",
+    "hg_levels": [2, 3, 4],
+    "property": "efh",
+    "tenure": "eigentum",
+    "timing": "langfristig",
+    "effort": "zeitintensiv",
+    "investment": "grosse_invest",
+    "wp_plan": "plus",
+    "description": "10 kWp PV-Anlage = ~9.500 kWh/J. 30% Eigenverbrauch + Einspeisung. Invest: 12-18k EUR. Amort: 8-12 J. Ersparnis: 800-1.500 EUR/J.",
+    "savings_eur": 1000,
+    "savings_by_hg": { "hg1": null, "hg2": 800, "hg3": 1000, "hg4": 1200 },
+    "heating_types": ["gas", "oil", "heat_pump", "district", "electric", "other"],
+    "building_age_relevant": ["pre1990", "1990to2010", "post2010"],
+    "income_level_min": "high",
+    "requires_solar": true
+  },
+  {
+    "id": 212,
+    "title": "Balkonkraftwerk aufstellen",
+    "category": "Solar",
+    "hg_range": "1-4",
+    "hg_levels": [1, 2, 3, 4],
+    "property": "mittel_miet",
+    "tenure": "miete",
+    "timing": "mittel",
+    "effort": "aufwand",
+    "investment": "kleine_invest",
+    "wp_plan": "plus",
+    "description": "800 Wp Mini-PV: 600-750 kWh/J Ertrag. 80% Eigenverbrauch x 35ct = ~180 EUR/J. Invest: 400-600 EUR. Amort: 2,5-3,5 J.",
+    "savings_eur": 180,
+    "savings_by_hg": { "hg1": 140, "hg2": 180, "hg3": 200, "hg4": 220 },
+    "heating_types": ["gas", "oil", "heat_pump", "district", "electric", "other"],
+    "building_age_relevant": ["pre1990", "1990to2010", "post2010"],
+    "income_level_min": "medium",
+    "requires_solar": true
+  },
+  {
+    "id": 213,
+    "title": "Regenwasser sammeln und nutzen",
+    "category": "Garten",
+    "hg_range": "2-4",
+    "hg_levels": [2, 3, 4],
+    "property": "efh",
+    "tenure": "eigentum",
+    "timing": "mittel",
+    "effort": "aufwand",
+    "investment": "kleine_invest",
+    "wp_plan": "nein",
+    "description": "Regentonne (300-1.000L) fuer Gartenbewaesserung. Spart 30-50% Trinkwasser im Garten. Invest: 50-200 EUR. Ersparnis: 80-150 EUR/J.",
+    "savings_eur": 120,
+    "savings_by_hg": { "hg1": null, "hg2": 100, "hg3": 120, "hg4": 150 },
+    "heating_types": ["gas", "oil", "heat_pump", "district", "electric", "other"],
+    "building_age_relevant": ["pre1990", "1990to2010", "post2010"],
+    "income_level_min": "low",
+    "requires_garden": true
+  },
+  {
+    "id": 214,
+    "title": "Gartenbewaesserung optimieren",
+    "category": "Garten",
+    "hg_range": "2-4",
+    "hg_levels": [2, 3, 4],
+    "property": "efh",
+    "tenure": "eigentum",
+    "timing": "sofort",
+    "effort": "aufwand",
+    "investment": "kleine_invest",
+    "wp_plan": "nein",
+    "description": "Troepfchenbewässerung statt Rasensprenger spart 50-70% Wasser. Morgens statt mittags giessen. Mulchen reduziert Verdunstung. Ersparnis: 80-120 EUR/J.",
+    "savings_eur": 100,
+    "savings_by_hg": { "hg1": null, "hg2": 80, "hg3": 100, "hg4": 130 },
+    "heating_types": ["gas", "oil", "heat_pump", "district", "electric", "other"],
+    "building_age_relevant": ["pre1990", "1990to2010", "post2010"],
+    "income_level_min": "low",
+    "requires_garden": true
+  },
+  {
+    "id": 215,
+    "title": "Heizungsrohre im Keller daemmen",
+    "category": "Heizung",
+    "hg_range": "2-4",
+    "hg_levels": [2, 3, 4],
+    "property": "efh",
+    "tenure": "eigentum",
+    "timing": "sofort",
+    "effort": "aufwand",
+    "investment": "kleine_invest",
+    "wp_plan": "free",
+    "description": "Ungedaemmte Rohre verlieren 5-10% Waerme. Rohrisolierung: 3-5 EUR/m. DIY moeglich. Amort: 6 Monate. Ersparnis: 80-150 EUR/J.",
+    "savings_eur": 120,
+    "savings_by_hg": { "hg1": null, "hg2": 100, "hg3": 120, "hg4": 150 },
+    "heating_types": ["gas", "oil", "district"],
+    "building_age_relevant": ["pre1990", "1990to2010"],
+    "income_level_min": "low"
+  }
+]
