@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { WpHomeProvider, useWpHome, WpHomeData, HeatingType, BuildingAge, InsulationQuality, IncomeLevel } from "./store/wpHomeStore";
 import ALL_TIPS from "./data/tips.json";
 import RoomsEditor, { RoomsEditorCompact, Room } from "./components/RoomsEditor";
+import NeighborhoodCompare from "./components/NeighborhoodCompare";
 
 // ── Tip-Mapping: JSON → TIPS format ──────────────────────────────
 type Tip = {
@@ -581,6 +582,9 @@ function Dashboard() {
    </motion.div>
 
    </div>{/* end hero row */}
+
+   {/* ── Nachbarschafts-Sparvergleich ─────────────────────────── */}
+   <NeighborhoodCompare totalSavings={total} />
 
    {/* ── Kategorie-Cards ──────────────────────────────────────── */}
    <div style={{ marginBottom: 24 }}>
