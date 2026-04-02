@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
+  <title>Vertrags-Countdown | Wechselpilot</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            wp: {
+              primary: '#243c47',
+              accent: '#2a6fa6',
+              green: '#24a47d',
+              dkGreen: '#167a52',
+              ltGreen: '#d3ede5',
+              yellow: '#f9aa00',
+              ltYellow: '#feeecc',
+              red: '#e93a3a',
+              ltRed: '#fdcece',
+              bg: '#eef1f6',
+              gray: { 300: '#e3e3e6', 500: '#c4c4ca', 700: '#a3a3a8', 800: '#828288', 900: '#595962' },
+            }
+          },
+          fontFamily: {
+            sans: ['Poppins', 'system-ui', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    * { -webkit-tap-highlight-color: transparent; }
+    .countdown-ring { transition: stroke-dashoffset 1s ease-out; }
+  </style>
+</head>
+<body class="bg-wp-bg min-h-screen font-sans antialiased">
+
+  <!-- Widget Container: drop this div anywhere -->
+  <div id="wp-countdown-widget" class="max-w-md mx-auto p-4 sm:p-6"></div>
+
+  <script>
+  (function() {
+    'use strict';
+
+    // ─── Mock-Daten: Verträge mit Kündigungsfristen ────────────────
+    var CONTRACTS = [
+      {
+        id: 1,
+        provider: 'E.ON Energie',
+        type: 'Strom',
+        icon: '\u26A1',
+        cancellationDate: getFutureDate(21),  // 3 Wochen = rot
+        monthlyCost: 89,
+        savingsPotential: 264,
+      },
+      {
+        id: 2,
+        provider: 'Stadtwerke München',
+        type: 'Gas',
+        icon: '\uD83D\uDD25',
+        cancellationDate: getFutureDate(42),  // 6 Wochen = gelb
+        monthlyCost: 124,
+        savingsPotential: 418,
+      },
+      {
+        id: 3,
+        provider: 'Vattenfall',
+        type: 'Strom',
+        icon: '\u26A1',
+        cancellationDate: getFutureDate(84),  // 12 Wochen = grün
+        monthlyCost: 72,
+        savingsPotential: 186,
+      },
+    ];
+
+    function getFutureDate(days) {
+      var d = new Date();
+      d.setDate(d.getDate() + days);
+      return d;
+    }
+
+    // ─── Hilfsfunktionen ──────────────────────────────────────────
+    function getDaysRemaining(date) {
+      var now = new Date();
+      now.setHours(0, 0, 0, 0);
+      var target = new Date(date);
+      target.setHours(0, 0, 0, 0);
+      return Math.ceil((target - now) / (1000 * 60 * 60 * 24));
+    }
+
+    function getWeeksRemaining(date) {
+      return Math.floor(getDaysRemaining(date) / 7);
+    }
+
+    function getUrgency(date) {
+      var weeks = getWeeksRemaining(date);
+      if (weeks < 4) return 'red';
+      if (weeks < 8) return 'yellow';
+      return 'green';
+    }
+
+    function formatDate(date) {
+      return new Date(date).toLocaleDateString('de-DE', {
+        day: '2-digit', month: '2-digit', year: 'numeric'
+      });
+    }
+
+    function formatCurrency(n) {
+      return n.toLocaleString('de-DE');
+    }
+
+    // ─── Urgency-spezifische Styles ───────────────────────────────
+    var URGENCY_CONFIG = {
+      red: {
+        bg: 'bg-wp-ltRed',
+        border: 'border-wp-red/30',
+        text: 'text-wp-red',
+        badge: 'bg-wp-red text-white',
+        ring: '#e93a3a',
+        gradient: 'from-red-50 to-white',
+        label: 'Dringend',
+        sublabel: 'Frist l\u00E4uft bald ab!',
+        pulse: true,
+      },
+      yellow: {
+        bg: 'bg-wp-ltYellow',
+        border: 'border-wp-yellow/30',
+        text: 'text-amber-700',
+        badge: 'bg-wp-yellow text-white',
+        ring: '#f9aa00',
+        gradient: 'from-amber-50 to-white',
+        label: 'Bald',
+        sublabel: 'Jetzt vergleichen',
+        pulse: false,
+      },
+      green: {
+        bg: 'bg-wp-ltGreen',
+        border: 'border-wp-green/30',
+        text: 'text-wp-dkGreen',
+        badge: 'bg-wp-green text-white',
+        ring: '#24a47d',
+        gradient: 'from-emerald-50 to-white',
+        label: 'Entspannt',
+        sublabel: 'Noch ausreichend Zeit',
+        pulse: false,
+      },
+    };
+
+    // ─── SVG Countdown-Ring ───────────────────────────────────────
+    function createCountdownRing(days, maxDays, color, size) {
+      size = size || 64;
+      var strokeW = 5;
+      var r = (size - strokeW) / 2;
+      var circ = 2 * Math.PI * r;
+      var pct = Math.min(Math.max(days / maxDays, 0), 1);
+      var offset = circ - pct * circ;
+
+      return '<svg width="' + size + '" height="' + size + '" class="transform -rotate-90">' +
+        '<circle cx="' + (size/2) + '" cy="' + (size/2) + '" r="' + r + '" fill="none" stroke="#e3e3e6" stroke-width="' + strokeW + '"/>' +
+        '<circle cx="' + (size/2) + '" cy="' + (size/2) + '" r="' + r + '" fill="none" stroke="' + color + '" stroke-width="' + strokeW + '" stroke-linecap="round" ' +
+        'stroke-dasharray="' + circ + '" stroke-dashoffset="' + offset + '" class="countdown-ring"/>' +
+        '</svg>';
+    }
+
+    // ─── Notification-Banner ──────────────────────────────────────
+    function renderNotificationBanner(contracts) {
+      var urgent = contracts.filter(function(c) { return getWeeksRemaining(c.cancellationDate) < 4; });
+      if (urgent.length === 0) return '';
+
+      var totalSavings = urgent.reduce(function(s, c) { return s + c.savingsPotential; }, 0);
+
+      return '<div class="mb-4 rounded-2xl bg-gradient-to-r from-wp-red to-red-600 p-4 text-white shadow-lg shadow-red-200/50 animate-pulse-slow">' +
+        '<div class="flex items-center gap-3">' +
+          '<div class="flex-shrink-0 w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-lg">\uD83D\uDD14</div>' +
+          '<div class="flex-1 min-w-0">' +
+            '<div class="text-sm font-bold">' + urgent.length + ' Vertrag' + (urgent.length > 1 ? '\u00E4ge' : '') + ' l' + '\u00E4uft bald aus!</div>' +
+            '<div class="text-xs opacity-90 mt-0.5">Bis zu ' + formatCurrency(totalSavings) + ' \u20AC Sparpotenzial</div>' +
+          '</div>' +
+          '<div class="flex-shrink-0 text-2xl font-800">\u26A0\uFE0F</div>' +
+        '</div>' +
+      '</div>';
+    }
+
+    // ─── Einzelne Vertragskarte ───────────────────────────────────
+    function renderContractCard(contract) {
+      var days = getDaysRemaining(contract.cancellationDate);
+      var weeks = getWeeksRemaining(contract.cancellationDate);
+      var urgency = getUrgency(contract.cancellationDate);
+      var cfg = URGENCY_CONFIG[urgency];
+
+      var daysLabel = days === 1 ? 'Tag' : 'Tage';
+      var weeksLabel = weeks === 1 ? 'Woche' : 'Wochen';
+
+      var maxDays = 84; // 12 Wochen
+      var ring = createCountdownRing(days, maxDays, cfg.ring, 56);
+
+      return '<div class="bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all duration-200 overflow-hidden group">' +
+
+        // Top accent bar
+        '<div class="h-1 bg-gradient-to-r ' + (urgency === 'red' ? 'from-wp-red to-red-400' : urgency === 'yellow' ? 'from-wp-yellow to-amber-300' : 'from-wp-green to-emerald-300') + '"></div>' +
+
+        '<div class="p-4 sm:p-5">' +
+
+          // Header: Provider + Urgency Badge
+          '<div class="flex items-start justify-between gap-3 mb-4">' +
+            '<div class="flex items-center gap-3 min-w-0">' +
+              '<div class="flex-shrink-0 w-10 h-10 rounded-xl bg-wp-bg flex items-center justify-center text-xl">' + contract.icon + '</div>' +
+              '<div class="min-w-0">' +
+                '<div class="text-sm font-bold text-wp-primary truncate">' + contract.provider + '</div>' +
+                '<div class="text-xs text-wp-gray-700">' + contract.type + ' \u00B7 ' + formatCurrency(contract.monthlyCost) + ' \u20AC/Monat</div>' +
+              '</div>' +
+            '</div>' +
+            '<span class="flex-shrink-0 text-[10px] font-bold px-2.5 py-1 rounded-full ' + cfg.badge + (cfg.pulse ? ' animate-pulse' : '') + '">' + cfg.label + '</span>' +
+          '</div>' +
+
+          // Countdown Center
+          '<div class="flex items-center gap-4 mb-4">' +
+            '<div class="relative flex-shrink-0">' +
+              ring +
+              '<div class="absolute inset-0 flex flex-col items-center justify-center rotate-0">' +
+                '<span class="text-lg font-extrabold leading-none ' + cfg.text + '">' + days + '</span>' +
+                '<span class="text-[8px] text-wp-gray-700 mt-0.5">' + daysLabel + '</span>' +
+              '</div>' +
+            '</div>' +
+            '<div class="flex-1 min-w-0">' +
+              '<div class="text-xs text-wp-gray-700 mb-1">K\u00FCndigungsfrist</div>' +
+              '<div class="text-base font-bold text-wp-primary">' + weeks + ' ' + weeksLabel + '</div>' +
+              '<div class="text-xs text-wp-gray-700 mt-0.5">bis ' + formatDate(contract.cancellationDate) + '</div>' +
+              '<div class="text-xs font-semibold mt-1.5 ' + cfg.text + '">' + cfg.sublabel + '</div>' +
+            '</div>' +
+          '</div>' +
+
+          // Savings Potential
+          '<div class="rounded-xl ' + cfg.bg + ' border ' + cfg.border + ' p-3 mb-4">' +
+            '<div class="flex items-center justify-between">' +
+              '<div>' +
+                '<div class="text-[10px] font-semibold text-wp-gray-700 uppercase tracking-wider">Sparpotenzial</div>' +
+                '<div class="text-xl font-extrabold text-wp-primary mt-0.5">' + formatCurrency(contract.savingsPotential) + ' \u20AC<span class="text-xs font-semibold text-wp-gray-700 ml-1">/ Jahr</span></div>' +
+              '</div>' +
+              '<div class="text-2xl">\uD83D\uDCB0</div>' +
+            '</div>' +
+          '</div>' +
+
+          // CTA Button
+          '<a href="/apps/wpilot-home/" class="block w-full text-center py-3 sm:py-3.5 rounded-xl border-none font-bold text-sm cursor-pointer transition-all duration-200 touch-manipulation ' +
+            (urgency === 'red'
+              ? 'bg-wp-red hover:bg-red-600 text-white shadow-lg shadow-red-200/40'
+              : urgency === 'yellow'
+                ? 'bg-wp-accent hover:bg-blue-700 text-white shadow-lg shadow-blue-200/40'
+                : 'bg-wp-primary/10 hover:bg-wp-primary/15 text-wp-primary') +
+            ' no-underline">' +
+            (urgency === 'red' ? 'Jetzt wechseln \u2192' : urgency === 'yellow' ? 'Jetzt vergleichen \u2192' : 'Tarife ansehen \u2192') +
+          '</a>' +
+
+        '</div>' +
+      '</div>';
+    }
+
+    // ─── Zusammenfassung oben ─────────────────────────────────────
+    function renderSummaryHeader(contracts) {
+      var totalSavings = contracts.reduce(function(s, c) { return s + c.savingsPotential; }, 0);
+      var nextContract = contracts.slice().sort(function(a, b) {
+        return getDaysRemaining(a.cancellationDate) - getDaysRemaining(b.cancellationDate);
+      })[0];
+      var nextDays = getDaysRemaining(nextContract.cancellationDate);
+      var nextUrgency = getUrgency(nextContract.cancellationDate);
+
+      return '<div class="rounded-2xl bg-gradient-to-br from-wp-primary via-[#18466a] to-wp-accent p-5 sm:p-6 text-white mb-5 relative overflow-hidden shadow-xl">' +
+
+        // Decorative
+        '<div class="absolute -top-8 -right-8 w-32 h-32 rounded-full bg-white/5"></div>' +
+        '<div class="absolute -bottom-6 -left-6 w-20 h-20 rounded-full bg-white/[0.03]"></div>' +
+
+        '<div class="relative z-10">' +
+          '<div class="flex items-center gap-2 mb-1">' +
+            '<span class="text-base">\uD83D\uDCC5</span>' +
+            '<span class="text-[10px] font-bold uppercase tracking-widest opacity-80">Vertrags-Countdown</span>' +
+          '</div>' +
+          '<h2 class="text-lg sm:text-xl font-extrabold mb-3 leading-tight">K\u00FCndigungsfristen im Blick</h2>' +
+
+          '<div class="grid grid-cols-2 gap-3">' +
+            '<div class="bg-white/[0.12] rounded-xl p-3 backdrop-blur-sm">' +
+              '<div class="text-2xl font-extrabold leading-none">' + nextDays + '</div>' +
+              '<div class="text-[10px] opacity-80 mt-1">Tage bis n\u00E4chste Frist</div>' +
+            '</div>' +
+            '<div class="bg-white/[0.12] rounded-xl p-3 backdrop-blur-sm">' +
+              '<div class="text-2xl font-extrabold leading-none">' + formatCurrency(totalSavings) + ' \u20AC</div>' +
+              '<div class="text-[10px] opacity-80 mt-1">Gesamt-Sparpotenzial</div>' +
+            '</div>' +
+          '</div>' +
+
+          '<div class="mt-3 text-xs opacity-70">' + contracts.length + ' aktive Vertr\u00E4ge \u00B7 Automatisch \u00FCberwacht</div>' +
+        '</div>' +
+
+      '</div>';
+    }
+
+    // ─── Widget rendern ───────────────────────────────────────────
+    function render() {
+      var container = document.getElementById('wp-countdown-widget');
+      if (!container) return;
+
+      // Sortiere nach Dringlichkeit (nächste Frist zuerst)
+      var sorted = CONTRACTS.slice().sort(function(a, b) {
+        return getDaysRemaining(a.cancellationDate) - getDaysRemaining(b.cancellationDate);
+      });
+
+      var html = '';
+
+      // Summary Header
+      html += renderSummaryHeader(sorted);
+
+      // Notification Banner (falls dringend)
+      html += renderNotificationBanner(sorted);
+
+      // Contract Cards
+      html += '<div class="flex flex-col gap-4">';
+      sorted.forEach(function(contract) {
+        html += renderContractCard(contract);
+      });
+      html += '</div>';
+
+      // Footer
+      html += '<div class="mt-5 text-center">' +
+        '<p class="text-[11px] text-wp-gray-700">Daten werden t\u00E4glich aktualisiert \u00B7 <a href="/apps/wpilot-home/" class="text-wp-accent font-semibold hover:underline no-underline">Alle Vertr\u00E4ge verwalten</a></p>' +
+      '</div>';
+
+      container.innerHTML = html;
+    }
+
+    // ─── Live-Countdown-Ticker (aktualisiert jede Minute) ─────────
+    function startLiveTicker() {
+      render();
+      setInterval(render, 60000);
+    }
+
+    // ─── Initialisierung ──────────────────────────────────────────
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', startLiveTicker);
+    } else {
+      startLiveTicker();
+    }
+  })();
+  </script>
+</body>
+</html>

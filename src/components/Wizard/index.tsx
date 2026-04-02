@@ -77,68 +77,47 @@ function ConfettiExplosion() {
   );
 }
 
+// ── Colors (matching RoomsEditor) ────────────────────────────────
+const C = {
+  primary: "#243c47",
+  accent: "#24a47d",
+  bg: "#f8f8fa",
+  white: "#fff",
+  g300: "#d4d4d7",
+  g700: "#6b6b7b",
+  border: "#e3e3e6",
+};
+
 // ── Styles ─────────────────────────────────────────────────────
 const S = {
-  overlay: {
-    position: "fixed", inset: 0, background: "rgba(15,23,42,0.7)",
-    backdropFilter: "blur(4px)", zIndex: 200,
-    display: "flex", alignItems: "center", justifyContent: "center",
-    padding: "0", overflowY: "auto" as const, WebkitOverflowScrolling: "touch",
-  } as React.CSSProperties,
-  modal: {
-    background: "#fff", borderRadius: "20px", width: "100%", maxWidth: 520,
-    maxHeight: "100vh", overflowY: "auto" as const, WebkitOverflowScrolling: "touch",
-    boxShadow: "0 24px 80px rgba(0,0,0,0.25)",
-    display: "flex", flexDirection: "column" as const,
-    margin: "0",
-  } as React.CSSProperties,
-  header: {
-    padding: "20px 20px 0",
-    display: "flex", alignItems: "center", gap: 12,
-  } as React.CSSProperties,
-  headerText: {
-    flex: 1, minWidth: 0,
-  } as React.CSSProperties,
-  closeBtn: {
-    background: "#f1f5f9", border: "none", borderRadius: 12,
-    width: 48, height: 48, minWidth: 48, minHeight: 48,
-    fontSize: 20, cursor: "pointer",
-    display: "flex", alignItems: "center", justifyContent: "center",
-    color: "#64748b", flexShrink: 0, touchAction: "manipulation",
-  } as React.CSSProperties,
-  body: {
-    padding: "20px 20px 24px",
-    flex: 1,
-    overflow: "hidden",
-  } as React.CSSProperties,
   stepTitle: {
-    fontSize: 20, fontWeight: 800, color: "#0f172a", marginBottom: 4,
-    letterSpacing: "-0.5px",
+    fontSize: 16, fontWeight: 700, color: C.primary, marginBottom: 4,
   } as React.CSSProperties,
   stepSub: {
-    fontSize: 13, color: "#64748b", marginBottom: 24, lineHeight: 1.5,
+    fontSize: 13, color: C.g700, marginBottom: 20, lineHeight: 1.5,
   } as React.CSSProperties,
   field: {
     marginBottom: 16,
   } as React.CSSProperties,
   label: {
-    display: "block", fontSize: 12, fontWeight: 700, color: "#374151",
+    display: "block", fontSize: 12, fontWeight: 700, color: C.primary,
     marginBottom: 6, textTransform: "uppercase" as const, letterSpacing: "0.05em",
   } as React.CSSProperties,
   input: {
     width: "100%", padding: "14px 16px", borderRadius: 12,
-    border: "1.5px solid #e2e8f0", fontSize: 16, color: "#0f172a",
-    background: "#fafbfc", outline: "none", boxSizing: "border-box" as const,
+    border: "1px solid " + C.border, fontSize: 16, color: C.primary,
+    background: C.white, outline: "none", boxSizing: "border-box" as const,
     transition: "border-color 0.15s", minHeight: 52, touchAction: "manipulation",
-    WebkitAppearance: "none",
+    WebkitAppearance: "none", accentColor: C.accent,
+    fontFamily: "Poppins, sans-serif",
   } as React.CSSProperties,
   select: {
     width: "100%", padding: "14px 16px", borderRadius: 12,
-    border: "1.5px solid #e2e8f0", fontSize: 16, color: "#0f172a",
-    background: "#fafbfc", outline: "none", boxSizing: "border-box" as const,
+    border: "1px solid " + C.border, fontSize: 16, color: C.primary,
+    background: C.white, outline: "none", boxSizing: "border-box" as const,
     appearance: "none" as const, minHeight: 52, touchAction: "manipulation",
-    WebkitAppearance: "none",
-    backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%2364748b'%3E%3Cpath fill-rule='evenodd' d='M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z' clip-rule='evenodd'/%3E%3C/svg%3E")`,
+    WebkitAppearance: "none", fontFamily: "Poppins, sans-serif",
+    backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%236b6b7b'%3E%3Cpath fill-rule='evenodd' d='M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z' clip-rule='evenodd'/%3E%3C/svg%3E")`,
     backgroundRepeat: "no-repeat",
     backgroundPosition: "right 14px center",
     backgroundSize: 20,
@@ -148,32 +127,29 @@ const S = {
     display: "flex", gap: 8, flexWrap: "wrap" as const,
   } as React.CSSProperties,
   pill: {
-    padding: "12px 18px", borderRadius: 12, fontSize: 14, fontWeight: 600,
-    border: "1.5px solid #e2e8f0", background: "#fff", color: "#374151",
-    cursor: "pointer", transition: "all 0.15s", minHeight: 52,
+    padding: "12px 18px", borderRadius: 14, fontSize: 14, fontWeight: 600,
+    border: "1px solid " + C.border, background: C.white, color: C.primary,
+    cursor: "pointer", transition: "all 0.15s", minHeight: 48,
     display: "flex", alignItems: "center", justifyContent: "center",
-    touchAction: "manipulation",
+    touchAction: "manipulation", fontFamily: "Poppins, sans-serif",
   } as React.CSSProperties,
   pillActive: {
-    border: "1.5px solid #2a6fa6", background: "#eff6ff", color: "#2a6fa6",
-  } as React.CSSProperties,
-  footer: {
-    padding: "0 20px 24px",
-    display: "flex", gap: 10,
+    border: "1.5px solid " + C.accent, background: "#e6f7f1", color: C.accent,
   } as React.CSSProperties,
   btnPrimary: {
     flex: 1, padding: "16px 0", borderRadius: 14, border: "none",
-    background: "linear-gradient(135deg, #2a6fa6 0%, #1d5a8a 100%)", color: "#fff",
-    fontSize: 15, fontWeight: 700, cursor: "pointer", minHeight: 56,
+    background: "linear-gradient(135deg, #0f4c3a 0%, #1a6b52 40%, #24a47d 100%)", color: "#fff",
+    fontSize: 15, fontWeight: 700, cursor: "pointer", minHeight: 52,
     transition: "transform 0.1s, box-shadow 0.15s",
-    boxShadow: "0 4px 14px rgba(42,111,166,0.3)",
-    touchAction: "manipulation",
+    boxShadow: "0 4px 14px rgba(36,164,125,0.3)",
+    touchAction: "manipulation", fontFamily: "Poppins, sans-serif",
   } as React.CSSProperties,
   btnGhost: {
-    padding: "16px 24px", borderRadius: 14, border: "1.5px solid #e2e8f0",
-    background: "#fff", color: "#64748b", fontSize: 15, fontWeight: 600,
-    cursor: "pointer", minHeight: 56,
+    padding: "16px 24px", borderRadius: 14, border: "1px solid " + C.border,
+    background: C.white, color: C.g700, fontSize: 15, fontWeight: 600,
+    cursor: "pointer", minHeight: 52,
     transition: "all 0.15s", touchAction: "manipulation",
+    fontFamily: "Poppins, sans-serif",
   } as React.CSSProperties,
   error: {
     fontSize: 11, color: "#dc2626", marginTop: 4, fontWeight: 500,
@@ -184,7 +160,7 @@ const S = {
   } as React.CSSProperties,
   skipLink: {
     display: "block", textAlign: "center" as const, marginTop: 12,
-    fontSize: 12, color: "#94a3b8", cursor: "pointer", textDecoration: "underline",
+    fontSize: 12, color: C.g700, cursor: "pointer", textDecoration: "underline",
     padding: "8px 0", minHeight: 48, lineHeight: "32px",
   } as React.CSSProperties,
   summaryRow: {
@@ -196,27 +172,27 @@ const S = {
 
 const cardStyle = {
   display: "flex", flexDirection: "column" as const, alignItems: "center",
-  padding: "18px 14px", borderRadius: 14, border: "1.5px solid #e2e8f0",
-  background: "#fff", cursor: "pointer", transition: "all 0.15s",
-  gap: 8, flex: "1 1 0", minWidth: 0, minHeight: 90,
-  touchAction: "manipulation",
+  padding: "14px 12px", borderRadius: 14, border: "1px solid " + C.border,
+  background: C.white, cursor: "pointer", transition: "all 0.15s",
+  gap: 8, flex: "1 1 0", minWidth: 0, minHeight: 80,
+  touchAction: "manipulation", fontFamily: "Poppins, sans-serif",
 } as React.CSSProperties;
 
 const cardActiveStyle = {
-  border: "1.5px solid #2a6fa6", background: "#eff6ff",
+  border: "1.5px solid " + C.accent, background: "#e6f7f1",
 } as React.CSSProperties;
 
 const cardIcon = {
-  fontSize: 32, lineHeight: 1,
+  fontSize: 28, lineHeight: 1,
 } as React.CSSProperties;
 
 const cardLabel = {
-  fontSize: 12, fontWeight: 600, color: "#374151", textAlign: "center" as const,
+  fontSize: 12, fontWeight: 600, color: C.primary, textAlign: "center" as const,
   lineHeight: 1.4,
 } as React.CSSProperties;
 
 const cardLabelActive = {
-  color: "#2a6fa6",
+  color: C.accent,
 } as React.CSSProperties;
 
 const toggleGroup = {
@@ -224,14 +200,14 @@ const toggleGroup = {
 } as React.CSSProperties;
 
 const toggleBtn = {
-  flex: 1, padding: "14px 18px", borderRadius: 12, fontSize: 14, fontWeight: 600,
-  border: "1.5px solid #e2e8f0", background: "#fff", color: "#374151",
+  flex: 1, padding: "14px 18px", borderRadius: 14, fontSize: 14, fontWeight: 600,
+  border: "1px solid " + C.border, background: C.white, color: C.primary,
   cursor: "pointer", transition: "all 0.15s", textAlign: "center" as const,
-  minHeight: 52, touchAction: "manipulation",
+  minHeight: 48, touchAction: "manipulation", fontFamily: "Poppins, sans-serif",
 } as React.CSSProperties;
 
 const toggleActive = {
-  border: "1.5px solid #2a6fa6", background: "#eff6ff", color: "#2a6fa6",
+  border: "1.5px solid " + C.accent, background: "#e6f7f1", color: C.accent,
 } as React.CSSProperties;
 
 // ── Slide animation variants ────────────────────────────────────
@@ -269,58 +245,62 @@ function StepHousehold({ data, update }: { data: Household; update: (p: Partial<
       <div style={S.stepTitle}>Wer wohnt hier?</div>
       <div style={S.stepSub}>Basisdaten helfen uns, Sparpotenziale realistisch einzuschätzen.</div>
 
-      <div style={S.field}>
-        <label style={S.label}>Postleitzahl</label>
-        <input
-          style={{ ...S.input, ...(plzErr ? { borderColor: "#dc2626" } : {}) }}
-          placeholder="z.B. 10115"
-          value={data.plz}
-          maxLength={5}
-          onChange={e => handlePLZ(e.target.value)}
-        />
-        {plzErr && <div style={S.error}>{plzErr}</div>}
-      </div>
+      <div style={{ background: C.white, borderRadius: 14, padding: "12px 14px", border: "1px solid " + C.border, marginBottom: 12 }}>
+        <div style={S.field}>
+          <label style={S.label}>Postleitzahl</label>
+          <input
+            style={{ ...S.input, ...(plzErr ? { borderColor: "#dc2626" } : {}) }}
+            placeholder="z.B. 10115"
+            value={data.plz}
+            maxLength={5}
+            onChange={e => handlePLZ(e.target.value)}
+          />
+          {plzErr && <div style={S.error}>{plzErr}</div>}
+        </div>
 
-      <div style={S.field}>
-        <label style={S.label}>Personen im Haushalt</label>
-        <div style={S.pillGroup}>
-          {[1, 2, 3, 4, 5].map(n => (
-            <button
-              key={n}
-              onClick={() => update({ persons: n })}
-              style={{ ...S.pill, ...(data.persons === n ? S.pillActive : {}) }}
-            >
-              {n} {n === 1 ? "Person" : n === 5 ? "+ Personen" : "Personen"}
-            </button>
-          ))}
+        <div style={S.field}>
+          <label style={S.label}>Wohnfläche (m²) — optional</label>
+          <input
+            style={S.input}
+            type="number"
+            placeholder="z.B. 80"
+            value={data.area || ""}
+            min={10} max={1000}
+            onChange={e => update({ area: Number(e.target.value) })}
+          />
         </div>
       </div>
 
-      <div style={S.field}>
-        <label style={S.label}>Wohnform</label>
-        <div style={S.pillGroup}>
-          {(["apartment", "house"] as const).map(t => (
-            <button
-              key={t}
-              onClick={() => update({ propertyType: t })}
-              style={{ ...S.pill, ...(data.propertyType === t ? S.pillActive : {}) }}
-            >
-              {t === "apartment" ? "🏢 Wohnung" : "🏠 Haus"}
-            </button>
-          ))}
+      <div style={{ background: C.white, borderRadius: 14, padding: "12px 14px", border: "1px solid " + C.border, marginBottom: 12 }}>
+        <div style={S.field}>
+          <label style={S.label}>Personen im Haushalt</label>
+          <div style={S.pillGroup}>
+            {[1, 2, 3, 4, 5].map(n => (
+              <button
+                key={n}
+                onClick={() => update({ persons: n })}
+                style={{ ...S.pill, ...(data.persons === n ? S.pillActive : {}) }}
+              >
+                {n} {n === 1 ? "Person" : n === 5 ? "+ Personen" : "Personen"}
+              </button>
+            ))}
+          </div>
         </div>
-      </div>
 
-      <div style={S.field}>
-        <label style={S.label}>Wohnfläche (m²) — optional</label>
-        <input
-          style={S.input}
-          type="number"
-          placeholder="z.B. 80"
-          value={data.area || ""}
-          min={10} max={1000}
-          onChange={e => update({ area: Number(e.target.value) })}
-        />
+        <div style={{ ...S.field, marginBottom: 0 }}>
+          <label style={S.label}>Wohnform</label>
+          <div style={S.pillGroup}>
+            {(["apartment", "house"] as const).map(t => (
+              <button
+                key={t}
+                onClick={() => update({ propertyType: t })}
+                style={{ ...S.pill, ...(data.propertyType === t ? S.pillActive : {}) }}
+              >
+                {t === "apartment" ? "🏢 Wohnung" : "🏠 Haus"}
+              </button>
+            ))}
+          </div>
+        </div>
       </div>
     </>
   );
@@ -346,14 +326,16 @@ function StepElectricity({ data, update }: {
       <>
         <div style={S.stepTitle}>Stromvertrag</div>
         <div style={S.stepSub}>Keinen Stromvertrag? Kein Problem — skippe diesen Schritt.</div>
-        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-          <button
-            onClick={() => setHasElec(true)}
-            style={{ ...S.btnPrimary, flex: "none", padding: "14px 24px", width: "fit-content" }}
-          >
-            Stromvertrag hinzufügen
-          </button>
-          <div style={S.skipLink} onClick={() => update(null)}>Überspringen →</div>
+        <div style={{ background: C.white, borderRadius: 14, padding: "12px 14px", border: "1px solid " + C.border }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+            <button
+              onClick={() => setHasElec(true)}
+              style={{ ...S.btnPrimary, flex: "none", padding: "14px 24px", width: "fit-content" }}
+            >
+              Stromvertrag hinzufügen
+            </button>
+            <div style={S.skipLink} onClick={() => update(null)}>Überspringen →</div>
+          </div>
         </div>
       </>
     );
@@ -364,64 +346,66 @@ function StepElectricity({ data, update }: {
       <div style={S.stepTitle}>Strom</div>
       <div style={S.stepSub}>Trage deinen aktuellen Stromvertrag ein — oder überspringe.</div>
 
-      <div style={S.field}>
-        <label style={S.label}>Anbieter</label>
-        <input
-          style={S.input}
-          placeholder="z.B. Vattenfall, E.ON, local..."
-          value={def.provider}
-          onChange={e => set({ provider: e.target.value })}
-        />
-      </div>
-
-      <div style={S.field}>
-        <label style={S.label}>Jahresverbrauch (kWh)</label>
-        <input
-          style={S.input}
-          type="number"
-          placeholder="z.B. 2500"
-          value={def.kwh || ""}
-          min={100} max={100000}
-          onChange={e => set({ kwh: Number(e.target.value) })}
-        />
-        <div style={{ fontSize: 11, color: "#94a3b8", marginTop: 4 }}>
-          Ø-Verbrauch: 1 Person ≈ 1.500 kWh · 2 Personen ≈ 2.500 kWh · 4 Personen ≈ 4.000 kWh
+      <div style={{ background: C.white, borderRadius: 14, padding: "12px 14px", border: "1px solid " + C.border }}>
+        <div style={S.field}>
+          <label style={S.label}>Anbieter</label>
+          <input
+            style={S.input}
+            placeholder="z.B. Vattenfall, E.ON, local..."
+            value={def.provider}
+            onChange={e => set({ provider: e.target.value })}
+          />
         </div>
-      </div>
 
-      <div style={S.field}>
-        <label style={S.label}>Monatliche Kosten (€)</label>
-        <input
-          style={S.input}
-          type="number"
-          placeholder="z.B. 80"
-          value={def.monthlyCost || ""}
-          min={0}
-          onChange={e => set({ monthlyCost: Number(e.target.value) })}
-        />
-      </div>
+        <div style={S.field}>
+          <label style={S.label}>Jahresverbrauch (kWh)</label>
+          <input
+            style={S.input}
+            type="number"
+            placeholder="z.B. 2500"
+            value={def.kwh || ""}
+            min={100} max={100000}
+            onChange={e => set({ kwh: Number(e.target.value) })}
+          />
+          <div style={{ fontSize: 11, color: C.g700, marginTop: 4 }}>
+            Ø-Verbrauch: 1 Person ≈ 1.500 kWh · 2 Personen ≈ 2.500 kWh · 4 Personen ≈ 4.000 kWh
+          </div>
+        </div>
 
-      <div style={S.field}>
-        <label style={S.label}>Tarifart</label>
-        <select
-          style={S.select}
-          value={def.tariffType}
-          onChange={e => set({ tariffType: e.target.value as ElectricityContract["tariffType"] })}
-        >
-          <option value="grundversorgung">Grundversorgung</option>
-          <option value="sondertarif">Sondertarif</option>
-          <option value="oeko">Öko-Tarif</option>
-        </select>
-      </div>
+        <div style={S.field}>
+          <label style={S.label}>Monatliche Kosten (€)</label>
+          <input
+            style={S.input}
+            type="number"
+            placeholder="z.B. 80"
+            value={def.monthlyCost || ""}
+            min={0}
+            onChange={e => set({ monthlyCost: Number(e.target.value) })}
+          />
+        </div>
 
-      <div style={S.field}>
-        <label style={S.label}>Vertragsende (Monat/Jahr) — optional</label>
-        <input
-          style={S.input}
-          type="month"
-          value={def.contractEnd}
-          onChange={e => set({ contractEnd: e.target.value })}
-        />
+        <div style={S.field}>
+          <label style={S.label}>Tarifart</label>
+          <select
+            style={S.select}
+            value={def.tariffType}
+            onChange={e => set({ tariffType: e.target.value as ElectricityContract["tariffType"] })}
+          >
+            <option value="grundversorgung">Grundversorgung</option>
+            <option value="sondertarif">Sondertarif</option>
+            <option value="oeko">Öko-Tarif</option>
+          </select>
+        </div>
+
+        <div style={{ ...S.field, marginBottom: 0 }}>
+          <label style={S.label}>Vertragsende (Monat/Jahr) — optional</label>
+          <input
+            style={S.input}
+            type="month"
+            value={def.contractEnd}
+            onChange={e => set({ contractEnd: e.target.value })}
+          />
+        </div>
       </div>
 
       <div style={S.skipLink} onClick={() => { setHasElec(false); update(null); }}>
@@ -450,14 +434,16 @@ function StepGas({ data, update }: {
       <>
         <div style={S.stepTitle}>Gasvertrag</div>
         <div style={S.stepSub}>Kein Gas? Überspringe einfach.</div>
-        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-          <button
-            onClick={() => setHasGas(true)}
-            style={{ ...S.btnPrimary, flex: "none", padding: "14px 24px", width: "fit-content" }}
-          >
-            Gasvertrag hinzufügen
-          </button>
-          <div style={S.skipLink} onClick={() => update(null)}>Überspringen →</div>
+        <div style={{ background: C.white, borderRadius: 14, padding: "12px 14px", border: "1px solid " + C.border }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+            <button
+              onClick={() => setHasGas(true)}
+              style={{ ...S.btnPrimary, flex: "none", padding: "14px 24px", width: "fit-content" }}
+            >
+              Gasvertrag hinzufügen
+            </button>
+            <div style={S.skipLink} onClick={() => update(null)}>Überspringen →</div>
+          </div>
         </div>
       </>
     );
@@ -468,51 +454,53 @@ function StepGas({ data, update }: {
       <div style={S.stepTitle}>Gas</div>
       <div style={S.stepSub}>Trage deinen Gasvertrag ein — oder überspringe.</div>
 
-      <div style={S.field}>
-        <label style={S.label}>Anbieter</label>
-        <input
-          style={S.input}
-          placeholder="z.B. E.ON, local..."
-          value={def.provider}
-          onChange={e => set({ provider: e.target.value })}
-        />
-      </div>
-
-      <div style={S.field}>
-        <label style={S.label}>Jahresverbrauch (kWh)</label>
-        <input
-          style={S.input}
-          type="number"
-          placeholder="z.B. 12000"
-          value={def.kwh || ""}
-          min={100} max={200000}
-          onChange={e => set({ kwh: Number(e.target.value) })}
-        />
-        <div style={{ fontSize: 11, color: "#94a3b8", marginTop: 4 }}>
-          Ø-Verbrauch: Wohnung ≈ 6.000 kWh · Einfamilienhaus ≈ 20.000 kWh
+      <div style={{ background: C.white, borderRadius: 14, padding: "12px 14px", border: "1px solid " + C.border }}>
+        <div style={S.field}>
+          <label style={S.label}>Anbieter</label>
+          <input
+            style={S.input}
+            placeholder="z.B. E.ON, local..."
+            value={def.provider}
+            onChange={e => set({ provider: e.target.value })}
+          />
         </div>
-      </div>
 
-      <div style={S.field}>
-        <label style={S.label}>Monatliche Kosten (€)</label>
-        <input
-          style={S.input}
-          type="number"
-          placeholder="z.B. 100"
-          value={def.monthlyCost || ""}
-          min={0}
-          onChange={e => set({ monthlyCost: Number(e.target.value) })}
-        />
-      </div>
+        <div style={S.field}>
+          <label style={S.label}>Jahresverbrauch (kWh)</label>
+          <input
+            style={S.input}
+            type="number"
+            placeholder="z.B. 12000"
+            value={def.kwh || ""}
+            min={100} max={200000}
+            onChange={e => set({ kwh: Number(e.target.value) })}
+          />
+          <div style={{ fontSize: 11, color: C.g700, marginTop: 4 }}>
+            Ø-Verbrauch: Wohnung ≈ 6.000 kWh · Einfamilienhaus ≈ 20.000 kWh
+          </div>
+        </div>
 
-      <div style={S.field}>
-        <label style={S.label}>Vertragsende (Monat/Jahr) — optional</label>
-        <input
-          style={S.input}
-          type="month"
-          value={def.contractEnd}
-          onChange={e => set({ contractEnd: e.target.value })}
-        />
+        <div style={S.field}>
+          <label style={S.label}>Monatliche Kosten (€)</label>
+          <input
+            style={S.input}
+            type="number"
+            placeholder="z.B. 100"
+            value={def.monthlyCost || ""}
+            min={0}
+            onChange={e => set({ monthlyCost: Number(e.target.value) })}
+          />
+        </div>
+
+        <div style={{ ...S.field, marginBottom: 0 }}>
+          <label style={S.label}>Vertragsende (Monat/Jahr) — optional</label>
+          <input
+            style={S.input}
+            type="month"
+            value={def.contractEnd}
+            onChange={e => set({ contractEnd: e.target.value })}
+          />
+        </div>
       </div>
 
       <div style={S.skipLink} onClick={() => { setHasGas(false); update(null); }}>
@@ -551,9 +539,8 @@ function StepReview({ household, electricity, gas }: {
 
       <div style={{
         background: "linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 50%, #f0f9ff 100%)",
-        borderRadius: 18, padding: "20px 18px", marginBottom: 16,
+        borderRadius: 14, padding: "16px 14px", marginBottom: 12,
         border: "1px solid #bbf7d0",
-        boxShadow: "0 4px 16px rgba(36,164,125,0.08)",
       }}>
         <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 14 }}>
           <div style={{
@@ -563,29 +550,29 @@ function StepReview({ household, electricity, gas }: {
             fontSize: 20,
           }}>🏠</div>
           <div>
-            <div style={{ fontSize: 14, fontWeight: 700, color: "#0f172a" }}>Dein Profil</div>
-            <div style={{ fontSize: 11, color: "#64748b" }}>Zusammenfassung deiner Angaben</div>
+            <div style={{ fontSize: 14, fontWeight: 700, color: C.primary }}>Dein Profil</div>
+            <div style={{ fontSize: 11, color: C.g700 }}>Zusammenfassung deiner Angaben</div>
           </div>
         </div>
 
         <div style={S.sectionLabel}>Haushalt</div>
         <div style={{ background: "rgba(255,255,255,0.7)", borderRadius: 12, padding: "8px 14px", marginBottom: 12 }}>
           <div style={S.summaryRow}>
-            <span style={{ color: "#64748b" }}>PLZ</span>
-            <span style={{ fontWeight: 700, color: "#0f172a" }}>{household.plz || "—"}</span>
+            <span style={{ color: C.g700 }}>PLZ</span>
+            <span style={{ fontWeight: 700, color: C.primary }}>{household.plz || "—"}</span>
           </div>
           <div style={S.summaryRow}>
-            <span style={{ color: "#64748b" }}>Personen</span>
-            <span style={{ fontWeight: 700, color: "#0f172a" }}>{persons}</span>
+            <span style={{ color: C.g700 }}>Personen</span>
+            <span style={{ fontWeight: 700, color: C.primary }}>{persons}</span>
           </div>
           <div style={S.summaryRow}>
-            <span style={{ color: "#64748b" }}>Wohnform</span>
-            <span style={{ fontWeight: 700, color: "#0f172a" }}>{household.propertyType === "apartment" ? "🏢 Wohnung" : "🏠 Haus"}</span>
+            <span style={{ color: C.g700 }}>Wohnform</span>
+            <span style={{ fontWeight: 700, color: C.primary }}>{household.propertyType === "apartment" ? "🏢 Wohnung" : "🏠 Haus"}</span>
           </div>
           {household.area > 0 && (
             <div style={{ ...S.summaryRow, borderBottom: "none" }}>
-              <span style={{ color: "#64748b" }}>Fläche</span>
-              <span style={{ fontWeight: 700, color: "#0f172a" }}>{household.area} m²</span>
+              <span style={{ color: C.g700 }}>Fläche</span>
+              <span style={{ fontWeight: 700, color: C.primary }}>{household.area} m²</span>
             </div>
           )}
         </div>
@@ -595,16 +582,16 @@ function StepReview({ household, electricity, gas }: {
             <div style={S.sectionLabel}>⚡ Strom</div>
             <div style={{ background: "rgba(255,255,255,0.7)", borderRadius: 12, padding: "8px 14px", marginBottom: 12 }}>
               <div style={S.summaryRow}>
-                <span style={{ color: "#64748b" }}>Anbieter</span>
-                <span style={{ fontWeight: 700, color: "#0f172a" }}>{electricity.provider || "—"}</span>
+                <span style={{ color: C.g700 }}>Anbieter</span>
+                <span style={{ fontWeight: 700, color: C.primary }}>{electricity.provider || "—"}</span>
               </div>
               <div style={S.summaryRow}>
-                <span style={{ color: "#64748b" }}>Verbrauch</span>
-                <span style={{ fontWeight: 700, color: "#0f172a" }}>{fmt(electricity.kwh)} kWh/J</span>
+                <span style={{ color: C.g700 }}>Verbrauch</span>
+                <span style={{ fontWeight: 700, color: C.primary }}>{fmt(electricity.kwh)} kWh/J</span>
               </div>
               <div style={{ ...S.summaryRow, borderBottom: "none" }}>
-                <span style={{ color: "#64748b" }}>Kosten</span>
-                <span style={{ fontWeight: 700, color: "#0f172a" }}>{fmt(electricity.monthlyCost)} €/Mo</span>
+                <span style={{ color: C.g700 }}>Kosten</span>
+                <span style={{ fontWeight: 700, color: C.primary }}>{fmt(electricity.monthlyCost)} €/Mo</span>
               </div>
             </div>
           </>
@@ -615,16 +602,16 @@ function StepReview({ household, electricity, gas }: {
             <div style={S.sectionLabel}>🔥 Gas</div>
             <div style={{ background: "rgba(255,255,255,0.7)", borderRadius: 12, padding: "8px 14px", marginBottom: 12 }}>
               <div style={S.summaryRow}>
-                <span style={{ color: "#64748b" }}>Anbieter</span>
-                <span style={{ fontWeight: 700, color: "#0f172a" }}>{gas.provider || "—"}</span>
+                <span style={{ color: C.g700 }}>Anbieter</span>
+                <span style={{ fontWeight: 700, color: C.primary }}>{gas.provider || "—"}</span>
               </div>
               <div style={S.summaryRow}>
-                <span style={{ color: "#64748b" }}>Verbrauch</span>
-                <span style={{ fontWeight: 700, color: "#0f172a" }}>{fmt(gas.kwh)} kWh/J</span>
+                <span style={{ color: C.g700 }}>Verbrauch</span>
+                <span style={{ fontWeight: 700, color: C.primary }}>{fmt(gas.kwh)} kWh/J</span>
               </div>
               <div style={{ ...S.summaryRow, borderBottom: "none" }}>
-                <span style={{ color: "#64748b" }}>Kosten</span>
-                <span style={{ fontWeight: 700, color: "#0f172a" }}>{fmt(gas.monthlyCost)} €/Mo</span>
+                <span style={{ color: C.g700 }}>Kosten</span>
+                <span style={{ fontWeight: 700, color: C.primary }}>{fmt(gas.monthlyCost)} €/Mo</span>
               </div>
             </div>
           </>
@@ -633,34 +620,34 @@ function StepReview({ household, electricity, gas }: {
         <div style={S.sectionLabel}>🏠 Gebäude & Lifestyle</div>
         <div style={{ background: "rgba(255,255,255,0.7)", borderRadius: 12, padding: "8px 14px" }}>
           <div style={S.summaryRow}>
-            <span style={{ color: "#64748b" }}>Heizung</span>
-            <span style={{ fontWeight: 700, color: "#0f172a" }}>{HEATING_LABELS[data.heatingType]}</span>
+            <span style={{ color: C.g700 }}>Heizung</span>
+            <span style={{ fontWeight: 700, color: C.primary }}>{HEATING_LABELS[data.heatingType]}</span>
           </div>
           <div style={S.summaryRow}>
-            <span style={{ color: "#64748b" }}>Gebäudealter</span>
-            <span style={{ fontWeight: 700, color: "#0f172a" }}>{BUILDING_LABELS[data.buildingAge]}</span>
+            <span style={{ color: C.g700 }}>Gebäudealter</span>
+            <span style={{ fontWeight: 700, color: C.primary }}>{BUILDING_LABELS[data.buildingAge]}</span>
           </div>
           <div style={S.summaryRow}>
-            <span style={{ color: "#64748b" }}>Isolierung</span>
-            <span style={{ fontWeight: 700, color: "#0f172a" }}>{INSULATION_LABELS[data.insulationQuality]}</span>
+            <span style={{ color: C.g700 }}>Isolierung</span>
+            <span style={{ fontWeight: 700, color: C.primary }}>{INSULATION_LABELS[data.insulationQuality]}</span>
           </div>
           <div style={S.summaryRow}>
-            <span style={{ color: "#64748b" }}>Budget</span>
-            <span style={{ fontWeight: 700, color: "#0f172a" }}>{INCOME_LABELS[data.income]}</span>
+            <span style={{ color: C.g700 }}>Budget</span>
+            <span style={{ fontWeight: 700, color: C.primary }}>{INCOME_LABELS[data.income]}</span>
           </div>
           <div style={S.summaryRow}>
-            <span style={{ color: "#64748b" }}>Garten</span>
-            <span style={{ fontWeight: 700, color: "#0f172a" }}>{data.hasGarden ? "🌿 Ja" : "Nein"}</span>
+            <span style={{ color: C.g700 }}>Garten</span>
+            <span style={{ fontWeight: 700, color: C.primary }}>{data.hasGarden ? "🌿 Ja" : "Nein"}</span>
           </div>
           <div style={{ ...S.summaryRow, borderBottom: "none" }}>
-            <span style={{ color: "#64748b" }}>Solar-Potenzial</span>
-            <span style={{ fontWeight: 700, color: "#0f172a" }}>{data.hasSolarPotential ? "☀️ Ja" : "Nein"}</span>
+            <span style={{ color: C.g700 }}>Solar-Potenzial</span>
+            <span style={{ fontWeight: 700, color: C.primary }}>{data.hasSolarPotential ? "☀️ Ja" : "Nein"}</span>
           </div>
         </div>
       </div>
 
       {!electricity && !gas && (
-        <div style={{ background: "#fff7ed", borderRadius: 14, padding: "12px 16px", marginBottom: 16, fontSize: 13, color: "#92400e" }}>
+        <div style={{ background: "#fff7ed", borderRadius: 14, padding: "12px 16px", marginBottom: 12, fontSize: 13, color: "#92400e" }}>
           Keine Energieverträge eingetragen. Die Ersparnis-Prognose basiert dann auf Durchschnittswerten.
         </div>
       )}
@@ -700,53 +687,59 @@ function StepBuilding({ data, update }: {
       <div style={S.stepTitle}>Haushalt & Gebäude</div>
       <div style={S.stepSub}>Wie wird bei dir geheizt? Und wie alt ist das Gebäude? Das hilft uns, die besten Spar-Tipps zu finden.</div>
 
-      <div style={S.field}>
-        <label style={S.label}>Heizungsart</label>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 8 }}>
-          {HEATING_OPTIONS.map(opt => (
-            <button
-              key={opt.value}
-              onClick={() => update({ heatingType: opt.value })}
-              style={{ ...cardStyle, ...(data.heatingType === opt.value ? cardActiveStyle : {}) }}
-            >
-              <span style={cardIcon}>{opt.icon}</span>
-              <span style={{ ...cardLabel, ...(data.heatingType === opt.value ? cardLabelActive : {}) }}>{opt.label}</span>
-            </button>
-          ))}
+      <div style={{ background: C.white, borderRadius: 14, padding: "12px 14px", border: "1px solid " + C.border, marginBottom: 12 }}>
+        <div style={S.field}>
+          <label style={S.label}>Heizungsart</label>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 8 }}>
+            {HEATING_OPTIONS.map(opt => (
+              <button
+                key={opt.value}
+                onClick={() => update({ heatingType: opt.value })}
+                style={{ ...cardStyle, ...(data.heatingType === opt.value ? cardActiveStyle : {}) }}
+              >
+                <span style={cardIcon}>{opt.icon}</span>
+                <span style={{ ...cardLabel, ...(data.heatingType === opt.value ? cardLabelActive : {}) }}>{opt.label}</span>
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 
-      <div style={S.field}>
-        <label style={S.label}>Gebäudealter</label>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 8 }}>
-          {BUILDING_AGE_OPTIONS.map(opt => (
-            <button
-              key={opt.value}
-              onClick={() => update({ buildingAge: opt.value })}
-              style={{ ...cardStyle, ...(data.buildingAge === opt.value ? cardActiveStyle : {}) }}
-            >
-              <span style={cardIcon}>{opt.icon}</span>
-              <span style={{ ...cardLabel, ...(data.buildingAge === opt.value ? cardLabelActive : {}) }}>{opt.label}</span>
-              <span style={{ fontSize: 9, color: "#94a3b8" }}>{opt.sub}</span>
-            </button>
-          ))}
+      <div style={{ background: C.white, borderRadius: 14, padding: "12px 14px", border: "1px solid " + C.border, marginBottom: 12 }}>
+        <div style={S.field}>
+          <label style={S.label}>Gebäudealter</label>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 8 }}>
+            {BUILDING_AGE_OPTIONS.map(opt => (
+              <button
+                key={opt.value}
+                onClick={() => update({ buildingAge: opt.value })}
+                style={{ ...cardStyle, ...(data.buildingAge === opt.value ? cardActiveStyle : {}) }}
+              >
+                <span style={cardIcon}>{opt.icon}</span>
+                <span style={{ ...cardLabel, ...(data.buildingAge === opt.value ? cardLabelActive : {}) }}>{opt.label}</span>
+                <span style={{ fontSize: 9, color: C.g700 }}>{opt.sub}</span>
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 
-      <div style={S.field}>
-        <label style={S.label}>Isolierungsqualität</label>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 8 }}>
-          {INSULATION_OPTIONS.map(opt => (
-            <button
-              key={opt.value}
-              onClick={() => update({ insulationQuality: opt.value })}
-              style={{ ...cardStyle, ...(data.insulationQuality === opt.value ? cardActiveStyle : {}) }}
-            >
-              <span style={cardIcon}>{opt.icon}</span>
-              <span style={{ ...cardLabel, ...(data.insulationQuality === opt.value ? cardLabelActive : {}) }}>{opt.label}</span>
-              <span style={{ fontSize: 9, color: "#94a3b8" }}>{opt.sub}</span>
-            </button>
-          ))}
+      <div style={{ background: C.white, borderRadius: 14, padding: "12px 14px", border: "1px solid " + C.border }}>
+        <div style={{ ...S.field, marginBottom: 0 }}>
+          <label style={S.label}>Isolierungsqualität</label>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 8 }}>
+            {INSULATION_OPTIONS.map(opt => (
+              <button
+                key={opt.value}
+                onClick={() => update({ insulationQuality: opt.value })}
+                style={{ ...cardStyle, ...(data.insulationQuality === opt.value ? cardActiveStyle : {}) }}
+              >
+                <span style={cardIcon}>{opt.icon}</span>
+                <span style={{ ...cardLabel, ...(data.insulationQuality === opt.value ? cardLabelActive : {}) }}>{opt.label}</span>
+                <span style={{ fontSize: 9, color: C.g700 }}>{opt.sub}</span>
+              </button>
+            ))}
+          </div>
         </div>
       </div>
     </>
@@ -771,113 +764,71 @@ function StepLifestyle({ data, update }: {
       <div style={S.stepTitle}>Lifestyle & Budget</div>
       <div style={S.stepSub}>Damit wir Tipps zeigen, die zu deinem Budget passen — keine unrealistischen Empfehlungen.</div>
 
-      <div style={S.field}>
-        <label style={S.label}>Haushaltsbudget</label>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 8 }}>
-          {INCOME_OPTIONS.map(opt => (
+      <div style={{ background: C.white, borderRadius: 14, padding: "12px 14px", border: "1px solid " + C.border, marginBottom: 12 }}>
+        <div style={{ ...S.field, marginBottom: 0 }}>
+          <label style={S.label}>Haushaltsbudget</label>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 8 }}>
+            {INCOME_OPTIONS.map(opt => (
+              <button
+                key={opt.value}
+                onClick={() => update({ income: opt.value })}
+                style={{ ...cardStyle, ...(data.income === opt.value ? cardActiveStyle : {}) }}
+              >
+                <span style={cardIcon}>{opt.icon}</span>
+                <span style={{ ...cardLabel, ...(data.income === opt.value ? cardLabelActive : {}) }}>{opt.label}</span>
+                <span style={{ fontSize: 9, color: C.g700 }}>{opt.sub}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div style={{ background: C.white, borderRadius: 14, padding: "12px 14px", border: "1px solid " + C.border, marginBottom: 12 }}>
+        <div style={{ ...S.field, marginBottom: 0 }}>
+          <label style={S.label}>Hast du einen Garten?</label>
+          <div style={toggleGroup}>
             <button
-              key={opt.value}
-              onClick={() => update({ income: opt.value })}
-              style={{ ...cardStyle, ...(data.income === opt.value ? cardActiveStyle : {}) }}
+              onClick={() => update({ hasGarden: true })}
+              style={{ ...toggleBtn, ...(data.hasGarden === true ? toggleActive : {}) }}
             >
-              <span style={cardIcon}>{opt.icon}</span>
-              <span style={{ ...cardLabel, ...(data.income === opt.value ? cardLabelActive : {}) }}>{opt.label}</span>
-              <span style={{ fontSize: 9, color: "#94a3b8" }}>{opt.sub}</span>
+              🌿 Ja
             </button>
-          ))}
+            <button
+              onClick={() => update({ hasGarden: false })}
+              style={{ ...toggleBtn, ...(data.hasGarden === false ? toggleActive : {}) }}
+            >
+              🏢 Nein
+            </button>
+          </div>
         </div>
       </div>
 
-      <div style={S.field}>
-        <label style={S.label}>Hast du einen Garten?</label>
-        <div style={toggleGroup}>
-          <button
-            onClick={() => update({ hasGarden: true })}
-            style={{ ...toggleBtn, ...(data.hasGarden === true ? toggleActive : {}) }}
-          >
-            🌿 Ja
-          </button>
-          <button
-            onClick={() => update({ hasGarden: false })}
-            style={{ ...toggleBtn, ...(data.hasGarden === false ? toggleActive : {}) }}
-          >
-            🏢 Nein
-          </button>
-        </div>
-      </div>
-
-      <div style={S.field}>
-        <label style={S.label}>Solar-Potenzial? (Dach, Balkon, Süd-Ausrichtung)</label>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 8 }}>
-          <button
-            onClick={() => update({ hasSolarPotential: true })}
-            style={{ ...toggleBtn, ...(data.hasSolarPotential === true ? toggleActive : {}) }}
-          >
-            ☀️ Ja
-          </button>
-          <button
-            onClick={() => update({ hasSolarPotential: false })}
-            style={{ ...toggleBtn, ...(data.hasSolarPotential === false ? toggleActive : {}) }}
-          >
-            🌧️ Nein
-          </button>
-          <button
-            onClick={() => update({ hasSolarPotential: false })}
-            style={{ ...toggleBtn, ...(data.hasSolarPotential === false ? toggleActive : {}) }}
-          >
-            🤷 Weiß nicht
-          </button>
+      <div style={{ background: C.white, borderRadius: 14, padding: "12px 14px", border: "1px solid " + C.border }}>
+        <div style={{ ...S.field, marginBottom: 0 }}>
+          <label style={S.label}>Solar-Potenzial? (Dach, Balkon, Süd-Ausrichtung)</label>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 8 }}>
+            <button
+              onClick={() => update({ hasSolarPotential: true })}
+              style={{ ...toggleBtn, ...(data.hasSolarPotential === true ? toggleActive : {}) }}
+            >
+              ☀️ Ja
+            </button>
+            <button
+              onClick={() => update({ hasSolarPotential: false })}
+              style={{ ...toggleBtn, ...(data.hasSolarPotential === false ? toggleActive : {}) }}
+            >
+              🌧️ Nein
+            </button>
+            <button
+              onClick={() => update({ hasSolarPotential: false })}
+              style={{ ...toggleBtn, ...(data.hasSolarPotential === false ? toggleActive : {}) }}
+            >
+              🤷 Weiß nicht
+            </button>
+          </div>
         </div>
       </div>
     </>
-  );
-}
-
-// ── Animated Progress Bar ───────────────────────────────────────
-function ProgressBar({ step, total }: { step: number; total: number }) {
-  const pct = ((step) / (total - 1)) * 100;
-  return (
-    <div style={{ padding: "16px 20px 0" }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
-        <span style={{ fontSize: 12, fontWeight: 600, color: "#64748b" }}>
-          Schritt {step + 1} von {total}
-        </span>
-        <span style={{ fontSize: 12, fontWeight: 700, color: "#2a6fa6" }}>
-          {Math.round(pct)}%
-        </span>
-      </div>
-      <div style={{
-        height: 6, borderRadius: 3, background: "#e2e8f0",
-        overflow: "hidden", position: "relative",
-      }}>
-        <motion.div
-          style={{
-            height: "100%", borderRadius: 3,
-            background: "linear-gradient(90deg, #2a6fa6 0%, #24a47d 100%)",
-          }}
-          initial={{ width: "0%" }}
-          animate={{ width: pct + "%" }}
-          transition={{ duration: 0.4, ease: "easeOut" }}
-        />
-      </div>
-      <div style={{ display: "flex", justifyContent: "space-between", marginTop: 6 }}>
-        {Array.from({ length: total }).map((_, i) => (
-          <motion.div
-            key={i}
-            style={{
-              width: 8, height: 8, borderRadius: 4,
-              boxSizing: "border-box" as const,
-            }}
-            animate={{
-              scale: i === step ? 1.3 : 1,
-              background: i < step ? "#24a47d" : i === step ? "#2a6fa6" : "#e2e8f0",
-              border: i === step ? "2px solid #2a6fa6" : "2px solid transparent",
-            }}
-            transition={{ duration: 0.3 }}
-          />
-        ))}
-      </div>
-    </div>
   );
 }
 
@@ -920,55 +871,120 @@ export default function Wizard() {
 
   const stepTitles = ["Haushalt", "Strom", "Gas", "Gebäude", "Lifestyle", "Fertig!"];
   const stepIcons = ["🏠", "⚡", "🔥", "🏗️", "🎨", "🎉"];
+  const pct = (step / (TOTAL_STEPS - 1)) * 100;
 
   return (
-    <div style={S.overlay}>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      style={{
+        position: "fixed" as const, inset: 0, background: C.bg, zIndex: 1000,
+        display: "flex", flexDirection: "column" as const,
+        fontFamily: "Poppins, sans-serif",
+      }}
+    >
       {showConfetti && <ConfettiExplosion />}
-      <motion.div
-        style={S.modal}
-        initial={{ opacity: 0, scale: 0.92, y: 30 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        transition={{ duration: 0.4, ease: "easeOut" }}
-      >
-        {/* Header */}
-        <div style={S.header}>
-          <div style={S.headerText}>
-            <div style={{ fontSize: 11, fontWeight: 700, color: "#2a6fa6", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 2 }}>
-              Willkommen bei WP Home
-            </div>
-            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+
+      {/* ── Header (like RoomsEditor) ── */}
+      <div style={{
+        display: "flex", alignItems: "center", justifyContent: "space-between",
+        padding: "16px 16px 12px", borderBottom: "1px solid " + C.border,
+        background: C.white,
+      }}>
+        <div style={{ fontSize: 17, fontWeight: 700, color: C.primary }}>
+          🏠 Einrichtung
+        </div>
+        <button
+          onClick={finishWizard}
+          style={{
+            fontSize: 12, padding: "8px 16px", borderRadius: 10,
+            border: "1px solid " + C.g300, background: C.white,
+            color: C.primary, cursor: "pointer", fontWeight: 600,
+            fontFamily: "Poppins, sans-serif",
+          }}
+        >
+          ← Überspringen
+        </button>
+      </div>
+
+      {/* ── Scrollable Body ── */}
+      <div style={{ flex: 1, overflowY: "auto", padding: 16 }}>
+        <div style={{ maxWidth: 600, margin: "0 auto" }}>
+
+          {/* ── Green Gradient Header Card (Step + Progress) ── */}
+          <div style={{
+            background: "linear-gradient(135deg, #0f4c3a 0%, #1a6b52 40%, #24a47d 100%)",
+            borderRadius: 16, padding: "16px 18px", color: "#fff", marginBottom: 20,
+          }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
               <motion.span
                 key={step}
                 initial={{ scale: 0.5, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ duration: 0.3 }}
-                style={{ fontSize: 20 }}
+                style={{ fontSize: 24 }}
               >
                 {stepIcons[step]}
               </motion.span>
-              <div style={{ fontSize: 15, fontWeight: 800, color: "#0f172a" }}>
-                {stepTitles[step]}
+              <div>
+                <div style={{ fontSize: 11, fontWeight: 600, opacity: 0.8 }}>
+                  Schritt {step + 1} von {TOTAL_STEPS}
+                </div>
+                <div style={{ fontSize: 20, fontWeight: 800 }}>
+                  {stepTitles[step]}
+                </div>
               </div>
             </div>
+            {/* Progress bar */}
+            <div style={{
+              height: 6, borderRadius: 3, background: "rgba(255,255,255,0.25)",
+              overflow: "hidden",
+            }}>
+              <motion.div
+                style={{
+                  height: "100%", borderRadius: 3,
+                  background: "#fff",
+                }}
+                initial={{ width: "0%" }}
+                animate={{ width: pct + "%" }}
+                transition={{ duration: 0.4, ease: "easeOut" }}
+              />
+            </div>
+            <div style={{ display: "flex", justifyContent: "space-between", marginTop: 6 }}>
+              {Array.from({ length: TOTAL_STEPS }).map((_, i) => (
+                <motion.div
+                  key={i}
+                  style={{
+                    width: 8, height: 8, borderRadius: 4,
+                    boxSizing: "border-box" as const,
+                  }}
+                  animate={{
+                    scale: i === step ? 1.3 : 1,
+                    background: i < step ? "#fff" : i === step ? "#fff" : "rgba(255,255,255,0.3)",
+                    border: i === step ? "2px solid #fff" : "2px solid transparent",
+                  }}
+                  transition={{ duration: 0.3 }}
+                />
+              ))}
+            </div>
           </div>
-          <button style={S.closeBtn} onClick={finishWizard} title="Überspringen">×</button>
-        </div>
 
-        {/* Animated Progress Bar */}
-        <ProgressBar step={step} total={TOTAL_STEPS} />
-
-        {/* Body with slide animation */}
-        <div style={{ ...S.body, position: "relative" as const }}>
+          {/* ── Error Messages ── */}
           {errors.length > 0 && (
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
-              style={{ background: "#fef2f2", border: "1px solid #fecaca", borderRadius: 10, padding: "10px 14px", marginBottom: 16, fontSize: 13, color: "#dc2626" }}
+              style={{
+                background: "#fef2f2", border: "1px solid #fecaca", borderRadius: 14,
+                padding: "10px 14px", marginBottom: 16, fontSize: 13, color: "#dc2626",
+              }}
             >
               {errors.map((e, i) => <div key={i}>{e}</div>)}
             </motion.div>
           )}
 
+          {/* ── Step Content with slide animation ── */}
           <AnimatePresence mode="wait" custom={direction}>
             <motion.div
               key={step}
@@ -987,10 +1003,18 @@ export default function Wizard() {
               {step === 5 && <StepReview household={data.household} electricity={data.electricity} gas={data.gas} />}
             </motion.div>
           </AnimatePresence>
-        </div>
 
-        {/* Footer */}
-        <div style={S.footer}>
+          {/* spacer for fixed footer */}
+          <div style={{ height: 80 }} />
+        </div>
+      </div>
+
+      {/* ── Footer (fixed bottom, like RoomsEditor) ── */}
+      <div style={{
+        padding: 16, background: C.white, borderTop: "1px solid " + C.border,
+        display: "flex", gap: 10,
+      }}>
+        <div style={{ maxWidth: 600, margin: "0 auto", width: "100%", display: "flex", gap: 10 }}>
           {step > 0 && (
             <motion.button
               style={S.btnGhost}
@@ -1018,7 +1042,7 @@ export default function Wizard() {
             {step < TOTAL_STEPS - 1 ? "Weiter →" : "Dashboard starten 🚀"}
           </motion.button>
         </div>
-      </motion.div>
-    </div>
+      </div>
+    </motion.div>
   );
 }

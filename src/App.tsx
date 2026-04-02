@@ -2,6 +2,7 @@ import { useState, useMemo, useRef, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import { WpHomeProvider, useWpHome, WpHomeData, HeatingType, BuildingAge, InsulationQuality, IncomeLevel } from "./store/wpHomeStore";
 import ALL_TIPS from "./data/tips.json";
+import RoomsEditor, { RoomsEditorCompact, Room } from "./components/RoomsEditor";
 
 // ── Tip-Mapping: JSON → TIPS format ──────────────────────────────
 type Tip = {
@@ -321,6 +322,11 @@ function Dashboard() {
  var _mt=useState<any>(null),modalTip=_mt[0],setModalTip=_mt[1];
  var _done=useState<Set<number>>(new Set()),done=_done[0],setDone=_done[1];
  var _catView=useState<string|null>(null),catView=_catView[0],setCatView=_catView[1];
+ var _rooms=useState<Room[]>(() => {
+  try { const saved = localStorage.getItem('wp_rooms'); return saved ? JSON.parse(saved) : []; } catch { return []; }
+ }),rooms=_rooms[0],setRoomsRaw=_rooms[1];
+ function setRooms(r: Room[]) { setRoomsRaw(r); localStorage.setItem('wp_rooms', JSON.stringify(r)); }
+ var _showRooms=useState(false),showRooms=_showRooms[0],setShowRooms=_showRooms[1];
 
  function markDone(id: number) {
   setDone(function(prev) { var n = new Set(prev); n.add(id); return n; });
@@ -428,14 +434,17 @@ function Dashboard() {
     </div>
    </div>
 
-   {/* ── Hero: Total Savings Card ───────────────────────────────── */}
+   {/* ── Hero Row: Savings + Flugspiel ──────────────────────────── */}
+   <div className="wp-hero-row" style={{ display: "flex", gap: 14, marginBottom: 20, flexWrap: "wrap" as const }}>
+   <style>{`@media(max-width:600px){.wp-hero-row{flex-direction:column;}}`}</style>
    <motion.div
+    className="wp-hero-main"
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
     transition={{ duration: 0.5 }}
     style={{
      background: "linear-gradient(135deg, #0f4c3a 0%, #1a6b52 40%, #24a47d 100%)",
-     borderRadius: 18, padding: "clamp(20px, 5vw, 24px)", marginBottom: 20,
+     borderRadius: 18, padding: "clamp(20px, 5vw, 24px)", flex: "1 1 60%", minWidth: 260,
      color: "#fff", position: "relative" as const, overflow: "hidden",
      boxShadow: "0 8px 32px rgba(36,164,125,0.25)",
     }}
@@ -458,8 +467,41 @@ function Dashboard() {
       basierend auf {tips.length} personalisierten Tipps
      </div>
 
+     {/* ── Nächster Spartipp (in Hero Box) ─────────────────────── */}
+     {sofortTips.length > 0 && (
+      <div
+       onClick={() => setModalTip(sofortTips[0])}
+       style={{
+        background: "rgba(255,255,255,0.13)", borderRadius: 14, padding: "12px 14px",
+        marginTop: 16, cursor: "pointer", backdropFilter: "blur(4px)",
+        border: "1px solid rgba(255,255,255,0.15)",
+        display: "flex", alignItems: "center", gap: 12,
+        transition: "background 0.15s",
+       }}
+       onMouseEnter={(e: any) => { e.currentTarget.style.background = "rgba(255,255,255,0.2)"; }}
+       onMouseLeave={(e: any) => { e.currentTarget.style.background = "rgba(255,255,255,0.13)"; }}
+      >
+       <div style={{
+        width: 36, height: 36, borderRadius: 10, background: "rgba(255,255,255,0.2)",
+        display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16, flexShrink: 0,
+       }}>💡</div>
+       <div style={{ flex: 1, minWidth: 0 }}>
+        <div style={{ fontSize: 10, fontWeight: 600, opacity: 0.75, marginBottom: 2, textTransform: "uppercase" as const, letterSpacing: "0.05em" }}>
+         Nächster Spartipp
+        </div>
+        <div style={{ fontSize: 13, fontWeight: 700, lineHeight: 1.3, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" as const }}>
+         {sofortTips[0].t}
+        </div>
+       </div>
+       <div style={{ textAlign: "right" as const, flexShrink: 0 }}>
+        <div style={{ fontSize: 18, fontWeight: 800 }}>{fmt(sofortTips[0].sav)} €</div>
+        <div style={{ fontSize: 10, opacity: 0.7 }}>pro Jahr</div>
+       </div>
+      </div>
+     )}
+
      <div style={{
-      display: "flex", gap: 10, marginTop: 18, flexWrap: "wrap" as const,
+      display: "flex", gap: 10, marginTop: 14, flexWrap: "wrap" as const,
      }}>
       <div style={{
        background: "rgba(255,255,255,0.15)", borderRadius: 12, padding: "10px 14px",
@@ -488,6 +530,57 @@ function Dashboard() {
      </div>
     </div>
    </motion.div>
+
+   {/* ── Flugspiel Home-Lager (Live) ─────────────────────────── */}
+   <motion.div
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.5, delay: 0.1 }}
+    style={{
+     borderRadius: 18, flex: "1 1 35%", minWidth: 200, minHeight: 250,
+     position: "relative" as const, overflow: "hidden",
+     boxShadow: "0 8px 32px rgba(15,52,96,0.3)",
+     cursor: "pointer", transition: "transform 0.2s, box-shadow 0.2s",
+     background: "#1a1a2e",
+    }}
+    onClick={() => { window.location.href = "/apps/flugspiel/"; }}
+    onMouseEnter={(e: any) => { e.currentTarget.style.transform = "translateY(-3px)"; e.currentTarget.style.boxShadow = "0 12px 40px rgba(15,52,96,0.4)"; }}
+    onMouseLeave={(e: any) => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "0 8px 32px rgba(15,52,96,0.3)"; }}
+   >
+    {/* Live game iframe */}
+    <iframe
+     src="/apps/flugspiel/?embed"
+     style={{
+      width: "100%", height: "100%",
+      border: "none", pointerEvents: "none",
+      position: "absolute", top: 0, left: 0,
+     }}
+     title="Flugspiel"
+     loading="lazy"
+    />
+    {/* Overlay with label + click catcher */}
+    <div style={{
+     position: "absolute", inset: 0, zIndex: 2,
+     background: "linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.1) 40%, transparent 100%)",
+     display: "flex", flexDirection: "column" as const, justifyContent: "flex-end",
+     padding: "14px 16px", color: "#fff", minHeight: 220,
+    }}>
+     <div style={{ fontSize: 10, fontWeight: 600, opacity: 0.7, letterSpacing: "0.08em", textTransform: "uppercase" as const, marginBottom: 2 }}>
+      Home-Lager
+     </div>
+     <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+      <div style={{ fontSize: 15, fontWeight: 700 }}>✈️ Flugspiel</div>
+      <div style={{
+       fontSize: 11, fontWeight: 600, background: "rgba(255,255,255,0.15)",
+       borderRadius: 8, padding: "4px 10px", backdropFilter: "blur(4px)",
+      }}>
+       Spielen →
+      </div>
+     </div>
+    </div>
+   </motion.div>
+
+   </div>{/* end hero row */}
 
    {/* ── Kategorie-Cards ──────────────────────────────────────── */}
    <div style={{ marginBottom: 24 }}>
@@ -542,6 +635,12 @@ function Dashboard() {
      ))}
     </div>
    </div>
+
+   {/* ── Wohnung / Räume-Editor ──────────────────────────────── */}
+   <div style={{ marginBottom: 20 }}>
+    <RoomsEditorCompact rooms={rooms} onClick={() => setShowRooms(true)} />
+   </div>
+   {showRooms && <RoomsEditor rooms={rooms} onChange={setRooms} onClose={() => setShowRooms(false)} />}
 
    {/* ── Sofort-Tipps Sektion ─────────────────────────────────── */}
    {sofortTips.length > 0 && (

@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
+  <title>Vertrags-Countdown | Wechselpilot</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            wp: {
+              primary: '#243c47',
+              accent: '#2a6fa6',
+              green: '#24a47d',
+              dkGreen: '#167a52',
+              ltGreen: '#d3ede5',
+              yellow: '#f9aa00',
+              ltYellow: '#feeecc',
+              red: '#e93a3a',
+              ltRed: '#fdcece',
+              bg: '#eef1f6',
+              gray: { 300: '#e3e3e6', 500: '#c4c4ca', 700: '#a3a3a8', 800: '#828288', 900: '#595962' },
+            }
+          },
+          fontFamily: {
+            sans: ['Poppins', 'system-ui', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    * { -webkit-tap-highlight-color: transparent; }
+    .countdown-ring { transition: stroke-dashoffset 1s ease-out; }
+  </style>
+</head>
+<body class="bg-wp-bg min-h-screen font-sans antialiased">
+
+  <!-- Widget Container -->
+  <div id="wp-countdown-widget" class="max-w-md mx-auto p-4 sm:p-6"></div>
+
+  <script type="module" src="/src/widgets/countdown-widget.js"></script>
+</body>
+</html>
