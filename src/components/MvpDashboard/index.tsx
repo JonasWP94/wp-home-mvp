@@ -12,17 +12,23 @@ import {
   IconTemperature,
   IconBolt,
   IconReceipt,
-  IconChartBar,
   IconSun,
   IconLeaf,
   IconBatteryCharging,
   IconCoin,
   IconShield,
   IconArrowRight,
+  IconArrowLeft,
   IconCircle,
   IconPig,
   IconPlug,
   IconX,
+  IconBike,
+  IconKey,
+  IconDroplet,
+  IconChevronRight,
+  IconChevronDown,
+  IconPencil,
 } from '@tabler/icons-react';
 
 // ── Types ────────────────────────────────────────────────────────
@@ -43,22 +49,72 @@ interface MvpTip {
   priority: 3 | 2 | 1;
   category: string;
   icon: React.ComponentType<{ size?: number; stroke?: number; color?: string }>;
-  savingsHg2: number;   // 2 Personen (ohne Kinder)
-  savingsHg3: number;   // 3+ Personen (mit Kindern)
+  savingsHg2: number;
+  savingsHg3: number;
   condition: (p: MvpProfile) => boolean;
 }
 
-// ── Hardcoded Tips with real savings from tips.json ──────────────
+// ── Profile Field Definitions ────────────────────────────────────
+const PROFILE_FIELDS = [
+  {
+    key: 'propertyType' as const,
+    label: 'Wohnungstyp',
+    icon: IconBuilding,
+    options: [
+      { value: 'wohnung', label: 'Wohnung',    icon: IconBuilding },
+      { value: 'haus',    label: 'Haus / EFH', icon: IconHome },
+    ],
+  },
+  {
+    key: 'tenure' as const,
+    label: 'Eigentumsstatus',
+    icon: IconKey,
+    options: [
+      { value: 'miete',    label: 'Zur Miete',   icon: IconKey },
+      { value: 'eigentum', label: 'Im Eigentum', icon: IconHome },
+    ],
+  },
+  {
+    key: 'heatingType' as const,
+    label: 'Heizungsart',
+    icon: IconFlame,
+    options: [
+      { value: 'gas',         label: 'Gas',         icon: IconFlame },
+      { value: 'oel',         label: 'Öl',          icon: IconDroplet },
+      { value: 'strom',       label: 'Strom',       icon: IconBolt },
+      { value: 'waermepumpe', label: 'Wärmepumpe',  icon: IconLeaf },
+    ],
+  },
+  {
+    key: 'autoType' as const,
+    label: 'Fahrzeug',
+    icon: IconCar,
+    options: [
+      { value: 'verbrenner', label: 'Verbrenner', icon: IconCar },
+      { value: 'eauto',      label: 'E-Auto',     icon: IconBatteryCharging },
+      { value: 'hybrid',     label: 'Hybrid',     icon: IconPlug },
+      { value: 'keins',      label: 'Kein Auto',  icon: IconBike },
+    ],
+  },
+  {
+    key: 'hasChildren' as const,
+    label: 'Kinder im Haushalt',
+    icon: IconUsers,
+    options: [
+      { value: 'true',  label: 'Ja',   icon: IconUsers },
+      { value: 'false', label: 'Nein', icon: IconUser },
+    ],
+  },
+];
+
+// ── Tips ─────────────────────────────────────────────────────────
 const ALL_TIPS: MvpTip[] = [
   {
     id: 'strom-gas-wechsel',
     title: 'Strom/Gas wechseln',
     partner: 'Octopus, Tibber, Lichtblick',
-    priority: 3,
-    category: 'Energie',
-    icon: IconBolt,
-    savingsHg2: 836,
-    savingsHg3: 836,
+    priority: 3, category: 'Energie', icon: IconBolt,
+    savingsHg2: 836, savingsHg3: 836,
     condition: () => true,
   },
   {
@@ -68,155 +124,113 @@ const ALL_TIPS: MvpTip[] = [
     partner: 'Taxfix, WISO, Zasta',
     partnerLinks: [
       { name: 'Taxfix', url: 'https://taxfix.de', logo: '/apps/wpilot-home/assets/partners/taxfix.png' },
-      { name: 'WISO', url: 'https://www.wiso-steuer.de', logo: '/apps/wpilot-home/assets/partners/wiso.png' },
-      { name: 'Zasta', url: 'https://www.zasta.de', logo: '/apps/wpilot-home/assets/partners/zasta.png' },
+      { name: 'WISO',   url: 'https://www.wiso-steuer.de', logo: '/apps/wpilot-home/assets/partners/wiso.png' },
+      { name: 'Zasta',  url: 'https://www.zasta.de', logo: '/apps/wpilot-home/assets/partners/zasta.png' },
     ],
-    priority: 3,
-    category: 'Steuern',
-    icon: IconReceipt,
-    savingsHg2: 1095,
-    savingsHg3: 1095,
+    priority: 3, category: 'Steuern', icon: IconReceipt,
+    savingsHg2: 1095, savingsHg3: 1095,
     condition: () => true,
   },
   {
     id: 'kfz-versicherung',
     title: 'KFZ-Versicherung wechseln',
     partner: 'Clark, Tarifcheck, HUK24',
-    priority: 3,
-    category: 'Versicherung',
-    icon: IconCar,
-    savingsHg2: 800,
-    savingsHg3: 800,
+    priority: 3, category: 'Versicherung', icon: IconCar,
+    savingsHg2: 800, savingsHg3: 800,
     condition: (p) => p.autoType !== 'keins',
   },
   {
-    id: 'thg-praemie',
-    title: 'THG-Prämie',
-    partner: 'Geld für eAuto/Hybrid',
-    priority: 1,
-    category: 'Mobilität',
-    icon: IconBatteryCharging,
-    savingsHg2: 630,
-    savingsHg3: 630,
-    condition: (p) => p.autoType === 'eauto' || p.autoType === 'hybrid',
     id: 'thermostate',
     title: 'Smarte Thermostate',
     partner: 'tado°, Homematic IP',
-    priority: 3,
-    category: 'Heizung',
-    icon: IconTemperature,
-    savingsHg2: 180,
-    savingsHg3: 220,
+    priority: 3, category: 'Heizung', icon: IconTemperature,
+    savingsHg2: 180, savingsHg3: 220,
     condition: () => true,
   },
   {
     id: 'solaranlage',
     title: 'Solaranlage',
     partner: 'Enpal, Zolar',
-    priority: 2,
-    category: 'Solar',
-    icon: IconSun,
-    savingsHg2: 300,
-    savingsHg3: 300,
+    priority: 2, category: 'Solar', icon: IconSun,
+    savingsHg2: 300, savingsHg3: 300,
     condition: (p) => p.tenure === 'eigentum' && p.propertyType === 'haus',
   },
   {
     id: 'waermepumpe',
     title: 'Wärmepumpe',
     partner: 'Thermondo, 1KOMMA5°',
-    priority: 2,
-    category: 'Heizung',
-    icon: IconLeaf,
-    savingsHg2: 700,
-    savingsHg3: 700,
+    priority: 2, category: 'Heizung', icon: IconLeaf,
+    savingsHg2: 700, savingsHg3: 700,
     condition: (p) => p.tenure === 'eigentum' && p.propertyType === 'haus' && p.heatingType !== 'waermepumpe',
   },
   {
     id: 'balkonkraftwerk',
     title: 'Balkonkraftwerk',
     partner: 'Yuma, Priwatt',
-    priority: 2,
-    category: 'Solar',
-    icon: IconSun,
-    savingsHg2: 180,
-    savingsHg3: 200,
+    priority: 2, category: 'Solar', icon: IconSun,
+    savingsHg2: 180, savingsHg3: 200,
     condition: (p) => !(p.tenure === 'eigentum' && p.propertyType === 'haus'),
   },
   {
     id: 'dynamischer-stromtarif',
     title: 'Dynamischer Stromtarif',
     partner: 'Tibber, Octopus',
-    priority: 2,
-    category: 'Energie',
-    icon: IconBolt,
-    savingsHg2: 836,
-    savingsHg3: 836,
+    priority: 2, category: 'Energie', icon: IconBolt,
+    savingsHg2: 836, savingsHg3: 836,
     condition: (p) => p.autoType === 'eauto' || p.autoType === 'hybrid' || p.heatingType === 'waermepumpe',
   },
   {
     id: 'hausrat-haftpflicht',
     title: 'Hausrat-/Haftpflicht',
     partner: 'Clark',
-    priority: 2,
-    category: 'Versicherung',
-    icon: IconShield,
-    savingsHg2: 160,
-    savingsHg3: 160,
+    priority: 2, category: 'Versicherung', icon: IconShield,
+    savingsHg2: 160, savingsHg3: 160,
     condition: () => true,
   },
   {
     id: 'thg-praemie',
     title: 'THG-Prämie',
     partner: 'Geld für eAuto',
-    priority: 1,
-    category: 'Mobilität',
-    icon: IconBatteryCharging,
-    savingsHg2: 630,
-    savingsHg3: 630,
+    priority: 1, category: 'Mobilität', icon: IconBatteryCharging,
+    savingsHg2: 630, savingsHg3: 630,
     condition: (p) => p.autoType === 'eauto',
   },
   {
     id: 'wallbox',
     title: 'Wallbox / Laden zuhause',
     partner: 'Enpal, charge.cloud',
-    priority: 1,
-    category: 'Mobilität',
-    icon: IconBatteryCharging,
-    savingsHg2: 280,
-    savingsHg3: 280,
+    priority: 1, category: 'Mobilität', icon: IconBatteryCharging,
+    savingsHg2: 280, savingsHg3: 280,
     condition: (p) => p.autoType === 'hybrid',
   },
   {
     id: 'kostenloses-girokonto',
     title: 'Kostenloses Girokonto',
     partner: 'ING, DKB',
-    priority: 1,
-    category: 'Finanzen',
-    icon: IconPig,
-    savingsHg2: 120,
-    savingsHg3: 120,
+    priority: 1, category: 'Finanzen', icon: IconPig,
+    savingsHg2: 120, savingsHg3: 120,
     condition: () => true,
   },
 ];
 
-// ── Design Tokens (matching full WizardNew + Dashboard) ──────────
-const BLUE    = '#5782B0';
-const BLUE_LT = '#EDF2F9';
-const BLUE_DK = '#3D5A80';
-const GREEN   = '#0C663B';
+// ── Design Tokens ────────────────────────────────────────────────
+const BLUE     = '#5782B0';
+const BLUE_LT  = '#EDF2F9';
+const BLUE_DK  = '#3D5A80';
+const GREEN    = '#0C663B';
 const GREEN_LT = '#E8F5EF';
-const ORANGE  = '#F9AA00';
+const ORANGE   = '#F9AA00';
 const ORANGE_LT = '#FEF3C7';
-const DARK    = '#2C3E50';
-const BG      = '#F5F6F8';
-const WHITE   = '#FFFFFF';
-const BORDER  = '#E2E8F0';
-const TEXT    = DARK;
+const DARK     = '#2C3E50';
+const BG       = '#F5F6F8';
+const WHITE    = '#FFFFFF';
+const BORDER   = '#E2E8F0';
+const TEXT     = DARK;
 const TEXT_MUTED = '#7A8C9A';
-const TEXT_DIM = '#A0AEBB';
+const TEXT_DIM   = '#A0AEBB';
 
 const PRIORITY_COLORS: Record<number, { bg: string; text: string; label: string }> = {
-  3: { bg: GREEN_LT, text: GREEN, label: 'Top' },
+  3: { bg: GREEN_LT,  text: GREEN,    label: 'Top' },
   2: { bg: ORANGE_LT, text: '#92400e', label: 'Empfohlen' },
   1: { bg: '#f3f4f6', text: TEXT_MUTED, label: 'Tipp' },
 };
@@ -240,20 +254,226 @@ function AnimatedCounter({ value, suffix = '' }: { value: number; suffix?: strin
   return <>{fmt(display)}{suffix}</>;
 }
 
-// ── Profile pill icons ───────────────────────────────────────────
-function ProfileIcon({ type, value }: { type: string; value: string }) {
-  const props = { size: 16, stroke: 1.5, color: BLUE_DK };
-  switch (type) {
-    case 'tenure': return <IconHome {...props} />;
-    case 'property': return value === 'haus' ? <IconHome {...props} /> : <IconBuilding {...props} />;
-    case 'heating': return <IconFlame {...props} />;
-    case 'auto': return value === 'eauto' ? <IconBatteryCharging {...props} /> : value === 'hybrid' ? <IconPlug {...props} /> : value === 'verbrenner' ? <IconCar {...props} /> : <IconBike {...props} />;
-    case 'children': return value === 'mit' ? <IconUsers {...props} /> : <IconUser {...props} />;
-    default: return <IconCircle {...props} />;
+// ── Profile Edit View ────────────────────────────────────────────
+function ProfileEditView({
+  profile,
+  onSave,
+  onBack,
+}: {
+  profile: MvpProfile;
+  onSave: (p: MvpProfile) => void;
+  onBack: () => void;
+}) {
+  const [local, setLocal] = useState<MvpProfile>(profile);
+  const [openField, setOpenField] = useState<string | null>(null);
+
+  function getCurrentLabel(field: typeof PROFILE_FIELDS[0]) {
+    const rawVal = local[field.key];
+    const strVal = rawVal === true ? 'true' : rawVal === false ? 'false' : String(rawVal ?? '');
+    return field.options.find(o => o.value === strVal)?.label ?? '–';
   }
+
+  function getCurrentIcon(field: typeof PROFILE_FIELDS[0]) {
+    const rawVal = local[field.key];
+    const strVal = rawVal === true ? 'true' : rawVal === false ? 'false' : String(rawVal ?? '');
+    return field.options.find(o => o.value === strVal)?.icon ?? IconCircle;
+  }
+
+  function selectOption(fieldKey: string, value: string) {
+    const coerced: any =
+      fieldKey === 'hasChildren'
+        ? value === 'true' ? true : false
+        : value;
+    const updated = { ...local, [fieldKey]: coerced };
+    setLocal(updated);
+    localStorage.setItem('wpilot_mvp_profile', JSON.stringify(updated));
+    onSave(updated);
+    setOpenField(null);
+  }
+
+  return (
+    <div style={{ minHeight: '100dvh', background: BG, display: 'flex', flexDirection: 'column' }}>
+
+      {/* Header */}
+      <div style={{
+        position: 'sticky', top: 0, zIndex: 100,
+        background: 'rgba(245,246,248,0.95)', backdropFilter: 'blur(12px)',
+        borderBottom: `1px solid ${BORDER}`,
+        padding: '12px 20px',
+        display: 'flex', alignItems: 'center', gap: 12,
+      }}>
+        <button
+          onClick={onBack}
+          style={{
+            background: 'none', border: `1.5px solid ${BORDER}`, borderRadius: 10,
+            padding: '7px 14px', cursor: 'pointer',
+            display: 'flex', alignItems: 'center', gap: 6,
+            fontSize: 13, fontWeight: 600, color: TEXT,
+          }}
+        >
+          <IconArrowLeft size={16} stroke={1.5} /> Zurück
+        </button>
+        <div style={{ flex: 1, textAlign: 'center' }}>
+          <span style={{ fontSize: 15, fontWeight: 700, color: TEXT }}>Ihr Profil</span>
+        </div>
+        <div style={{ width: 80 }} />
+      </div>
+
+      {/* Content */}
+      <div style={{ maxWidth: 540, margin: '0 auto', padding: '20px 16px 40px', width: '100%' }}>
+
+        <p style={{ fontSize: 13, color: TEXT_MUTED, marginBottom: 20, lineHeight: 1.5 }}>
+          Tippen Sie auf ein Feld, um Ihre Angabe direkt zu ändern. Die Empfehlungen werden sofort aktualisiert.
+        </p>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+          {PROFILE_FIELDS.map(field => {
+            const isOpen = openField === field.key;
+            const FieldIcon = field.icon;
+            const CurrentIcon = getCurrentIcon(field);
+            const currentLabel = getCurrentLabel(field);
+            const rawVal = local[field.key];
+            const strVal = rawVal === true ? 'true' : rawVal === false ? 'false' : String(rawVal ?? '');
+
+            return (
+              <motion.div
+                key={field.key}
+                layout
+                style={{
+                  background: WHITE,
+                  border: isOpen ? `2px solid ${BLUE}` : `1.5px solid ${BORDER}`,
+                  borderRadius: 14,
+                  overflow: 'hidden',
+                  transition: 'border-color 0.15s',
+                }}
+              >
+                {/* Row header */}
+                <div
+                  onClick={() => setOpenField(isOpen ? null : field.key)}
+                  style={{
+                    padding: '14px 16px',
+                    display: 'flex', alignItems: 'center', gap: 12,
+                    cursor: 'pointer',
+                  }}
+                >
+                  <div style={{
+                    width: 38, height: 38, borderRadius: 10,
+                    background: isOpen ? BLUE : BLUE_LT,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    flexShrink: 0, transition: 'background 0.15s',
+                  }}>
+                    <FieldIcon size={20} stroke={1.5} color={isOpen ? WHITE : BLUE} />
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontSize: 11, fontWeight: 600, color: TEXT_MUTED, letterSpacing: '0.04em', marginBottom: 2 }}>
+                      {field.label.toUpperCase()}
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                      <CurrentIcon size={15} stroke={1.5} color={BLUE_DK} />
+                      <span style={{ fontSize: 15, fontWeight: 700, color: TEXT }}>{currentLabel}</span>
+                    </div>
+                  </div>
+                  <div style={{ color: TEXT_DIM, transition: 'transform 0.2s', transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}>
+                    <IconChevronDown size={18} stroke={1.5} />
+                  </div>
+                </div>
+
+                {/* Options */}
+                <AnimatePresence>
+                  {isOpen && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.2 }}
+                      style={{ overflow: 'hidden' }}
+                    >
+                      <div style={{
+                        padding: '0 12px 12px',
+                        display: 'flex', flexDirection: 'column', gap: 7,
+                        borderTop: `1px solid ${BORDER}`, paddingTop: 12,
+                      }}>
+                        {field.options.map(opt => {
+                          const isSelected = strVal === opt.value;
+                          const OptIcon = opt.icon;
+                          return (
+                            <motion.button
+                              key={opt.value}
+                              whileTap={{ scale: 0.97 }}
+                              onClick={() => selectOption(field.key, opt.value)}
+                              style={{
+                                width: '100%',
+                                background: isSelected ? BLUE_LT : '#f9fafb',
+                                border: isSelected ? `2px solid ${BLUE}` : `1.5px solid ${BORDER}`,
+                                borderRadius: 10, padding: '11px 14px',
+                                display: 'flex', alignItems: 'center', gap: 12,
+                                cursor: 'pointer', transition: 'all 0.12s',
+                                textAlign: 'left' as const,
+                              }}
+                            >
+                              <div style={{
+                                width: 34, height: 34, borderRadius: 8,
+                                background: isSelected ? BLUE : WHITE,
+                                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                flexShrink: 0, transition: 'all 0.12s',
+                                border: isSelected ? 'none' : `1px solid ${BORDER}`,
+                              }}>
+                                <OptIcon size={18} stroke={1.5} color={isSelected ? WHITE : TEXT_MUTED} />
+                              </div>
+                              <span style={{ fontSize: 14, fontWeight: 600, color: isSelected ? BLUE_DK : TEXT, flex: 1 }}>
+                                {opt.label}
+                              </span>
+                              {isSelected && (
+                                <div style={{
+                                  width: 22, height: 22, borderRadius: 11, background: BLUE,
+                                  display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+                                }}>
+                                  <IconCheck size={14} stroke={2.5} color={WHITE} />
+                                </div>
+                              )}
+                            </motion.button>
+                          );
+                        })}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </motion.div>
+            );
+          })}
+        </div>
+
+        <div style={{ marginTop: 24, textAlign: 'center' }}>
+          <button
+            onClick={onBack}
+            style={{
+              background: BLUE, border: 'none', borderRadius: 12,
+              padding: '12px 28px', fontSize: 14, fontWeight: 600,
+              color: WHITE, cursor: 'pointer',
+              boxShadow: `0 2px 8px rgba(87,130,176,0.35)`,
+              display: 'inline-flex', alignItems: 'center', gap: 8,
+            }}
+          >
+            Empfehlungen ansehen <IconArrowRight size={16} />
+          </button>
+        </div>
+      </div>
+    </div>
+  );
 }
 
-import { IconBike } from '@tabler/icons-react';
+// ── Profile Pill Icon ────────────────────────────────────────────
+function ProfilePillIcon({ type, value }: { type: string; value: string }) {
+  const p = { size: 16, stroke: 1.5, color: BLUE_DK };
+  switch (type) {
+    case 'tenure':   return <IconHome {...p} />;
+    case 'property': return value === 'haus' ? <IconHome {...p} /> : <IconBuilding {...p} />;
+    case 'heating':  return <IconFlame {...p} />;
+    case 'auto':     return value === 'eauto' ? <IconBatteryCharging {...p} /> : value === 'hybrid' ? <IconPlug {...p} /> : value === 'verbrenner' ? <IconCar {...p} /> : <IconBike {...p} />;
+    case 'children': return value === 'mit' ? <IconUsers {...p} /> : <IconUser {...p} />;
+    default:         return <IconCircle {...p} />;
+  }
+}
 
 // ── Main Component ───────────────────────────────────────────────
 interface DashboardProps {
@@ -262,6 +482,7 @@ interface DashboardProps {
 
 export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
   const [profile, setProfile] = useState<MvpProfile | null>(initialProfile ?? null);
+  const [view, setView] = useState<'dashboard' | 'profile'>('dashboard');
   const [done, setDone] = useState<Set<string>>(() => {
     try { return new Set(JSON.parse(localStorage.getItem('wpilot_mvp_done') || '[]')); } catch { return new Set(); }
   });
@@ -279,13 +500,11 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
     } catch {}
   }, []);
 
-  useEffect(() => {
-    localStorage.setItem('wpilot_mvp_done', JSON.stringify([...done]));
-  }, [done]);
+  useEffect(() => { localStorage.setItem('wpilot_mvp_done',    JSON.stringify([...done]));    }, [done]);
+  useEffect(() => { localStorage.setItem('wpilot_mvp_removed', JSON.stringify([...removed])); }, [removed]);
 
-  useEffect(() => {
-    localStorage.setItem('wpilot_mvp_removed', JSON.stringify([...removed]));
-  }, [removed]);
+  const hg = profile?.hasChildren ? 3 : 2;
+  const getSavings = (tip: MvpTip) => hg === 3 ? tip.savingsHg3 : tip.savingsHg2;
 
   const tips = useMemo(() => {
     if (!profile) return [];
@@ -303,11 +522,7 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
       .sort((a, b) => b.priority - a.priority || b.savingsHg2 - a.savingsHg2);
   }, [profile, removed]);
 
-  // Use hg3 if children, hg2 otherwise
-  const hg = profile?.hasChildren ? 3 : 2;
-  const getSavings = (tip: MvpTip) => hg === 3 ? tip.savingsHg3 : tip.savingsHg2;
-
-  const total = useMemo(() => tips.reduce((s, t) => s + getSavings(t), 0), [tips, hg]);
+  const total     = useMemo(() => tips.reduce((s, t) => s + getSavings(t), 0), [tips, hg]);
   const doneCount = useMemo(() => tips.filter(t => done.has(t.id)).length, [tips, done]);
   const doneTotal = useMemo(() => tips.filter(t => done.has(t.id)).reduce((s, t) => s + getSavings(t), 0), [tips, done, hg]);
 
@@ -329,46 +544,40 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
     );
   }
 
+  // ── Profile view ─────────────────────────────────────────────
+  if (view === 'profile') {
+    return (
+      <ProfileEditView
+        profile={profile}
+        onSave={updated => setProfile(updated)}
+        onBack={() => setView('dashboard')}
+      />
+    );
+  }
+
   function toggleDone(id: string) {
-    setDone(prev => {
-      const next = new Set(prev);
-      if (next.has(id)) next.delete(id); else next.add(id);
-      return next;
-    });
+    setDone(prev => { const n = new Set(prev); if (n.has(id)) n.delete(id); else n.add(id); return n; });
   }
-
   function removeTip(id: string) {
-    setRemoved(prev => {
-      const next = new Set(prev);
-      next.add(id);
-      return next;
-    });
-    setDone(prev => {
-      const next = new Set(prev);
-      next.delete(id);
-      return next;
-    });
+    setRemoved(prev => { const n = new Set(prev); n.add(id); return n; });
+    setDone(prev => { const n = new Set(prev); n.delete(id); return n; });
   }
-
   function restoreTip(id: string) {
-    setRemoved(prev => {
-      const next = new Set(prev);
-      next.delete(id);
-      return next;
-    });
+    setRemoved(prev => { const n = new Set(prev); n.delete(id); return n; });
   }
 
   const profilePills = [
-    { type: 'tenure', label: profile.tenure === 'eigentum' ? 'Eigentum' : 'Miete', value: profile.tenure },
-    { type: 'property', label: profile.propertyType === 'haus' ? 'Haus' : 'Wohnung', value: profile.propertyType },
-    { type: 'heating', label: ({ gas: 'Gas', oel: 'Öl', strom: 'Strom', waermepumpe: 'Wärmepumpe' } as any)[profile.heatingType] || '', value: profile.heatingType },
-    { type: 'auto', label: ({ verbrenner: 'Verbrenner', eauto: 'E-Auto', hybrid: 'Hybrid', keins: 'Kein Auto' } as any)[profile.autoType], value: profile.autoType },
-    { type: 'children', label: profile.hasChildren ? 'Mit Kindern' : 'Ohne Kinder', value: profile.hasChildren ? 'mit' : 'ohne' },
+    { type: 'tenure',   label: profile.tenure === 'eigentum' ? 'Eigentum' : 'Miete',                                                            value: profile.tenure },
+    { type: 'property', label: profile.propertyType === 'haus' ? 'Haus' : 'Wohnung',                                                            value: profile.propertyType },
+    { type: 'heating',  label: ({ gas: 'Gas', oel: 'Öl', strom: 'Strom', waermepumpe: 'Wärmepumpe' } as any)[profile.heatingType] || '',         value: profile.heatingType },
+    { type: 'auto',     label: ({ verbrenner: 'Verbrenner', eauto: 'E-Auto', hybrid: 'Hybrid', keins: 'Kein Auto' } as any)[profile.autoType],   value: profile.autoType },
+    { type: 'children', label: profile.hasChildren ? 'Mit Kindern' : 'Ohne Kinder',                                                              value: profile.hasChildren ? 'mit' : 'ohne' },
   ];
 
+  // ── Dashboard view ────────────────────────────────────────────
   return (
     <div style={{ minHeight: '100dvh', background: BG }}>
-      {/* ── Header ─────────────────────────────────────── */}
+      {/* Header */}
       <div style={{
         position: 'sticky', top: 0, zIndex: 100,
         background: 'rgba(245,246,248,0.95)', backdropFilter: 'blur(12px)',
@@ -379,24 +588,28 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
         <img src="/apps/wpilot-home/assets/logo-wp.png" alt="WP" height={22} style={{ objectFit: 'contain', flexShrink: 0 }} />
         <span style={{ fontSize: 13, fontWeight: 700, color: TEXT, fontFamily: "'Poppins', sans-serif", letterSpacing: '0.05em' }}>HOME</span>
         <div style={{ flex: 1 }} />
-        <button onClick={() => { localStorage.removeItem('wpilot_mvp_profile'); window.location.href = '/apps/wpilot-home/mvp.html'; }} style={{
-          background: 'none', border: `1px solid ${BORDER}`, borderRadius: 8,
-          padding: '6px 12px', fontSize: 12, fontWeight: 500, color: TEXT_MUTED, cursor: 'pointer',
-          display: 'flex', alignItems: 'center', gap: 4,
-        }}>
-          <IconRefresh size={14} /> Neu starten
+        <button
+          onClick={() => setView('profile')}
+          style={{
+            background: 'none', border: `1px solid ${BORDER}`, borderRadius: 8,
+            padding: '6px 12px', fontSize: 12, fontWeight: 500, color: TEXT_MUTED, cursor: 'pointer',
+            display: 'flex', alignItems: 'center', gap: 4,
+          }}
+        >
+          <IconPencil size={13} stroke={1.5} /> Profil ändern
         </button>
       </div>
 
       <div style={{ maxWidth: 680, margin: '0 auto', padding: '20px 16px 40px' }}>
-        {/* ── Hero ──────────────────────────────────────── */}
+
+        {/* Hero */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
           style={{
             background: 'linear-gradient(135deg, #0f4c3a 0%, #1a6b52 40%, #24a47d 100%)',
-            borderRadius: 18, padding: '24px 20px', color: '#fff',
+            borderRadius: 18, padding: '24px 20px', color: WHITE,
             position: 'relative', overflow: 'hidden',
             boxShadow: '0 8px 32px rgba(36,164,125,0.25)',
             marginBottom: 14,
@@ -416,12 +629,9 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
             <div style={{ fontSize: 12, opacity: 0.7, marginBottom: 16 }}>
               {tips.length} Empfehlungen basierend auf Ihren Antworten
             </div>
-
             <div style={{ display: 'flex', gap: 10 }}>
               <div style={{ background: 'rgba(255,255,255,0.15)', borderRadius: 12, padding: '10px 14px', flex: '1 1 0', minWidth: 80 }}>
-                <div style={{ fontSize: 18, fontWeight: 700 }}>
-                  <AnimatedCounter value={doneTotal} suffix=" €" />
-                </div>
+                <div style={{ fontSize: 18, fontWeight: 700 }}><AnimatedCounter value={doneTotal} suffix=" €" /></div>
                 <div style={{ fontSize: 10, opacity: 0.8 }}>Erledigt</div>
               </div>
               <div style={{ background: 'rgba(255,255,255,0.15)', borderRadius: 12, padding: '10px 14px', flex: '1 1 0', minWidth: 80 }}>
@@ -432,25 +642,32 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
           </div>
         </motion.div>
 
-        {/* ── Profile summary ───────────────────────────── */}
-        <div style={{
-          background: WHITE, borderRadius: 14, padding: '14px 16px',
-          marginBottom: 20, border: `1px solid ${BORDER}`,
-          display: 'flex', gap: 8, flexWrap: 'wrap',
-        }}>
+        {/* Profile summary pills */}
+        <div
+          onClick={() => setView('profile')}
+          style={{
+            background: WHITE, borderRadius: 14, padding: '12px 16px',
+            marginBottom: 20, border: `1px solid ${BORDER}`,
+            display: 'flex', gap: 8, flexWrap: 'wrap', cursor: 'pointer',
+            alignItems: 'center',
+          }}
+        >
           {profilePills.map(p => (
             <span key={p.type} style={{
               display: 'inline-flex', alignItems: 'center', gap: 5,
               background: BLUE_LT, borderRadius: 8, padding: '5px 10px',
               fontSize: 12, fontWeight: 500, color: BLUE_DK,
             }}>
-              <ProfileIcon type={p.type} value={p.value} />
+              <ProfilePillIcon type={p.type} value={p.value} />
               {p.label}
             </span>
           ))}
+          <span style={{ marginLeft: 'auto', display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 12, color: TEXT_MUTED }}>
+            <IconPencil size={13} stroke={1.5} /> ändern
+          </span>
         </div>
 
-        {/* ── Tip list ──────────────────────────────────── */}
+        {/* Tip list */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
           {tips.map((tip, i) => {
             const isDone = done.has(tip.id);
@@ -458,146 +675,103 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
             const pri = PRIORITY_COLORS[tip.priority];
             const TipIcon = tip.icon;
             const savings = getSavings(tip);
-
             return (
-              <div className="mvp-tip-row" style={{ position: 'relative' }}>
-              <motion.div
-                key={tip.id}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.2, delay: i * 0.03 }}
-                className="mvp-tip-card"
-                style={{
-                  background: WHITE,
-                  borderRadius: 14,
-                  border: isDone ? `2px solid ${GREEN}` : `1px solid ${BORDER}`,
-                  overflow: 'hidden',
-                  opacity: isDone ? 0.6 : 1,
-                  transition: 'opacity 0.15s',
-                }}
-              >
-                {/* Main row */}
-                <div
-                  onClick={() => setExpanded(isExpanded ? null : tip.id)}
+              <div key={tip.id} style={{ position: 'relative' }}>
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.2, delay: i * 0.03 }}
                   style={{
-                    padding: '14px 16px',
-                    display: 'flex', alignItems: 'center', gap: 12,
-                    cursor: 'pointer',
+                    background: WHITE, borderRadius: 14,
+                    border: isDone ? `2px solid ${GREEN}` : `1px solid ${BORDER}`,
+                    overflow: 'hidden', opacity: isDone ? 0.6 : 1, transition: 'opacity 0.15s',
                   }}
                 >
-                  {/* Icon */}
-                  <div style={{
-                    width: 40, height: 40, borderRadius: 12,
-                    background: BLUE_LT,
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    flexShrink: 0,
-                  }}>
-                    <TipIcon size={22} stroke={1.5} color={BLUE} />
-                  </div>
-
-                  {/* Content */}
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{
-                      fontSize: 15, fontWeight: 700, color: TEXT, lineHeight: 1.3,
-                      textDecoration: isDone ? 'line-through' : 'none',
-                      marginBottom: 2,
-                    }}>
-                      {tip.title}
-                    </div>
-                    <div style={{ fontSize: 12, color: TEXT_MUTED }}>
-                      {fmt(savings)} € / Jahr
-                    </div>
-                  </div>
-
-                  {/* Priority badge */}
-                  <span style={{
-                    fontSize: 10, fontWeight: 700, padding: '4px 8px', borderRadius: 6,
-                    background: pri.bg, color: pri.text,
-                    flexShrink: 0, whiteSpace: 'nowrap',
-                  }}>
-                    {pri.label}
-                  </span>
-
-                  {/* Check — right side */}
-                  <button
-                    onClick={(e) => { e.stopPropagation(); toggleDone(tip.id); }}
-                    style={{
-                      width: 28, height: 28, borderRadius: 8, flexShrink: 0,
-                      border: isDone ? 'none' : `2px solid ${BORDER}`,
-                      background: isDone ? GREEN : 'transparent',
-                      color: isDone ? '#fff' : 'transparent',
-                      cursor: 'pointer',
-                      display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      transition: 'all 0.15s',
-                    }}
+                  <div
+                    onClick={() => setExpanded(isExpanded ? null : tip.id)}
+                    style={{ padding: '14px 16px', display: 'flex', alignItems: 'center', gap: 12, cursor: 'pointer' }}
                   >
-                    <IconCheck size={16} stroke={2} />
-                  </button>
-                </div>
-
-                {/* Expanded detail */}
-                <AnimatePresence>
-                  {isExpanded && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: 'auto', opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.2 }}
-                      style={{ overflow: 'hidden' }}
-                    >
-                      <div style={{
-                        padding: '0 16px 16px',
-                        borderTop: `1px solid ${BORDER}`,
-                        marginTop: 0, paddingTop: 14,
-                      }}>
-                        {tip.description && (
-                          <p style={{ fontSize: 13, color: TEXT_MUTED, lineHeight: 1.6, marginBottom: 14 }}>{tip.description}</p>
-                        )}
-                        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
-                          <span style={{ fontSize: 12, background: GREEN_LT, borderRadius: 8, padding: '6px 12px', color: GREEN, fontWeight: 500, display: 'inline-flex', alignItems: 'center', gap: 5 }}>
-                            💰 {fmt(savings)} € / Jahr
-                          </span>
-                        </div>
-                        {tip.partnerLinks && tip.partnerLinks.length > 0 && (
-                          <div style={{ display: 'flex', gap: 10, marginTop: 14, flexWrap: 'wrap' }}>
-                            {tip.partnerLinks.map(pl => (
-                              <a key={pl.name} href={pl.url} target="_blank" rel="noopener noreferrer" style={{
-                                display: 'inline-flex', alignItems: 'center', gap: 6,
-                                background: WHITE, border: `1px solid ${BORDER}`, borderRadius: 10,
-                                padding: '6px 12px', textDecoration: 'none',
-                                transition: 'all 0.15s',
-                              }}>
-                                <img src={pl.logo} alt={pl.name} height={20} style={{ objectFit: 'contain' }} />
-                              </a>
-                            ))}
-                          </div>
-                        )}
+                    <div style={{ width: 40, height: 40, borderRadius: 12, background: BLUE_LT, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                      <TipIcon size={22} stroke={1.5} color={BLUE} />
+                    </div>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ fontSize: 15, fontWeight: 700, color: TEXT, lineHeight: 1.3, textDecoration: isDone ? 'line-through' : 'none', marginBottom: 2 }}>
+                        {tip.title}
                       </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </motion.div>
-              {/* Delete X — outside card, right of container */}
-              <button
-                className="mvp-tip-delete"
-                onClick={() => removeTip(tip.id)}
-                style={{
-                  position: 'absolute', top: '50%', right: -34, transform: 'translateY(-50%)',
-                  width: 28, height: 28, borderRadius: 8,
-                  border: 'none', background: 'transparent',
-                  color: TEXT_MUTED, cursor: 'pointer',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  opacity: 0, transition: 'opacity 0.15s',
-                }}
-              >
-                <IconX size={16} stroke={1.5} />
-              </button>
+                      <div style={{ fontSize: 12, color: TEXT_MUTED }}>{fmt(savings)} € / Jahr</div>
+                    </div>
+                    <span style={{ fontSize: 10, fontWeight: 700, padding: '4px 8px', borderRadius: 6, background: pri.bg, color: pri.text, flexShrink: 0, whiteSpace: 'nowrap' }}>
+                      {pri.label}
+                    </span>
+                    <button
+                      onClick={e => { e.stopPropagation(); toggleDone(tip.id); }}
+                      style={{
+                        width: 28, height: 28, borderRadius: 8, flexShrink: 0,
+                        border: isDone ? 'none' : `2px solid ${BORDER}`,
+                        background: isDone ? GREEN : 'transparent',
+                        color: isDone ? WHITE : 'transparent',
+                        cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.15s',
+                      }}
+                    >
+                      <IconCheck size={16} stroke={2} />
+                    </button>
+                  </div>
+                  <AnimatePresence>
+                    {isExpanded && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.2 }}
+                        style={{ overflow: 'hidden' }}
+                      >
+                        <div style={{ padding: '14px 16px 16px', borderTop: `1px solid ${BORDER}` }}>
+                          {tip.description && (
+                            <p style={{ fontSize: 13, color: TEXT_MUTED, lineHeight: 1.6, marginBottom: 14 }}>{tip.description}</p>
+                          )}
+                          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
+                            <span style={{ fontSize: 12, background: GREEN_LT, borderRadius: 8, padding: '6px 12px', color: GREEN, fontWeight: 500, display: 'inline-flex', alignItems: 'center', gap: 5 }}>
+                              💰 {fmt(savings)} € / Jahr
+                            </span>
+                          </div>
+                          {tip.partnerLinks && tip.partnerLinks.length > 0 && (
+                            <div style={{ display: 'flex', gap: 10, marginTop: 14, flexWrap: 'wrap' }}>
+                              {tip.partnerLinks.map(pl => (
+                                <a key={pl.name} href={pl.url} target="_blank" rel="noopener noreferrer" style={{
+                                  display: 'inline-flex', alignItems: 'center', gap: 6,
+                                  background: WHITE, border: `1px solid ${BORDER}`, borderRadius: 10,
+                                  padding: '6px 12px', textDecoration: 'none', transition: 'all 0.15s',
+                                }}>
+                                  <img src={pl.logo} alt={pl.name} height={20} style={{ objectFit: 'contain' }} />
+                                </a>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </motion.div>
+                <button
+                  onClick={() => removeTip(tip.id)}
+                  style={{
+                    position: 'absolute', top: '50%', right: -34, transform: 'translateY(-50%)',
+                    width: 28, height: 28, borderRadius: 8,
+                    border: 'none', background: 'transparent',
+                    color: TEXT_MUTED, cursor: 'pointer',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    opacity: 0, transition: 'opacity 0.15s',
+                  }}
+                  className="mvp-tip-delete"
+                >
+                  <IconX size={16} stroke={1.5} />
+                </button>
               </div>
             );
           })}
         </div>
 
-        {/* ── Gelöschte Empfehlungen ──────────────────── */}
+        {/* Deleted tips */}
         {removedTips.length > 0 && (
           <div style={{ marginTop: 24 }}>
             <button
@@ -609,61 +783,30 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
                 padding: '8px 0', width: '100%',
               }}
             >
-              <span style={{
-                display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-                width: 20, height: 20, borderRadius: 6, background: ORANGE_LT,
-                fontSize: 11, fontWeight: 700, color: '#92400e',
-              }}>{removedTips.length}</span>
+              <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 20, height: 20, borderRadius: 6, background: ORANGE_LT, fontSize: 11, fontWeight: 700, color: '#92400e' }}>
+                {removedTips.length}
+              </span>
               Gelöschte Empfehlungen
-              <span style={{
-                display: 'inline-block',
-                transform: showRemoved ? 'rotate(180deg)' : 'rotate(0deg)',
-                transition: 'transform 0.2s',
-                fontSize: 14,
-              }}>▾</span>
+              <span style={{ display: 'inline-block', transform: showRemoved ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s', fontSize: 14 }}>▾</span>
             </button>
-
             {showRemoved && (
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: 'auto' }}
-                exit={{ opacity: 0, height: 0 }}
-                style={{ overflow: 'hidden' }}
-              >
+              <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} style={{ overflow: 'hidden' }}>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 6, paddingTop: 4 }}>
                   {removedTips.map(tip => {
                     const TipIcon = tip.icon;
                     const savings = getSavings(tip);
                     const pri = PRIORITY_COLORS[tip.priority];
                     return (
-                      <div key={tip.id} style={{
-                        background: WHITE, borderRadius: 12,
-                        border: `1px dashed ${BORDER}`, padding: '10px 14px',
-                        display: 'flex', alignItems: 'center', gap: 10,
-                        opacity: 0.7,
-                      }}>
-                        <div style={{
-                          width: 32, height: 32, borderRadius: 10, background: BLUE_LT,
-                          display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
-                        }}>
+                      <div key={tip.id} style={{ background: WHITE, borderRadius: 12, border: `1px dashed ${BORDER}`, padding: '10px 14px', display: 'flex', alignItems: 'center', gap: 10, opacity: 0.7 }}>
+                        <div style={{ width: 32, height: 32, borderRadius: 10, background: BLUE_LT, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                           <TipIcon size={18} stroke={1.5} color={BLUE} />
                         </div>
                         <div style={{ flex: 1, minWidth: 0 }}>
                           <div style={{ fontSize: 13, fontWeight: 600, color: TEXT }}>{tip.title}</div>
                           <div style={{ fontSize: 11, color: TEXT_MUTED }}>{fmt(savings)} € / Jahr</div>
                         </div>
-                        <span style={{
-                          fontSize: 9, fontWeight: 700, padding: '3px 6px', borderRadius: 5,
-                          background: pri.bg, color: pri.text, flexShrink: 0,
-                        }}>{pri.label}</span>
-                        <button
-                          onClick={() => restoreTip(tip.id)}
-                          style={{
-                            fontSize: 11, fontWeight: 600, padding: '4px 10px', borderRadius: 8,
-                            border: `1px solid ${GREEN}`, background: GREEN_LT,
-                            color: GREEN, cursor: 'pointer', whiteSpace: 'nowrap',
-                          }}
-                        >
+                        <span style={{ fontSize: 9, fontWeight: 700, padding: '3px 6px', borderRadius: 5, background: pri.bg, color: pri.text, flexShrink: 0 }}>{pri.label}</span>
+                        <button onClick={() => restoreTip(tip.id)} style={{ fontSize: 11, fontWeight: 600, padding: '4px 10px', borderRadius: 8, border: `1px solid ${GREEN}`, background: GREEN_LT, color: GREEN, cursor: 'pointer', whiteSpace: 'nowrap' }}>
                           ↩ Zurück
                         </button>
                       </div>
@@ -675,10 +818,13 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
           </div>
         )}
 
-        {/* ── Footer ────────────────────────────────────── */}
+        {/* Footer */}
         <div style={{ textAlign: 'center', marginTop: 32, paddingTop: 16, borderTop: `1px solid ${BORDER}` }}>
           <p style={{ fontSize: 12, color: TEXT_MUTED }}>
-            {tips.length} Empfehlungen · {fmt(total)} € Potenzial · <a href="/apps/wpilot-home/mvp.html" style={{ color: BLUE, textDecoration: 'none', fontWeight: 500 }}>Profil ändern</a>
+            {tips.length} Empfehlungen · {fmt(total)} € Potenzial ·{' '}
+            <button onClick={() => setView('profile')} style={{ background: 'none', border: 'none', color: BLUE, fontSize: 12, fontWeight: 500, cursor: 'pointer', padding: 0 }}>
+              Profil ändern
+            </button>
           </p>
         </div>
       </div>
