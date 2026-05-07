@@ -10,8 +10,10 @@ import {
   IconArrowLeft,
   IconArrowRight,
   IconCheck,
-  IconChevronRight,
+  IconBolt,
+  IconGift,
 } from '@tabler/icons-react';
+import MvpDashboard from '../MvpDashboard';
 
 // ── Types ────────────────────────────────────────────────────────
 interface MvpProfile {
@@ -26,7 +28,7 @@ const INITIAL: MvpProfile = {
   tenure: '', propertyType: '', heatingType: '', autoType: '', hasChildren: null,
 };
 
-// ── Design Tokens (matching full WizardNew) ──────────────────────
+// ── Design Tokens ────────────────────────────────────────────────
 const BLUE    = '#5782B0';
 const BLUE_LT = '#EDF2F9';
 const BLUE_DK = '#3D5A80';
@@ -41,9 +43,6 @@ const BORDER  = '#E2E8F0';
 const TEXT    = DARK;
 const TEXT_MUTED = '#7A8C9A';
 const TEXT_DIM = '#A0AEBB';
-const ACCENT  = ORANGE;
-
-const ICON_SIZE = 26;
 
 // ── Step Definitions ─────────────────────────────────────────────
 const STEPS = [
@@ -103,11 +102,9 @@ const STEPS = [
   },
 ];
 
-// Import additional icons used in options
 import {
   IconKey,
   IconDroplet,
-  IconBolt,
   IconLeaf,
   IconBatteryCharging,
   IconBike,
@@ -116,11 +113,165 @@ import {
 
 const TOTAL = STEPS.length;
 
-// ── Component ────────────────────────────────────────────────────
+type View = 'intro' | 'quiz' | 'results';
+
+// ── Intro Screen (adapted from MvpThankYou) ──────────────────────
+function IntroScreen({ onStart }: { onStart: () => void }) {
+  return (
+    <div style={{ minHeight: '100dvh', background: BG, display: 'flex', flexDirection: 'column' }}>
+      {/* Header */}
+      <div style={{
+        background: 'rgba(245,246,248,0.95)', backdropFilter: 'blur(12px)',
+        borderBottom: `1px solid ${BORDER}`,
+        padding: '10px 20px',
+        display: 'flex', alignItems: 'center',
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <img src="/apps/wpilot-home/assets/logo-wp.png" alt="WP" height={20} style={{ objectFit: 'contain' }} />
+          <span style={{ fontSize: 12, fontWeight: 700, color: TEXT, fontFamily: "'Poppins', sans-serif", letterSpacing: '0.05em' }}>HOME</span>
+        </div>
+      </div>
+
+      {/* Content */}
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '20px 20px 24px' }}>
+        <div style={{ width: '100%', maxWidth: 780 }}>
+
+          {/* Checkmark + Headline */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            style={{ textAlign: 'center', marginBottom: 18 }}
+          >
+            <motion.div
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ type: 'spring', stiffness: 260, damping: 20 }}
+              style={{
+                width: 56, height: 56, borderRadius: 28,
+                background: `linear-gradient(135deg, ${GREEN} 0%, #0d8045 100%)`,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                margin: '0 auto 10px',
+                boxShadow: `0 4px 16px rgba(12,102,59,0.25)`,
+              }}
+            >
+              <IconCheck size={28} stroke={2.5} color={WHITE} />
+            </motion.div>
+            <h1 style={{ fontSize: 22, fontWeight: 800, color: TEXT, lineHeight: 1.2, marginBottom: 4 }}>
+              Willkommen bei Wechselpilot HOME
+            </h1>
+            <p style={{ fontSize: 13, color: TEXT_MUTED, lineHeight: 1.4, marginBottom: 2 }}>
+              5 kurze Fragen – Ihr persönliches Sparpotenzial in Sekunden.
+            </p>
+            <p style={{ fontSize: 15, fontWeight: 700, color: GREEN, lineHeight: 1.3 }}>
+              Unsere Nutzer sparen durchschnittlich <span style={{ fontSize: 18 }}>3.800 €</span> pro Jahr
+            </p>
+          </motion.div>
+
+          {/* Section heading */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3 }}
+            style={{ textAlign: 'center', marginBottom: 12 }}
+          >
+            <p style={{ fontSize: 11, fontWeight: 600, color: BLUE, letterSpacing: '0.06em' }}>
+              WAS ERWARTET SIE?
+            </p>
+          </motion.div>
+
+          {/* Teaser Cards */}
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4 }}
+            style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12, marginBottom: 20 }}
+          >
+            <div style={{
+              background: WHITE, border: `2px solid ${BORDER}`, borderRadius: 14,
+              padding: '16px 14px',
+              display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, textAlign: 'center',
+            }}>
+              <div style={{ width: 44, height: 44, borderRadius: 12, background: BLUE_LT, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <IconBolt size={22} stroke={1.5} color={BLUE} />
+              </div>
+              <div>
+                <div style={{ fontSize: 13, fontWeight: 700, color: TEXT, lineHeight: 1.2 }}>Energie & Heizung</div>
+                <div style={{ fontSize: 11, color: TEXT_MUTED }}>Strom, Gas, Solar & Wärmepumpe</div>
+              </div>
+            </div>
+
+            <div style={{
+              background: WHITE, border: `2px solid ${BORDER}`, borderRadius: 14,
+              padding: '16px 14px',
+              display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, textAlign: 'center',
+            }}>
+              <div style={{ width: 44, height: 44, borderRadius: 12, background: ORANGE_LT, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <IconCar size={22} stroke={1.5} color={ORANGE} />
+              </div>
+              <div>
+                <div style={{ fontSize: 13, fontWeight: 700, color: TEXT, lineHeight: 1.2 }}>Mobilität</div>
+                <div style={{ fontSize: 11, color: TEXT_MUTED }}>THG-Prämie, KFZ & Wallbox</div>
+              </div>
+            </div>
+
+            <div style={{
+              background: `linear-gradient(135deg, ${GREEN_LT} 0%, #f0faf4 100%)`,
+              border: `2px solid ${GREEN}33`, borderRadius: 14,
+              padding: '16px 14px',
+              display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, textAlign: 'center',
+            }}>
+              <div style={{ width: 44, height: 44, borderRadius: 12, background: GREEN_LT, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
+                <IconGift size={22} stroke={1.5} color={GREEN} />
+                <div style={{ position: 'absolute', top: -3, right: -3, width: 16, height: 16, borderRadius: 8, background: '#EF4444', display: 'flex', alignItems: 'center', justifyContent: 'center', border: `2px solid ${WHITE}` }}>
+                  <span style={{ fontSize: 8, fontWeight: 800, color: WHITE }}>1</span>
+                </div>
+              </div>
+              <div>
+                <div style={{ fontSize: 13, fontWeight: 700, color: TEXT, lineHeight: 1.2 }}>Versicherung & Familie</div>
+                <div style={{ fontSize: 11, color: TEXT_MUTED }}>Hausrat, Haftpflicht & Steuern</div>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* CTA */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.55 }}
+            style={{ textAlign: 'center' }}
+          >
+            <motion.button
+              whileTap={{ scale: 0.97 }}
+              onClick={onStart}
+              style={{
+                background: `linear-gradient(135deg, ${GREEN} 0%, #0d8045 100%)`,
+                border: 'none', borderRadius: 14,
+                padding: '14px 32px',
+                fontSize: 15, fontWeight: 700, color: WHITE,
+                cursor: 'pointer',
+                boxShadow: `0 4px 16px rgba(12,102,59,0.3)`,
+                display: 'inline-flex', alignItems: 'center', gap: 8,
+              }}
+            >
+              Sparpotenzial berechnen <IconArrowRight size={18} />
+            </motion.button>
+            <p style={{ fontSize: 12, color: TEXT_DIM, marginTop: 8 }}>5 Fragen · unter 1 Minute · kostenlos</p>
+          </motion.div>
+
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Main Component ────────────────────────────────────────────────
 export default function MvpWizard() {
+  const [view, setView] = useState<View>('intro');
   const [step, setStep] = useState(0);
   const [profile, setProfile] = useState<MvpProfile>(INITIAL);
   const [dir, setDir] = useState(1);
+  const [finalProfile, setFinalProfile] = useState<MvpProfile | null>(null);
 
   const current = STEPS[step];
   const currentValue = profile[current.key];
@@ -132,11 +283,16 @@ export default function MvpWizard() {
     setProfile(p => ({ ...p, [current.key]: val }));
   }
 
+  function finish(fp: MvpProfile) {
+    localStorage.setItem('wpilot_mvp_profile', JSON.stringify(fp));
+    setFinalProfile(fp);
+    setView('results');
+  }
+
   function goNext() {
     if (!canNext) return;
     if (isLast) {
-      localStorage.setItem('wpilot_mvp_profile', JSON.stringify(profile));
-      window.location.href = '/apps/wpilot-home/thankyou.html';
+      finish(profile);
       return;
     }
     setDir(1);
@@ -144,19 +300,26 @@ export default function MvpWizard() {
   }
 
   function goBack() {
-    if (step === 0) return;
+    if (step === 0) {
+      setView('intro');
+      return;
+    }
     setDir(-1);
     setStep(s => s - 1);
   }
 
   React.useEffect(() => {
+    if (view !== 'quiz') return;
     function onKey(e: KeyboardEvent) {
       if (e.key === 'Enter' && canNext) goNext();
-      if (e.key === 'Backspace' && step > 0) goBack();
+      if (e.key === 'Backspace') goBack();
     }
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [canNext, step]);
+  }, [canNext, step, view]);
+
+  if (view === 'intro') return <IntroScreen onStart={() => setView('quiz')} />;
+  if (view === 'results' && finalProfile) return <MvpDashboard initialProfile={finalProfile} />;
 
   const slideVariants = {
     enter: (d: number) => ({ x: d > 0 ? 80 : -80, opacity: 0 }),
@@ -178,8 +341,6 @@ export default function MvpWizard() {
           <img src="/apps/wpilot-home/assets/logo-wp.png" alt="WP" height={22} style={{ objectFit: 'contain' }} />
           <span style={{ fontSize: 13, fontWeight: 700, color: TEXT, fontFamily: "'Poppins', sans-serif", letterSpacing: '0.05em' }}>HOME</span>
         </div>
-
-        {/* Step dots */}
         <div style={{ display: 'flex', gap: 6, flex: 1, justifyContent: 'center' }}>
           {STEPS.map((_, i) => (
             <div key={i} style={{
@@ -214,7 +375,6 @@ export default function MvpWizard() {
             transition={{ duration: 0.25 }}
             style={{ width: '100%', maxWidth: 420 }}
           >
-            {/* Step header */}
             <div style={{ textAlign: 'center', marginBottom: 28 }}>
               <div style={{
                 width: 56, height: 56, borderRadius: 16,
@@ -234,7 +394,6 @@ export default function MvpWizard() {
               </p>
             </div>
 
-            {/* Options */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
               {current.options.map(opt => {
                 const isSelected = String(currentValue) === String(opt.value);
@@ -244,12 +403,11 @@ export default function MvpWizard() {
                     key={String(opt.value)}
                     whileTap={{ scale: 0.97 }}
                     onClick={() => {
-                      select(opt.value === 'true' ? true : opt.value === 'false' ? false : opt.value);
+                      const val = opt.value === 'true' ? true : opt.value === 'false' ? false : opt.value;
+                      select(val);
                       setTimeout(() => {
                         if (isLast) {
-                          const next = { ...profile, [current.key]: opt.value === 'true' ? true : opt.value === 'false' ? false : opt.value };
-                          localStorage.setItem('wpilot_mvp_profile', JSON.stringify(next));
-                          window.location.href = '/apps/wpilot-home/thankyou.html';
+                          finish({ ...profile, [current.key]: val });
                         } else {
                           setDir(1);
                           setStep(s => s + 1);
@@ -304,19 +462,16 @@ export default function MvpWizard() {
           style={{
             background: 'transparent', border: `1.5px solid ${BORDER}`,
             borderRadius: 12, padding: '10px 16px',
-            fontSize: 14, fontWeight: 600, color: step === 0 ? TEXT_DIM : TEXT,
-            cursor: step === 0 ? 'not-allowed' : 'pointer',
-            opacity: step === 0 ? 0.4 : 1, transition: 'all 0.15s',
+            fontSize: 14, fontWeight: 600, color: TEXT,
+            cursor: 'pointer', transition: 'all 0.15s',
             display: 'flex', alignItems: 'center', gap: 6,
           }}
         >
           <IconArrowLeft size={16} /> Zurück
         </button>
-
         <div style={{ fontSize: 12, color: TEXT_MUTED, fontWeight: 500 }}>
           {step + 1} / {TOTAL}
         </div>
-
         <button
           onClick={goNext}
           disabled={!canNext}
