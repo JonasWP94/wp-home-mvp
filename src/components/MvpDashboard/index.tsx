@@ -256,8 +256,12 @@ function ProfileIcon({ type, value }: { type: string; value: string }) {
 import { IconBike } from '@tabler/icons-react';
 
 // ── Main Component ───────────────────────────────────────────────
-export default function MvpDashboard() {
-  const [profile, setProfile] = useState<MvpProfile | null>(null);
+interface DashboardProps {
+  initialProfile?: MvpProfile;
+}
+
+export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
+  const [profile, setProfile] = useState<MvpProfile | null>(initialProfile ?? null);
   const [done, setDone] = useState<Set<string>>(() => {
     try { return new Set(JSON.parse(localStorage.getItem('wpilot_mvp_done') || '[]')); } catch { return new Set(); }
   });
@@ -268,6 +272,7 @@ export default function MvpDashboard() {
   const [showRemoved, setShowRemoved] = useState(false);
 
   useEffect(() => {
+    if (initialProfile) return;
     try {
       const raw = localStorage.getItem('wpilot_mvp_profile');
       if (raw) setProfile(JSON.parse(raw));
