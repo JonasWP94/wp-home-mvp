@@ -8,14 +8,12 @@ import {
   IconUsers,
   IconUser,
   IconCheck,
-  IconRefresh,
   IconTemperature,
   IconBolt,
   IconReceipt,
   IconSun,
   IconLeaf,
   IconBatteryCharging,
-  IconCoin,
   IconShield,
   IconArrowRight,
   IconArrowLeft,
@@ -26,7 +24,6 @@ import {
   IconBike,
   IconKey,
   IconDroplet,
-  IconChevronRight,
   IconChevronDown,
   IconPencil,
 } from '@tabler/icons-react';
@@ -79,10 +76,10 @@ const PROFILE_FIELDS = [
     label: 'Heizungsart',
     icon: IconFlame,
     options: [
-      { value: 'gas',         label: 'Gas',         icon: IconFlame },
-      { value: 'oel',         label: 'Öl',          icon: IconDroplet },
-      { value: 'strom',       label: 'Strom',       icon: IconBolt },
-      { value: 'waermepumpe', label: 'Wärmepumpe',  icon: IconLeaf },
+      { value: 'gas',         label: 'Gas',        icon: IconFlame },
+      { value: 'oel',         label: 'Öl',         icon: IconDroplet },
+      { value: 'strom',       label: 'Strom',      icon: IconBolt },
+      { value: 'waermepumpe', label: 'Wärmepumpe', icon: IconLeaf },
     ],
   },
   {
@@ -113,8 +110,72 @@ const ALL_TIPS: MvpTip[] = [
     id: 'strom-gas-wechsel',
     title: 'Strom/Gas wechseln',
     partner: 'Octopus, Tibber, Lichtblick',
-    priority: 3, category: 'Energie', icon: IconBolt,
+    priority: 3, category: 'energie', icon: IconBolt,
     savingsHg2: 836, savingsHg3: 836,
+    condition: () => true,
+  },
+  {
+    id: 'thermostate',
+    title: 'Smarte Thermostate',
+    partner: 'tado°, Homematic IP',
+    priority: 3, category: 'heizung', icon: IconTemperature,
+    savingsHg2: 180, savingsHg3: 220,
+    condition: () => true,
+  },
+  {
+    id: 'waermepumpe',
+    title: 'Wärmepumpe',
+    partner: 'Thermondo, 1KOMMA5°',
+    priority: 2, category: 'heizung', icon: IconLeaf,
+    savingsHg2: 700, savingsHg3: 700,
+    condition: (p) => p.tenure === 'eigentum' && p.propertyType === 'haus' && p.heatingType !== 'waermepumpe',
+  },
+  {
+    id: 'solaranlage',
+    title: 'Solaranlage',
+    partner: 'Enpal, Zolar',
+    priority: 2, category: 'solar', icon: IconSun,
+    savingsHg2: 300, savingsHg3: 300,
+    condition: (p) => p.tenure === 'eigentum' && p.propertyType === 'haus',
+  },
+  {
+    id: 'balkonkraftwerk',
+    title: 'Balkonkraftwerk',
+    partner: 'Yuma, Priwatt',
+    priority: 2, category: 'solar', icon: IconSun,
+    savingsHg2: 180, savingsHg3: 200,
+    condition: (p) => !(p.tenure === 'eigentum' && p.propertyType === 'haus'),
+  },
+  {
+    id: 'kfz-versicherung',
+    title: 'KFZ-Versicherung wechseln',
+    partner: 'Clark, Tarifcheck, HUK24',
+    priority: 3, category: 'mobilitaet', icon: IconCar,
+    savingsHg2: 800, savingsHg3: 800,
+    condition: (p) => p.autoType !== 'keins',
+  },
+  {
+    id: 'thg-praemie',
+    title: 'THG-Prämie',
+    partner: 'Geld für eAuto',
+    priority: 1, category: 'mobilitaet', icon: IconBatteryCharging,
+    savingsHg2: 630, savingsHg3: 630,
+    condition: (p) => p.autoType === 'eauto',
+  },
+  {
+    id: 'wallbox',
+    title: 'Wallbox / Laden zuhause',
+    partner: 'Enpal, charge.cloud',
+    priority: 1, category: 'mobilitaet', icon: IconBatteryCharging,
+    savingsHg2: 280, savingsHg3: 280,
+    condition: (p) => p.autoType === 'hybrid',
+  },
+  {
+    id: 'hausrat-haftpflicht',
+    title: 'Hausrat-/Haftpflicht',
+    partner: 'Clark',
+    priority: 2, category: 'versicherung', icon: IconShield,
+    savingsHg2: 160, savingsHg3: 160,
     condition: () => true,
   },
   {
@@ -123,115 +184,103 @@ const ALL_TIPS: MvpTip[] = [
     description: 'Mit einer Steuer-App geht es ganz einfach — auch ohne Steuerwissen. Antworten auf Fragen geben, fertig. Durchschnittliche Rückerstattung: über 1.000 €.',
     partner: 'Taxfix, WISO, Zasta',
     partnerLinks: [
-      { name: 'Taxfix', url: 'https://taxfix.de', logo: '/apps/wpilot-home/assets/partners/taxfix.png' },
-      { name: 'WISO',   url: 'https://www.wiso-steuer.de', logo: '/apps/wpilot-home/assets/partners/wiso.png' },
-      { name: 'Zasta',  url: 'https://www.zasta.de', logo: '/apps/wpilot-home/assets/partners/zasta.png' },
+      { name: 'Taxfix', url: 'https://taxfix.de',           logo: '/apps/wpilot-home/assets/partners/taxfix.png' },
+      { name: 'WISO',   url: 'https://www.wiso-steuer.de',  logo: '/apps/wpilot-home/assets/partners/wiso.png' },
+      { name: 'Zasta',  url: 'https://www.zasta.de',        logo: '/apps/wpilot-home/assets/partners/zasta.png' },
     ],
-    priority: 3, category: 'Steuern', icon: IconReceipt,
+    priority: 3, category: 'finanzen', icon: IconReceipt,
     savingsHg2: 1095, savingsHg3: 1095,
     condition: () => true,
-  },
-  {
-    id: 'kfz-versicherung',
-    title: 'KFZ-Versicherung wechseln',
-    partner: 'Clark, Tarifcheck, HUK24',
-    priority: 3, category: 'Versicherung', icon: IconCar,
-    savingsHg2: 800, savingsHg3: 800,
-    condition: (p) => p.autoType !== 'keins',
-  },
-  {
-    id: 'thermostate',
-    title: 'Smarte Thermostate',
-    partner: 'tado°, Homematic IP',
-    priority: 3, category: 'Heizung', icon: IconTemperature,
-    savingsHg2: 180, savingsHg3: 220,
-    condition: () => true,
-  },
-  {
-    id: 'solaranlage',
-    title: 'Solaranlage',
-    partner: 'Enpal, Zolar',
-    priority: 2, category: 'Solar', icon: IconSun,
-    savingsHg2: 300, savingsHg3: 300,
-    condition: (p) => p.tenure === 'eigentum' && p.propertyType === 'haus',
-  },
-  {
-    id: 'waermepumpe',
-    title: 'Wärmepumpe',
-    partner: 'Thermondo, 1KOMMA5°',
-    priority: 2, category: 'Heizung', icon: IconLeaf,
-    savingsHg2: 700, savingsHg3: 700,
-    condition: (p) => p.tenure === 'eigentum' && p.propertyType === 'haus' && p.heatingType !== 'waermepumpe',
-  },
-  {
-    id: 'balkonkraftwerk',
-    title: 'Balkonkraftwerk',
-    partner: 'Yuma, Priwatt',
-    priority: 2, category: 'Solar', icon: IconSun,
-    savingsHg2: 180, savingsHg3: 200,
-    condition: (p) => !(p.tenure === 'eigentum' && p.propertyType === 'haus'),
-  },
-  {
-    id: 'dynamischer-stromtarif',
-    title: 'Dynamischer Stromtarif',
-    partner: 'Tibber, Octopus',
-    priority: 2, category: 'Energie', icon: IconBolt,
-    savingsHg2: 836, savingsHg3: 836,
-    condition: (p) => p.autoType === 'eauto' || p.autoType === 'hybrid' || p.heatingType === 'waermepumpe',
-  },
-  {
-    id: 'hausrat-haftpflicht',
-    title: 'Hausrat-/Haftpflicht',
-    partner: 'Clark',
-    priority: 2, category: 'Versicherung', icon: IconShield,
-    savingsHg2: 160, savingsHg3: 160,
-    condition: () => true,
-  },
-  {
-    id: 'thg-praemie',
-    title: 'THG-Prämie',
-    partner: 'Geld für eAuto',
-    priority: 1, category: 'Mobilität', icon: IconBatteryCharging,
-    savingsHg2: 630, savingsHg3: 630,
-    condition: (p) => p.autoType === 'eauto',
-  },
-  {
-    id: 'wallbox',
-    title: 'Wallbox / Laden zuhause',
-    partner: 'Enpal, charge.cloud',
-    priority: 1, category: 'Mobilität', icon: IconBatteryCharging,
-    savingsHg2: 280, savingsHg3: 280,
-    condition: (p) => p.autoType === 'hybrid',
   },
   {
     id: 'kostenloses-girokonto',
     title: 'Kostenloses Girokonto',
     partner: 'ING, DKB',
-    priority: 1, category: 'Finanzen', icon: IconPig,
+    priority: 1, category: 'finanzen', icon: IconPig,
     savingsHg2: 120, savingsHg3: 120,
     condition: () => true,
   },
 ];
 
+// ── Cluster definitions ──────────────────────────────────────────
+function buildClusters(profile: MvpProfile, tips: MvpTip[]): { title: string; tips: MvpTip[] }[] {
+  const byCategory: Record<string, MvpTip[]> = {};
+  for (const t of tips) {
+    if (!byCategory[t.category]) byCategory[t.category] = [];
+    byCategory[t.category].push(t);
+  }
+
+  const heizungLabel: Record<string, string> = {
+    gas:         'Spartipps für Ihre Gasheizung',
+    oel:         'Spartipps für Ihre Ölheizung',
+    strom:       'Spartipps für Ihre Stromheizung',
+    waermepumpe: 'Ihre Wärmepumpe optimieren',
+  };
+
+  const clusterDefs: { key: string; title: string }[] = [
+    {
+      key: 'energie',
+      title: 'Energie & Tarife',
+    },
+    {
+      key: 'heizung',
+      title: heizungLabel[profile.heatingType] ?? (
+        profile.tenure === 'eigentum' && profile.propertyType === 'haus'
+          ? 'Heizung & Modernisierung'
+          : 'Heizung optimieren'
+      ),
+    },
+    {
+      key: 'solar',
+      title:
+        profile.propertyType === 'haus' && profile.tenure === 'eigentum'
+          ? 'Solar für Ihr Haus'
+          : profile.tenure === 'eigentum'
+          ? 'Solar für Ihre Eigentumswohnung'
+          : 'Solar für Ihre Mietwohnung',
+    },
+    {
+      key: 'mobilitaet',
+      title:
+        profile.autoType === 'eauto'      ? 'Spartipps für Ihr E-Auto' :
+        profile.autoType === 'hybrid'     ? 'Spartipps für Ihr Hybrid-Fahrzeug' :
+        profile.autoType === 'verbrenner' ? 'Spartipps für Ihr Auto' :
+        'Mobilität',
+    },
+    {
+      key: 'versicherung',
+      title: profile.hasChildren ? 'Versicherung & Schutz für Ihre Familie' : 'Versicherung & Schutz',
+    },
+    {
+      key: 'finanzen',
+      title: 'Steuern & Finanzen',
+    },
+  ];
+
+  return clusterDefs
+    .map(c => ({ title: c.title, tips: (byCategory[c.key] || []).sort((a, b) => b.priority - a.priority) }))
+    .filter(c => c.tips.length > 0);
+}
+
 // ── Design Tokens ────────────────────────────────────────────────
-const BLUE     = '#5782B0';
-const BLUE_LT  = '#EDF2F9';
-const BLUE_DK  = '#3D5A80';
-const GREEN    = '#0C663B';
-const GREEN_LT = '#E8F5EF';
-const ORANGE   = '#F9AA00';
+const BLUE      = '#5782B0';
+const BLUE_LT   = '#EDF2F9';
+const BLUE_DK   = '#3D5A80';
+const GREEN     = '#0C663B';
+const GREEN_LT  = '#E8F5EF';
+const ORANGE    = '#F9AA00';
 const ORANGE_LT = '#FEF3C7';
-const DARK     = '#2C3E50';
-const BG       = '#F5F6F8';
-const WHITE    = '#FFFFFF';
-const BORDER   = '#E2E8F0';
-const TEXT     = DARK;
-const TEXT_MUTED = '#7A8C9A';
-const TEXT_DIM   = '#A0AEBB';
+const DARK      = '#2C3E50';
+const BG        = '#F5F6F8';
+const WHITE     = '#FFFFFF';
+const BORDER    = '#E2E8F0';
+const TEXT      = DARK;
+const TEXT_MUTED  = '#7A8C9A';
+const TEXT_DIM    = '#A0AEBB';
 
 const PRIORITY_COLORS: Record<number, { bg: string; text: string; label: string }> = {
-  3: { bg: GREEN_LT,  text: GREEN,    label: 'Top' },
-  2: { bg: ORANGE_LT, text: '#92400e', label: 'Empfohlen' },
+  3: { bg: GREEN_LT,  text: GREEN,      label: 'Top' },
+  2: { bg: ORANGE_LT, text: '#92400e',  label: 'Empfohlen' },
   1: { bg: '#f3f4f6', text: TEXT_MUTED, label: 'Tipp' },
 };
 
@@ -245,8 +294,7 @@ function AnimatedCounter({ value, suffix = '' }: { value: number; suffix?: strin
     const t0 = performance.now();
     function tick(now: number) {
       const p = Math.min((now - t0) / duration, 1);
-      const eased = 1 - Math.pow(1 - p, 3);
-      setDisplay(Math.round(eased * value));
+      setDisplay(Math.round((1 - Math.pow(1 - p, 3)) * value));
       if (p < 1) requestAnimationFrame(tick);
     }
     requestAnimationFrame(tick);
@@ -256,9 +304,7 @@ function AnimatedCounter({ value, suffix = '' }: { value: number; suffix?: strin
 
 // ── Profile Edit View ────────────────────────────────────────────
 function ProfileEditView({
-  profile,
-  onSave,
-  onBack,
+  profile, onSave, onBack,
 }: {
   profile: MvpProfile;
   onSave: (p: MvpProfile) => void;
@@ -267,23 +313,13 @@ function ProfileEditView({
   const [local, setLocal] = useState<MvpProfile>(profile);
   const [openField, setOpenField] = useState<string | null>(null);
 
-  function getCurrentLabel(field: typeof PROFILE_FIELDS[0]) {
-    const rawVal = local[field.key];
-    const strVal = rawVal === true ? 'true' : rawVal === false ? 'false' : String(rawVal ?? '');
-    return field.options.find(o => o.value === strVal)?.label ?? '–';
-  }
-
-  function getCurrentIcon(field: typeof PROFILE_FIELDS[0]) {
-    const rawVal = local[field.key];
-    const strVal = rawVal === true ? 'true' : rawVal === false ? 'false' : String(rawVal ?? '');
-    return field.options.find(o => o.value === strVal)?.icon ?? IconCircle;
+  function getStrVal(field: typeof PROFILE_FIELDS[0]) {
+    const v = local[field.key];
+    return v === true ? 'true' : v === false ? 'false' : String(v ?? '');
   }
 
   function selectOption(fieldKey: string, value: string) {
-    const coerced: any =
-      fieldKey === 'hasChildren'
-        ? value === 'true' ? true : false
-        : value;
+    const coerced: any = fieldKey === 'hasChildren' ? value === 'true' : value;
     const updated = { ...local, [fieldKey]: coerced };
     setLocal(updated);
     localStorage.setItem('wpilot_mvp_profile', JSON.stringify(updated));
@@ -293,24 +329,19 @@ function ProfileEditView({
 
   return (
     <div style={{ minHeight: '100dvh', background: BG, display: 'flex', flexDirection: 'column' }}>
-
       {/* Header */}
       <div style={{
         position: 'sticky', top: 0, zIndex: 100,
         background: 'rgba(245,246,248,0.95)', backdropFilter: 'blur(12px)',
-        borderBottom: `1px solid ${BORDER}`,
-        padding: '12px 20px',
+        borderBottom: `1px solid ${BORDER}`, padding: '12px 20px',
         display: 'flex', alignItems: 'center', gap: 12,
       }}>
-        <button
-          onClick={onBack}
-          style={{
-            background: 'none', border: `1.5px solid ${BORDER}`, borderRadius: 10,
-            padding: '7px 14px', cursor: 'pointer',
-            display: 'flex', alignItems: 'center', gap: 6,
-            fontSize: 13, fontWeight: 600, color: TEXT,
-          }}
-        >
+        <button onClick={onBack} style={{
+          background: 'none', border: `1.5px solid ${BORDER}`, borderRadius: 10,
+          padding: '7px 14px', cursor: 'pointer',
+          display: 'flex', alignItems: 'center', gap: 6,
+          fontSize: 13, fontWeight: 600, color: TEXT,
+        }}>
           <IconArrowLeft size={16} stroke={1.5} /> Zurück
         </button>
         <div style={{ flex: 1, textAlign: 'center' }}>
@@ -319,9 +350,7 @@ function ProfileEditView({
         <div style={{ width: 80 }} />
       </div>
 
-      {/* Content */}
       <div style={{ maxWidth: 540, margin: '0 auto', padding: '20px 16px 40px', width: '100%' }}>
-
         <p style={{ fontSize: 13, color: TEXT_MUTED, marginBottom: 20, lineHeight: 1.5 }}>
           Tippen Sie auf ein Feld, um Ihre Angabe direkt zu ändern. Die Empfehlungen werden sofort aktualisiert.
         </p>
@@ -330,21 +359,20 @@ function ProfileEditView({
           {PROFILE_FIELDS.map(field => {
             const isOpen = openField === field.key;
             const FieldIcon = field.icon;
-            const CurrentIcon = getCurrentIcon(field);
-            const currentLabel = getCurrentLabel(field);
-            const rawVal = local[field.key];
-            const strVal = rawVal === true ? 'true' : rawVal === false ? 'false' : String(rawVal ?? '');
+            const strVal = getStrVal(field);
+            const currentOpt = field.options.find(o => o.value === strVal);
+            const CurrentIcon = currentOpt?.icon ?? IconCircle;
 
             return (
-              <motion.div
+              // plain div — no motion.div/layout so border-radius stays smooth
+              <div
                 key={field.key}
-                layout
                 style={{
                   background: WHITE,
                   border: isOpen ? `2px solid ${BLUE}` : `1.5px solid ${BORDER}`,
                   borderRadius: 14,
                   overflow: 'hidden',
-                  transition: 'border-color 0.15s',
+                  transition: 'border-color 0.2s',
                 }}
               >
                 {/* Row header */}
@@ -353,14 +381,14 @@ function ProfileEditView({
                   style={{
                     padding: '14px 16px',
                     display: 'flex', alignItems: 'center', gap: 12,
-                    cursor: 'pointer',
+                    cursor: 'pointer', userSelect: 'none',
                   }}
                 >
                   <div style={{
-                    width: 38, height: 38, borderRadius: 10,
+                    width: 38, height: 38, borderRadius: 10, flexShrink: 0,
                     background: isOpen ? BLUE : BLUE_LT,
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    flexShrink: 0, transition: 'background 0.15s',
+                    transition: 'background 0.2s',
                   }}>
                     <FieldIcon size={20} stroke={1.5} color={isOpen ? WHITE : BLUE} />
                   </div>
@@ -370,28 +398,36 @@ function ProfileEditView({
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                       <CurrentIcon size={15} stroke={1.5} color={BLUE_DK} />
-                      <span style={{ fontSize: 15, fontWeight: 700, color: TEXT }}>{currentLabel}</span>
+                      <span style={{ fontSize: 15, fontWeight: 700, color: TEXT }}>
+                        {currentOpt?.label ?? '–'}
+                      </span>
                     </div>
                   </div>
-                  <div style={{ color: TEXT_DIM, transition: 'transform 0.2s', transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}>
+                  <div style={{
+                    color: TEXT_DIM,
+                    transition: 'transform 0.25s ease',
+                    transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)',
+                    display: 'flex',
+                  }}>
                     <IconChevronDown size={18} stroke={1.5} />
                   </div>
                 </div>
 
-                {/* Options */}
-                <AnimatePresence>
+                {/* Options — AnimatePresence on the wrapper only, no layout */}
+                <AnimatePresence initial={false}>
                   {isOpen && (
                     <motion.div
+                      key="options"
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: 'auto', opacity: 1 }}
                       exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.2 }}
+                      transition={{ duration: 0.22, ease: 'easeInOut' }}
                       style={{ overflow: 'hidden' }}
                     >
                       <div style={{
-                        padding: '0 12px 12px',
+                        padding: '12px 12px 12px',
+                        borderTop: `1px solid ${BORDER}`,
                         display: 'flex', flexDirection: 'column', gap: 7,
-                        borderTop: `1px solid ${BORDER}`, paddingTop: 12,
                       }}>
                         {field.options.map(opt => {
                           const isSelected = strVal === opt.value;
@@ -412,11 +448,11 @@ function ProfileEditView({
                               }}
                             >
                               <div style={{
-                                width: 34, height: 34, borderRadius: 8,
+                                width: 34, height: 34, borderRadius: 8, flexShrink: 0,
                                 background: isSelected ? BLUE : WHITE,
-                                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                flexShrink: 0, transition: 'all 0.12s',
                                 border: isSelected ? 'none' : `1px solid ${BORDER}`,
+                                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                transition: 'all 0.12s',
                               }}>
                                 <OptIcon size={18} stroke={1.5} color={isSelected ? WHITE : TEXT_MUTED} />
                               </div>
@@ -425,8 +461,8 @@ function ProfileEditView({
                               </span>
                               {isSelected && (
                                 <div style={{
-                                  width: 22, height: 22, borderRadius: 11, background: BLUE,
-                                  display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+                                  width: 22, height: 22, borderRadius: 11, background: BLUE, flexShrink: 0,
+                                  display: 'flex', alignItems: 'center', justifyContent: 'center',
                                 }}>
                                   <IconCheck size={14} stroke={2.5} color={WHITE} />
                                 </div>
@@ -438,22 +474,19 @@ function ProfileEditView({
                     </motion.div>
                   )}
                 </AnimatePresence>
-              </motion.div>
+              </div>
             );
           })}
         </div>
 
         <div style={{ marginTop: 24, textAlign: 'center' }}>
-          <button
-            onClick={onBack}
-            style={{
-              background: BLUE, border: 'none', borderRadius: 12,
-              padding: '12px 28px', fontSize: 14, fontWeight: 600,
-              color: WHITE, cursor: 'pointer',
-              boxShadow: `0 2px 8px rgba(87,130,176,0.35)`,
-              display: 'inline-flex', alignItems: 'center', gap: 8,
-            }}
-          >
+          <button onClick={onBack} style={{
+            background: BLUE, border: 'none', borderRadius: 12,
+            padding: '12px 28px', fontSize: 14, fontWeight: 600,
+            color: WHITE, cursor: 'pointer',
+            boxShadow: `0 2px 8px rgba(87,130,176,0.35)`,
+            display: 'inline-flex', alignItems: 'center', gap: 8,
+          }}>
             Empfehlungen ansehen <IconArrowRight size={16} />
           </button>
         </div>
@@ -508,20 +541,15 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
 
   const tips = useMemo(() => {
     if (!profile) return [];
-    return ALL_TIPS
-      .filter(t => t.condition(profile))
-      .filter(t => !removed.has(t.id))
-      .sort((a, b) => b.priority - a.priority || b.savingsHg2 - a.savingsHg2);
+    return ALL_TIPS.filter(t => t.condition(profile) && !removed.has(t.id));
   }, [profile, removed]);
 
   const removedTips = useMemo(() => {
     if (!profile) return [];
-    return ALL_TIPS
-      .filter(t => t.condition(profile))
-      .filter(t => removed.has(t.id))
-      .sort((a, b) => b.priority - a.priority || b.savingsHg2 - a.savingsHg2);
+    return ALL_TIPS.filter(t => t.condition(profile) && removed.has(t.id));
   }, [profile, removed]);
 
+  const clusters = useMemo(() => profile ? buildClusters(profile, tips) : [], [profile, tips]);
   const total     = useMemo(() => tips.reduce((s, t) => s + getSavings(t), 0), [tips, hg]);
   const doneCount = useMemo(() => tips.filter(t => done.has(t.id)).length, [tips, done]);
   const doneTotal = useMemo(() => tips.filter(t => done.has(t.id)).reduce((s, t) => s + getSavings(t), 0), [tips, done, hg]);
@@ -544,7 +572,6 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
     );
   }
 
-  // ── Profile view ─────────────────────────────────────────────
   if (view === 'profile') {
     return (
       <ProfileEditView
@@ -567,35 +594,30 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
   }
 
   const profilePills = [
-    { type: 'tenure',   label: profile.tenure === 'eigentum' ? 'Eigentum' : 'Miete',                                                            value: profile.tenure },
-    { type: 'property', label: profile.propertyType === 'haus' ? 'Haus' : 'Wohnung',                                                            value: profile.propertyType },
-    { type: 'heating',  label: ({ gas: 'Gas', oel: 'Öl', strom: 'Strom', waermepumpe: 'Wärmepumpe' } as any)[profile.heatingType] || '',         value: profile.heatingType },
-    { type: 'auto',     label: ({ verbrenner: 'Verbrenner', eauto: 'E-Auto', hybrid: 'Hybrid', keins: 'Kein Auto' } as any)[profile.autoType],   value: profile.autoType },
-    { type: 'children', label: profile.hasChildren ? 'Mit Kindern' : 'Ohne Kinder',                                                              value: profile.hasChildren ? 'mit' : 'ohne' },
+    { type: 'tenure',   label: profile.tenure === 'eigentum' ? 'Eigentum' : 'Miete',                                                          value: profile.tenure },
+    { type: 'property', label: profile.propertyType === 'haus' ? 'Haus' : 'Wohnung',                                                          value: profile.propertyType },
+    { type: 'heating',  label: ({ gas: 'Gas', oel: 'Öl', strom: 'Strom', waermepumpe: 'Wärmepumpe' } as any)[profile.heatingType] || '',       value: profile.heatingType },
+    { type: 'auto',     label: ({ verbrenner: 'Verbrenner', eauto: 'E-Auto', hybrid: 'Hybrid', keins: 'Kein Auto' } as any)[profile.autoType], value: profile.autoType },
+    { type: 'children', label: profile.hasChildren ? 'Mit Kindern' : 'Ohne Kinder',                                                            value: profile.hasChildren ? 'mit' : 'ohne' },
   ];
 
-  // ── Dashboard view ────────────────────────────────────────────
   return (
     <div style={{ minHeight: '100dvh', background: BG }}>
       {/* Header */}
       <div style={{
         position: 'sticky', top: 0, zIndex: 100,
         background: 'rgba(245,246,248,0.95)', backdropFilter: 'blur(12px)',
-        borderBottom: `1px solid ${BORDER}`,
-        padding: '12px 20px',
+        borderBottom: `1px solid ${BORDER}`, padding: '12px 20px',
         display: 'flex', alignItems: 'center', gap: 10,
       }}>
         <img src="/apps/wpilot-home/assets/logo-wp.png" alt="WP" height={22} style={{ objectFit: 'contain', flexShrink: 0 }} />
         <span style={{ fontSize: 13, fontWeight: 700, color: TEXT, fontFamily: "'Poppins', sans-serif", letterSpacing: '0.05em' }}>HOME</span>
         <div style={{ flex: 1 }} />
-        <button
-          onClick={() => setView('profile')}
-          style={{
-            background: 'none', border: `1px solid ${BORDER}`, borderRadius: 8,
-            padding: '6px 12px', fontSize: 12, fontWeight: 500, color: TEXT_MUTED, cursor: 'pointer',
-            display: 'flex', alignItems: 'center', gap: 4,
-          }}
-        >
+        <button onClick={() => setView('profile')} style={{
+          background: 'none', border: `1px solid ${BORDER}`, borderRadius: 8,
+          padding: '6px 12px', fontSize: 12, fontWeight: 500, color: TEXT_MUTED, cursor: 'pointer',
+          display: 'flex', alignItems: 'center', gap: 4,
+        }}>
           <IconPencil size={13} stroke={1.5} /> Profil ändern
         </button>
       </div>
@@ -604,37 +626,28 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
 
         {/* Hero */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+          initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}
           style={{
             background: 'linear-gradient(135deg, #0f4c3a 0%, #1a6b52 40%, #24a47d 100%)',
             borderRadius: 18, padding: '24px 20px', color: WHITE,
             position: 'relative', overflow: 'hidden',
-            boxShadow: '0 8px 32px rgba(36,164,125,0.25)',
             marginBottom: 14,
           }}
         >
           <div style={{ position: 'absolute', top: -30, right: -30, width: 120, height: 120, borderRadius: 60, background: 'rgba(255,255,255,0.06)' }} />
           <div style={{ position: 'relative', zIndex: 1 }}>
-            <div style={{ fontSize: 11, fontWeight: 600, opacity: 0.85, marginBottom: 8, letterSpacing: '0.05em' }}>
-              Ihr Sparpotenzial pro Jahr
-            </div>
+            <div style={{ fontSize: 11, fontWeight: 600, opacity: 0.85, marginBottom: 8, letterSpacing: '0.05em' }}>Ihr Sparpotenzial pro Jahr</div>
             <div style={{ display: 'flex', alignItems: 'baseline', gap: 6, marginBottom: 8 }}>
-              <span style={{ fontSize: 42, fontWeight: 800, lineHeight: 1, letterSpacing: '-2px' }}>
-                <AnimatedCounter value={total} />
-              </span>
+              <span style={{ fontSize: 42, fontWeight: 800, lineHeight: 1, letterSpacing: '-2px' }}><AnimatedCounter value={total} /></span>
               <span style={{ fontSize: 20, fontWeight: 700, opacity: 0.8 }}>€</span>
             </div>
-            <div style={{ fontSize: 12, opacity: 0.7, marginBottom: 16 }}>
-              {tips.length} Empfehlungen basierend auf Ihren Antworten
-            </div>
+            <div style={{ fontSize: 12, opacity: 0.7, marginBottom: 16 }}>{tips.length} Empfehlungen basierend auf Ihren Antworten</div>
             <div style={{ display: 'flex', gap: 10 }}>
-              <div style={{ background: 'rgba(255,255,255,0.15)', borderRadius: 12, padding: '10px 14px', flex: '1 1 0', minWidth: 80 }}>
+              <div style={{ background: 'rgba(255,255,255,0.15)', borderRadius: 12, padding: '10px 14px', flex: '1 1 0' }}>
                 <div style={{ fontSize: 18, fontWeight: 700 }}><AnimatedCounter value={doneTotal} suffix=" €" /></div>
                 <div style={{ fontSize: 10, opacity: 0.8 }}>Erledigt</div>
               </div>
-              <div style={{ background: 'rgba(255,255,255,0.15)', borderRadius: 12, padding: '10px 14px', flex: '1 1 0', minWidth: 80 }}>
+              <div style={{ background: 'rgba(255,255,255,0.15)', borderRadius: 12, padding: '10px 14px', flex: '1 1 0' }}>
                 <div style={{ fontSize: 18, fontWeight: 700 }}>{doneCount}/{tips.length}</div>
                 <div style={{ fontSize: 10, opacity: 0.8 }}>Tipps erledigt</div>
               </div>
@@ -642,14 +655,13 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
           </div>
         </motion.div>
 
-        {/* Profile summary pills */}
+        {/* Profile pills */}
         <div
           onClick={() => setView('profile')}
           style={{
-            background: WHITE, borderRadius: 14, padding: '12px 16px',
-            marginBottom: 20, border: `1px solid ${BORDER}`,
-            display: 'flex', gap: 8, flexWrap: 'wrap', cursor: 'pointer',
-            alignItems: 'center',
+            background: WHITE, borderRadius: 14, padding: '12px 16px', marginBottom: 24,
+            border: `1px solid ${BORDER}`, display: 'flex', gap: 8, flexWrap: 'wrap',
+            cursor: 'pointer', alignItems: 'center',
           }}
         >
           {profilePills.map(p => (
@@ -667,122 +679,132 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
           </span>
         </div>
 
-        {/* Tip list */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-          {tips.map((tip, i) => {
-            const isDone = done.has(tip.id);
-            const isExpanded = expanded === tip.id;
-            const pri = PRIORITY_COLORS[tip.priority];
-            const TipIcon = tip.icon;
-            const savings = getSavings(tip);
-            return (
-              <div key={tip.id} style={{ position: 'relative' }}>
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.2, delay: i * 0.03 }}
-                  style={{
-                    background: WHITE, borderRadius: 14,
-                    border: isDone ? `2px solid ${GREEN}` : `1px solid ${BORDER}`,
-                    overflow: 'hidden', opacity: isDone ? 0.6 : 1, transition: 'opacity 0.15s',
-                  }}
-                >
-                  <div
-                    onClick={() => setExpanded(isExpanded ? null : tip.id)}
-                    style={{ padding: '14px 16px', display: 'flex', alignItems: 'center', gap: 12, cursor: 'pointer' }}
-                  >
-                    <div style={{ width: 40, height: 40, borderRadius: 12, background: BLUE_LT, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                      <TipIcon size={22} stroke={1.5} color={BLUE} />
-                    </div>
-                    <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ fontSize: 15, fontWeight: 700, color: TEXT, lineHeight: 1.3, textDecoration: isDone ? 'line-through' : 'none', marginBottom: 2 }}>
-                        {tip.title}
-                      </div>
-                      <div style={{ fontSize: 12, color: TEXT_MUTED }}>{fmt(savings)} € / Jahr</div>
-                    </div>
-                    <span style={{ fontSize: 10, fontWeight: 700, padding: '4px 8px', borderRadius: 6, background: pri.bg, color: pri.text, flexShrink: 0, whiteSpace: 'nowrap' }}>
-                      {pri.label}
-                    </span>
-                    <button
-                      onClick={e => { e.stopPropagation(); toggleDone(tip.id); }}
-                      style={{
-                        width: 28, height: 28, borderRadius: 8, flexShrink: 0,
-                        border: isDone ? 'none' : `2px solid ${BORDER}`,
-                        background: isDone ? GREEN : 'transparent',
-                        color: isDone ? WHITE : 'transparent',
-                        cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.15s',
-                      }}
-                    >
-                      <IconCheck size={16} stroke={2} />
-                    </button>
-                  </div>
-                  <AnimatePresence>
-                    {isExpanded && (
-                      <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: 'auto', opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.2 }}
-                        style={{ overflow: 'hidden' }}
-                      >
-                        <div style={{ padding: '14px 16px 16px', borderTop: `1px solid ${BORDER}` }}>
-                          {tip.description && (
-                            <p style={{ fontSize: 13, color: TEXT_MUTED, lineHeight: 1.6, marginBottom: 14 }}>{tip.description}</p>
-                          )}
-                          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
-                            <span style={{ fontSize: 12, background: GREEN_LT, borderRadius: 8, padding: '6px 12px', color: GREEN, fontWeight: 500, display: 'inline-flex', alignItems: 'center', gap: 5 }}>
-                              💰 {fmt(savings)} € / Jahr
-                            </span>
-                          </div>
-                          {tip.partnerLinks && tip.partnerLinks.length > 0 && (
-                            <div style={{ display: 'flex', gap: 10, marginTop: 14, flexWrap: 'wrap' }}>
-                              {tip.partnerLinks.map(pl => (
-                                <a key={pl.name} href={pl.url} target="_blank" rel="noopener noreferrer" style={{
-                                  display: 'inline-flex', alignItems: 'center', gap: 6,
-                                  background: WHITE, border: `1px solid ${BORDER}`, borderRadius: 10,
-                                  padding: '6px 12px', textDecoration: 'none', transition: 'all 0.15s',
-                                }}>
-                                  <img src={pl.logo} alt={pl.name} height={20} style={{ objectFit: 'contain' }} />
-                                </a>
-                              ))}
-                            </div>
-                          )}
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </motion.div>
-                <button
-                  onClick={() => removeTip(tip.id)}
-                  style={{
-                    position: 'absolute', top: '50%', right: -34, transform: 'translateY(-50%)',
-                    width: 28, height: 28, borderRadius: 8,
-                    border: 'none', background: 'transparent',
-                    color: TEXT_MUTED, cursor: 'pointer',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    opacity: 0, transition: 'opacity 0.15s',
-                  }}
-                  className="mvp-tip-delete"
-                >
-                  <IconX size={16} stroke={1.5} />
-                </button>
+        {/* Clustered tips */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 28 }}>
+          {clusters.map((cluster, ci) => (
+            <div key={cluster.title}>
+              {/* Cluster heading */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10 }}>
+                <span style={{ fontSize: 13, fontWeight: 700, color: TEXT }}>{cluster.title}</span>
+                <div style={{ flex: 1, height: 1, background: BORDER }} />
+                <span style={{ fontSize: 11, color: TEXT_MUTED, fontWeight: 500 }}>
+                  {fmt(cluster.tips.reduce((s, t) => s + getSavings(t), 0))} €
+                </span>
               </div>
-            );
-          })}
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                {cluster.tips.map((tip, i) => {
+                  const isDone = done.has(tip.id);
+                  const isExpanded = expanded === tip.id;
+                  const pri = PRIORITY_COLORS[tip.priority];
+                  const TipIcon = tip.icon;
+                  const savings = getSavings(tip);
+                  return (
+                    <div key={tip.id} style={{ position: 'relative' }}>
+                      <motion.div
+                        initial={{ opacity: 0, y: 8 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.2, delay: i * 0.04 }}
+                        style={{
+                          background: WHITE, borderRadius: 14,
+                          border: isDone ? `2px solid ${GREEN}` : `1px solid ${BORDER}`,
+                          overflow: 'hidden', opacity: isDone ? 0.6 : 1, transition: 'opacity 0.15s',
+                        }}
+                      >
+                        <div
+                          onClick={() => setExpanded(isExpanded ? null : tip.id)}
+                          style={{ padding: '14px 16px', display: 'flex', alignItems: 'center', gap: 12, cursor: 'pointer' }}
+                        >
+                          <div style={{ width: 40, height: 40, borderRadius: 12, background: BLUE_LT, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                            <TipIcon size={22} stroke={1.5} color={BLUE} />
+                          </div>
+                          <div style={{ flex: 1, minWidth: 0 }}>
+                            <div style={{ fontSize: 15, fontWeight: 700, color: TEXT, lineHeight: 1.3, textDecoration: isDone ? 'line-through' : 'none', marginBottom: 2 }}>
+                              {tip.title}
+                            </div>
+                            <div style={{ fontSize: 12, color: TEXT_MUTED }}>{fmt(savings)} € / Jahr</div>
+                          </div>
+                          <span style={{ fontSize: 10, fontWeight: 700, padding: '4px 8px', borderRadius: 6, background: pri.bg, color: pri.text, flexShrink: 0, whiteSpace: 'nowrap' }}>
+                            {pri.label}
+                          </span>
+                          <button
+                            onClick={e => { e.stopPropagation(); toggleDone(tip.id); }}
+                            style={{
+                              width: 28, height: 28, borderRadius: 8, flexShrink: 0,
+                              border: isDone ? 'none' : `2px solid ${BORDER}`,
+                              background: isDone ? GREEN : 'transparent',
+                              color: isDone ? WHITE : 'transparent',
+                              cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.15s',
+                            }}
+                          >
+                            <IconCheck size={16} stroke={2} />
+                          </button>
+                        </div>
+
+                        <AnimatePresence>
+                          {isExpanded && (
+                            <motion.div
+                              initial={{ height: 0, opacity: 0 }}
+                              animate={{ height: 'auto', opacity: 1 }}
+                              exit={{ height: 0, opacity: 0 }}
+                              transition={{ duration: 0.2 }}
+                              style={{ overflow: 'hidden' }}
+                            >
+                              <div style={{ padding: '14px 16px 16px', borderTop: `1px solid ${BORDER}` }}>
+                                {tip.description && (
+                                  <p style={{ fontSize: 13, color: TEXT_MUTED, lineHeight: 1.6, marginBottom: 14 }}>{tip.description}</p>
+                                )}
+                                <span style={{ fontSize: 12, background: GREEN_LT, borderRadius: 8, padding: '6px 12px', color: GREEN, fontWeight: 500, display: 'inline-flex', alignItems: 'center', gap: 5 }}>
+                                  💰 {fmt(savings)} € / Jahr
+                                </span>
+                                {tip.partnerLinks && tip.partnerLinks.length > 0 && (
+                                  <div style={{ display: 'flex', gap: 10, marginTop: 14, flexWrap: 'wrap' }}>
+                                    {tip.partnerLinks.map(pl => (
+                                      <a key={pl.name} href={pl.url} target="_blank" rel="noopener noreferrer" style={{
+                                        display: 'inline-flex', alignItems: 'center', gap: 6,
+                                        background: WHITE, border: `1px solid ${BORDER}`, borderRadius: 10,
+                                        padding: '6px 12px', textDecoration: 'none',
+                                      }}>
+                                        <img src={pl.logo} alt={pl.name} height={20} style={{ objectFit: 'contain' }} />
+                                      </a>
+                                    ))}
+                                  </div>
+                                )}
+                              </div>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </motion.div>
+
+                      <button
+                        onClick={() => removeTip(tip.id)}
+                        style={{
+                          position: 'absolute', top: '50%', right: -34, transform: 'translateY(-50%)',
+                          width: 28, height: 28, borderRadius: 8, border: 'none',
+                          background: 'transparent', color: TEXT_MUTED, cursor: 'pointer',
+                          display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          opacity: 0, transition: 'opacity 0.15s',
+                        }}
+                        className="mvp-tip-delete"
+                      >
+                        <IconX size={16} stroke={1.5} />
+                      </button>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
         </div>
 
         {/* Deleted tips */}
         {removedTips.length > 0 && (
           <div style={{ marginTop: 24 }}>
-            <button
-              onClick={() => setShowRemoved(!showRemoved)}
-              style={{
-                display: 'flex', alignItems: 'center', gap: 8,
-                background: 'none', border: 'none', cursor: 'pointer',
-                color: TEXT_MUTED, fontSize: 13, fontWeight: 600,
-                padding: '8px 0', width: '100%',
-              }}
-            >
+            <button onClick={() => setShowRemoved(!showRemoved)} style={{
+              display: 'flex', alignItems: 'center', gap: 8,
+              background: 'none', border: 'none', cursor: 'pointer',
+              color: TEXT_MUTED, fontSize: 13, fontWeight: 600, padding: '8px 0', width: '100%',
+            }}>
               <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 20, height: 20, borderRadius: 6, background: ORANGE_LT, fontSize: 11, fontWeight: 700, color: '#92400e' }}>
                 {removedTips.length}
               </span>
@@ -790,7 +812,7 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
               <span style={{ display: 'inline-block', transform: showRemoved ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s', fontSize: 14 }}>▾</span>
             </button>
             {showRemoved && (
-              <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} style={{ overflow: 'hidden' }}>
+              <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} style={{ overflow: 'hidden' }}>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 6, paddingTop: 4 }}>
                   {removedTips.map(tip => {
                     const TipIcon = tip.icon;
