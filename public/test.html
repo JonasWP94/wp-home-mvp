@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head><title>Wizard Test</title></head>
+<body>
+<h1>Wizard Test Page</h1>
+<div id="root">LOADING...</div>
+<script type="module" src="/apps/wpilot-home/assets/wizard-C4Ibq7DE.js"></script>
+<script>
+  window.addEventListener('error', function(e) {
+    document.getElementById('root').innerHTML = '<pre style="color:red">ERROR: ' + e.message + '\n' + (e.error ? e.error.stack : '') + '</pre>';
+  });
+</script>
+</body>
+</html>

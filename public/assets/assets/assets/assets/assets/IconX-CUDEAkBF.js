@@ -1,0 +1,1 @@
+import{o as e}from"./IconUsers-Xxg_v2Tx.js";var t=e(`outline`,`sun`,`Sun`,[[`path`,{d:`M8 12a4 4 0 1 0 8 0a4 4 0 1 0 -8 0`,key:`svg-0`}],[`path`,{d:`M3 12h1m8 -9v1m8 8h1m-9 8v1m-6.4 -15.4l.7 .7m12.1 -.7l-.7 .7m0 11.4l.7 .7m-12.1 -.7l-.7 .7`,key:`svg-1`}]]),n=e(`outline`,`x`,`X`,[[`path`,{d:`M18 6l-12 12`,key:`svg-0`}],[`path`,{d:`M6 6l12 12`,key:`svg-1`}]]);export{t as n,n as t};

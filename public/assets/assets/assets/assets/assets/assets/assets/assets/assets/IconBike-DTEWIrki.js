@@ -1,0 +1,1 @@
+import{u as e}from"./IconUsers-B-GVD0dC.js";var t=e(`outline`,`bike`,`Bike`,[[`path`,{d:`M2 18a3 3 0 1 0 6 0a3 3 0 1 0 -6 0`,key:`svg-0`}],[`path`,{d:`M16 18a3 3 0 1 0 6 0a3 3 0 1 0 -6 0`,key:`svg-1`}],[`path`,{d:`M12 19l0 -4l-3 -3l5 -4l2 3l3 0`,key:`svg-2`}],[`path`,{d:`M16 5a1 1 0 1 0 2 0a1 1 0 1 0 -2 0`,key:`svg-3`}]]);export{t};

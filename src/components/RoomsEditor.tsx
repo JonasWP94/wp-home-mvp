@@ -25,6 +25,7 @@ interface Props {
   rooms: Room[];
   onChange: (rooms: Room[]) => void;
   onClose: () => void;
+  onSwitchToFloorplan?: () => void;
 }
 
 const S = {
@@ -82,7 +83,7 @@ export function RoomsEditorCompact({ rooms, onClick }: { rooms: Room[]; onClick:
   );
 }
 
-export default function RoomsEditor({ rooms, onChange, onClose }: Props) {
+export default function RoomsEditor({ rooms, onChange, onClose, onSwitchToFloorplan }: Props) {
   const [editRoom, setEditRoom] = useState<Room | null>(null);
   const totalSize = rooms.reduce((s, r) => s + r.size, 0);
 
@@ -123,7 +124,21 @@ export default function RoomsEditor({ rooms, onChange, onClose }: Props) {
         padding: "16px 16px 12px", borderBottom: "1px solid #e3e3e6",
         background: S.white,
       }}>
-        <div style={{ fontSize: 17, fontWeight: 700, color: S.primary }}>🏠 Räume bearbeiten</div>
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <div style={{ fontSize: 17, fontWeight: 700, color: S.primary }}>🏠 Räume bearbeiten</div>
+          {onSwitchToFloorplan && (
+            <button
+              onClick={onSwitchToFloorplan}
+              style={{
+                fontSize: 11, padding: "6px 12px", borderRadius: 8,
+                border: "1px solid #d4e2ed", background: "#f0f6fb",
+                color: S.accent, cursor: "pointer", fontWeight: 600,
+              }}
+            >
+              🏠 Grundriss
+            </button>
+          )}
+        </div>
         <button
           onClick={onClose}
           style={{

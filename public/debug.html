@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Wizard Debug</title>
+  <style>
+    body { font-family: monospace; padding: 20px; background: #0a0a0a; color: #4ade80; }
+    pre { white-space: pre-wrap; font-size: 11px; }
+    .err { color: #f87171; }
+    .ok { color: #4ade80; }
+    .warn { color: #fbbf24; }
+    .loader { border: 2px solid #333; border-top: 2px solid #4ade80; border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; margin: 20px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+<h1 style="color:#fff;">Wizard Debug</h1>
+<div id="loader" class="loader"></div>
+<pre id="log"></pre>
+<script>
+const log = document.getElementById('log');
+const loader = document.getElementById('loader');
+function info(msg) { log.innerHTML += '<span class="ok">INFO: ' + msg + '</span>\n'; }
+function warn(msg) { log.innerHTML += '<span class="warn">WARN: ' + msg + '</span>\n'; }
+function err(msg) { log.innerHTML += '<span class="err">ERR: ' + msg + '</span>\n'; }
+info('Page loaded');
+info('Fetching wizard bundle...');
+fetch('/apps/wpilot-home/assets/wizard-CCNnsZz_.js')
+  .then(r => { info('Bundle status: ' + r.status); return r.text(); })
+  .then(t => { info('Bundle size: ' + t.length + ' bytes'); info('First 200 chars: ' + t.substring(0,200)); })
+  .catch(e => err('Fetch failed: ' + e));
+window.onerror = function(msg, src, line, col, err) {
+  err('JS ERROR: ' + msg + ' at ' + src + ':' + line + ':' + col);
+  if(err && err.stack) log.innerHTML += 'Stack: ' + err.stack + '\n';
+};
+window.addEventListener('unhandledrejection', function(e) {
+  err('UNHANDLED: ' + String(e.reason));
+});
+window.addEventListener('load', function() {
+  info('Window loaded');
+  setTimeout(() => { loader.style.display='none'; info('Done — check above for errors'); }, 3000);
+});
+</script>
+</body>
+</html>

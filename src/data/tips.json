@@ -21,7 +21,8 @@
       "hg2": null,
       "hg3": 700,
       "hg4": 700
-    }
+    },
+    "requires_heatpump": false
   },
   {
     "id": 2,
@@ -46,7 +47,8 @@
       "hg2": 300,
       "hg3": 300,
       "hg4": 300
-    }
+    },
+    "requires_pv": false
   },
   {
     "id": 3,
@@ -278,7 +280,8 @@
       "hg2": 168,
       "hg3": 168,
       "hg4": 168
-    }
+    },
+    "requires_balkonkraftwerk": false
   },
   {
     "id": 12,
@@ -354,7 +357,8 @@
       "hg2": 800,
       "hg3": 800,
       "hg4": 800
-    }
+    },
+    "requires_auto": true
   },
   {
     "id": 15,
@@ -477,12 +481,12 @@
     "investment": "kostenlos",
     "wp_plan": "nein",
     "description": "Bei 40.000 EUR Einkommen: ~585 EUR Kirchensteuer/J. Austritt beim Standesamt: 30 EUR einmalig.",
-    "savings_eur": 40000,
+    "savings_eur": 585,
     "savings_by_hg": {
-      "hg1": 40000,
-      "hg2": 40000,
-      "hg3": 40000,
-      "hg4": 40000
+      "hg1": 585,
+      "hg2": 585,
+      "hg3": 585,
+      "hg4": 585
     }
   },
   {
@@ -1454,7 +1458,8 @@
       "hg2": 1200,
       "hg3": 1200,
       "hg4": 1200
-    }
+    },
+    "requires_homeoffice": true
   },
   {
     "id": 58,
@@ -1581,7 +1586,8 @@
       "hg2": 25,
       "hg3": 25,
       "hg4": 25
-    }
+    },
+    "requires_keller": true
   },
   {
     "id": 63,
@@ -1838,7 +1844,8 @@
       "hg2": 70,
       "hg3": 70,
       "hg4": 70
-    }
+    },
+    "requires_auto": true
   },
   {
     "id": 73,
@@ -1864,7 +1871,8 @@
       "hg2": 200,
       "hg3": 200,
       "hg4": 200
-    }
+    },
+    "requires_auto": true
   },
   {
     "id": 74,
@@ -1890,7 +1898,8 @@
       "hg2": 150,
       "hg3": 150,
       "hg4": 150
-    }
+    },
+    "requires_auto": true
   },
   {
     "id": 75,
@@ -1916,7 +1925,8 @@
       "hg2": 62,
       "hg3": 62,
       "hg4": 62
-    }
+    },
+    "requires_auto": true
   },
   {
     "id": 76,
@@ -2554,12 +2564,12 @@
     "investment": "kleine_invest",
     "wp_plan": "nein",
     "description": "100 EUR/Mo x 7% Rendite x 20 Jahre = ~52.000 EUR. Auf Sparbuch (0,5%): ~25.200 EUR. Diff: ~26.800 EUR.",
-    "savings_eur": 26800,
+    "savings_eur": 1340,
     "savings_by_hg": {
-      "hg1": 26800,
-      "hg2": 26800,
-      "hg3": 26800,
-      "hg4": 26800
+      "hg1": 1340,
+      "hg2": 1340,
+      "hg3": 1340,
+      "hg4": 1340
     }
   },
   {
@@ -2585,58 +2595,6 @@
       "hg2": 500,
       "hg3": 500,
       "hg4": 500
-    }
-  },
-  {
-    "id": 102,
-    "title": "Doppelte Haushaltsfuehrung absetzen",
-    "category": "Steuern",
-    "hg_range": "1-4",
-    "hg_levels": [
-      1,
-      2,
-      3,
-      4
-    ],
-    "property": "klein_miet",
-    "tenure": "miete",
-    "timing": "mittel",
-    "effort": "aufwand",
-    "investment": "kostenlos",
-    "wp_plan": "plus",
-    "description": "Zweitwohnung 600 EUR/Mo. Max 1.000 EUR/Mo absetzbar. Bei 42%: bis 5.040 EUR/J.",
-    "savings_eur": 5040,
-    "savings_by_hg": {
-      "hg1": 5040,
-      "hg2": 5040,
-      "hg3": 5040,
-      "hg4": 5040
-    }
-  },
-  {
-    "id": 103,
-    "title": "Mietpreisbremse pruefen",
-    "category": "Wohnen",
-    "hg_range": "1-4",
-    "hg_levels": [
-      1,
-      2,
-      3,
-      4
-    ],
-    "property": "gross_miet",
-    "tenure": "miete",
-    "timing": "mittel",
-    "effort": "aufwand",
-    "investment": "kostenlos",
-    "wp_plan": "plus",
-    "description": "Miete 12 EUR/m², Vergleich 10 EUR. 80m² = 160 EUR/Mo = 1.920 EUR/J Rueckforderung bis 30 Mo.",
-    "savings_eur": 160,
-    "savings_by_hg": {
-      "hg1": 160,
-      "hg2": 160,
-      "hg3": 160,
-      "hg4": 160
     }
   },
   {
@@ -2773,7 +2731,12 @@
     "title": "Smarte Thermostate nachrüsten",
     "category": "Heizung",
     "hg_range": "1-4",
-    "hg_levels": [1, 2, 3, 4],
+    "hg_levels": [
+      1,
+      2,
+      3,
+      4
+    ],
     "property": "mittel_miet",
     "tenure": "miete",
     "timing": "sofort",
@@ -2782,28 +2745,22 @@
     "wp_plan": "plus",
     "description": "Smarte Thermostate lernen dein Heizverhalten und regeln automatisch. 10-15% Heizkosten sparen. Invest: 40-60 EUR/Stueck. Amort: 1 Jahr.",
     "savings_eur": 180,
-    "savings_by_hg": { "hg1": 120, "hg2": 180, "hg3": 220, "hg4": 280 },
-    "heating_types": ["gas", "oil", "district"],
-    "building_age_relevant": ["pre1990", "1990to2010", "post2010"],
-    "income_level_min": "low"
-  },
-  {
-    "id": 201,
-    "title": "Heizkoerper entlueften",
-    "category": "Heizung",
-    "hg_range": "1-4",
-    "hg_levels": [1, 2, 3, 4],
-    "property": "mittel_miet",
-    "tenure": "miete",
-    "timing": "sofort",
-    "effort": "muehelos",
-    "investment": "kostenlos",
-    "wp_plan": "free",
-    "description": "Luft im Heizkoerper verhindert Waermeverteilung. Regelmaessig entlueften spart 5-10% Heizkosten. Kostenlos mit Entlueftungsschluessel.",
-    "savings_eur": 80,
-    "savings_by_hg": { "hg1": 50, "hg2": 80, "hg3": 100, "hg4": 130 },
-    "heating_types": ["gas", "oil", "district"],
-    "building_age_relevant": ["pre1990", "1990to2010"],
+    "savings_by_hg": {
+      "hg1": 120,
+      "hg2": 180,
+      "hg3": 220,
+      "hg4": 280
+    },
+    "heating_types": [
+      "gas",
+      "oil",
+      "district"
+    ],
+    "building_age_relevant": [
+      "pre1990",
+      "1990to2010",
+      "post2010"
+    ],
     "income_level_min": "low"
   },
   {
@@ -2811,7 +2768,12 @@
     "title": "Nachtabsenkung aktivieren",
     "category": "Heizung",
     "hg_range": "1-4",
-    "hg_levels": [1, 2, 3, 4],
+    "hg_levels": [
+      1,
+      2,
+      3,
+      4
+    ],
     "property": "mittel_miet",
     "tenure": "miete",
     "timing": "sofort",
@@ -2820,9 +2782,23 @@
     "wp_plan": "free",
     "description": "Heizung nachts auf 16-17°C senken spart 5-10% Heizkosten. Einfach am Thermostat oder Regler einstellen. Kein Invest noetig.",
     "savings_eur": 150,
-    "savings_by_hg": { "hg1": 90, "hg2": 150, "hg3": 200, "hg4": 260 },
-    "heating_types": ["gas", "oil", "district", "electric"],
-    "building_age_relevant": ["pre1990", "1990to2010", "post2010"],
+    "savings_by_hg": {
+      "hg1": 90,
+      "hg2": 150,
+      "hg3": 200,
+      "hg4": 260
+    },
+    "heating_types": [
+      "gas",
+      "oil",
+      "district",
+      "electric"
+    ],
+    "building_age_relevant": [
+      "pre1990",
+      "1990to2010",
+      "post2010"
+    ],
     "income_level_min": "low"
   },
   {
@@ -2830,7 +2806,12 @@
     "title": "Fenster und Tueren abdichten (Profi)",
     "category": "Heizung",
     "hg_range": "1-4",
-    "hg_levels": [1, 2, 3, 4],
+    "hg_levels": [
+      1,
+      2,
+      3,
+      4
+    ],
     "property": "mittel_miet",
     "tenure": "miete",
     "timing": "sofort",
@@ -2839,9 +2820,23 @@
     "wp_plan": "free",
     "description": "Professionelle Dichtungsbaender und Zugluftstopper reduzieren Waermeverlust um 10-15%. Material: 30-80 EUR. Amort: 3-6 Monate.",
     "savings_eur": 120,
-    "savings_by_hg": { "hg1": 80, "hg2": 120, "hg3": 160, "hg4": 200 },
-    "heating_types": ["gas", "oil", "district", "electric", "heat_pump"],
-    "building_age_relevant": ["pre1990", "1990to2010"],
+    "savings_by_hg": {
+      "hg1": 80,
+      "hg2": 120,
+      "hg3": 160,
+      "hg4": 200
+    },
+    "heating_types": [
+      "gas",
+      "oil",
+      "district",
+      "electric",
+      "heat_pump"
+    ],
+    "building_age_relevant": [
+      "pre1990",
+      "1990to2010"
+    ],
     "income_level_min": "low"
   },
   {
@@ -2849,7 +2844,11 @@
     "title": "Heizungswartung durchfuehren lassen",
     "category": "Heizung",
     "hg_range": "2-4",
-    "hg_levels": [2, 3, 4],
+    "hg_levels": [
+      2,
+      3,
+      4
+    ],
     "property": "efh",
     "tenure": "eigentum",
     "timing": "mittel",
@@ -2858,36 +2857,33 @@
     "wp_plan": "plus",
     "description": "Jaehrliche Wartung haelt Heizung effizient. Ungewartete Anlagen verbrauchen 10-15% mehr. Kosten: 150-250 EUR. Netto-Ersparnis: 100-200 EUR/J.",
     "savings_eur": 150,
-    "savings_by_hg": { "hg1": null, "hg2": 150, "hg3": 200, "hg4": 250 },
-    "heating_types": ["gas", "oil"],
-    "building_age_relevant": ["pre1990", "1990to2010"],
+    "savings_by_hg": {
+      "hg1": null,
+      "hg2": 150,
+      "hg3": 200,
+      "hg4": 250
+    },
+    "heating_types": [
+      "gas",
+      "oil"
+    ],
+    "building_age_relevant": [
+      "pre1990",
+      "1990to2010"
+    ],
     "income_level_min": "medium"
-  },
-  {
-    "id": 205,
-    "title": "Sparduschkopf einbauen",
-    "category": "Warmwasser",
-    "hg_range": "1-4",
-    "hg_levels": [1, 2, 3, 4],
-    "property": "mittel_miet",
-    "tenure": "miete",
-    "timing": "sofort",
-    "effort": "muehelos",
-    "investment": "kleine_invest",
-    "wp_plan": "free",
-    "description": "Reduziert Wasserverbrauch um 50% bei gleichem Komfort. Invest: 20-40 EUR. Familie 4 Pers: ~200 EUR/J Ersparnis an Wasser+Energie.",
-    "savings_eur": 200,
-    "savings_by_hg": { "hg1": 80, "hg2": 150, "hg3": 200, "hg4": 260 },
-    "heating_types": ["gas", "oil", "district", "electric", "heat_pump", "other"],
-    "building_age_relevant": ["pre1990", "1990to2010", "post2010"],
-    "income_level_min": "low"
   },
   {
     "id": 206,
     "title": "Warmwasser-Temperatur senken",
     "category": "Warmwasser",
     "hg_range": "1-4",
-    "hg_levels": [1, 2, 3, 4],
+    "hg_levels": [
+      1,
+      2,
+      3,
+      4
+    ],
     "property": "mittel_miet",
     "tenure": "miete",
     "timing": "sofort",
@@ -2896,9 +2892,23 @@
     "wp_plan": "free",
     "description": "Boiler von 60°C auf 50°C senken spart 10-15% Warmwasserkosten. Legionellen-Schutz: 1x/Woche auf 60°C aufheizen. Ersparnis: ~100 EUR/J.",
     "savings_eur": 100,
-    "savings_by_hg": { "hg1": 60, "hg2": 100, "hg3": 130, "hg4": 160 },
-    "heating_types": ["gas", "oil", "electric", "heat_pump"],
-    "building_age_relevant": ["pre1990", "1990to2010", "post2010"],
+    "savings_by_hg": {
+      "hg1": 60,
+      "hg2": 100,
+      "hg3": 130,
+      "hg4": 160
+    },
+    "heating_types": [
+      "gas",
+      "oil",
+      "electric",
+      "heat_pump"
+    ],
+    "building_age_relevant": [
+      "pre1990",
+      "1990to2010",
+      "post2010"
+    ],
     "income_level_min": "low"
   },
   {
@@ -2906,7 +2916,11 @@
     "title": "Durchlauferhitzer statt Boiler",
     "category": "Warmwasser",
     "hg_range": "2-4",
-    "hg_levels": [2, 3, 4],
+    "hg_levels": [
+      2,
+      3,
+      4
+    ],
     "property": "efh",
     "tenure": "eigentum",
     "timing": "mittel",
@@ -2915,9 +2929,19 @@
     "wp_plan": "plus",
     "description": "Alter Boiler verbraucht Standby-Energie. Moderner Durchlauferhitzer spart 15-20% Warmwasserkosten. Invest: 300-600 EUR. Amort: 2-3 J.",
     "savings_eur": 180,
-    "savings_by_hg": { "hg1": null, "hg2": 140, "hg3": 180, "hg4": 230 },
-    "heating_types": ["electric"],
-    "building_age_relevant": ["pre1990", "1990to2010"],
+    "savings_by_hg": {
+      "hg1": null,
+      "hg2": 140,
+      "hg3": 180,
+      "hg4": 230
+    },
+    "heating_types": [
+      "electric"
+    ],
+    "building_age_relevant": [
+      "pre1990",
+      "1990to2010"
+    ],
     "income_level_min": "medium"
   },
   {
@@ -2925,7 +2949,11 @@
     "title": "Dach daemmen (oberste Geschossdecke)",
     "category": "Gebaeude",
     "hg_range": "2-4",
-    "hg_levels": [2, 3, 4],
+    "hg_levels": [
+      2,
+      3,
+      4
+    ],
     "property": "efh",
     "tenure": "eigentum",
     "timing": "langfristig",
@@ -2934,9 +2962,22 @@
     "wp_plan": "plus",
     "description": "Ungedaemmtes Dach: 15-20% Waermeverlust. Daemmung oberste Geschossdecke: 30-50 EUR/m². BAFA-Foerderung 15%. Amort: 5-10 J. Ersparnis: 300-500 EUR/J.",
     "savings_eur": 400,
-    "savings_by_hg": { "hg1": null, "hg2": 350, "hg3": 400, "hg4": 500 },
-    "heating_types": ["gas", "oil", "heat_pump", "district", "electric"],
-    "building_age_relevant": ["pre1990"],
+    "savings_by_hg": {
+      "hg1": null,
+      "hg2": 350,
+      "hg3": 400,
+      "hg4": 500
+    },
+    "heating_types": [
+      "gas",
+      "oil",
+      "heat_pump",
+      "district",
+      "electric"
+    ],
+    "building_age_relevant": [
+      "pre1990"
+    ],
     "income_level_min": "high"
   },
   {
@@ -2944,7 +2985,11 @@
     "title": "Fenster tauschen (3-fach Verglasung)",
     "category": "Gebaeude",
     "hg_range": "2-4",
-    "hg_levels": [2, 3, 4],
+    "hg_levels": [
+      2,
+      3,
+      4
+    ],
     "property": "efh",
     "tenure": "eigentum",
     "timing": "langfristig",
@@ -2953,9 +2998,22 @@
     "wp_plan": "plus",
     "description": "Alte Fenster (U-Wert 2,8) durch 3-fach (U-Wert 0,6) ersetzen. Waermeverlust sinkt 75%. Invest: 8-15k EUR. BAFA 15%. Amort: 10-15 J.",
     "savings_eur": 350,
-    "savings_by_hg": { "hg1": null, "hg2": 300, "hg3": 350, "hg4": 450 },
-    "heating_types": ["gas", "oil", "heat_pump", "district", "electric"],
-    "building_age_relevant": ["pre1990"],
+    "savings_by_hg": {
+      "hg1": null,
+      "hg2": 300,
+      "hg3": 350,
+      "hg4": 450
+    },
+    "heating_types": [
+      "gas",
+      "oil",
+      "heat_pump",
+      "district",
+      "electric"
+    ],
+    "building_age_relevant": [
+      "pre1990"
+    ],
     "income_level_min": "high"
   },
   {
@@ -2963,7 +3021,11 @@
     "title": "Kellerdaemmung nachholen",
     "category": "Gebaeude",
     "hg_range": "2-4",
-    "hg_levels": [2, 3, 4],
+    "hg_levels": [
+      2,
+      3,
+      4
+    ],
     "property": "efh",
     "tenure": "eigentum",
     "timing": "langfristig",
@@ -2972,17 +3034,36 @@
     "wp_plan": "plus",
     "description": "Ungedaemmte Kellerdecke: 5-10% Waermeverlust. Daemmplatten von unten: 20-40 EUR/m². BAFA-Foerderung moeglich. Amort: 5-8 J.",
     "savings_eur": 250,
-    "savings_by_hg": { "hg1": null, "hg2": 200, "hg3": 250, "hg4": 320 },
-    "heating_types": ["gas", "oil", "heat_pump", "district", "electric"],
-    "building_age_relevant": ["pre1990", "1990to2010"],
-    "income_level_min": "high"
+    "savings_by_hg": {
+      "hg1": null,
+      "hg2": 200,
+      "hg3": 250,
+      "hg4": 320
+    },
+    "heating_types": [
+      "gas",
+      "oil",
+      "heat_pump",
+      "district",
+      "electric"
+    ],
+    "building_age_relevant": [
+      "pre1990",
+      "1990to2010"
+    ],
+    "income_level_min": "high",
+    "requires_keller": true
   },
   {
     "id": 211,
     "title": "PV-Anlage installieren",
     "category": "Solar",
     "hg_range": "2-4",
-    "hg_levels": [2, 3, 4],
+    "hg_levels": [
+      2,
+      3,
+      4
+    ],
     "property": "efh",
     "tenure": "eigentum",
     "timing": "langfristig",
@@ -2991,18 +3072,40 @@
     "wp_plan": "plus",
     "description": "10 kWp PV-Anlage = ~9.500 kWh/J. 30% Eigenverbrauch + Einspeisung. Invest: 12-18k EUR. Amort: 8-12 J. Ersparnis: 800-1.500 EUR/J.",
     "savings_eur": 1000,
-    "savings_by_hg": { "hg1": null, "hg2": 800, "hg3": 1000, "hg4": 1200 },
-    "heating_types": ["gas", "oil", "heat_pump", "district", "electric", "other"],
-    "building_age_relevant": ["pre1990", "1990to2010", "post2010"],
+    "savings_by_hg": {
+      "hg1": null,
+      "hg2": 800,
+      "hg3": 1000,
+      "hg4": 1200
+    },
+    "heating_types": [
+      "gas",
+      "oil",
+      "heat_pump",
+      "district",
+      "electric",
+      "other"
+    ],
+    "building_age_relevant": [
+      "pre1990",
+      "1990to2010",
+      "post2010"
+    ],
     "income_level_min": "high",
-    "requires_solar": true
+    "requires_solar": true,
+    "requires_pv": false
   },
   {
     "id": 212,
     "title": "Balkonkraftwerk aufstellen",
     "category": "Solar",
     "hg_range": "1-4",
-    "hg_levels": [1, 2, 3, 4],
+    "hg_levels": [
+      1,
+      2,
+      3,
+      4
+    ],
     "property": "mittel_miet",
     "tenure": "miete",
     "timing": "mittel",
@@ -3011,18 +3114,39 @@
     "wp_plan": "plus",
     "description": "800 Wp Mini-PV: 600-750 kWh/J Ertrag. 80% Eigenverbrauch x 35ct = ~180 EUR/J. Invest: 400-600 EUR. Amort: 2,5-3,5 J.",
     "savings_eur": 180,
-    "savings_by_hg": { "hg1": 140, "hg2": 180, "hg3": 200, "hg4": 220 },
-    "heating_types": ["gas", "oil", "heat_pump", "district", "electric", "other"],
-    "building_age_relevant": ["pre1990", "1990to2010", "post2010"],
+    "savings_by_hg": {
+      "hg1": 140,
+      "hg2": 180,
+      "hg3": 200,
+      "hg4": 220
+    },
+    "heating_types": [
+      "gas",
+      "oil",
+      "heat_pump",
+      "district",
+      "electric",
+      "other"
+    ],
+    "building_age_relevant": [
+      "pre1990",
+      "1990to2010",
+      "post2010"
+    ],
     "income_level_min": "medium",
-    "requires_solar": true
+    "requires_solar": true,
+    "requires_balkonkraftwerk": false
   },
   {
     "id": 213,
     "title": "Regenwasser sammeln und nutzen",
     "category": "Garten",
     "hg_range": "2-4",
-    "hg_levels": [2, 3, 4],
+    "hg_levels": [
+      2,
+      3,
+      4
+    ],
     "property": "efh",
     "tenure": "eigentum",
     "timing": "mittel",
@@ -3031,18 +3155,39 @@
     "wp_plan": "nein",
     "description": "Regentonne (300-1.000L) fuer Gartenbewaesserung. Spart 30-50% Trinkwasser im Garten. Invest: 50-200 EUR. Ersparnis: 80-150 EUR/J.",
     "savings_eur": 120,
-    "savings_by_hg": { "hg1": null, "hg2": 100, "hg3": 120, "hg4": 150 },
-    "heating_types": ["gas", "oil", "heat_pump", "district", "electric", "other"],
-    "building_age_relevant": ["pre1990", "1990to2010", "post2010"],
+    "savings_by_hg": {
+      "hg1": null,
+      "hg2": 100,
+      "hg3": 120,
+      "hg4": 150
+    },
+    "heating_types": [
+      "gas",
+      "oil",
+      "heat_pump",
+      "district",
+      "electric",
+      "other"
+    ],
+    "building_age_relevant": [
+      "pre1990",
+      "1990to2010",
+      "post2010"
+    ],
     "income_level_min": "low",
-    "requires_garden": true
+    "requires_garden": true,
+    "requires_garten": true
   },
   {
     "id": 214,
     "title": "Gartenbewaesserung optimieren",
     "category": "Garten",
     "hg_range": "2-4",
-    "hg_levels": [2, 3, 4],
+    "hg_levels": [
+      2,
+      3,
+      4
+    ],
     "property": "efh",
     "tenure": "eigentum",
     "timing": "sofort",
@@ -3051,18 +3196,39 @@
     "wp_plan": "nein",
     "description": "Troepfchenbewässerung statt Rasensprenger spart 50-70% Wasser. Morgens statt mittags giessen. Mulchen reduziert Verdunstung. Ersparnis: 80-120 EUR/J.",
     "savings_eur": 100,
-    "savings_by_hg": { "hg1": null, "hg2": 80, "hg3": 100, "hg4": 130 },
-    "heating_types": ["gas", "oil", "heat_pump", "district", "electric", "other"],
-    "building_age_relevant": ["pre1990", "1990to2010", "post2010"],
+    "savings_by_hg": {
+      "hg1": null,
+      "hg2": 80,
+      "hg3": 100,
+      "hg4": 130
+    },
+    "heating_types": [
+      "gas",
+      "oil",
+      "heat_pump",
+      "district",
+      "electric",
+      "other"
+    ],
+    "building_age_relevant": [
+      "pre1990",
+      "1990to2010",
+      "post2010"
+    ],
     "income_level_min": "low",
-    "requires_garden": true
+    "requires_garden": true,
+    "requires_garten": true
   },
   {
     "id": 215,
     "title": "Heizungsrohre im Keller daemmen",
     "category": "Heizung",
     "hg_range": "2-4",
-    "hg_levels": [2, 3, 4],
+    "hg_levels": [
+      2,
+      3,
+      4
+    ],
     "property": "efh",
     "tenure": "eigentum",
     "timing": "sofort",
@@ -3071,9 +3237,22 @@
     "wp_plan": "free",
     "description": "Ungedaemmte Rohre verlieren 5-10% Waerme. Rohrisolierung: 3-5 EUR/m. DIY moeglich. Amort: 6 Monate. Ersparnis: 80-150 EUR/J.",
     "savings_eur": 120,
-    "savings_by_hg": { "hg1": null, "hg2": 100, "hg3": 120, "hg4": 150 },
-    "heating_types": ["gas", "oil", "district"],
-    "building_age_relevant": ["pre1990", "1990to2010"],
-    "income_level_min": "low"
+    "savings_by_hg": {
+      "hg1": null,
+      "hg2": 100,
+      "hg3": 120,
+      "hg4": 150
+    },
+    "heating_types": [
+      "gas",
+      "oil",
+      "district"
+    ],
+    "building_age_relevant": [
+      "pre1990",
+      "1990to2010"
+    ],
+    "income_level_min": "low",
+    "requires_keller": true
   }
 ]

@@ -1,8 +1,9 @@
 import { useState, useMemo, useRef, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
-import { WpHomeProvider, useWpHome, WpHomeData, HeatingType, BuildingAge, InsulationQuality, IncomeLevel } from "./store/wpHomeStore";
+import { WpHomeProvider, useWpHome, WpHomeData, HeatingType, BuildingAge, InsulationQuality, IncomeLevel, Tenure, WizardProfile } from "./store/wpHomeStore";
 import ALL_TIPS from "./data/tips.json";
-import RoomsEditor, { RoomsEditorCompact, Room } from "./components/RoomsEditor";
+import RoomsEditor, { Room } from "./components/RoomsEditor";
+import FloorPlan from "./components/FloorPlan";
 import NeighborhoodCompare from "./components/NeighborhoodCompare";
 
 // ── Tip-Mapping: JSON → TIPS format ──────────────────────────────
@@ -54,19 +55,39 @@ function mapTips(allTips: any[], hg: number): Tip[] {
 // ── Personalization: filter + multiplier ──────────────────────────
 const INCOME_ORDER: IncomeLevel[] = ['low', 'medium', 'high', 'very_high'];
 
-function filterTipsByProfile(allTips: any[], profile: Pick<WpHomeData, 'heatingType' | 'buildingAge' | 'insulationQuality' | 'income' | 'hasGarden' | 'hasSolarPotential'>): any[] {
+function filterTipsByProfile(allTips: any[], profile: any): any[] {
   return allTips.filter((t: any) => {
-    if (t.heating_types && Array.isArray(t.heating_types)) {
+    // Heating type filter — only if user actually answered
+    if (t.heating_types && Array.isArray(t.heating_types) && profile.heatingKnown) {
       if (!t.heating_types.includes(profile.heatingType)) return false;
     }
-    if (t.building_age_relevant && Array.isArray(t.building_age_relevant)) {
+    // Building age filter — only if user actually answered
+    if (t.building_age_relevant && Array.isArray(t.building_age_relevant) && profile.heatingKnown) {
       if (!t.building_age_relevant.includes(profile.buildingAge)) return false;
     }
+    // Income level filter
     if (t.income_level_min) {
       var tipMinIdx = INCOME_ORDER.indexOf(t.income_level_min);
       var userIdx = INCOME_ORDER.indexOf(profile.income);
       if (userIdx < tipMinIdx) return false;
     }
+    // Tenure filter — only if user answered the ownership step
+    if (profile.tenureKnown && profile.tenure === "miete" && t.tenure === "eigentum") return false;
+    // Property filter — only if user answered the property step
+    if (profile.propertyKnown && profile.propertyType === "apartment" && t.property === "efh") return false;
+    // Don't show tips for things user already has
+    if (t.requires_pv === false && profile.hasSolarPotential) return false;
+    if (t.requires_balkonkraftwerk === false && profile.hasBalkonkraftwerk) return false;
+    if (t.requires_heatpump === false && profile.heatingType === "heat_pump") return false;
+    // Only show auto tips if user has a car
+    if (t.requires_auto === true && !profile.hasAuto) return false;
+    // Only show homeoffice tips if user works from home
+    if (t.requires_homeoffice === true && !profile.homeoffice) return false;
+    // Only show keller tips if user has a cellar
+    if (t.requires_keller === true && !profile.hasKeller) return false;
+    // Only show garden tips if user has a garden
+    if ((t.requires_garten === true || t.requires_garden === true) && !profile.hasGarden) return false;
+    // Existing: garden/solar filters
     if (t.requires_garden && !profile.hasGarden) return false;
     if (t.requires_solar && !profile.hasSolarPotential) return false;
     return true;
@@ -202,7 +223,7 @@ function ProgressRing({ pct, color, size = 48 }: { pct: number; color: string; s
 }
 
 // ── Tip Detail Modal (Mobile Bottom-Sheet) ─────────────────────
-function TippModal(props: {tip: any, onClose: ()=>void, onDone?: (id: number)=>void}) {
+function TippModal(props: {tip: any, onClose: ()=>void, onDone?: (id: number)=>void, onDismiss?: (id: number)=>void}) {
  var tip=props.tip; if(!tip)return null;
  return(
  <motion.div
@@ -231,20 +252,23 @@ function TippModal(props: {tip: any, onClose: ()=>void, onDone?: (id: number)=>v
  <div style={{display:"flex",gap:16,padding:"18px 0",borderTop:"1px solid #e3e3e6",borderBottom:"1px solid #e3e3e6",marginBottom:20}}>
  <div style={{flex:1,textAlign:"center" as const}}><div style={{fontSize:28,fontWeight:800,color:S.primary}}>{fmt(tip.sav)} €</div><div style={{fontSize:12,color:S.g700,marginTop:4}}>Ersparnis / Jahr</div></div>
  <div style={{width:1,background:"#e3e3e6"}}/>
- <div style={{flex:1,textAlign:"center" as const}}><div style={{fontSize:16,fontWeight:700,color:tip.wp==="Core"?S.green:S.accent}}>{tip.wp}</div><div style={{fontSize:12,color:S.g700,marginTop:4}}>Tarif</div></div>
+ <div style={{flex:1,textAlign:"center" as const}}><div style={{fontSize:16,fontWeight:700,color:tip.wp==="Core"||tip.wp==="core"?S.green:S.accent}}>{tip.wp?tip.wp.charAt(0).toUpperCase()+tip.wp.slice(1):"—"}</div><div style={{fontSize:12,color:S.g700,marginTop:4}}>Tarif</div></div>
  </div>
- <button onClick={function(){if(props.onDone)props.onDone(tip.id);props.onClose();}} style={{width:"100%",padding:"16px 0",borderRadius:14,border:"none",background:S.accent,color:"#fff",fontSize:"clamp(14px, 3.5vw, 15px)",fontWeight:700,cursor:"pointer",minHeight:56,touchAction:"manipulation"}}>Tipp umsetzen →</button>
+ <div style={{display:"flex",gap:10}}>
+  <button onClick={function(){if(props.onDismiss)props.onDismiss(tip.id);props.onClose();}} style={{flex:"1 1 0",padding:"14px 0",borderRadius:14,border:"1px solid #d4d4d7",background:"#fff",color:"#6b6b7b",fontSize:"clamp(13px, 3.5vw, 14px)",fontWeight:600,cursor:"pointer",minHeight:52,touchAction:"manipulation"}}>Nicht interessiert</button>
+  <button onClick={function(){if(props.onDone)props.onDone(tip.id);props.onClose();}} style={{flex:"2 1 0",padding:"14px 0",borderRadius:14,border:"none",background:S.accent,color:"#fff",fontSize:"clamp(14px, 3.5vw, 15px)",fontWeight:700,cursor:"pointer",minHeight:52,touchAction:"manipulation"}}>Tipp umsetzen →</button>
+ </div>
  </motion.div>
  </motion.div>
  );
 }
 
 // ── Category Detail View ────────────────────────────────────────
-function CategoryDetail({ cat, tips, done, onBack, onTipClick }: {
-  cat: string; tips: any[]; done: Set<number>;
-  onBack: () => void; onTipClick: (t: any) => void;
+function CategoryDetail({ cat, tips, done, dismissed, onBack, onTipClick, onDismiss }: {
+  cat: string; tips: any[]; done: Set<number>; dismissed: Set<number>;
+  onBack: () => void; onTipClick: (t: any) => void; onDismiss: (id: number) => void;
 }) {
-  var catTips = tips.filter(t => t.c === cat);
+  var catTips = tips.filter(t => t.c === cat && !dismissed.has(t.id));
   var total = catTips.reduce((s, t) => s + t.sav, 0);
   var doneCount = catTips.filter(t => done.has(t.id)).length;
   return (
@@ -267,7 +291,7 @@ function CategoryDetail({ cat, tips, done, onBack, onTipClick }: {
             }}>{CAT_ICONS[cat] || "📌"}</div>
             <div style={{ flex: 1, minWidth: "150px" }}>
               <div style={{ fontSize: 19, fontWeight: 700, color: S.primary }}>{cat}</div>
-              <div style={{ fontSize: 12, color: S.g700 }}>{catTips.length} Tipps · {doneCount} erledigt</div>
+              <div style={{ fontSize: 12, color: S.g700 }}>{catTips.length} Tipps · {doneCount} erledigt{dismissed.size > 0 ? ' · ' + dismissed.size + ' abgelehnt' : ''}</div>
             </div>
             <div style={{ textAlign: "right" as const, flexShrink: 0 }}>
               <div style={{ fontSize: 24, fontWeight: 800, color: S.green }}>{fmt(total)} €</div>
@@ -284,29 +308,48 @@ function CategoryDetail({ cat, tips, done, onBack, onTipClick }: {
                 key={t.id}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, height: 0, marginBottom: 0 }}
                 transition={{ delay: i * 0.04 }}
-                onClick={() => onTipClick(t)}
                 style={{
-                  background: "#fff", borderRadius: 14, padding: "16px 16px",
-                  border: "1px solid #e3e3e6", cursor: "pointer",
+                  background: "#fff", borderRadius: 14, padding: "14px 14px",
+                  border: "1px solid #e3e3e6",
                   boxShadow: "0 2px 6px rgba(0,0,0,0.04)",
                   opacity: isDone ? 0.55 : 1,
-                  display: "flex", alignItems: "flex-start", gap: 12,
+                  display: "flex", alignItems: "flex-start", gap: 10,
                   transition: "box-shadow 0.15s",
-                  minHeight: 80, touchAction: "manipulation",
+                  minHeight: 72, touchAction: "manipulation",
+                  position: "relative" as const,
                 }}
                 onMouseEnter={(e: any) => e.currentTarget.style.boxShadow = "0 4px 14px rgba(0,0,0,0.1)"}
                 onMouseLeave={(e: any) => e.currentTarget.style.boxShadow = "0 2px 6px rgba(0,0,0,0.04)"}
               >
-                <span style={{ fontSize: 15, color: isDone ? S.green : S.g500, width: 24, flexShrink: 0, fontWeight: 700, textAlign: "center" }}>
+                {/* Dismiss button — bottom right, red, text label */}
+                <button
+                  onClick={(e: any) => { e.stopPropagation(); onDismiss(t.id); }}
+                  title="Tipp ablehnen"
+                  style={{
+                    position: "absolute" as const, bottom: 6, right: 6,
+                    padding: "6px 10px", borderRadius: 8,
+                    border: "none", background: "#e93a3a", color: "#fff",
+                    fontSize: 11, cursor: "pointer", flexShrink: 0,
+                    fontWeight: 600, zIndex: 2,
+                    transition: "opacity 0.2s",
+                  }}
+                  onMouseEnter={(e: any) => { e.currentTarget.style.opacity = "0.85"; }}
+                  onMouseLeave={(e: any) => { e.currentTarget.style.opacity = "1"; }}
+                >Ablehnen</button>
+                {/* Number / check */}
+                <span style={{ fontSize: 14, color: isDone ? S.green : S.g500, width: 22, flexShrink: 0, fontWeight: 700, textAlign: "center", paddingTop: 2 }}>
                   {isDone ? "✓" : (i + 1)}
                 </span>
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ fontSize: 14, fontWeight: 600, color: S.primary, textDecoration: isDone ? "line-through" : "none", marginBottom: 4, lineHeight: 1.4 }}>{t.t}</div>
-                  <div style={{ fontSize: 12, color: S.g700, lineHeight: 1.5 }}>{t.desc?.slice(0, 90)}{t.desc?.length > 90 ? "..." : ""}</div>
+                {/* Content — opens modal */}
+                <div style={{ flex: 1, minWidth: 0, cursor: "pointer" }} onClick={() => onTipClick(t)}>
+                  <div style={{ fontSize: 13, fontWeight: 600, color: S.primary, textDecoration: isDone ? "line-through" : "none", marginBottom: 3, lineHeight: 1.4 }}>{t.t}</div>
+                  <div style={{ fontSize: 11, color: S.g700, lineHeight: 1.5 }}>{t.desc?.slice(0, 80)}{t.desc?.length > 80 ? "..." : ""}</div>
                 </div>
-                <div style={{ textAlign: "right" as const, flexShrink: 0 }}>
-                  <div style={{ fontSize: 16, fontWeight: 700, color: S.primary, marginBottom: 4 }}>{fmt(t.sav)} €</div>
+                {/* Right column */}
+                <div style={{ textAlign: "right" as const, flexShrink: 0, paddingTop: 2 }}>
+                  <div style={{ fontSize: 15, fontWeight: 700, color: S.primary, marginBottom: 4 }}>{fmt(t.sav)} €</div>
                   <span style={getPill(t.ti)}>{t.ti}</span>
                 </div>
               </motion.div>
@@ -322,15 +365,21 @@ function CategoryDetail({ cat, tips, done, onBack, onTipClick }: {
 function Dashboard() {
  var _mt=useState<any>(null),modalTip=_mt[0],setModalTip=_mt[1];
  var _done=useState<Set<number>>(new Set()),done=_done[0],setDone=_done[1];
+ var _dismissed=useState<Set<number>>(new Set()),dismissed=_dismissed[0],setDismissed=_dismissed[1];
  var _catView=useState<string|null>(null),catView=_catView[0],setCatView=_catView[1];
  var _rooms=useState<Room[]>(() => {
   try { const saved = localStorage.getItem('wp_rooms'); return saved ? JSON.parse(saved) : []; } catch { return []; }
  }),rooms=_rooms[0],setRoomsRaw=_rooms[1];
  function setRooms(r: Room[]) { setRoomsRaw(r); localStorage.setItem('wp_rooms', JSON.stringify(r)); }
  var _showRooms=useState(false),showRooms=_showRooms[0],setShowRooms=_showRooms[1];
+ var _editorMode=useState<'list'|'floorplan'>('list'),editorMode=_editorMode[0],setEditorMode=_editorMode[1];
 
  function markDone(id: number) {
   setDone(function(prev) { var n = new Set(prev); n.add(id); return n; });
+ }
+
+ function markDismissed(id: number) {
+  setDismissed(function(prev) { var n = new Set(prev); n.add(id); return n; });
  }
 
  // Wizard store
@@ -342,6 +391,13 @@ function Dashboard() {
  function personsToHG(p: number) { if (p<=1) return 1; if (p===2) return 2; if (p<=4) return 3; return 4; }
  var effectiveHG = personsToHG(wPersons);
 
+ // Track which wizard steps were skipped to reduce filtering aggressiveness
+ var skippedSteps = wData.wizardProfile?.skippedSteps || [];
+ // Step mapping: 6=Energy/Heating, 4=Property type, 5=Tenure, 7=Devices
+ var heatingKnown = !skippedSteps.includes(6);
+ var propertyKnown = !skippedSteps.includes(4);
+ var tenureKnown = !skippedSteps.includes(5);
+
  var profileData = {
    heatingType: wData.heatingType || 'gas' as HeatingType,
    buildingAge: wData.buildingAge || '1990to2010' as BuildingAge,
@@ -349,6 +405,16 @@ function Dashboard() {
    income: wData.income || 'medium' as IncomeLevel,
    hasGarden: wData.hasGarden || false,
    hasSolarPotential: wData.hasSolarPotential || false,
+   hasBalkonkraftwerk: wData.hasBalkonkraftwerk || false,
+   tenure: wData.tenure || 'miete',
+   propertyType: wData.household.propertyType || 'apartment',
+   hasAuto: wData.hasAuto || false,
+   homeoffice: wData.homeoffice || false,
+   hasKeller: wData.hasKeller || false,
+   hasSmartHome: wData.hasSmartHome || false,
+   heatingKnown: heatingKnown,
+   propertyKnown: propertyKnown,
+   tenureKnown: tenureKnown,
  };
  var savingsMultiplier = getSavingsMultiplier(profileData.buildingAge as BuildingAge, profileData.insulationQuality as InsulationQuality);
 
@@ -363,8 +429,8 @@ function Dashboard() {
      var cat = t.c;
      var multiplied = (cat === 'Heizung' || cat === 'Gebaeude' || cat === 'Energie') ? Math.round(baseSav * savingsMultiplier) : baseSav;
      return Object.assign({}, t, {sav: multiplied});
-   }).filter(function(t){return t.sav>0;}).sort(function(a,b){return b.sav-a.sav;});
- }, [effectiveHG, profileData.heatingType, profileData.buildingAge, profileData.insulationQuality, profileData.income, profileData.hasGarden, profileData.hasSolarPotential]);
+   }).filter(function(t){return t.sav>0 && !dismissed.has(t.id);}).sort(function(a,b){return b.sav-a.sav;});
+ }, [effectiveHG, profileData.heatingType, profileData.buildingAge, profileData.insulationQuality, profileData.income, profileData.hasGarden, profileData.hasSolarPotential, profileData.hasBalkonkraftwerk, profileData.tenure, profileData.propertyType, profileData.hasAuto, profileData.homeoffice, profileData.hasKeller, profileData.hasSmartHome, profileData.heatingKnown, profileData.propertyKnown, profileData.tenureKnown, dismissed]);
 
  var total = useMemo(function(){return tips.reduce(function(s,t){return s+t.sav;},0);}, [tips]);
 
@@ -391,6 +457,19 @@ function Dashboard() {
  }, [tips, done]);
 
  // ── Wizard redirect ─────────────────────────────────────────────
+ // Migrate wizard profile from wizard's storage to dashboard storage on first load
+ if (!wWizardDone) {
+  try {
+    var wiz = localStorage.getItem('wpilot_home_wizard_profile');
+    if (wiz) {
+      var wizData = JSON.parse(wiz);
+      wpCtx.saveWizardProfile(wizData);
+      localStorage.removeItem('wpilot_home_wizard_profile');
+      // Re-read after migration
+      wWizardDone = true;
+    }
+  } catch(e) {}
+ }
  if (!wWizardDone) {
   window.location.href = '/apps/wpilot-home/wizard.html';
   return null;
@@ -400,8 +479,8 @@ function Dashboard() {
  if (catView) {
   return (
    <>
-    <CategoryDetail cat={catView} tips={tips} done={done} onBack={() => setCatView(null)} onTipClick={setModalTip} />
-    <TippModal tip={modalTip} onDone={markDone} onClose={() => setModalTip(null)} />
+    <CategoryDetail cat={catView} tips={tips} done={done} dismissed={dismissed} onBack={() => setCatView(null)} onTipClick={setModalTip} onDismiss={markDismissed} />
+    <TippModal tip={modalTip} onDone={markDone} onDismiss={markDismissed} onClose={() => setModalTip(null)} />
    </>
   );
  }
@@ -436,8 +515,10 @@ function Dashboard() {
    </div>
 
    {/* ── Hero Row: Savings + Flugspiel ──────────────────────────── */}
-   <div className="wp-hero-row" style={{ display: "flex", gap: 14, marginBottom: 20, flexWrap: "wrap" as const }}>
+   <div className="wp-hero-row" style={{ display: "flex", gap: 14, marginBottom: 20, flexWrap: "wrap" as const, alignItems: "stretch" as const }}>
    <style>{`@media(max-width:600px){.wp-hero-row{flex-direction:column;}}`}</style>
+   {/* Left column: green box + next tip button as a unit */}
+   <div style={{ flex: "1 1 60%", minWidth: 260, display: "flex", flexDirection: "column" as const, gap: 10 }}>
    <motion.div
     className="wp-hero-main"
     initial={{ opacity: 0, y: 20 }}
@@ -445,7 +526,7 @@ function Dashboard() {
     transition={{ duration: 0.5 }}
     style={{
      background: "linear-gradient(135deg, #0f4c3a 0%, #1a6b52 40%, #24a47d 100%)",
-     borderRadius: 18, padding: "clamp(20px, 5vw, 24px)", flex: "1 1 60%", minWidth: 260,
+     borderRadius: 18, padding: "clamp(20px, 5vw, 24px)",
      color: "#fff", position: "relative" as const, overflow: "hidden",
      boxShadow: "0 8px 32px rgba(36,164,125,0.25)",
     }}
@@ -467,39 +548,6 @@ function Dashboard() {
      <div style={{ fontSize: 12, opacity: 0.7 }}>
       basierend auf {tips.length} personalisierten Tipps
      </div>
-
-     {/* ── Nächster Spartipp (in Hero Box) ─────────────────────── */}
-     {sofortTips.length > 0 && (
-      <div
-       onClick={() => setModalTip(sofortTips[0])}
-       style={{
-        background: "rgba(255,255,255,0.13)", borderRadius: 14, padding: "12px 14px",
-        marginTop: 16, cursor: "pointer", backdropFilter: "blur(4px)",
-        border: "1px solid rgba(255,255,255,0.15)",
-        display: "flex", alignItems: "center", gap: 12,
-        transition: "background 0.15s",
-       }}
-       onMouseEnter={(e: any) => { e.currentTarget.style.background = "rgba(255,255,255,0.2)"; }}
-       onMouseLeave={(e: any) => { e.currentTarget.style.background = "rgba(255,255,255,0.13)"; }}
-      >
-       <div style={{
-        width: 36, height: 36, borderRadius: 10, background: "rgba(255,255,255,0.2)",
-        display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16, flexShrink: 0,
-       }}>💡</div>
-       <div style={{ flex: 1, minWidth: 0 }}>
-        <div style={{ fontSize: 10, fontWeight: 600, opacity: 0.75, marginBottom: 2, textTransform: "uppercase" as const, letterSpacing: "0.05em" }}>
-         Nächster Spartipp
-        </div>
-        <div style={{ fontSize: 13, fontWeight: 700, lineHeight: 1.3, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" as const }}>
-         {sofortTips[0].t}
-        </div>
-       </div>
-       <div style={{ textAlign: "right" as const, flexShrink: 0 }}>
-        <div style={{ fontSize: 18, fontWeight: 800 }}>{fmt(sofortTips[0].sav)} €</div>
-        <div style={{ fontSize: 10, opacity: 0.7 }}>pro Jahr</div>
-       </div>
-      </div>
-     )}
 
      <div style={{
       display: "flex", gap: 10, marginTop: 14, flexWrap: "wrap" as const,
@@ -531,6 +579,45 @@ function Dashboard() {
      </div>
     </div>
    </motion.div>
+
+   {/* ── Nächster Spartipp — below green box ────────────────── */}
+   {sofortTips.length > 0 && (
+    <motion.div
+     initial={{ opacity: 0, y: 10 }}
+     animate={{ opacity: 1, y: 0 }}
+     transition={{ duration: 0.3, delay: 0.3 }}
+     onClick={() => setModalTip(sofortTips[0])}
+     style={{
+      background: "linear-gradient(135deg, #1a6b52 0%, #24a47d 100%)", borderRadius: 14, padding: "14px 16px",
+      cursor: "pointer",
+      border: "none",
+      boxShadow: "0 4px 16px rgba(36,164,125,0.2)",
+      display: "flex", alignItems: "center", gap: 12,
+      color: "#fff",
+      transition: "box-shadow 0.15s, transform 0.15s",
+     }}
+     onMouseEnter={(e: any) => { e.currentTarget.style.boxShadow = "0 6px 24px rgba(36,164,125,0.35)"; e.currentTarget.style.transform = "translateY(-1px)"; }}
+     onMouseLeave={(e: any) => { e.currentTarget.style.boxShadow = "0 4px 16px rgba(36,164,125,0.2)"; e.currentTarget.style.transform = "translateY(0)"; }}
+    >
+     <div style={{
+      width: 40, height: 40, borderRadius: 12, background: "rgba(255,255,255,0.2)",
+      display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20, flexShrink: 0,
+     }}>💡</div>
+     <div style={{ flex: 1, minWidth: 0 }}>
+      <div style={{ fontSize: 10, fontWeight: 600, opacity: 0.8, marginBottom: 2, textTransform: "uppercase" as const, letterSpacing: "0.05em" }}>
+       Nächster Spartipp
+      </div>
+      <div style={{ fontSize: 14, fontWeight: 700, color: "#fff", lineHeight: 1.3, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" as const }}>
+       {sofortTips[0].t}
+      </div>
+     </div>
+     <div style={{ textAlign: "right" as const, flexShrink: 0 }}>
+      <div style={{ fontSize: 20, fontWeight: 800, color: "#fff" }}>{fmt(sofortTips[0].sav)} €</div>
+      <div style={{ fontSize: 10, opacity: 0.8 }}>pro Jahr</div>
+     </div>
+    </motion.div>
+   )}
+   </div>
 
    {/* ── Flugspiel Home-Lager (Live) ─────────────────────────── */}
    <motion.div
@@ -642,9 +729,58 @@ function Dashboard() {
 
    {/* ── Wohnung / Räume-Editor ──────────────────────────────── */}
    <div style={{ marginBottom: 20 }}>
-    <RoomsEditorCompact rooms={rooms} onClick={() => setShowRooms(true)} />
+    {/* Card header with mode switcher */}
+    <div style={{ background: S.white, borderRadius: 16, padding: "16px", border: "1px solid #e3e3e6", boxShadow: "0 2px 8px rgba(0,0,0,0.04)", cursor: "pointer", transition: "box-shadow 0.2s", marginBottom: 10,
+      onClick: () => setShowRooms(true),
+      onMouseEnter: (e: any) => e.currentTarget.style.boxShadow = "0 6px 20px rgba(0,0,0,0.1)",
+      onMouseLeave: (e: any) => e.currentTarget.style.boxShadow = "0 2px 8px rgba(0,0,0,0.04)" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
+        <div style={{ fontSize: 14, fontWeight: 700, color: S.primary }}>🏠 Meine Wohnung</div>
+        <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+          {/* Mode toggle pills */}
+          <div style={{ display: "flex", background: S.g200, borderRadius: 8, padding: "2px", gap: 2 }}>
+            <button onClick={(e: any) => { e.stopPropagation(); setEditorMode('list'); setShowRooms(true); }}
+              style={{ padding: "4px 10px", borderRadius: 6, fontSize: 10, fontWeight: 600, cursor: "pointer", border: "none",
+                background: editorMode === 'list' ? S.white : "transparent", color: editorMode === 'list' ? S.primary : S.g700, boxShadow: editorMode === 'list' ? "0 1px 3px rgba(0,0,0,0.1)" : "none", transition: "all 0.15s" }}>
+              📋 Liste
+            </button>
+            <button onClick={(e: any) => { e.stopPropagation(); setEditorMode('floorplan'); setShowRooms(true); }}
+              style={{ padding: "4px 10px", borderRadius: 6, fontSize: 10, fontWeight: 600, cursor: "pointer", border: "none",
+                background: editorMode === 'floorplan' ? S.white : "transparent", color: editorMode === 'floorplan' ? S.primary : S.g700, boxShadow: editorMode === 'floorplan' ? "0 1px 3px rgba(0,0,0,0.1)" : "none", transition: "all 0.15s" }}>
+              🏠 Grundriss
+            </button>
+          </div>
+          <span style={{ fontSize: 12, color: S.accent, fontWeight: 600 }}>Bearbeiten →</span>
+        </div>
+      </div>
+      {/* Mini floor plan preview */}
+      <div style={{ display: "flex", flexWrap: "wrap" as const, gap: 6, marginBottom: 8 }}>
+        {rooms.length === 0 ? (
+          <div style={{ fontSize: 13, color: S.g700 }}>Tippe um deine Räume einzurichten</div>
+        ) : (
+          <>
+            <div style={{ display: "flex", flexWrap: "wrap" as const, gap: 5, flex: 1, minWidth: 0 }}>
+              {rooms.map(r => (
+                <span key={r.id} style={{ fontSize: 11, fontWeight: 600, padding: "4px 10px", borderRadius: 200, background: r.color, color: S.primary, display: "flex", alignItems: "center", gap: 4 }}>
+                  {r.icon} {r.name} ({r.size}m²)
+                </span>
+              ))}
+            </div>
+          </>
+        )}
+      </div>
+      {rooms.length > 0 && (
+        <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" as const }}>
+          <div style={{ fontSize: 12, color: S.g700 }}>{rooms.length} Räume · {rooms.reduce((s, r) => s + r.size, 0)} m²</div>
+          <div style={{ fontSize: 9, color: S.g700, background: S.g200, padding: "2px 8px", borderRadius: 200 }}>
+            Modus: {editorMode === 'list' ? '📋 Liste' : '🏠 Grundriss'}
+          </div>
+        </div>
+      )}
+    </div>
    </div>
-   {showRooms && <RoomsEditor rooms={rooms} onChange={setRooms} onClose={() => setShowRooms(false)} />}
+   {showRooms && editorMode === 'list' && <RoomsEditor rooms={rooms} onChange={setRooms} onClose={() => setShowRooms(false)} onSwitchToFloorplan={() => setEditorMode('floorplan')} />}
+   {showRooms && editorMode === 'floorplan' && <FloorPlan rooms={rooms} onChange={setRooms} onClose={() => setShowRooms(false)} onSwitchToList={() => setEditorMode('list')} />}
 
    {/* ── Sofort-Tipps Sektion ─────────────────────────────────── */}
    {sofortTips.length > 0 && (
@@ -749,8 +885,22 @@ function Dashboard() {
     </div>
    </motion.div>
 
-   {/* ── Wizard wiederholen Button ────────────────────────────── */}
-   <div style={{ textAlign: "center" as const, paddingTop: 8 }}>
+   {/* ── Wizard Fortsetzen + Wiederholen Buttons ───────────── */}
+   <div style={{ textAlign: "center" as const, paddingTop: 8, display: "flex", flexDirection: "column" as const, alignItems: "center", gap: 10 }}>
+    {wData.wizardProfile?.skippedSteps?.length > 0 && (
+     <button
+      onClick={() => { window.location.href = '/apps/wpilot-home/wizard.html?resume=1'; }}
+      style={{
+       fontSize: 14, fontWeight: 700, color: "#fff",
+       background: S.accent, border: "none",
+       borderRadius: 12, padding: "12px 24px", cursor: "pointer",
+       transition: "all 0.15s", minHeight: 52, touchAction: "manipulation",
+       boxShadow: "0 2px 8px rgba(42,111,166,0.3)",
+      }}
+     >
+      Offene Fragen ergänzen ({wData.wizardProfile.skippedSteps.length})
+     </button>
+    )}
     <button
      onClick={() => { wpCtx.resetWizard(); window.location.href = '/apps/wpilot-home/wizard.html'; }}
      style={{
@@ -769,7 +919,7 @@ function Dashboard() {
   </div>
 
   {/* Tip Modal */}
-  <TippModal tip={modalTip} onDone={markDone} onClose={() => setModalTip(null)} />
+  <TippModal tip={modalTip} onDone={markDone} onDismiss={markDismissed} onClose={() => setModalTip(null)} />
  </div>
  );
 }

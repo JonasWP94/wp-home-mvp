@@ -11,6 +11,9 @@ export default defineConfig({
       input: {
         main: './index.html',
         wizard: './wizard.html',
+        mvp: './mvp.html',
+        mvpDash: './mvp-dashboard.html',
+        thankyou: './thankyou.html',
       },
     },
   },
