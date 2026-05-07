@@ -13,7 +13,7 @@ import {
   IconHome,
 } from '@tabler/icons-react';
 
-// ── Design Tokens (matching MvpWizard) ──────────────────────────
+// ── Design Tokens ────────────────────────────────────────────────
 const BLUE    = '#5782B0';
 const BLUE_LT = '#EDF2F9';
 const GREEN   = '#0C663B';
@@ -28,7 +28,11 @@ const TEXT    = DARK;
 const TEXT_MUTED = '#7A8C9A';
 const TEXT_DIM = '#A0AEBB';
 
-export default function MvpThankYou() {
+interface Props {
+  onStart?: () => void;
+}
+
+export default function MvpThankYou({ onStart }: Props = {}) {
   const [rating, setRating] = useState(0);
   const [hoverStar, setHoverStar] = useState(0);
 
@@ -125,7 +129,7 @@ export default function MvpThankYou() {
             }}
           >
 
-            {/* Card 1 */}
+            {/* Card 1 – weiterer Zähler */}
             <motion.button
               whileTap={{ scale: 0.98 }}
               onClick={() => { window.location.href = 'https://konto.wechselpilot.com/neuer-zähler'; }}
@@ -161,7 +165,7 @@ export default function MvpThankYou() {
               </div>
             </motion.button>
 
-            {/* Card 2 */}
+            {/* Card 2 – Freunde einladen */}
             <motion.button
               whileTap={{ scale: 0.98 }}
               style={{
@@ -193,10 +197,16 @@ export default function MvpThankYou() {
               </div>
             </motion.button>
 
-            {/* Card 3 */}
+            {/* Card 3 – noch mehr sparen → startet Wizard */}
             <motion.button
               whileTap={{ scale: 0.98 }}
-              onClick={() => { window.location.href = '/apps/wpilot-home/mvp.html'; }}
+              onClick={() => {
+                if (onStart) {
+                  onStart();
+                } else {
+                  window.location.href = '/apps/wpilot-home/mvp.html';
+                }
+              }}
               style={{
                 width: '100%',
                 background: `linear-gradient(135deg, ${GREEN_LT} 0%, #f0faf4 100%)`,
