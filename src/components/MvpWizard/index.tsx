@@ -11,9 +11,15 @@ import {
   IconArrowRight,
   IconCheck,
   IconBolt,
-  IconGift,
+  IconKey,
+  IconDroplet,
+  IconLeaf,
+  IconBatteryCharging,
+  IconBike,
+  IconPlug,
 } from '@tabler/icons-react';
 import MvpDashboard from '../MvpDashboard';
+import MvpThankYou from '../MvpThankYou';
 
 // ── Types ────────────────────────────────────────────────────────
 interface MvpProfile {
@@ -33,9 +39,7 @@ const BLUE    = '#5782B0';
 const BLUE_LT = '#EDF2F9';
 const BLUE_DK = '#3D5A80';
 const GREEN   = '#0C663B';
-const GREEN_LT = '#E8F5EF';
 const ORANGE  = '#F9AA00';
-const ORANGE_LT = '#FEF3C7';
 const DARK    = '#2C3E50';
 const BG      = '#F5F6F8';
 const WHITE   = '#FFFFFF';
@@ -49,20 +53,20 @@ const STEPS = [
   {
     key: 'propertyType' as const,
     icon: IconBuilding,
-    title: 'Wohnung oder Haus?',
-    sub: 'EFH = Wärmepumpe & Solar, Wohnung = Balkonkraftwerk & dynamischer Strom',
+    title: 'Wohnen Sie in einer Wohnung oder einem Haus?',
+    sub: 'Damit empfehlen wir Ihnen die passenden Energiespar-Optionen für Ihre Wohnsituation.',
     options: [
       { value: 'wohnung', label: 'Wohnung', icon: IconBuilding },
-      { value: 'haus', label: 'Haus / EFH', icon: IconHome },
+      { value: 'haus',    label: 'Haus / EFH', icon: IconHome },
     ],
   },
   {
     key: 'tenure' as const,
-    icon: IconHome,
+    icon: IconKey,
     title: 'Wohnen Sie zur Miete oder im Eigentum?',
-    sub: 'Bestimmt, welche Energie-Invest-Empfehlungen für Sie relevant sind',
+    sub: 'Mieter und Eigentümer haben unterschiedliche Möglichkeiten – wir zeigen Ihnen die passenden.',
     options: [
-      { value: 'miete', label: 'Zur Miete', icon: IconKey },
+      { value: 'miete',    label: 'Zur Miete',   icon: IconKey },
       { value: 'eigentum', label: 'Im Eigentum', icon: IconHome },
     ],
   },
@@ -70,200 +74,41 @@ const STEPS = [
     key: 'heatingType' as const,
     icon: IconFlame,
     title: 'Wie heizen Sie aktuell?',
-    sub: 'Bestimmt Wechsel- und Modernisierungsempfehlungen',
+    sub: 'Wir prüfen, ob Sie beim Heizen sparen oder von einem günstigeren System profitieren können.',
     options: [
-      { value: 'gas', label: 'Gas', icon: IconFlame },
-      { value: 'oel', label: 'Öl', icon: IconDroplet },
-      { value: 'strom', label: 'Strom', icon: IconBolt },
+      { value: 'gas',        label: 'Gas',        icon: IconFlame },
+      { value: 'oel',        label: 'Öl',         icon: IconDroplet },
+      { value: 'strom',      label: 'Strom',      icon: IconBolt },
       { value: 'waermepumpe', label: 'Wärmepumpe', icon: IconLeaf },
     ],
   },
   {
     key: 'autoType' as const,
     icon: IconCar,
-    title: 'Haben Sie ein Auto?',
-    sub: 'E-Auto → THG-Prämie & Wallbox. Verbrenner → Sprit & Versicherung',
+    title: 'Welches Fahrzeug nutzen Sie?',
+    sub: 'Je nach Fahrzeug zeigen wir Ihnen, wie Sie bei Kraftstoff, Versicherung oder Ladestrom sparen.',
     options: [
       { value: 'verbrenner', label: 'Verbrenner', icon: IconCar },
-      { value: 'eauto', label: 'E-Auto', icon: IconBatteryCharging },
-      { value: 'hybrid', label: 'Hybrid', icon: IconPlug },
-      { value: 'keins', label: 'Kein Auto', icon: IconBike },
+      { value: 'eauto',      label: 'E-Auto',     icon: IconBatteryCharging },
+      { value: 'hybrid',     label: 'Hybrid',     icon: IconPlug },
+      { value: 'keins',      label: 'Kein Auto',  icon: IconBike },
     ],
   },
   {
     key: 'hasChildren' as const,
     icon: IconUsers,
-    title: 'Haben Sie Kinder?',
-    sub: 'Kinderzuschlag, Familycard, Secondhand-Tipps',
+    title: 'Leben Kinder in Ihrem Haushalt?',
+    sub: 'Familien profitieren von zusätzlichen Spar-Angeboten bei Versicherungen und Energietarifen.',
     options: [
-      { value: 'true', label: 'Ja', icon: IconUsers },
+      { value: 'true',  label: 'Ja',   icon: IconUsers },
       { value: 'false', label: 'Nein', icon: IconUser },
     ],
   },
 ];
 
-import {
-  IconKey,
-  IconDroplet,
-  IconLeaf,
-  IconBatteryCharging,
-  IconBike,
-  IconPlug,
-} from '@tabler/icons-react';
-
 const TOTAL = STEPS.length;
 
 type View = 'intro' | 'quiz' | 'results';
-
-// ── Intro Screen (adapted from MvpThankYou) ──────────────────────
-function IntroScreen({ onStart }: { onStart: () => void }) {
-  return (
-    <div style={{ minHeight: '100dvh', background: BG, display: 'flex', flexDirection: 'column' }}>
-      {/* Header */}
-      <div style={{
-        background: 'rgba(245,246,248,0.95)', backdropFilter: 'blur(12px)',
-        borderBottom: `1px solid ${BORDER}`,
-        padding: '10px 20px',
-        display: 'flex', alignItems: 'center',
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <img src="/apps/wpilot-home/assets/logo-wp.png" alt="WP" height={20} style={{ objectFit: 'contain' }} />
-          <span style={{ fontSize: 12, fontWeight: 700, color: TEXT, fontFamily: "'Poppins', sans-serif", letterSpacing: '0.05em' }}>HOME</span>
-        </div>
-      </div>
-
-      {/* Content */}
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '20px 20px 24px' }}>
-        <div style={{ width: '100%', maxWidth: 780 }}>
-
-          {/* Checkmark + Headline */}
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            style={{ textAlign: 'center', marginBottom: 18 }}
-          >
-            <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ type: 'spring', stiffness: 260, damping: 20 }}
-              style={{
-                width: 56, height: 56, borderRadius: 28,
-                background: `linear-gradient(135deg, ${GREEN} 0%, #0d8045 100%)`,
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                margin: '0 auto 10px',
-                boxShadow: `0 4px 16px rgba(12,102,59,0.25)`,
-              }}
-            >
-              <IconCheck size={28} stroke={2.5} color={WHITE} />
-            </motion.div>
-            <h1 style={{ fontSize: 22, fontWeight: 800, color: TEXT, lineHeight: 1.2, marginBottom: 4 }}>
-              Willkommen bei Wechselpilot HOME
-            </h1>
-            <p style={{ fontSize: 13, color: TEXT_MUTED, lineHeight: 1.4, marginBottom: 2 }}>
-              5 kurze Fragen – Ihr persönliches Sparpotenzial in Sekunden.
-            </p>
-            <p style={{ fontSize: 15, fontWeight: 700, color: GREEN, lineHeight: 1.3 }}>
-              Unsere Nutzer sparen durchschnittlich <span style={{ fontSize: 18 }}>3.800 €</span> pro Jahr
-            </p>
-          </motion.div>
-
-          {/* Section heading */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.3 }}
-            style={{ textAlign: 'center', marginBottom: 12 }}
-          >
-            <p style={{ fontSize: 11, fontWeight: 600, color: BLUE, letterSpacing: '0.06em' }}>
-              WAS ERWARTET SIE?
-            </p>
-          </motion.div>
-
-          {/* Teaser Cards */}
-          <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 }}
-            style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12, marginBottom: 20 }}
-          >
-            <div style={{
-              background: WHITE, border: `2px solid ${BORDER}`, borderRadius: 14,
-              padding: '16px 14px',
-              display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, textAlign: 'center',
-            }}>
-              <div style={{ width: 44, height: 44, borderRadius: 12, background: BLUE_LT, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <IconBolt size={22} stroke={1.5} color={BLUE} />
-              </div>
-              <div>
-                <div style={{ fontSize: 13, fontWeight: 700, color: TEXT, lineHeight: 1.2 }}>Energie & Heizung</div>
-                <div style={{ fontSize: 11, color: TEXT_MUTED }}>Strom, Gas, Solar & Wärmepumpe</div>
-              </div>
-            </div>
-
-            <div style={{
-              background: WHITE, border: `2px solid ${BORDER}`, borderRadius: 14,
-              padding: '16px 14px',
-              display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, textAlign: 'center',
-            }}>
-              <div style={{ width: 44, height: 44, borderRadius: 12, background: ORANGE_LT, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <IconCar size={22} stroke={1.5} color={ORANGE} />
-              </div>
-              <div>
-                <div style={{ fontSize: 13, fontWeight: 700, color: TEXT, lineHeight: 1.2 }}>Mobilität</div>
-                <div style={{ fontSize: 11, color: TEXT_MUTED }}>THG-Prämie, KFZ & Wallbox</div>
-              </div>
-            </div>
-
-            <div style={{
-              background: `linear-gradient(135deg, ${GREEN_LT} 0%, #f0faf4 100%)`,
-              border: `2px solid ${GREEN}33`, borderRadius: 14,
-              padding: '16px 14px',
-              display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, textAlign: 'center',
-            }}>
-              <div style={{ width: 44, height: 44, borderRadius: 12, background: GREEN_LT, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
-                <IconGift size={22} stroke={1.5} color={GREEN} />
-                <div style={{ position: 'absolute', top: -3, right: -3, width: 16, height: 16, borderRadius: 8, background: '#EF4444', display: 'flex', alignItems: 'center', justifyContent: 'center', border: `2px solid ${WHITE}` }}>
-                  <span style={{ fontSize: 8, fontWeight: 800, color: WHITE }}>1</span>
-                </div>
-              </div>
-              <div>
-                <div style={{ fontSize: 13, fontWeight: 700, color: TEXT, lineHeight: 1.2 }}>Versicherung & Familie</div>
-                <div style={{ fontSize: 11, color: TEXT_MUTED }}>Hausrat, Haftpflicht & Steuern</div>
-              </div>
-            </div>
-          </motion.div>
-
-          {/* CTA */}
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.55 }}
-            style={{ textAlign: 'center' }}
-          >
-            <motion.button
-              whileTap={{ scale: 0.97 }}
-              onClick={onStart}
-              style={{
-                background: `linear-gradient(135deg, ${GREEN} 0%, #0d8045 100%)`,
-                border: 'none', borderRadius: 14,
-                padding: '14px 32px',
-                fontSize: 15, fontWeight: 700, color: WHITE,
-                cursor: 'pointer',
-                boxShadow: `0 4px 16px rgba(12,102,59,0.3)`,
-                display: 'inline-flex', alignItems: 'center', gap: 8,
-              }}
-            >
-              Sparpotenzial berechnen <IconArrowRight size={18} />
-            </motion.button>
-            <p style={{ fontSize: 12, color: TEXT_DIM, marginTop: 8 }}>5 Fragen · unter 1 Minute · kostenlos</p>
-          </motion.div>
-
-        </div>
-      </div>
-    </div>
-  );
-}
 
 // ── Main Component ────────────────────────────────────────────────
 export default function MvpWizard() {
@@ -291,19 +136,13 @@ export default function MvpWizard() {
 
   function goNext() {
     if (!canNext) return;
-    if (isLast) {
-      finish(profile);
-      return;
-    }
+    if (isLast) { finish(profile); return; }
     setDir(1);
     setStep(s => s + 1);
   }
 
   function goBack() {
-    if (step === 0) {
-      setView('intro');
-      return;
-    }
+    if (step === 0) { setView('intro'); return; }
     setDir(-1);
     setStep(s => s - 1);
   }
@@ -318,17 +157,18 @@ export default function MvpWizard() {
     return () => window.removeEventListener('keydown', onKey);
   }, [canNext, step, view]);
 
-  if (view === 'intro') return <IntroScreen onStart={() => setView('quiz')} />;
+  if (view === 'intro') return <MvpThankYou onStart={() => setView('quiz')} />;
   if (view === 'results' && finalProfile) return <MvpDashboard initialProfile={finalProfile} />;
 
   const slideVariants = {
-    enter: (d: number) => ({ x: d > 0 ? 80 : -80, opacity: 0 }),
+    enter:  (d: number) => ({ x: d > 0 ?  80 : -80, opacity: 0 }),
     center: { x: 0, opacity: 1 },
-    exit: (d: number) => ({ x: d > 0 ? -80 : 80, opacity: 0 }),
+    exit:   (d: number) => ({ x: d > 0 ? -80 :  80, opacity: 0 }),
   };
 
   return (
     <div style={{ minHeight: '100dvh', background: BG, display: 'flex', flexDirection: 'column' }}>
+
       {/* ── Header ────────────────────────────────────────── */}
       <div style={{
         position: 'sticky', top: 0, zIndex: 100,
@@ -345,7 +185,7 @@ export default function MvpWizard() {
           {STEPS.map((_, i) => (
             <div key={i} style={{
               width: i === step ? 24 : 8, height: 8, borderRadius: 4,
-              background: i === step ? BLUE : i < step ? BLUE : BORDER,
+              background: i <= step ? BLUE : BORDER,
               transition: 'all 0.3s', flexShrink: 0,
             }} />
           ))}
@@ -418,8 +258,7 @@ export default function MvpWizard() {
                       width: '100%',
                       background: isSelected ? BLUE_LT : WHITE,
                       border: isSelected ? `2px solid ${BLUE}` : `2px solid ${BORDER}`,
-                      borderRadius: 14,
-                      padding: '16px 18px',
+                      borderRadius: 14, padding: '16px 18px',
                       display: 'flex', alignItems: 'center', gap: 14,
                       cursor: 'pointer', transition: 'all 0.15s',
                       textAlign: 'left' as const,
@@ -437,7 +276,11 @@ export default function MvpWizard() {
                       {opt.label}
                     </span>
                     {isSelected && (
-                      <div style={{ marginLeft: 'auto', flexShrink: 0, width: 24, height: 24, borderRadius: 12, background: BLUE, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <div style={{
+                        marginLeft: 'auto', flexShrink: 0,
+                        width: 24, height: 24, borderRadius: 12,
+                        background: BLUE, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      }}>
                         <IconCheck size={16} stroke={2} color={WHITE} />
                       </div>
                     )}
