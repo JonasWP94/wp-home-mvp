@@ -48,16 +48,6 @@ const ICON_SIZE = 26;
 // ── Step Definitions ─────────────────────────────────────────────
 const STEPS = [
   {
-    key: 'tenure' as const,
-    icon: IconHome,
-    title: 'Wohnen Sie zur Miete oder im Eigentum?',
-    sub: 'Bestimmt, welche Energie-Invest-Empfehlungen für Sie relevant sind',
-    options: [
-      { value: 'miete', label: 'Zur Miete', icon: IconKey },
-      { value: 'eigentum', label: 'Im Eigentum', icon: IconHome },
-    ],
-  },
-  {
     key: 'propertyType' as const,
     icon: IconBuilding,
     title: 'Wohnung oder Haus?',
@@ -65,6 +55,16 @@ const STEPS = [
     options: [
       { value: 'wohnung', label: 'Wohnung', icon: IconBuilding },
       { value: 'haus', label: 'Haus / EFH', icon: IconHome },
+    ],
+  },
+  {
+    key: 'tenure' as const,
+    icon: IconHome,
+    title: 'Wohnen Sie zur Miete oder im Eigentum?',
+    sub: 'Bestimmt, welche Energie-Invest-Empfehlungen für Sie relevant sind',
+    options: [
+      { value: 'miete', label: 'Zur Miete', icon: IconKey },
+      { value: 'eigentum', label: 'Im Eigentum', icon: IconHome },
     ],
   },
   {
