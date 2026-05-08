@@ -1,16 +1,16 @@
-import React from 'react';
+﻿import React from 'react';
 import { motion } from 'framer-motion';
 import { IconArrowRight, IconArrowLeft } from '@tabler/icons-react';
 
 // ── Design Tokens ────────────────────────────────────────────────
-const BLUE     = '#5782B0';
-const BLUE_LT  = 'rgba(87,130,176,0.08)';
+const BLUE     = '#2a6fa6';
+const BLUE_LT  = 'rgba(42,111,166,0.08)';
 const ORANGE   = '#F9AA00';
-const DARK     = '#2C3E50';
-const BG       = '#F5F6F8';
+const DARK     = '#243c47';
+const BG       = '#f3f3f5';
 const WHITE    = '#FFFFFF';
-const BORDER   = '#E2E8F0';
-const TEXT_MUTED = '#7A8C9A';
+const BORDER   = '#e3e3e6';
+const TEXT_MUTED = '#828288';
 
 interface Props {
   onStart: () => void;
@@ -23,7 +23,7 @@ export default function MvpHomeLanding({ onStart, onBack }: Props) {
 
       {/* ── Header ────────────────────────────────────────── */}
       <div style={{
-        background: 'rgba(245,246,248,0.95)', backdropFilter: 'blur(12px)',
+        background: 'rgba(243,243,245,0.95)', backdropFilter: 'blur(12px)',
         borderBottom: `1px solid ${BORDER}`,
         padding: '10px 20px',
         display: 'flex', alignItems: 'center', gap: 8,
@@ -85,13 +85,13 @@ export default function MvpHomeLanding({ onStart, onBack }: Props) {
               style={{ width: 80, height: 80, margin: '0 auto', display: 'block' }}>
               <circle cx="60" cy="60" r="55" fill={BLUE_LT} />
               <path d="M60 20 L95 50 L95 95 L25 95 L25 50 Z"
-                fill="rgba(87,130,176,0.18)" stroke={BLUE} strokeWidth="2.5" strokeLinejoin="round" />
+                fill="rgba(42,111,166,0.18)" stroke={BLUE} strokeWidth="2.5" strokeLinejoin="round" />
               <rect x="50" y="60" width="20" height="35" rx="2"
                 fill={ORANGE} stroke="#E8920A" strokeWidth="1.5" />
               <rect x="32" y="58" width="14" height="14" rx="2"
-                fill="rgba(87,130,176,0.3)" stroke="rgba(87,130,176,0.5)" strokeWidth="1" />
+                fill="rgba(42,111,166,0.3)" stroke="rgba(42,111,166,0.5)" strokeWidth="1" />
               <rect x="74" y="58" width="14" height="14" rx="2"
-                fill="rgba(87,130,176,0.3)" stroke="rgba(87,130,176,0.5)" strokeWidth="1" />
+                fill="rgba(42,111,166,0.3)" stroke="rgba(42,111,166,0.5)" strokeWidth="1" />
               <path d="M60 12 L60 20 M50 18 L60 20 L70 18"
                 stroke={ORANGE} strokeWidth="2.5" strokeLinecap="round" />
             </svg>
@@ -166,7 +166,7 @@ export default function MvpHomeLanding({ onStart, onBack }: Props) {
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
               <div style={{ display: 'flex', alignItems: 'center' }}>
-                {['#5782B0', '#24A47D', '#F9AA00'].map((color, i) => (
+                {['#2a6fa6', '#24A47D', '#F9AA00'].map((color, i) => (
                   <div key={i} style={{
                     width: 26, height: 26, borderRadius: 13,
                     background: color, border: `2px solid ${BG}`,
