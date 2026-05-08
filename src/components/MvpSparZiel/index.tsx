@@ -6,7 +6,7 @@ import {
   IconTrendingDown,
   IconBolt,
   IconLeaf,
-  IconZap,
+  IconRocket,
   IconClock,
   IconTool,
   IconMinus,
@@ -46,7 +46,7 @@ const SPARZIELE = [
 ];
 
 const ZEITAUFWAND = [
-  { value: 'Mühelos',  sub: 'Sofort umsetzbar',       Icon: IconZap },
+  { value: 'Mühelos',  sub: 'Sofort umsetzbar',       Icon: IconRocket },
   { value: 'Moderat',  sub: 'Paar Stunden / Monat',   Icon: IconClock },
   { value: 'Intensiv', sub: 'Maximale Ersparnis',      Icon: IconTool },
 ];
