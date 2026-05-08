@@ -25,17 +25,19 @@ export default function MvpHomeLanding({ onStart, onBack }: Props) {
       <div style={{
         background: 'rgba(245,246,248,0.95)', backdropFilter: 'blur(12px)',
         borderBottom: `1px solid ${BORDER}`,
-        padding: '12px 20px',
-        display: 'flex', alignItems: 'center', gap: 6,
+        padding: '10px 20px',
+        display: 'flex', alignItems: 'center', gap: 8,
       }}>
-        <img src="/apps/wpilot-home/assets/logo-wp.png" alt="WP" height={22} style={{ objectFit: 'contain' }} />
+        <img src="/apps/wpilot-home/assets/logo-wp.png" alt="WP" height={30} style={{ objectFit: 'contain' }} />
         <span style={{
-          fontSize: 11, fontWeight: 800, color: DARK,
           background: ORANGE, borderRadius: 6,
-          padding: '3px 7px', letterSpacing: '0.06em',
+          padding: '2px 7px 3px',
           fontFamily: "'Poppins', sans-serif",
-          display: 'inline-flex', alignItems: 'baseline', gap: 4,
-        }}>HOME<span style={{ fontSize: 8, fontWeight: 500, letterSpacing: 0, opacity: 0.75 }}>beta</span></span>
+          display: 'inline-flex', flexDirection: 'column', alignItems: 'center', lineHeight: 1,
+        }}>
+          <span style={{ fontSize: 11, fontWeight: 800, color: DARK, letterSpacing: '0.06em' }}>HOME</span>
+          <span style={{ fontSize: 7, fontWeight: 500, color: DARK, opacity: 0.7, letterSpacing: '0.04em' }}>beta</span>
+        </span>
         <div style={{ flex: 1 }} />
         {onBack && (
           <button
@@ -64,10 +66,10 @@ export default function MvpHomeLanding({ onStart, onBack }: Props) {
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ type: 'spring', stiffness: 260, damping: 22 }}
-            style={{ marginBottom: 28 }}
+            style={{ marginBottom: 24 }}
           >
             <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg"
-              style={{ width: 96, height: 96, margin: '0 auto', display: 'block' }}>
+              style={{ width: 88, height: 88, margin: '0 auto', display: 'block' }}>
               <circle cx="60" cy="60" r="55" fill={BLUE_LT} />
               <path d="M60 20 L95 50 L95 95 L25 95 L25 50 Z"
                 fill="rgba(87,130,176,0.18)" stroke={BLUE} strokeWidth="2.5" strokeLinejoin="round" />
@@ -82,11 +84,30 @@ export default function MvpHomeLanding({ onStart, onBack }: Props) {
             </svg>
           </motion.div>
 
+          {/* Logo above headline */}
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.08 }}
+            style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, marginBottom: 16 }}
+          >
+            <img src="/apps/wpilot-home/assets/logo-wp.png" alt="WP" height={32} style={{ objectFit: 'contain' }} />
+            <span style={{
+              background: ORANGE, borderRadius: 6,
+              padding: '2px 7px 3px',
+              fontFamily: "'Poppins', sans-serif",
+              display: 'inline-flex', flexDirection: 'column', alignItems: 'center', lineHeight: 1,
+            }}>
+              <span style={{ fontSize: 11, fontWeight: 800, color: DARK, letterSpacing: '0.06em' }}>HOME</span>
+              <span style={{ fontSize: 7, fontWeight: 500, color: DARK, opacity: 0.7, letterSpacing: '0.04em' }}>beta</span>
+            </span>
+          </motion.div>
+
           {/* Headline */}
           <motion.h1
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
+            transition={{ delay: 0.14 }}
             style={{
               fontSize: 'clamp(26px, 7vw, 36px)', fontWeight: 800,
               color: DARK, lineHeight: 1.2, letterSpacing: '-0.02em',
@@ -100,7 +121,7 @@ export default function MvpHomeLanding({ onStart, onBack }: Props) {
           <motion.p
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.18 }}
+            transition={{ delay: 0.22 }}
             style={{
               fontSize: 'clamp(14px, 3.5vw, 16px)', color: TEXT_MUTED,
               lineHeight: 1.65, marginBottom: 40,
@@ -117,7 +138,7 @@ export default function MvpHomeLanding({ onStart, onBack }: Props) {
             className="wp-cta-inline"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.26 }}
+            transition={{ delay: 0.3 }}
             style={{ display: 'none', justifyContent: 'center', marginBottom: 24 }}
           >
             <button
@@ -143,7 +164,7 @@ export default function MvpHomeLanding({ onStart, onBack }: Props) {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 0.32 }}
+            transition={{ delay: 0.38 }}
             style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10 }}
           >
             <div style={{ display: 'flex', alignItems: 'center' }}>
