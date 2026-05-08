@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import {
   IconCheck,
@@ -14,19 +14,19 @@ import {
 } from '@tabler/icons-react';
 
 // ── Design Tokens ────────────────────────────────────────────────
-const BLUE    = '#5782B0';
-const BLUE_LT = '#EDF2F9';
-const GREEN   = '#0C663B';
-const GREEN_LT = '#E8F5EF';
+const BLUE    = '#2a6fa6';
+const BLUE_LT = '#eef1f6';
+const GREEN   = '#167a52';
+const GREEN_LT = '#d3ede5';
 const ORANGE  = '#F9AA00';
 const ORANGE_LT = '#FEF3C7';
-const DARK    = '#2C3E50';
-const BG      = '#F5F6F8';
+const DARK    = '#243c47';
+const BG      = '#f3f3f5';
 const WHITE   = '#FFFFFF';
-const BORDER  = '#E2E8F0';
+const BORDER  = '#e3e3e6';
 const TEXT    = DARK;
-const TEXT_MUTED = '#7A8C9A';
-const TEXT_DIM = '#A0AEBB';
+const TEXT_MUTED = '#828288';
+const TEXT_DIM = '#a3a3a8';
 
 interface Props {
   onStart?: () => void;
@@ -41,7 +41,7 @@ export default function MvpThankYou({ onStart }: Props = {}) {
 
       {/* ── Header ────────────────────────────────────────── */}
       <div style={{
-        background: 'rgba(245,246,248,0.95)', backdropFilter: 'blur(12px)',
+        background: 'rgba(243,243,245,0.95)', backdropFilter: 'blur(12px)',
         borderBottom: `1px solid ${BORDER}`,
         padding: '10px 20px',
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
@@ -92,10 +92,10 @@ export default function MvpThankYou({ onStart }: Props = {}) {
               transition={{ type: 'spring', stiffness: 260, damping: 20 }}
               style={{
                 width: 56, height: 56, borderRadius: 28,
-                background: `linear-gradient(135deg, ${GREEN} 0%, #0d8045 100%)`,
+                background: `linear-gradient(135deg, ${GREEN} 0%, #19875a 100%)`,
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 margin: '0 auto 10px',
-                boxShadow: `0 4px 16px rgba(12,102,59,0.25)`,
+                boxShadow: `0 4px 16px rgba(23,122,82,0.25)`,
               }}
             >
               <IconCheck size={28} stroke={2.5} color={WHITE} />
