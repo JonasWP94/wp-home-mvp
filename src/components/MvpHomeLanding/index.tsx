@@ -110,6 +110,35 @@ export default function MvpHomeLanding({ onStart, onBack }: Props) {
             Jede Frage hat einen konkreten Nutzen für Ihren persönlichen Sparplan.
           </motion.p>
 
+          {/* ── Desktop-only inline CTA (above trust line) ── */}
+          <style>{`@media(min-width:640px){.wp-cta-inline{display:flex !important;}.wp-cta-sticky{display:none !important;}}`}</style>
+
+          <motion.div
+            className="wp-cta-inline"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.26 }}
+            style={{ display: 'none', justifyContent: 'center', marginBottom: 24 }}
+          >
+            <button
+              onClick={onStart}
+              style={{
+                background: `linear-gradient(135deg, ${ORANGE} 0%, #F59E0B 100%)`,
+                border: 'none', borderRadius: 14,
+                padding: '14px 36px',
+                fontSize: 16, fontWeight: 700, color: '#1a1a2e',
+                cursor: 'pointer', letterSpacing: '-0.01em',
+                boxShadow: `0 4px 20px rgba(249,170,0,0.35)`,
+                display: 'flex', alignItems: 'center', gap: 8,
+                transition: 'transform 0.1s, box-shadow 0.1s',
+              }}
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = 'scale(1.02)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 6px 28px rgba(249,170,0,0.5)'; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = 'scale(1)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 4px 20px rgba(249,170,0,0.35)'; }}
+            >
+              Jetzt loslegen <IconArrowRight size={18} stroke={2} />
+            </button>
+          </motion.div>
+
           {/* Trust */}
           <motion.div
             initial={{ opacity: 0 }}
@@ -136,8 +165,8 @@ export default function MvpHomeLanding({ onStart, onBack }: Props) {
         </div>
       </div>
 
-      {/* ── Sticky CTA ────────────────────────────────────── */}
-      <div style={{
+      {/* ── Sticky CTA (mobile only) ───────────────────────── */}
+      <div className="wp-cta-sticky" style={{
         position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 100,
         background: 'rgba(255,255,255,0.97)', backdropFilter: 'blur(12px)',
         borderTop: `1px solid ${BORDER}`,
