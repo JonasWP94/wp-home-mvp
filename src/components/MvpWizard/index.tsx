@@ -185,15 +185,17 @@ export default function MvpWizard() {
         padding: '14px 20px',
         display: 'flex', alignItems: 'center', gap: 12,
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0 }}>
-          <img src="/apps/wpilot-home/assets/logo-wp.png" alt="WP" height={22} style={{ objectFit: 'contain' }} />
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
+          <img src="/apps/wpilot-home/assets/logo-wp.png" alt="WP" height={30} style={{ objectFit: 'contain' }} />
           <span style={{
-            fontSize: 11, fontWeight: 800, color: DARK,
             background: ORANGE, borderRadius: 6,
-            padding: '3px 7px', letterSpacing: '0.06em',
+            padding: '2px 7px 3px',
             fontFamily: "'Poppins', sans-serif",
-            display: 'inline-flex', alignItems: 'baseline', gap: 4,
-          }}>HOME<span style={{ fontSize: 8, fontWeight: 500, letterSpacing: 0, opacity: 0.75 }}>beta</span></span>
+            display: 'inline-flex', flexDirection: 'column', alignItems: 'center', lineHeight: 1,
+          }}>
+            <span style={{ fontSize: 11, fontWeight: 800, color: DARK, letterSpacing: '0.06em' }}>HOME</span>
+            <span style={{ fontSize: 7, fontWeight: 500, color: DARK, opacity: 0.7, letterSpacing: '0.04em' }}>beta</span>
+          </span>
         </div>
         <div style={{ flex: 1 }} />
       </div>
