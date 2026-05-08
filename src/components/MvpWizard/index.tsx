@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   IconHome,
@@ -47,18 +47,18 @@ const INITIAL: MvpProfile = {
 };
 
 // ── Design Tokens ────────────────────────────────────────────────
-const BLUE    = '#5782B0';
-const BLUE_LT = '#EDF2F9';
-const BLUE_DK = '#3D5A80';
-const GREEN   = '#0C663B';
+const BLUE    = '#2a6fa6';
+const BLUE_LT = '#eef1f6';
+const BLUE_DK = '#18466a';
+const GREEN   = '#167a52';
 const ORANGE  = '#F9AA00';
-const DARK    = '#2C3E50';
-const BG      = '#F5F6F8';
+const DARK    = '#243c47';
+const BG      = '#f3f3f5';
 const WHITE   = '#FFFFFF';
-const BORDER  = '#E2E8F0';
+const BORDER  = '#e3e3e6';
 const TEXT    = DARK;
-const TEXT_MUTED = '#7A8C9A';
-const TEXT_DIM = '#A0AEBB';
+const TEXT_MUTED = '#828288';
+const TEXT_DIM = '#a3a3a8';
 
 // ── Step Definitions ─────────────────────────────────────────────
 const STEPS = [
@@ -291,7 +291,7 @@ export default function MvpWizard() {
       {/* ── Header ────────────────────────────────────────── */}
       <div style={{
         position: 'sticky', top: 0, zIndex: 100,
-        background: 'rgba(245,246,248,0.95)', backdropFilter: 'blur(12px)',
+        background: 'rgba(243,243,245,0.95)', backdropFilter: 'blur(12px)',
         borderBottom: `1px solid ${BORDER}`,
         padding: '14px 20px',
         display: 'flex', alignItems: 'center', gap: 12,
@@ -385,7 +385,7 @@ export default function MvpWizard() {
                   >
                     <div style={{
                       width: 40, height: 40, borderRadius: 10,
-                      background: isSelected ? BLUE : '#f3f4f6',
+                      background: isSelected ? BLUE : '#eef1f6',
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
                       flexShrink: 0, transition: 'all 0.15s',
                     }}>
@@ -458,7 +458,7 @@ export default function MvpWizard() {
             fontSize: 14, fontWeight: 600, color: canNext ? WHITE : TEXT_DIM,
             cursor: canNext ? 'pointer' : 'not-allowed',
             transition: 'all 0.15s',
-            boxShadow: canNext ? `0 2px 8px rgba(87,130,176,0.35)` : 'none',
+            boxShadow: canNext ? `0 2px 8px rgba(42,111,166,0.35)` : 'none',
             display: 'flex', alignItems: 'center', gap: 6,
           }}
         >
