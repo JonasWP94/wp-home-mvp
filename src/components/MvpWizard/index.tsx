@@ -20,6 +20,7 @@ import {
 } from '@tabler/icons-react';
 import MvpDashboard from '../MvpDashboard';
 import MvpThankYou from '../MvpThankYou';
+import MvpHomeLanding from '../MvpHomeLanding';
 
 // ── Types ────────────────────────────────────────────────────────
 interface MvpProfile {
@@ -108,7 +109,7 @@ const STEPS = [
 
 const TOTAL = STEPS.length;
 
-type View = 'intro' | 'quiz' | 'results';
+type View = 'intro' | 'landing' | 'quiz' | 'results';
 
 // ── Main Component ────────────────────────────────────────────────
 export default function MvpWizard() {
@@ -148,7 +149,7 @@ export default function MvpWizard() {
   }
 
   function goBack() {
-    if (step === 0) { setView('intro'); return; }
+    if (step === 0) { setView('landing'); return; }
     setDir(-1);
     setStep(s => s - 1);
   }
@@ -163,7 +164,8 @@ export default function MvpWizard() {
     return () => window.removeEventListener('keydown', onKey);
   }, [canNext, step, view]);
 
-  if (view === 'intro') return <MvpThankYou onStart={() => setView('quiz')} />;
+  if (view === 'intro') return <MvpThankYou onStart={() => setView('landing')} />;
+  if (view === 'landing') return <MvpHomeLanding onStart={() => setView('quiz')} onBack={() => setView('intro')} />;
   if (view === 'results' && finalProfile) return <MvpDashboard initialProfile={finalProfile} />;
 
   const slideVariants = {
@@ -183,9 +185,14 @@ export default function MvpWizard() {
         padding: '14px 20px',
         display: 'flex', alignItems: 'center', gap: 12,
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0 }}>
           <img src="/apps/wpilot-home/assets/logo-wp.png" alt="WP" height={22} style={{ objectFit: 'contain' }} />
-          <span style={{ fontSize: 13, fontWeight: 700, color: TEXT, fontFamily: "'Poppins', sans-serif", letterSpacing: '0.05em' }}>HOME</span>
+          <span style={{
+            fontSize: 11, fontWeight: 800, color: DARK,
+            background: ORANGE, borderRadius: 6,
+            padding: '3px 7px', letterSpacing: '0.06em',
+            fontFamily: "'Poppins', sans-serif",
+          }}>HOME</span>
         </div>
         <div style={{ flex: 1 }} />
       </div>
