@@ -42,15 +42,15 @@ interface MvpProfile {
   investitionen: 'keine' | 'gadgets' | 'projekte' | '';
   sparziel: string;
   zeitaufwand: string;
-  steuererklaerung: 'ja' | 'nein' | '';
-  energievertraege: 'ja' | 'nein' | '';
-  girokonto: 'ja' | 'nein' | '';
+  steuererklaerung: boolean;
+  energievertraege: boolean;
+  girokonto: boolean;
 }
 
 const INITIAL: MvpProfile = {
   tenure: '', propertyType: '', heatingType: '', autoType: '', hasChildren: null,
   investitionen: '', sparziel: '', zeitaufwand: '',
-  steuererklaerung: '', energievertraege: '', girokonto: '',
+  steuererklaerung: false, energievertraege: false, girokonto: false,
 };
 
 // ── Step Definitions ─────────────────────────────────────────────
