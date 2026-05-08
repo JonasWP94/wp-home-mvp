@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import {
   IconArrowRight,
@@ -16,17 +16,17 @@ import {
 } from '@tabler/icons-react';
 
 // ── Design Tokens ────────────────────────────────────────────────
-const BLUE    = '#5782B0';
-const BLUE_LT = '#EDF2F9';
-const BLUE_DK = '#3D5A80';
+const BLUE    = '#2a6fa6';
+const BLUE_LT = '#eef1f6';
+const BLUE_DK = '#18466a';
 const ORANGE  = '#F9AA00';
-const DARK    = '#2C3E50';
-const BG      = '#F5F6F8';
+const DARK    = '#243c47';
+const BG      = '#f3f3f5';
 const WHITE   = '#FFFFFF';
-const BORDER  = '#E2E8F0';
+const BORDER  = '#e3e3e6';
 const TEXT    = DARK;
-const TEXT_MUTED = '#7A8C9A';
-const TEXT_DIM = '#A0AEBB';
+const TEXT_MUTED = '#828288';
+const TEXT_DIM = '#a3a3a8';
 
 export interface SparZielData {
   sparziel: string;
@@ -81,7 +81,7 @@ function SettingsRow({
     >
       <div style={{
         width: 36, height: 36, borderRadius: 10,
-        background: selected ? BLUE : '#f0f2f5',
+        background: selected ? BLUE : '#eef1f6',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         transition: 'all 0.15s',
       }}>
@@ -127,7 +127,7 @@ export default function MvpSparZiel({ onDone, onBack }: Props) {
       {/* ── Header ────────────────────────────────────────── */}
       <div style={{
         position: 'sticky', top: 0, zIndex: 100,
-        background: 'rgba(245,246,248,0.95)', backdropFilter: 'blur(12px)',
+        background: 'rgba(243,243,245,0.95)', backdropFilter: 'blur(12px)',
         borderBottom: `1px solid ${BORDER}`,
         padding: '10px 20px',
         display: 'flex', alignItems: 'center', gap: 8,
@@ -254,7 +254,7 @@ export default function MvpSparZiel({ onDone, onBack }: Props) {
             border: 'none', borderRadius: 12, padding: '10px 20px',
             fontSize: 14, fontWeight: 600, color: canContinue ? WHITE : TEXT_DIM,
             cursor: canContinue ? 'pointer' : 'not-allowed', transition: 'all 0.15s',
-            boxShadow: canContinue ? `0 2px 8px rgba(87,130,176,0.35)` : 'none',
+            boxShadow: canContinue ? `0 2px 8px rgba(42,111,166,0.35)` : 'none',
             display: 'flex', alignItems: 'center', gap: 6,
           }}
         >
