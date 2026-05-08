@@ -1,15 +1,13 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import {
-  IconCheck,
-  IconX,
   IconReceiptTax,
   IconBolt,
   IconCreditCard,
 } from '@tabler/icons-react';
 import {
-  ACCENT, PRIMARY, BG, WHITE, BORDER, GREY_200, GREY_700, GREY_800,
-  GREEN, GREY_500,
+  ACCENT, PRIMARY, BG, WHITE, BORDER, GREY_200, GREY_800,
+  GREEN,
   RADIUS_MD, RADIUS_SM,
   TEXT_XS, TEXT_SM, TEXT_LG,
   FW_REGULAR, FW_SEMIBOLD, FW_BOLD,
@@ -18,9 +16,9 @@ import WpHeader from '../_WpHeader';
 import WpBottomNav from '../_WpBottomNav';
 
 export interface EssentialsData {
-  steuererklaerung: 'ja' | 'nein' | '';
-  energievertraege: 'ja' | 'nein' | '';
-  girokonto:        'ja' | 'nein' | '';
+  steuererklaerung: boolean;
+  energievertraege: boolean;
+  girokonto:        boolean;
 }
 
 interface Props {
@@ -29,83 +27,89 @@ interface Props {
 }
 
 const QUESTIONS: { key: keyof EssentialsData; label: string; sub: string; Icon: React.ComponentType<{ size?: number; stroke?: number; color?: string }> }[] = [
-  { key: 'steuererklaerung', label: 'Steuererklärung schon erledigt?',     sub: 'Ø 1.095 € Rückerstattung pro Jahr',           Icon: IconReceiptTax },
+  { key: 'steuererklaerung', label: 'Steuererklärung schon erledigt?',     sub: 'Ø 1.095 € Rückerstattung pro Jahr',                Icon: IconReceiptTax },
   { key: 'energievertraege', label: 'Energieverträge optimiert?',          sub: 'Strom & Gas regelmäßig wechseln spart hunderte €', Icon: IconBolt },
-  { key: 'girokonto',        label: 'Haben Sie ein kostenloses Girokonto?', sub: 'Bis zu 60 € Kontoführungsgebühren / Jahr',     Icon: IconCreditCard },
+  { key: 'girokonto',        label: 'Haben Sie ein kostenloses Girokonto?', sub: 'Bis zu 60 € Kontoführungsgebühren / Jahr',         Icon: IconCreditCard },
 ];
 
-function YesNoRow({
+// ── iOS-style Toggle ─────────────────────────────────────────────
+function Toggle({ on, onChange }: { on: boolean; onChange: (v: boolean) => void }) {
+  const W = 46;
+  const H = 26;
+  const KNOB = 22;
+  const PAD = (H - KNOB) / 2;
+
+  return (
+    <button
+      onClick={() => onChange(!on)}
+      role="switch"
+      aria-checked={on}
+      style={{
+        width: W, height: H, borderRadius: H / 2,
+        background: on ? GREEN : '#cfcfd5',
+        border: 'none', padding: 0,
+        position: 'relative', cursor: 'pointer',
+        transition: 'background 0.2s ease',
+        flexShrink: 0,
+      }}
+    >
+      <motion.div
+        animate={{ x: on ? W - KNOB - PAD : PAD }}
+        transition={{ type: 'spring', stiffness: 500, damping: 32 }}
+        style={{
+          position: 'absolute', top: PAD, left: 0,
+          width: KNOB, height: KNOB, borderRadius: KNOB / 2,
+          background: WHITE,
+          boxShadow: '0 1px 3px rgba(0,0,0,0.15), 0 1px 2px rgba(0,0,0,0.1)',
+        }}
+      />
+    </button>
+  );
+}
+
+function ToggleRow({
   icon: Icon, label, sub, value, onChange,
 }: {
   icon: React.ComponentType<{ size?: number; stroke?: number; color?: string }>;
   label: string; sub: string;
-  value: 'ja' | 'nein' | '';
-  onChange: (v: 'ja' | 'nein') => void;
+  value: boolean;
+  onChange: (v: boolean) => void;
 }) {
   return (
-    <div style={{
-      background: WHITE,
-      border: `1.5px solid ${BORDER}`,
-      borderRadius: RADIUS_MD,
-      padding: '14px 16px',
-      display: 'flex', alignItems: 'center', gap: 14,
-      transition: 'all 0.15s',
-    }}>
+    <div
+      onClick={() => onChange(!value)}
+      style={{
+        background: WHITE,
+        border: `1.5px solid ${value ? GREEN : BORDER}`,
+        borderRadius: RADIUS_MD,
+        padding: '14px 16px',
+        display: 'flex', alignItems: 'center', gap: 14,
+        transition: 'border-color 0.2s ease',
+        cursor: 'pointer',
+        userSelect: 'none',
+      }}
+    >
       <div style={{
         width: 40, height: 40, borderRadius: RADIUS_SM, flexShrink: 0,
-        background: GREY_200,
+        background: value ? '#d3ede5' : GREY_200,
         display: 'flex', alignItems: 'center', justifyContent: 'center',
+        transition: 'all 0.2s ease',
       }}>
-        <Icon size={20} stroke={1.8} color={GREY_800} />
+        <Icon size={20} stroke={1.8} color={value ? GREEN : GREY_800} />
       </div>
       <div style={{ flex: 1, minWidth: 0 }}>
         <div style={{ fontSize: TEXT_SM, fontWeight: FW_SEMIBOLD, color: PRIMARY, lineHeight: 1.25 }}>{label}</div>
         <div style={{ fontSize: TEXT_XS, fontWeight: FW_REGULAR, color: GREY_800, marginTop: 2, lineHeight: 1.4 }}>{sub}</div>
       </div>
-      <div style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
-        <motion.button
-          whileTap={{ scale: 0.92 }}
-          onClick={() => onChange('ja')}
-          style={{
-            minWidth: 50, height: 34, borderRadius: RADIUS_SM,
-            background: value === 'ja' ? GREEN : WHITE,
-            border: `1.5px solid ${value === 'ja' ? GREEN : BORDER}`,
-            color: value === 'ja' ? WHITE : GREY_700,
-            fontSize: TEXT_XS, fontWeight: FW_SEMIBOLD,
-            cursor: 'pointer', transition: 'all 0.15s',
-            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4,
-            fontFamily: "'Poppins', sans-serif",
-          }}
-        >
-          <IconCheck size={13} stroke={2.5} /> Ja
-        </motion.button>
-        <motion.button
-          whileTap={{ scale: 0.92 }}
-          onClick={() => onChange('nein')}
-          style={{
-            minWidth: 56, height: 34, borderRadius: RADIUS_SM,
-            background: value === 'nein' ? GREY_500 : WHITE,
-            border: `1.5px solid ${value === 'nein' ? GREY_500 : BORDER}`,
-            color: value === 'nein' ? WHITE : GREY_700,
-            fontSize: TEXT_XS, fontWeight: FW_SEMIBOLD,
-            cursor: 'pointer', transition: 'all 0.15s',
-            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4,
-            fontFamily: "'Poppins', sans-serif",
-          }}
-        >
-          <IconX size={13} stroke={2.5} /> Nein
-        </motion.button>
-      </div>
+      <Toggle on={value} onChange={onChange} />
     </div>
   );
 }
 
 export default function MvpEssentials({ onDone, onBack }: Props) {
   const [data, setData] = useState<EssentialsData>({
-    steuererklaerung: '', energievertraege: '', girokonto: '',
+    steuererklaerung: false, energievertraege: false, girokonto: false,
   });
-
-  const allAnswered = QUESTIONS.every(q => data[q.key] !== '');
 
   return (
     <div style={{
@@ -134,13 +138,13 @@ export default function MvpEssentials({ onDone, onBack }: Props) {
                 Haben Sie die Basics schon erledigt?
               </h1>
               <p style={{ fontSize: TEXT_SM, color: GREY_800, lineHeight: 1.55, fontWeight: FW_REGULAR }}>
-                Diese vier Themen bringen den meisten Haushalten jährlich vierstellige Beträge.
+                Aktivieren Sie, was bereits erledigt ist — alles andere zeigen wir Ihnen als Spartipp.
               </p>
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
               {QUESTIONS.map(q => (
-                <YesNoRow
+                <ToggleRow
                   key={q.key}
                   icon={q.Icon}
                   label={q.label}
@@ -157,8 +161,7 @@ export default function MvpEssentials({ onDone, onBack }: Props) {
 
       <WpBottomNav
         onBack={onBack}
-        onNext={() => allAnswered && onDone(data)}
-        nextDisabled={!allAnswered}
+        onNext={() => onDone(data)}
       />
     </div>
   );
