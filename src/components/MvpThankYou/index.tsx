@@ -46,9 +46,14 @@ export default function MvpThankYou({ onStart }: Props = {}) {
         padding: '10px 20px',
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
           <img src="/apps/wpilot-home/assets/logo-wp.png" alt="WP" height={20} style={{ objectFit: 'contain' }} />
-          <span style={{ fontSize: 12, fontWeight: 700, color: TEXT, fontFamily: "'Poppins', sans-serif", letterSpacing: '0.05em' }}>HOME</span>
+          <span style={{
+            fontSize: 11, fontWeight: 800, color: DARK,
+            background: ORANGE, borderRadius: 6,
+            padding: '3px 7px', letterSpacing: '0.06em',
+            fontFamily: "'Poppins', sans-serif",
+          }}>HOME</span>
         </div>
 
         <button
