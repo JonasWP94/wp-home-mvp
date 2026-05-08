@@ -73,26 +73,28 @@ function SettingsRow({
         background: selected ? BLUE_LT : WHITE,
         border: `1.5px solid ${selected ? BLUE : BORDER}`,
         borderRadius: 12,
-        padding: '11px 14px',
-        display: 'flex', alignItems: 'center', gap: 12,
-        cursor: 'pointer', transition: 'all 0.15s', textAlign: 'left' as const,
+        padding: '12px 10px',
+        display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8,
+        cursor: 'pointer', transition: 'all 0.15s', textAlign: 'center' as const,
+        position: 'relative',
       }}
     >
       <div style={{
-        width: 34, height: 34, borderRadius: 9, flexShrink: 0,
+        width: 36, height: 36, borderRadius: 10,
         background: selected ? BLUE : '#f0f2f5',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         transition: 'all 0.15s',
       }}>
-        <Icon size={17} stroke={1.8} color={selected ? WHITE : TEXT_MUTED} />
+        <Icon size={18} stroke={1.8} color={selected ? WHITE : TEXT_MUTED} />
       </div>
-      <div style={{ flex: 1, minWidth: 0 }}>
-        <div style={{ fontSize: 14, fontWeight: 700, color: selected ? BLUE_DK : TEXT, lineHeight: 1.2 }}>{label}</div>
-        <div style={{ fontSize: 11, color: TEXT_MUTED, marginTop: 1 }}>{sub}</div>
+      <div style={{ minWidth: 0, width: '100%' }}>
+        <div style={{ fontSize: 12, fontWeight: 700, color: selected ? BLUE_DK : TEXT, lineHeight: 1.2 }}>{label}</div>
+        <div style={{ fontSize: 10, color: TEXT_MUTED, marginTop: 2, lineHeight: 1.3 }}>{sub}</div>
       </div>
       {selected && (
         <div style={{
-          width: 20, height: 20, borderRadius: 10, flexShrink: 0,
+          position: 'absolute', top: 6, right: 6,
+          width: 16, height: 16, borderRadius: 8,
           background: BLUE, display: 'flex', alignItems: 'center', justifyContent: 'center',
         }}>
           <IconCheck size={11} stroke={3} color={WHITE} />
@@ -169,7 +171,7 @@ export default function MvpSparZiel({ onDone, onBack }: Props) {
             {/* ── Sparziel ──────────────────────────────────── */}
             <div style={{ marginBottom: 24 }}>
               <SectionHeader label="SPARZIEL" title="Was ist Ihr Sparziel?" />
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8 }}>
                 {SPARZIELE.map(opt => (
                   <SettingsRow
                     key={opt.value}
@@ -190,7 +192,7 @@ export default function MvpSparZiel({ onDone, onBack }: Props) {
                 title="Wie viel Zeit möchten Sie investieren?"
                 sub="Mehr Zeitaufwand = mehr Ersparnis und Cashback. Wir passen die Vorschläge an Ihren Aufwand an."
               />
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8 }}>
                 {ZEITAUFWAND.map(opt => (
                   <SettingsRow
                     key={opt.value}
@@ -207,7 +209,7 @@ export default function MvpSparZiel({ onDone, onBack }: Props) {
             {/* ── Investitionen ─────────────────────────────── */}
             <div style={{ marginBottom: 8 }}>
               <SectionHeader label="INVESTITIONSBEREITSCHAFT" title="Was sind Sie bereit zu investieren?" />
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8 }}>
                 {INVESTITIONEN.map(opt => (
                   <SettingsRow
                     key={opt.value}
