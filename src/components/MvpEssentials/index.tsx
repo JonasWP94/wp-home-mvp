@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import {
   IconArrowRight,
@@ -12,18 +12,18 @@ import {
 } from '@tabler/icons-react';
 
 // ── Design Tokens ────────────────────────────────────────────────
-const BLUE    = '#5782B0';
-const BLUE_LT = '#EDF2F9';
-const BLUE_DK = '#3D5A80';
+const BLUE    = '#2a6fa6';
+const BLUE_LT = '#eef1f6';
+const BLUE_DK = '#18466a';
 const ORANGE  = '#F9AA00';
-const GREEN   = '#0C663B';
-const DARK    = '#2C3E50';
-const BG      = '#F5F6F8';
+const GREEN   = '#167a52';
+const DARK    = '#243c47';
+const BG      = '#f3f3f5';
 const WHITE   = '#FFFFFF';
-const BORDER  = '#E2E8F0';
+const BORDER  = '#e3e3e6';
 const TEXT    = DARK;
-const TEXT_MUTED = '#7A8C9A';
-const TEXT_DIM = '#A0AEBB';
+const TEXT_MUTED = '#828288';
+const TEXT_DIM = '#a3a3a8';
 
 export interface EssentialsData {
   steuererklaerung: 'ja' | 'nein' | '';
@@ -62,7 +62,7 @@ function YesNoRow({
     }}>
       <div style={{
         width: 34, height: 34, borderRadius: 9, flexShrink: 0,
-        background: '#f0f2f5',
+        background: '#eef1f6',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
       }}>
         <Icon size={17} stroke={1.8} color={TEXT_MUTED} />
@@ -120,7 +120,7 @@ export default function MvpEssentials({ onDone, onBack }: Props) {
       {/* ── Header ────────────────────────────────────────── */}
       <div style={{
         position: 'sticky', top: 0, zIndex: 100,
-        background: 'rgba(245,246,248,0.95)', backdropFilter: 'blur(12px)',
+        background: 'rgba(243,243,245,0.95)', backdropFilter: 'blur(12px)',
         borderBottom: `1px solid ${BORDER}`,
         padding: '10px 20px',
         display: 'flex', alignItems: 'center', gap: 8,
@@ -206,7 +206,7 @@ export default function MvpEssentials({ onDone, onBack }: Props) {
             border: 'none', borderRadius: 12, padding: '10px 20px',
             fontSize: 14, fontWeight: 600, color: allAnswered ? WHITE : TEXT_DIM,
             cursor: allAnswered ? 'pointer' : 'not-allowed', transition: 'all 0.15s',
-            boxShadow: allAnswered ? `0 2px 8px rgba(87,130,176,0.35)` : 'none',
+            boxShadow: allAnswered ? `0 2px 8px rgba(42,111,166,0.35)` : 'none',
             display: 'flex', alignItems: 'center', gap: 6,
           }}
         >
