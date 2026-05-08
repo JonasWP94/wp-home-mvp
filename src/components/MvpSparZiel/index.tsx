@@ -103,11 +103,12 @@ function SettingsRow({
 }
 
 // ── Section header ───────────────────────────────────────────────
-function SectionHeader({ label, title }: { label: string; title: string }) {
+function SectionHeader({ label, title, sub }: { label: string; title: string; sub?: string }) {
   return (
     <div style={{ marginBottom: 10 }}>
       <div style={{ fontSize: 10, fontWeight: 700, color: BLUE, letterSpacing: '0.09em', marginBottom: 3 }}>{label}</div>
       <div style={{ fontSize: 16, fontWeight: 800, color: TEXT }}>{title}</div>
+      {sub && <div style={{ fontSize: 12, color: TEXT_MUTED, marginTop: 4, lineHeight: 1.45 }}>{sub}</div>}
     </div>
   );
 }
@@ -184,7 +185,11 @@ export default function MvpSparZiel({ onDone, onBack }: Props) {
 
             {/* ── Zeitaufwand ───────────────────────────────── */}
             <div style={{ marginBottom: 24 }}>
-              <SectionHeader label="ZEITAUFWAND" title="Wie viel Zeit möchten Sie investieren?" />
+              <SectionHeader
+                label="ZEITAUFWAND"
+                title="Wie viel Zeit möchten Sie investieren?"
+                sub="Mehr Zeitaufwand = mehr Ersparnis und Cashback. Wir passen die Vorschläge an Ihren Aufwand an."
+              />
               <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                 {ZEITAUFWAND.map(opt => (
                   <SettingsRow
