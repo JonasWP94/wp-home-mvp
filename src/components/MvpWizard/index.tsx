@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   IconHome,
@@ -7,7 +7,6 @@ import {
   IconCar,
   IconUsers,
   IconUser,
-  IconArrowLeft,
   IconArrowRight,
   IconCheck,
   IconBolt,
@@ -18,6 +17,15 @@ import {
   IconBike,
   IconPlug,
 } from '@tabler/icons-react';
+import {
+  ACCENT, BLUE_VERY_BRIGHT, BLUE_DARK,
+  PRIMARY, BG, WHITE, BORDER, GREY_200, GREY_700, GREY_800,
+  RADIUS_MD, RADIUS_SM, RADIUS_LG,
+  TEXT_XS, TEXT_SM, TEXT_MD, TEXT_LG,
+  FW_REGULAR, FW_MEDIUM, FW_SEMIBOLD, FW_BOLD,
+} from '../_tokens';
+import WpHeader from '../_WpHeader';
+import WpBottomNav from '../_WpBottomNav';
 import MvpDashboard from '../MvpDashboard';
 import MvpThankYou from '../MvpThankYou';
 import MvpHomeLanding from '../MvpHomeLanding';
@@ -46,20 +54,6 @@ const INITIAL: MvpProfile = {
   steuererklaerung: '', energievertraege: '', girokonto: '', neobroker: '',
 };
 
-// ── Design Tokens ────────────────────────────────────────────────
-const BLUE    = '#2a6fa6';
-const BLUE_LT = '#eef1f6';
-const BLUE_DK = '#18466a';
-const GREEN   = '#167a52';
-const ORANGE  = '#F9AA00';
-const DARK    = '#243c47';
-const BG      = '#f3f3f5';
-const WHITE   = '#FFFFFF';
-const BORDER  = '#e3e3e6';
-const TEXT    = DARK;
-const TEXT_MUTED = '#828288';
-const TEXT_DIM = '#a3a3a8';
-
 // ── Step Definitions ─────────────────────────────────────────────
 const STEPS = [
   {
@@ -69,7 +63,7 @@ const STEPS = [
     sub: 'Damit empfehlen wir Ihnen die passenden Energiespar-Optionen für Ihre Wohnsituation.',
     options: [
       { value: 'wohnung', label: 'Wohnung', icon: IconBuilding },
-      { value: 'haus',    label: 'Haus', icon: IconHome },
+      { value: 'haus',    label: 'Haus',    icon: IconHome },
     ],
   },
   {
@@ -158,21 +152,19 @@ function LoadingScreen({ onDone }: { onDone: () => void }) {
     <div style={{
       minHeight: '100dvh', background: BG,
       display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-      padding: '40px 24px',
+      padding: '40px 24px', fontFamily: "'Poppins', sans-serif",
     }}>
-      {/* Spinner */}
       <motion.div
         animate={{ rotate: 360 }}
         transition={{ repeat: Infinity, duration: 1, ease: 'linear' }}
         style={{
-          width: 52, height: 52, borderRadius: 26,
-          border: `3px solid ${BLUE_LT}`,
-          borderTopColor: BLUE,
+          width: 56, height: 56, borderRadius: 28,
+          border: `3px solid ${BLUE_VERY_BRIGHT}`,
+          borderTopColor: ACCENT,
           marginBottom: 28,
         }}
       />
 
-      {/* Label */}
       <AnimatePresence mode="wait">
         <motion.p
           key={idx}
@@ -180,16 +172,18 @@ function LoadingScreen({ onDone }: { onDone: () => void }) {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -6 }}
           transition={{ duration: 0.25 }}
-          style={{ fontSize: 15, fontWeight: 600, color: TEXT, marginBottom: 24, textAlign: 'center' }}
+          style={{
+            fontSize: TEXT_MD, fontWeight: FW_SEMIBOLD,
+            color: PRIMARY, marginBottom: 24, textAlign: 'center',
+          }}
         >
           {LOADING_STEPS[idx]}
         </motion.p>
       </AnimatePresence>
 
-      {/* Progress bar */}
       <div style={{ width: '100%', maxWidth: 280, height: 4, background: BORDER, borderRadius: 2, overflow: 'hidden' }}>
         <div style={{
-          height: '100%', background: BLUE, borderRadius: 2,
+          height: '100%', background: ACCENT, borderRadius: 2,
           width: `${barPct * 100}%`, transition: 'width 0.05s linear',
         }} />
       </div>
@@ -285,44 +279,16 @@ export default function MvpWizard() {
     exit:   (d: number) => ({ x: d > 0 ? -80 :  80, opacity: 0 }),
   };
 
+  const progressPct = 50 + ((step + 1) / TOTAL) * 50;
+
   return (
-    <div style={{ minHeight: '100dvh', background: BG, display: 'flex', flexDirection: 'column' }}>
+    <div style={{
+      minHeight: '100dvh', background: BG, display: 'flex', flexDirection: 'column',
+      fontFamily: "'Poppins', sans-serif",
+    }}>
+      <WpHeader showProgress progressPct={progressPct} />
 
-      {/* ── Header ────────────────────────────────────────── */}
-      <div style={{
-        position: 'sticky', top: 0, zIndex: 100,
-        background: 'rgba(243,243,245,0.95)', backdropFilter: 'blur(12px)',
-        borderBottom: `1px solid ${BORDER}`,
-        padding: '14px 20px',
-        display: 'flex', alignItems: 'center', gap: 12,
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
-          <img src="/apps/wpilot-home/assets/logo-wp.png" alt="WP" height={30} style={{ objectFit: 'contain' }} />
-          <span style={{
-            background: ORANGE, borderRadius: 6,
-            padding: '2px 7px 3px',
-            fontFamily: "'Poppins', sans-serif",
-            display: 'inline-flex', flexDirection: 'column', alignItems: 'center', lineHeight: 1,
-          }}>
-            <span style={{ fontSize: 11, fontWeight: 800, color: DARK, letterSpacing: '0.06em' }}>HOME</span>
-            <span style={{ fontSize: 7, fontWeight: 500, color: DARK, opacity: 0.7, letterSpacing: '0.04em' }}>beta</span>
-          </span>
-        </div>
-        <div style={{ flex: 1 }} />
-      </div>
-
-      {/* ── Progress bar ──────────────────────────────────── */}
-      <div style={{ height: 3, background: BORDER }}>
-        <motion.div
-          initial={false}
-          animate={{ width: `${((step + 1) / TOTAL) * 100}%` }}
-          transition={{ duration: 0.3 }}
-          style={{ height: '100%', background: BLUE }}
-        />
-      </div>
-
-      {/* ── Content ───────────────────────────────────────── */}
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '32px 20px 120px' }}>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '32px 24px 120px' }}>
         <AnimatePresence mode="wait" custom={dir}>
           <motion.div
             key={step}
@@ -332,35 +298,43 @@ export default function MvpWizard() {
             animate="center"
             exit="exit"
             transition={{ duration: 0.25 }}
-            style={{ width: '100%', maxWidth: 420 }}
+            style={{ width: '100%', maxWidth: 460 }}
           >
             <div style={{ textAlign: 'center', marginBottom: 28 }}>
               <div style={{
-                width: 56, height: 56, borderRadius: 16,
-                background: BLUE_LT, display: 'flex', alignItems: 'center', justifyContent: 'center',
-                margin: '0 auto 14px',
+                width: 60, height: 60, borderRadius: RADIUS_LG,
+                background: BLUE_VERY_BRIGHT,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                margin: '0 auto 16px',
               }}>
-                <StepIcon size={30} stroke={1.5} color={BLUE} />
+                <StepIcon size={30} stroke={1.6} color={ACCENT} />
               </div>
-              <div style={{ fontSize: 11, fontWeight: 600, color: BLUE, letterSpacing: '0.08em', marginBottom: 6 }}>
+              <div style={{
+                fontSize: 11, fontWeight: FW_BOLD, color: ACCENT,
+                letterSpacing: '0.1em', marginBottom: 8,
+              }}>
                 FRAGE {step + 1} VON {TOTAL}
               </div>
-              <h1 style={{ fontSize: 22, fontWeight: 800, color: TEXT, lineHeight: 1.3, marginBottom: 8 }}>
+              <h1 style={{
+                fontSize: TEXT_LG + 4, fontWeight: FW_SEMIBOLD,
+                color: PRIMARY, lineHeight: 1.25, marginBottom: 8,
+                letterSpacing: '-0.01em',
+              }}>
                 {current.title}
               </h1>
-              <p style={{ fontSize: 13, color: TEXT_MUTED, lineHeight: 1.5 }}>
+              <p style={{ fontSize: TEXT_SM, color: GREY_800, lineHeight: 1.55, fontWeight: FW_REGULAR }}>
                 {current.sub}
               </p>
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
               {current.options.map(opt => {
                 const isSelected = String(currentValue) === String(opt.value);
                 const OptIcon = opt.icon;
                 return (
                   <motion.button
                     key={String(opt.value)}
-                    whileTap={{ scale: 0.97 }}
+                    whileTap={{ scale: 0.98 }}
                     onClick={() => {
                       const val = opt.value === 'true' ? true : opt.value === 'false' ? false : opt.value;
                       select(val);
@@ -375,32 +349,36 @@ export default function MvpWizard() {
                     }}
                     style={{
                       width: '100%',
-                      background: isSelected ? BLUE_LT : WHITE,
-                      border: isSelected ? `2px solid ${BLUE}` : `2px solid ${BORDER}`,
-                      borderRadius: 14, padding: '16px 18px',
+                      background: isSelected ? BLUE_VERY_BRIGHT : WHITE,
+                      border: `1.5px solid ${isSelected ? ACCENT : BORDER}`,
+                      borderRadius: RADIUS_MD, padding: '14px 16px',
                       display: 'flex', alignItems: 'center', gap: 14,
                       cursor: 'pointer', transition: 'all 0.15s',
                       textAlign: 'left' as const,
+                      fontFamily: "'Poppins', sans-serif",
                     }}
                   >
                     <div style={{
-                      width: 40, height: 40, borderRadius: 10,
-                      background: isSelected ? BLUE : '#eef1f6',
+                      width: 38, height: 38, borderRadius: RADIUS_SM,
+                      background: isSelected ? ACCENT : GREY_200,
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
                       flexShrink: 0, transition: 'all 0.15s',
                     }}>
-                      <OptIcon size={22} stroke={1.5} color={isSelected ? WHITE : TEXT_MUTED} />
+                      <OptIcon size={20} stroke={1.8} color={isSelected ? WHITE : GREY_800} />
                     </div>
-                    <span style={{ fontSize: 16, fontWeight: 600, color: isSelected ? BLUE_DK : TEXT }}>
+                    <span style={{
+                      fontSize: TEXT_MD - 1, fontWeight: FW_SEMIBOLD,
+                      color: isSelected ? BLUE_DARK : PRIMARY,
+                    }}>
                       {opt.label}
                     </span>
                     {isSelected && (
                       <div style={{
                         marginLeft: 'auto', flexShrink: 0,
-                        width: 24, height: 24, borderRadius: 12,
-                        background: BLUE, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        width: 22, height: 22, borderRadius: 11,
+                        background: ACCENT, display: 'flex', alignItems: 'center', justifyContent: 'center',
                       }}>
-                        <IconCheck size={16} stroke={2} color={WHITE} />
+                        <IconCheck size={14} stroke={2.5} color={WHITE} />
                       </div>
                     )}
                   </motion.button>
@@ -411,10 +389,10 @@ export default function MvpWizard() {
                   onClick={skip}
                   style={{
                     background: 'none', border: 'none', cursor: 'pointer',
-                    fontSize: 13, color: TEXT_DIM, fontWeight: 500,
-                    padding: '10px 0 4px', textAlign: 'center' as const,
+                    fontSize: TEXT_XS + 1, color: GREY_700, fontWeight: FW_MEDIUM,
+                    padding: '12px 0 4px', textAlign: 'center' as const,
                     display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4,
-                    width: '100%',
+                    width: '100%', fontFamily: "'Poppins', sans-serif",
                   }}
                 >
                   Überspringen <IconArrowRight size={13} stroke={1.5} />
@@ -425,46 +403,17 @@ export default function MvpWizard() {
         </AnimatePresence>
       </div>
 
-      {/* ── Bottom nav ────────────────────────────────────── */}
-      <div style={{
-        position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 100,
-        background: 'rgba(255,255,255,0.97)', backdropFilter: 'blur(12px)',
-        borderTop: `1px solid ${BORDER}`,
-        padding: '14px 20px',
-        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-      }}>
-        <button
-          onClick={goBack}
-          style={{
-            background: 'transparent', border: `1.5px solid ${BORDER}`,
-            borderRadius: 12, padding: '10px 16px',
-            fontSize: 14, fontWeight: 600, color: TEXT,
-            cursor: 'pointer', transition: 'all 0.15s',
-            display: 'flex', alignItems: 'center', gap: 6,
-          }}
-        >
-          <IconArrowLeft size={16} /> Zurück
-        </button>
-        <div style={{ fontSize: 12, color: TEXT_MUTED, fontWeight: 500 }}>
-          {step + 1} / {TOTAL}
-        </div>
-        <button
-          onClick={goNext}
-          disabled={!canNext}
-          style={{
-            background: canNext ? BLUE : BORDER,
-            border: 'none', borderRadius: 12,
-            padding: '10px 20px',
-            fontSize: 14, fontWeight: 600, color: canNext ? WHITE : TEXT_DIM,
-            cursor: canNext ? 'pointer' : 'not-allowed',
-            transition: 'all 0.15s',
-            boxShadow: canNext ? `0 2px 8px rgba(42,111,166,0.35)` : 'none',
-            display: 'flex', alignItems: 'center', gap: 6,
-          }}
-        >
-          {isLast ? 'Ergebnis anzeigen' : 'Weiter'} <IconArrowRight size={16} />
-        </button>
-      </div>
+      <WpBottomNav
+        onBack={goBack}
+        onNext={goNext}
+        nextDisabled={!canNext}
+        nextLabel={isLast ? 'Ergebnis anzeigen' : 'Weiter'}
+        middle={
+          <div style={{ fontSize: 12, color: GREY_800, fontWeight: FW_MEDIUM }}>
+            {step + 1} / {TOTAL}
+          </div>
+        }
+      />
     </div>
   );
 }
