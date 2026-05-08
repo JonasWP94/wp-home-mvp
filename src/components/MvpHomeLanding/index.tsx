@@ -1,16 +1,14 @@
-﻿import React from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
-import { IconArrowRight, IconArrowLeft } from '@tabler/icons-react';
-
-// ── Design Tokens ────────────────────────────────────────────────
-const BLUE     = '#2a6fa6';
-const BLUE_LT  = 'rgba(42,111,166,0.08)';
-const ORANGE   = '#F9AA00';
-const DARK     = '#243c47';
-const BG       = '#f3f3f5';
-const WHITE    = '#FFFFFF';
-const BORDER   = '#e3e3e6';
-const TEXT_MUTED = '#828288';
+import { IconArrowRight } from '@tabler/icons-react';
+import {
+  ACCENT, PRIMARY, BG, BORDER, GREY_800,
+  YELLOW,
+  TEXT_MD, TEXT_LG,
+  FW_REGULAR, FW_SEMIBOLD, FW_BOLD,
+  RADIUS_LG, SHADOW_MD,
+} from '../_tokens';
+import WpHeader from '../_WpHeader';
 
 interface Props {
   onStart: () => void;
@@ -19,41 +17,12 @@ interface Props {
 
 export default function MvpHomeLanding({ onStart, onBack }: Props) {
   return (
-    <div style={{ minHeight: '100dvh', background: BG, display: 'flex', flexDirection: 'column' }}>
+    <div style={{
+      minHeight: '100dvh', background: BG, display: 'flex', flexDirection: 'column',
+      fontFamily: "'Poppins', sans-serif",
+    }}>
+      <WpHeader onBack={onBack} />
 
-      {/* ── Header ────────────────────────────────────────── */}
-      <div style={{
-        background: 'rgba(243,243,245,0.95)', backdropFilter: 'blur(12px)',
-        borderBottom: `1px solid ${BORDER}`,
-        padding: '10px 20px',
-        display: 'flex', alignItems: 'center', gap: 8,
-      }}>
-        <img src="/apps/wpilot-home/assets/logo-wp.png" alt="WP" height={30} style={{ objectFit: 'contain' }} />
-        <span style={{
-          background: ORANGE, borderRadius: 6,
-          padding: '2px 7px 3px',
-          fontFamily: "'Poppins', sans-serif",
-          display: 'inline-flex', flexDirection: 'column', alignItems: 'center', lineHeight: 1,
-        }}>
-          <span style={{ fontSize: 11, fontWeight: 800, color: DARK, letterSpacing: '0.06em' }}>HOME</span>
-          <span style={{ fontSize: 7, fontWeight: 500, color: DARK, opacity: 0.7, letterSpacing: '0.04em' }}>beta</span>
-        </span>
-        <div style={{ flex: 1 }} />
-        {onBack && (
-          <button
-            onClick={onBack}
-            style={{
-              background: 'none', border: 'none', cursor: 'pointer',
-              fontSize: 13, color: TEXT_MUTED, fontWeight: 500,
-              display: 'flex', alignItems: 'center', gap: 4, padding: '4px 0',
-            }}
-          >
-            <IconArrowLeft size={14} stroke={1.5} /> Zurück
-          </button>
-        )}
-      </div>
-
-      {/* ── Content ───────────────────────────────────────── */}
       <div style={{
         flex: 1, display: 'flex', flexDirection: 'column',
         alignItems: 'center', justifyContent: 'center',
@@ -79,21 +48,21 @@ export default function MvpHomeLanding({ onStart, onBack }: Props) {
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ type: 'spring', stiffness: 260, damping: 22 }}
-            style={{ marginBottom: 20 }}
+            style={{ marginBottom: 24 }}
           >
             <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg"
-              style={{ width: 80, height: 80, margin: '0 auto', display: 'block' }}>
-              <circle cx="60" cy="60" r="55" fill={BLUE_LT} />
+              style={{ width: 84, height: 84, margin: '0 auto', display: 'block' }}>
+              <circle cx="60" cy="60" r="55" fill="rgba(42,111,166,0.08)" />
               <path d="M60 20 L95 50 L95 95 L25 95 L25 50 Z"
-                fill="rgba(42,111,166,0.18)" stroke={BLUE} strokeWidth="2.5" strokeLinejoin="round" />
+                fill="rgba(42,111,166,0.18)" stroke={ACCENT} strokeWidth="2.5" strokeLinejoin="round" />
               <rect x="50" y="60" width="20" height="35" rx="2"
-                fill={ORANGE} stroke="#E8920A" strokeWidth="1.5" />
+                fill={YELLOW} stroke="#E8920A" strokeWidth="1.5" />
               <rect x="32" y="58" width="14" height="14" rx="2"
                 fill="rgba(42,111,166,0.3)" stroke="rgba(42,111,166,0.5)" strokeWidth="1" />
               <rect x="74" y="58" width="14" height="14" rx="2"
                 fill="rgba(42,111,166,0.3)" stroke="rgba(42,111,166,0.5)" strokeWidth="1" />
               <path d="M60 12 L60 20 M50 18 L60 20 L70 18"
-                stroke={ORANGE} strokeWidth="2.5" strokeLinecap="round" />
+                stroke={YELLOW} strokeWidth="2.5" strokeLinecap="round" />
             </svg>
           </motion.div>
 
@@ -104,12 +73,12 @@ export default function MvpHomeLanding({ onStart, onBack }: Props) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
             style={{
-              fontSize: 32, fontWeight: 800,
-              color: DARK, lineHeight: 1.1, letterSpacing: '-0.025em',
-              marginBottom: 18, textAlign: 'center',
+              fontSize: 32, fontWeight: FW_BOLD,
+              color: PRIMARY, lineHeight: 1.1, letterSpacing: '-0.025em',
+              marginBottom: 16, textAlign: 'center',
             }}
           >
-            Der <span style={{ color: ORANGE }}>CFO</span> für Ihr Wohnzimmer.
+            Der <span style={{ color: YELLOW }}>CFO</span> für Ihr Wohnzimmer.
           </motion.h1>
 
           {/* Subline */}
@@ -118,8 +87,8 @@ export default function MvpHomeLanding({ onStart, onBack }: Props) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.18 }}
             style={{
-              fontSize: 16, color: TEXT_MUTED,
-              lineHeight: 1.6, marginBottom: 28,
+              fontSize: TEXT_MD, color: GREY_800,
+              lineHeight: 1.55, marginBottom: 32, fontWeight: FW_REGULAR,
               maxWidth: 560, marginLeft: 'auto', marginRight: 'auto',
               textAlign: 'center',
             }}
@@ -132,30 +101,31 @@ export default function MvpHomeLanding({ onStart, onBack }: Props) {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.26 }}
-            style={{ display: 'flex', justifyContent: 'center', marginBottom: 28 }}
+            style={{ display: 'flex', justifyContent: 'center', marginBottom: 32 }}
           >
             <button
               className="wp-cta-inline"
               onClick={onStart}
               style={{
                 display: 'none',
-                background: `linear-gradient(135deg, ${ORANGE} 0%, #F59E0B 100%)`,
-                border: 'none', borderRadius: 14,
+                background: YELLOW,
+                border: 'none', borderRadius: RADIUS_LG,
                 padding: '14px 36px',
-                fontSize: 16, fontWeight: 700, color: '#1a1a2e',
+                fontSize: TEXT_LG - 4, fontWeight: FW_SEMIBOLD, color: PRIMARY,
                 cursor: 'pointer', letterSpacing: '-0.01em',
-                boxShadow: `0 4px 20px rgba(249,170,0,0.35)`,
+                boxShadow: SHADOW_MD,
                 alignItems: 'center', gap: 8,
                 transition: 'transform 0.1s, box-shadow 0.1s',
+                fontFamily: "'Poppins', sans-serif",
               }}
-              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = 'scale(1.02)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 6px 28px rgba(249,170,0,0.5)'; }}
-              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = 'scale(1)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 4px 20px rgba(249,170,0,0.35)'; }}
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(-1px)'; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(0)'; }}
             >
               Jetzt loslegen <IconArrowRight size={18} stroke={2} />
             </button>
           </motion.div>
 
-          {/* Trust + optional hint combined */}
+          {/* Trust + optional hint */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -166,7 +136,7 @@ export default function MvpHomeLanding({ onStart, onBack }: Props) {
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
               <div style={{ display: 'flex', alignItems: 'center' }}>
-                {['#2a6fa6', '#24A47D', '#F9AA00'].map((color, i) => (
+                {[ACCENT, '#24A47D', YELLOW].map((color, i) => (
                   <div key={i} style={{
                     width: 26, height: 26, borderRadius: 13,
                     background: color, border: `2px solid ${BG}`,
@@ -176,11 +146,11 @@ export default function MvpHomeLanding({ onStart, onBack }: Props) {
                   }}>👤</div>
                 ))}
               </div>
-              <span style={{ fontSize: 13, color: TEXT_MUTED }}>
-                Bereits <strong style={{ color: DARK }}>400.000+ Haushalte</strong> gespart
+              <span style={{ fontSize: 13, color: GREY_800, fontWeight: FW_REGULAR }}>
+                Bereits <strong style={{ color: PRIMARY, fontWeight: FW_SEMIBOLD }}>400.000+ Haushalte</strong> gespart
               </span>
             </div>
-            <p style={{ fontSize: 12, color: TEXT_MUTED, lineHeight: 1.5, textAlign: 'center', margin: 0 }}>
+            <p style={{ fontSize: 12, color: GREY_800, lineHeight: 1.5, textAlign: 'center', margin: 0 }}>
               Alle Infos optional. Je mehr Infos Sie teilen, desto besser die Spartipps.
             </p>
           </motion.div>
@@ -188,7 +158,7 @@ export default function MvpHomeLanding({ onStart, onBack }: Props) {
         </div>
       </div>
 
-      {/* ── Sticky CTA (mobile only) ───────────────────────── */}
+      {/* Sticky CTA (mobile only) */}
       <div className="wp-cta-sticky" style={{
         position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 100,
         background: 'rgba(255,255,255,0.97)', backdropFilter: 'blur(12px)',
@@ -200,19 +170,19 @@ export default function MvpHomeLanding({ onStart, onBack }: Props) {
           onClick={onStart}
           style={{
             width: '100%',
-            background: `linear-gradient(135deg, ${ORANGE} 0%, #F59E0B 100%)`,
-            border: 'none', borderRadius: 14,
+            background: YELLOW,
+            border: 'none', borderRadius: RADIUS_LG,
             padding: '15px 20px',
-            fontSize: 16, fontWeight: 700, color: '#1a1a2e',
+            fontSize: TEXT_LG - 4, fontWeight: FW_SEMIBOLD, color: PRIMARY,
             cursor: 'pointer', letterSpacing: '-0.01em',
-            boxShadow: `0 4px 20px rgba(249,170,0,0.35)`,
+            boxShadow: SHADOW_MD,
             display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+            fontFamily: "'Poppins', sans-serif",
           }}
         >
           Jetzt loslegen <IconArrowRight size={18} stroke={2} />
         </motion.button>
       </div>
-
     </div>
   );
 }
