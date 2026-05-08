@@ -22,6 +22,7 @@ import MvpDashboard from '../MvpDashboard';
 import MvpThankYou from '../MvpThankYou';
 import MvpHomeLanding from '../MvpHomeLanding';
 import MvpSparZiel, { SparZielData } from '../MvpSparZiel';
+import MvpEssentials, { EssentialsData } from '../MvpEssentials';
 
 // ── Types ────────────────────────────────────────────────────────
 interface MvpProfile {
@@ -33,11 +34,16 @@ interface MvpProfile {
   investitionen: 'keine' | 'gadgets' | 'projekte' | '';
   sparziel: string;
   zeitaufwand: string;
+  steuererklaerung: 'ja' | 'nein' | '';
+  energievertraege: 'ja' | 'nein' | '';
+  girokonto: 'ja' | 'nein' | '';
+  neobroker: 'ja' | 'nein' | '';
 }
 
 const INITIAL: MvpProfile = {
   tenure: '', propertyType: '', heatingType: '', autoType: '', hasChildren: null,
   investitionen: '', sparziel: '', zeitaufwand: '',
+  steuererklaerung: '', energievertraege: '', girokonto: '', neobroker: '',
 };
 
 // ── Design Tokens ────────────────────────────────────────────────
@@ -115,7 +121,7 @@ const STEPS = [
 
 const TOTAL = STEPS.length;
 
-type View = 'intro' | 'landing' | 'sparziel' | 'quiz' | 'loading' | 'results';
+type View = 'intro' | 'landing' | 'sparziel' | 'essentials' | 'quiz' | 'loading' | 'results';
 
 // ── Loading Screen ────────────────────────────────────────────────
 const LOADING_STEPS = [
@@ -229,7 +235,7 @@ export default function MvpWizard() {
   }
 
   function goBack() {
-    if (step === 0) { setView('sparziel'); return; }
+    if (step === 0) { setView('essentials'); return; }
     setDir(-1);
     setStep(s => s - 1);
   }
@@ -250,9 +256,24 @@ export default function MvpWizard() {
     <MvpSparZiel
       onDone={(data: SparZielData) => {
         setProfile(p => ({ ...p, sparziel: data.sparziel, zeitaufwand: data.zeitaufwand, investitionen: data.investitionen as MvpProfile['investitionen'] }));
-        setView('quiz');
+        setView('essentials');
       }}
       onBack={() => setView('landing')}
+    />
+  );
+  if (view === 'essentials') return (
+    <MvpEssentials
+      onDone={(data: EssentialsData) => {
+        setProfile(p => ({
+          ...p,
+          steuererklaerung: data.steuererklaerung,
+          energievertraege: data.energievertraege,
+          girokonto: data.girokonto,
+          neobroker: data.neobroker,
+        }));
+        setView('quiz');
+      }}
+      onBack={() => setView('sparziel')}
     />
   );
   if (view === 'loading') return <LoadingScreen onDone={() => setView('results')} />;
