@@ -6,7 +6,6 @@ import {
   IconReceiptTax,
   IconBolt,
   IconCreditCard,
-  IconChartLine,
 } from '@tabler/icons-react';
 import {
   ACCENT, PRIMARY, BG, WHITE, BORDER, GREY_200, GREY_700, GREY_800,
@@ -22,7 +21,6 @@ export interface EssentialsData {
   steuererklaerung: 'ja' | 'nein' | '';
   energievertraege: 'ja' | 'nein' | '';
   girokonto:        'ja' | 'nein' | '';
-  neobroker:        'ja' | 'nein' | '';
 }
 
 interface Props {
@@ -34,7 +32,6 @@ const QUESTIONS: { key: keyof EssentialsData; label: string; sub: string; Icon: 
   { key: 'steuererklaerung', label: 'Steuererklärung schon erledigt?',     sub: 'Ø 1.095 € Rückerstattung pro Jahr',           Icon: IconReceiptTax },
   { key: 'energievertraege', label: 'Energieverträge optimiert?',          sub: 'Strom & Gas regelmäßig wechseln spart hunderte €', Icon: IconBolt },
   { key: 'girokonto',        label: 'Haben Sie ein kostenloses Girokonto?', sub: 'Bis zu 60 € Kontoführungsgebühren / Jahr',     Icon: IconCreditCard },
-  { key: 'neobroker',        label: 'Kunde bei einem Neo-Broker?',          sub: 'Trade Republic, Scalable Capital o. ä.',       Icon: IconChartLine },
 ];
 
 function YesNoRow({
@@ -105,7 +102,7 @@ function YesNoRow({
 
 export default function MvpEssentials({ onDone, onBack }: Props) {
   const [data, setData] = useState<EssentialsData>({
-    steuererklaerung: '', energievertraege: '', girokonto: '', neobroker: '',
+    steuererklaerung: '', energievertraege: '', girokonto: '',
   });
 
   const allAnswered = QUESTIONS.every(q => data[q.key] !== '');
