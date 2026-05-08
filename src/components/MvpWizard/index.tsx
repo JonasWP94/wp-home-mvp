@@ -192,7 +192,8 @@ export default function MvpWizard() {
             background: ORANGE, borderRadius: 6,
             padding: '3px 7px', letterSpacing: '0.06em',
             fontFamily: "'Poppins', sans-serif",
-          }}>HOME</span>
+            display: 'inline-flex', alignItems: 'baseline', gap: 4,
+          }}>HOME<span style={{ fontSize: 8, fontWeight: 500, letterSpacing: 0, opacity: 0.75 }}>beta</span></span>
         </div>
         <div style={{ flex: 1 }} />
       </div>
