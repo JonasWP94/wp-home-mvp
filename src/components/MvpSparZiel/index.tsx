@@ -1,13 +1,25 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { IconArrowRight, IconArrowLeft, IconCheck } from '@tabler/icons-react';
+import {
+  IconArrowRight,
+  IconArrowLeft,
+  IconTrendingDown,
+  IconBolt,
+  IconLeaf,
+  IconZap,
+  IconClock,
+  IconTool,
+  IconMinus,
+  IconCpu,
+  IconBuildingCommunity,
+  IconCheck,
+} from '@tabler/icons-react';
 
 // ── Design Tokens ────────────────────────────────────────────────
 const BLUE    = '#5782B0';
 const BLUE_LT = '#EDF2F9';
 const BLUE_DK = '#3D5A80';
 const ORANGE  = '#F9AA00';
-const GREEN   = '#0C663B';
 const DARK    = '#2C3E50';
 const BG      = '#F5F6F8';
 const WHITE   = '#FFFFFF';
@@ -19,6 +31,7 @@ const TEXT_DIM = '#A0AEBB';
 export interface SparZielData {
   sparziel: string;
   zeitaufwand: string;
+  investitionen: string;
 }
 
 interface Props {
@@ -27,21 +40,83 @@ interface Props {
 }
 
 const SPARZIELE = [
-  { value: 'Laufende Kosten senken',  sub: 'Monatliche Ausgaben dauerhaft reduzieren', emoji: '📉' },
-  { value: 'Einmalig viel sparen',    sub: 'Den größten Hebel jetzt identifizieren',   emoji: '💥' },
-  { value: 'Ökologisch & sparsam',    sub: 'Nachhaltigkeit und Kostenoptimierung',      emoji: '🌿' },
+  { value: 'Laufende Kosten senken', sub: 'Monatliche Ausgaben dauerhaft reduzieren', Icon: IconTrendingDown },
+  { value: 'Einmalig viel sparen',   sub: 'Den größten Hebel jetzt identifizieren',   Icon: IconBolt },
+  { value: 'Ökologisch & sparsam',   sub: 'Nachhaltigkeit und Kostenoptimierung',      Icon: IconLeaf },
 ];
 
 const ZEITAUFWAND = [
-  { value: 'Mühelos',  sub: 'Sofort umsetzbar',       emoji: '⚡' },
-  { value: 'Moderat',  sub: 'Paar Stunden / Monat',   emoji: '⏱' },
-  { value: 'Intensiv', sub: 'Maximale Ersparnis',      emoji: '🔧' },
+  { value: 'Mühelos',  sub: 'Sofort umsetzbar',       Icon: IconZap },
+  { value: 'Moderat',  sub: 'Paar Stunden / Monat',   Icon: IconClock },
+  { value: 'Intensiv', sub: 'Maximale Ersparnis',      Icon: IconTool },
 ];
 
+const INVESTITIONEN = [
+  { value: 'Keine',           sub: 'Nur kostenfreie Maßnahmen',    Icon: IconMinus },
+  { value: 'Kleine Gadgets',  sub: 'Bis ca. 100 €',                Icon: IconCpu },
+  { value: 'Große Projekte',  sub: 'Sanierung & Umbau möglich',    Icon: IconBuildingCommunity },
+];
+
+// ── Compact settings-row chip ────────────────────────────────────
+function SettingsRow({
+  icon: Icon, label, sub, selected, onClick,
+}: {
+  icon: React.ComponentType<{ size?: number; stroke?: number; color?: string }>;
+  label: string; sub: string; selected: boolean; onClick: () => void;
+}) {
+  return (
+    <motion.button
+      whileTap={{ scale: 0.98 }}
+      onClick={onClick}
+      style={{
+        width: '100%',
+        background: selected ? BLUE_LT : WHITE,
+        border: `1.5px solid ${selected ? BLUE : BORDER}`,
+        borderRadius: 12,
+        padding: '11px 14px',
+        display: 'flex', alignItems: 'center', gap: 12,
+        cursor: 'pointer', transition: 'all 0.15s', textAlign: 'left' as const,
+      }}
+    >
+      <div style={{
+        width: 34, height: 34, borderRadius: 9, flexShrink: 0,
+        background: selected ? BLUE : '#f0f2f5',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        transition: 'all 0.15s',
+      }}>
+        <Icon size={17} stroke={1.8} color={selected ? WHITE : TEXT_MUTED} />
+      </div>
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <div style={{ fontSize: 14, fontWeight: 700, color: selected ? BLUE_DK : TEXT, lineHeight: 1.2 }}>{label}</div>
+        <div style={{ fontSize: 11, color: TEXT_MUTED, marginTop: 1 }}>{sub}</div>
+      </div>
+      {selected && (
+        <div style={{
+          width: 20, height: 20, borderRadius: 10, flexShrink: 0,
+          background: BLUE, display: 'flex', alignItems: 'center', justifyContent: 'center',
+        }}>
+          <IconCheck size={11} stroke={3} color={WHITE} />
+        </div>
+      )}
+    </motion.button>
+  );
+}
+
+// ── Section header ───────────────────────────────────────────────
+function SectionHeader({ label, title }: { label: string; title: string }) {
+  return (
+    <div style={{ marginBottom: 10 }}>
+      <div style={{ fontSize: 10, fontWeight: 700, color: BLUE, letterSpacing: '0.09em', marginBottom: 3 }}>{label}</div>
+      <div style={{ fontSize: 16, fontWeight: 800, color: TEXT }}>{title}</div>
+    </div>
+  );
+}
+
 export default function MvpSparZiel({ onDone, onBack }: Props) {
-  const [sparziel, setSparziel] = useState('');
-  const [zeitaufwand, setZeitaufwand] = useState('');
-  const canContinue = sparziel !== '' && zeitaufwand !== '';
+  const [sparziel, setSparziel]         = useState('');
+  const [zeitaufwand, setZeitaufwand]   = useState('');
+  const [investitionen, setInvestitionen] = useState('');
+  const canContinue = sparziel !== '' && zeitaufwand !== '' && investitionen !== '';
 
   return (
     <div style={{ minHeight: '100dvh', background: BG, display: 'flex', flexDirection: 'column' }}>
@@ -72,104 +147,73 @@ export default function MvpSparZiel({ onDone, onBack }: Props) {
       </div>
 
       {/* ── Content ───────────────────────────────────────── */}
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '32px 20px 120px' }}>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '28px 20px 120px' }}>
         <div style={{ width: '100%', maxWidth: 420 }}>
 
           <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
 
-            {/* Sparziel section */}
-            <div style={{ textAlign: 'center', marginBottom: 24 }}>
+            {/* Page title */}
+            <div style={{ textAlign: 'center', marginBottom: 28 }}>
               <div style={{ fontSize: 11, fontWeight: 600, color: BLUE, letterSpacing: '0.08em', marginBottom: 6 }}>
-                IHR SPARZIEL
+                SCHRITT 1 VON 1
               </div>
               <h1 style={{ fontSize: 22, fontWeight: 800, color: TEXT, lineHeight: 1.3, marginBottom: 8 }}>
-                Was ist Ihr Sparziel?
+                Ihre Präferenzen
               </h1>
               <p style={{ fontSize: 13, color: TEXT_MUTED, lineHeight: 1.5 }}>
-                So sortieren wir die Tipps nach Ihrer Priorität.
+                Damit wir die Tipps optimal auf Sie zuschneiden können.
               </p>
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 32 }}>
-              {SPARZIELE.map(opt => {
-                const sel = sparziel === opt.value;
-                return (
-                  <motion.button
+            {/* ── Sparziel ──────────────────────────────────── */}
+            <div style={{ marginBottom: 24 }}>
+              <SectionHeader label="SPARZIEL" title="Was ist Ihr Sparziel?" />
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                {SPARZIELE.map(opt => (
+                  <SettingsRow
                     key={opt.value}
-                    whileTap={{ scale: 0.97 }}
+                    icon={opt.Icon}
+                    label={opt.value}
+                    sub={opt.sub}
+                    selected={sparziel === opt.value}
                     onClick={() => setSparziel(opt.value)}
-                    style={{
-                      width: '100%',
-                      background: sel ? BLUE_LT : WHITE,
-                      border: sel ? `2px solid ${BLUE}` : `2px solid ${BORDER}`,
-                      borderRadius: 14, padding: '14px 18px',
-                      display: 'flex', alignItems: 'center', gap: 14,
-                      cursor: 'pointer', transition: 'all 0.15s', textAlign: 'left' as const,
-                    }}
-                  >
-                    <div style={{
-                      width: 40, height: 40, borderRadius: 10, flexShrink: 0,
-                      background: sel ? BLUE : '#f3f4f6',
-                      display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      fontSize: 20, transition: 'all 0.15s',
-                    }}>{opt.emoji}</div>
-                    <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ fontSize: 15, fontWeight: 700, color: sel ? BLUE_DK : TEXT, marginBottom: 2 }}>{opt.value}</div>
-                      <div style={{ fontSize: 12, color: TEXT_MUTED }}>{opt.sub}</div>
-                    </div>
-                    {sel && (
-                      <div style={{
-                        width: 24, height: 24, borderRadius: 12, flexShrink: 0,
-                        background: BLUE, display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      }}>
-                        <IconCheck size={14} stroke={2.5} color={WHITE} />
-                      </div>
-                    )}
-                  </motion.button>
-                );
-              })}
-            </div>
-
-            {/* Zeitaufwand section */}
-            <div style={{ textAlign: 'center', marginBottom: 16 }}>
-              <div style={{ fontSize: 11, fontWeight: 600, color: BLUE, letterSpacing: '0.08em', marginBottom: 6 }}>
-                ZEITAUFWAND
+                  />
+                ))}
               </div>
-              <h2 style={{ fontSize: 18, fontWeight: 700, color: TEXT, marginBottom: 6 }}>
-                Wie viel Zeit möchten Sie investieren?
-              </h2>
-              <p style={{ fontSize: 13, color: TEXT_MUTED, lineHeight: 1.5 }}>
-                Wir passen die Vorschläge an Ihren Aufwand an.
-              </p>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10 }}>
-              {ZEITAUFWAND.map(opt => {
-                const sel = zeitaufwand === opt.value;
-                return (
-                  <motion.button
+            {/* ── Zeitaufwand ───────────────────────────────── */}
+            <div style={{ marginBottom: 24 }}>
+              <SectionHeader label="ZEITAUFWAND" title="Wie viel Zeit möchten Sie investieren?" />
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                {ZEITAUFWAND.map(opt => (
+                  <SettingsRow
                     key={opt.value}
-                    whileTap={{ scale: 0.97 }}
+                    icon={opt.Icon}
+                    label={opt.value}
+                    sub={opt.sub}
+                    selected={zeitaufwand === opt.value}
                     onClick={() => setZeitaufwand(opt.value)}
-                    style={{
-                      background: sel ? BLUE_LT : WHITE,
-                      border: sel ? `2px solid ${BLUE}` : `2px solid ${BORDER}`,
-                      borderRadius: 14, padding: '14px 10px',
-                      display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6,
-                      cursor: 'pointer', transition: 'all 0.15s',
-                    }}
-                  >
-                    <div style={{
-                      width: 40, height: 40, borderRadius: 10,
-                      background: sel ? BLUE : '#f3f4f6',
-                      display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      fontSize: 20, transition: 'all 0.15s',
-                    }}>{opt.emoji}</div>
-                    <span style={{ fontSize: 13, fontWeight: 700, color: sel ? BLUE_DK : TEXT }}>{opt.value}</span>
-                    <span style={{ fontSize: 10, color: TEXT_MUTED, textAlign: 'center' as const, lineHeight: 1.3 }}>{opt.sub}</span>
-                  </motion.button>
-                );
-              })}
+                  />
+                ))}
+              </div>
+            </div>
+
+            {/* ── Investitionen ─────────────────────────────── */}
+            <div style={{ marginBottom: 8 }}>
+              <SectionHeader label="INVESTITIONSBEREITSCHAFT" title="Was sind Sie bereit zu investieren?" />
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                {INVESTITIONEN.map(opt => (
+                  <SettingsRow
+                    key={opt.value}
+                    icon={opt.Icon}
+                    label={opt.value}
+                    sub={opt.sub}
+                    selected={investitionen === opt.value}
+                    onClick={() => setInvestitionen(opt.value)}
+                  />
+                ))}
+              </div>
             </div>
 
           </motion.div>
@@ -196,7 +240,7 @@ export default function MvpSparZiel({ onDone, onBack }: Props) {
           <IconArrowLeft size={16} /> Zurück
         </button>
         <button
-          onClick={() => canContinue && onDone({ sparziel, zeitaufwand })}
+          onClick={() => canContinue && onDone({ sparziel, zeitaufwand, investitionen })}
           disabled={!canContinue}
           style={{
             background: canContinue ? BLUE : BORDER,
