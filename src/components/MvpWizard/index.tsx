@@ -109,7 +109,81 @@ const STEPS = [
 
 const TOTAL = STEPS.length;
 
-type View = 'intro' | 'landing' | 'quiz' | 'results';
+type View = 'intro' | 'landing' | 'quiz' | 'loading' | 'results';
+
+// ── Loading Screen ────────────────────────────────────────────────
+const LOADING_STEPS = [
+  'Antworten werden ausgewertet …',
+  'Spartipps werden personalisiert …',
+  'Ihr Spar-Dashboard wird erstellt …',
+];
+
+function LoadingScreen({ onDone }: { onDone: () => void }) {
+  const [idx, setIdx] = React.useState(0);
+  const [barPct, setBarPct] = React.useState(0);
+
+  React.useEffect(() => {
+    const duration = 2400;
+    const start = performance.now();
+    let rafId: number;
+
+    function tick(now: number) {
+      const pct = Math.min((now - start) / duration, 1);
+      setBarPct(pct);
+      const stepIdx = Math.min(Math.floor(pct * LOADING_STEPS.length), LOADING_STEPS.length - 1);
+      setIdx(stepIdx);
+      if (pct < 1) {
+        rafId = requestAnimationFrame(tick);
+      } else {
+        setTimeout(onDone, 120);
+      }
+    }
+    rafId = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(rafId);
+  }, []);
+
+  return (
+    <div style={{
+      minHeight: '100dvh', background: BG,
+      display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+      padding: '40px 24px',
+    }}>
+      {/* Spinner */}
+      <motion.div
+        animate={{ rotate: 360 }}
+        transition={{ repeat: Infinity, duration: 1, ease: 'linear' }}
+        style={{
+          width: 52, height: 52, borderRadius: 26,
+          border: `3px solid ${BLUE_LT}`,
+          borderTopColor: BLUE,
+          marginBottom: 28,
+        }}
+      />
+
+      {/* Label */}
+      <AnimatePresence mode="wait">
+        <motion.p
+          key={idx}
+          initial={{ opacity: 0, y: 6 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -6 }}
+          transition={{ duration: 0.25 }}
+          style={{ fontSize: 15, fontWeight: 600, color: TEXT, marginBottom: 24, textAlign: 'center' }}
+        >
+          {LOADING_STEPS[idx]}
+        </motion.p>
+      </AnimatePresence>
+
+      {/* Progress bar */}
+      <div style={{ width: '100%', maxWidth: 280, height: 4, background: BORDER, borderRadius: 2, overflow: 'hidden' }}>
+        <div style={{
+          height: '100%', background: BLUE, borderRadius: 2,
+          width: `${barPct * 100}%`, transition: 'width 0.05s linear',
+        }} />
+      </div>
+    </div>
+  );
+}
 
 // ── Main Component ────────────────────────────────────────────────
 export default function MvpWizard() {
@@ -132,7 +206,7 @@ export default function MvpWizard() {
   function finish(fp: MvpProfile) {
     localStorage.setItem('wpilot_mvp_profile', JSON.stringify(fp));
     setFinalProfile(fp);
-    setView('results');
+    setView('loading');
   }
 
   function goNext() {
@@ -166,6 +240,7 @@ export default function MvpWizard() {
 
   if (view === 'intro') return <MvpThankYou onStart={() => setView('landing')} />;
   if (view === 'landing') return <MvpHomeLanding onStart={() => setView('quiz')} onBack={() => setView('intro')} />;
+  if (view === 'loading') return <LoadingScreen onDone={() => setView('results')} />;
   if (view === 'results' && finalProfile) return <MvpDashboard initialProfile={finalProfile} />;
 
   const slideVariants = {
@@ -243,19 +318,6 @@ export default function MvpWizard() {
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-              {isLast && (
-                <button
-                  onClick={skip}
-                  style={{
-                    background: 'none', border: 'none', cursor: 'pointer',
-                    fontSize: 13, color: TEXT_DIM, fontWeight: 500,
-                    padding: '4px 0 10px', textAlign: 'right' as const,
-                    display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 4,
-                  }}
-                >
-                  Überspringen <IconArrowRight size={13} stroke={1.5} />
-                </button>
-              )}
               {current.options.map(opt => {
                 const isSelected = String(currentValue) === String(opt.value);
                 const OptIcon = opt.icon;
@@ -308,6 +370,20 @@ export default function MvpWizard() {
                   </motion.button>
                 );
               })}
+              {isLast && (
+                <button
+                  onClick={skip}
+                  style={{
+                    background: 'none', border: 'none', cursor: 'pointer',
+                    fontSize: 13, color: TEXT_DIM, fontWeight: 500,
+                    padding: '10px 0 4px', textAlign: 'center' as const,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4,
+                    width: '100%',
+                  }}
+                >
+                  Überspringen <IconArrowRight size={13} stroke={1.5} />
+                </button>
+              )}
             </div>
           </motion.div>
         </AnimatePresence>
