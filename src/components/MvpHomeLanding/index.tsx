@@ -183,6 +183,19 @@ export default function MvpHomeLanding({ onStart, onBack }: Props) {
             </span>
           </motion.div>
 
+          {/* Privacy / optional hint */}
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.46 }}
+            style={{
+              fontSize: 12, color: TEXT_MUTED, lineHeight: 1.5,
+              marginTop: 18, textAlign: 'center',
+            }}
+          >
+            Alle Infos optional. Je mehr Infos Sie teilen, desto besser die Spartipps.
+          </motion.p>
+
         </div>
       </div>
 
