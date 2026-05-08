@@ -1,8 +1,6 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import {
-  IconArrowRight,
-  IconArrowLeft,
   IconCheck,
   IconX,
   IconReceiptTax,
@@ -10,26 +8,21 @@ import {
   IconCreditCard,
   IconChartLine,
 } from '@tabler/icons-react';
-
-// ── Design Tokens ────────────────────────────────────────────────
-const BLUE    = '#2a6fa6';
-const BLUE_LT = '#eef1f6';
-const BLUE_DK = '#18466a';
-const ORANGE  = '#F9AA00';
-const GREEN   = '#167a52';
-const DARK    = '#243c47';
-const BG      = '#f3f3f5';
-const WHITE   = '#FFFFFF';
-const BORDER  = '#e3e3e6';
-const TEXT    = DARK;
-const TEXT_MUTED = '#828288';
-const TEXT_DIM = '#a3a3a8';
+import {
+  ACCENT, PRIMARY, BG, WHITE, BORDER, GREY_200, GREY_700, GREY_800,
+  GREEN, GREY_500,
+  RADIUS_MD, RADIUS_SM,
+  TEXT_XS, TEXT_SM, TEXT_LG,
+  FW_REGULAR, FW_SEMIBOLD, FW_BOLD,
+} from '../_tokens';
+import WpHeader from '../_WpHeader';
+import WpBottomNav from '../_WpBottomNav';
 
 export interface EssentialsData {
   steuererklaerung: 'ja' | 'nein' | '';
   energievertraege: 'ja' | 'nein' | '';
-  girokonto: 'ja' | 'nein' | '';
-  neobroker: 'ja' | 'nein' | '';
+  girokonto:        'ja' | 'nein' | '';
+  neobroker:        'ja' | 'nein' | '';
 }
 
 interface Props {
@@ -38,10 +31,10 @@ interface Props {
 }
 
 const QUESTIONS: { key: keyof EssentialsData; label: string; sub: string; Icon: React.ComponentType<{ size?: number; stroke?: number; color?: string }> }[] = [
-  { key: 'steuererklaerung', label: 'Steuererklärung schon erledigt?', sub: 'Durchschnittlich 1.095 € Rückerstattung pro Jahr', Icon: IconReceiptTax },
-  { key: 'energievertraege', label: 'Energieverträge optimiert?',       sub: 'Strom & Gas regelmäßig wechseln spart hunderte €', Icon: IconBolt },
-  { key: 'girokonto',        label: 'Haben Sie ein kostenloses Girokonto?', sub: 'Bis zu 60 € jährlich an Kontoführungsgebühren sparen', Icon: IconCreditCard },
-  { key: 'neobroker',        label: 'Kunde bei einem Neo-Broker?',       sub: 'Trade Republic, Scalable Capital o. ä.',           Icon: IconChartLine },
+  { key: 'steuererklaerung', label: 'Steuererklärung schon erledigt?',     sub: 'Ø 1.095 € Rückerstattung pro Jahr',           Icon: IconReceiptTax },
+  { key: 'energievertraege', label: 'Energieverträge optimiert?',          sub: 'Strom & Gas regelmäßig wechseln spart hunderte €', Icon: IconBolt },
+  { key: 'girokonto',        label: 'Haben Sie ein kostenloses Girokonto?', sub: 'Bis zu 60 € Kontoführungsgebühren / Jahr',     Icon: IconCreditCard },
+  { key: 'neobroker',        label: 'Kunde bei einem Neo-Broker?',          sub: 'Trade Republic, Scalable Capital o. ä.',       Icon: IconChartLine },
 ];
 
 function YesNoRow({
@@ -56,33 +49,35 @@ function YesNoRow({
     <div style={{
       background: WHITE,
       border: `1.5px solid ${BORDER}`,
-      borderRadius: 12,
-      padding: '12px 14px',
-      display: 'flex', alignItems: 'center', gap: 12,
+      borderRadius: RADIUS_MD,
+      padding: '14px 16px',
+      display: 'flex', alignItems: 'center', gap: 14,
+      transition: 'all 0.15s',
     }}>
       <div style={{
-        width: 34, height: 34, borderRadius: 9, flexShrink: 0,
-        background: '#eef1f6',
+        width: 40, height: 40, borderRadius: RADIUS_SM, flexShrink: 0,
+        background: GREY_200,
         display: 'flex', alignItems: 'center', justifyContent: 'center',
       }}>
-        <Icon size={17} stroke={1.8} color={TEXT_MUTED} />
+        <Icon size={20} stroke={1.8} color={GREY_800} />
       </div>
       <div style={{ flex: 1, minWidth: 0 }}>
-        <div style={{ fontSize: 14, fontWeight: 700, color: TEXT, lineHeight: 1.2 }}>{label}</div>
-        <div style={{ fontSize: 11, color: TEXT_MUTED, marginTop: 1 }}>{sub}</div>
+        <div style={{ fontSize: TEXT_SM, fontWeight: FW_SEMIBOLD, color: PRIMARY, lineHeight: 1.25 }}>{label}</div>
+        <div style={{ fontSize: TEXT_XS, fontWeight: FW_REGULAR, color: GREY_800, marginTop: 2, lineHeight: 1.4 }}>{sub}</div>
       </div>
       <div style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
         <motion.button
           whileTap={{ scale: 0.92 }}
           onClick={() => onChange('ja')}
           style={{
-            width: 44, height: 32, borderRadius: 8,
+            minWidth: 50, height: 34, borderRadius: RADIUS_SM,
             background: value === 'ja' ? GREEN : WHITE,
             border: `1.5px solid ${value === 'ja' ? GREEN : BORDER}`,
-            color: value === 'ja' ? WHITE : TEXT_MUTED,
-            fontSize: 12, fontWeight: 700,
+            color: value === 'ja' ? WHITE : GREY_700,
+            fontSize: TEXT_XS, fontWeight: FW_SEMIBOLD,
             cursor: 'pointer', transition: 'all 0.15s',
-            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 3,
+            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4,
+            fontFamily: "'Poppins', sans-serif",
           }}
         >
           <IconCheck size={13} stroke={2.5} /> Ja
@@ -91,13 +86,14 @@ function YesNoRow({
           whileTap={{ scale: 0.92 }}
           onClick={() => onChange('nein')}
           style={{
-            width: 50, height: 32, borderRadius: 8,
-            background: value === 'nein' ? '#94a3b8' : WHITE,
-            border: `1.5px solid ${value === 'nein' ? '#94a3b8' : BORDER}`,
-            color: value === 'nein' ? WHITE : TEXT_MUTED,
-            fontSize: 12, fontWeight: 700,
+            minWidth: 56, height: 34, borderRadius: RADIUS_SM,
+            background: value === 'nein' ? GREY_500 : WHITE,
+            border: `1.5px solid ${value === 'nein' ? GREY_500 : BORDER}`,
+            color: value === 'nein' ? WHITE : GREY_700,
+            fontSize: TEXT_XS, fontWeight: FW_SEMIBOLD,
             cursor: 'pointer', transition: 'all 0.15s',
-            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 3,
+            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4,
+            fontFamily: "'Poppins', sans-serif",
           }}
         >
           <IconX size={13} stroke={2.5} /> Nein
@@ -115,53 +111,36 @@ export default function MvpEssentials({ onDone, onBack }: Props) {
   const allAnswered = QUESTIONS.every(q => data[q.key] !== '');
 
   return (
-    <div style={{ minHeight: '100dvh', background: BG, display: 'flex', flexDirection: 'column' }}>
+    <div style={{
+      minHeight: '100dvh', background: BG, display: 'flex', flexDirection: 'column',
+      fontFamily: "'Poppins', sans-serif",
+    }}>
+      <WpHeader showProgress progressPct={35} />
 
-      {/* ── Header ────────────────────────────────────────── */}
-      <div style={{
-        position: 'sticky', top: 0, zIndex: 100,
-        background: 'rgba(243,243,245,0.95)', backdropFilter: 'blur(12px)',
-        borderBottom: `1px solid ${BORDER}`,
-        padding: '10px 20px',
-        display: 'flex', alignItems: 'center', gap: 8,
-      }}>
-        <img src="/apps/wpilot-home/assets/logo-wp.png" alt="WP" height={30} style={{ objectFit: 'contain' }} />
-        <span style={{
-          background: ORANGE, borderRadius: 6, padding: '2px 7px 3px',
-          fontFamily: "'Poppins', sans-serif",
-          display: 'inline-flex', flexDirection: 'column', alignItems: 'center', lineHeight: 1,
-        }}>
-          <span style={{ fontSize: 11, fontWeight: 800, color: DARK, letterSpacing: '0.06em' }}>HOME</span>
-          <span style={{ fontSize: 7, fontWeight: 500, color: DARK, opacity: 0.7, letterSpacing: '0.04em' }}>beta</span>
-        </span>
-        <div style={{ flex: 1 }} />
-      </div>
-
-      {/* ── Progress bar ──────────────────────────────────── */}
-      <div style={{ height: 3, background: BORDER }}>
-        <div style={{ height: '100%', background: BLUE, width: '20%', transition: 'width 0.3s' }} />
-      </div>
-
-      {/* ── Content ───────────────────────────────────────── */}
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '28px 20px 120px' }}>
-        <div style={{ width: '100%', maxWidth: 480 }}>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '32px 24px 120px' }}>
+        <div style={{ width: '100%', maxWidth: 560 }}>
 
           <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
 
-            {/* Page title */}
-            <div style={{ textAlign: 'center', marginBottom: 24 }}>
-              <div style={{ fontSize: 11, fontWeight: 600, color: BLUE, letterSpacing: '0.08em', marginBottom: 6 }}>
+            <div style={{ textAlign: 'center', marginBottom: 28 }}>
+              <div style={{
+                fontSize: 11, fontWeight: FW_BOLD, color: ACCENT,
+                letterSpacing: '0.1em', marginBottom: 8,
+              }}>
                 ESSENTIELLE TIPPS
               </div>
-              <h1 style={{ fontSize: 22, fontWeight: 800, color: TEXT, lineHeight: 1.3, marginBottom: 8 }}>
+              <h1 style={{
+                fontSize: TEXT_LG + 4, fontWeight: FW_SEMIBOLD,
+                color: PRIMARY, lineHeight: 1.25, marginBottom: 8,
+                letterSpacing: '-0.01em',
+              }}>
                 Haben Sie die Basics schon erledigt?
               </h1>
-              <p style={{ fontSize: 13, color: TEXT_MUTED, lineHeight: 1.5 }}>
+              <p style={{ fontSize: TEXT_SM, color: GREY_800, lineHeight: 1.55, fontWeight: FW_REGULAR }}>
                 Diese vier Themen bringen den meisten Haushalten jährlich vierstellige Beträge.
               </p>
             </div>
 
-            {/* Questions */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
               {QUESTIONS.map(q => (
                 <YesNoRow
@@ -179,41 +158,11 @@ export default function MvpEssentials({ onDone, onBack }: Props) {
         </div>
       </div>
 
-      {/* ── Bottom nav ────────────────────────────────────── */}
-      <div style={{
-        position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 100,
-        background: 'rgba(255,255,255,0.97)', backdropFilter: 'blur(12px)',
-        borderTop: `1px solid ${BORDER}`,
-        padding: '14px 20px',
-        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-      }}>
-        <button
-          onClick={onBack}
-          style={{
-            background: 'transparent', border: `1.5px solid ${BORDER}`,
-            borderRadius: 12, padding: '10px 16px',
-            fontSize: 14, fontWeight: 600, color: TEXT,
-            cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6,
-          }}
-        >
-          <IconArrowLeft size={16} /> Zurück
-        </button>
-        <button
-          onClick={() => allAnswered && onDone(data)}
-          disabled={!allAnswered}
-          style={{
-            background: allAnswered ? BLUE : BORDER,
-            border: 'none', borderRadius: 12, padding: '10px 20px',
-            fontSize: 14, fontWeight: 600, color: allAnswered ? WHITE : TEXT_DIM,
-            cursor: allAnswered ? 'pointer' : 'not-allowed', transition: 'all 0.15s',
-            boxShadow: allAnswered ? `0 2px 8px rgba(42,111,166,0.35)` : 'none',
-            display: 'flex', alignItems: 'center', gap: 6,
-          }}
-        >
-          Weiter <IconArrowRight size={16} />
-        </button>
-      </div>
-
+      <WpBottomNav
+        onBack={onBack}
+        onNext={() => allAnswered && onDone(data)}
+        nextDisabled={!allAnswered}
+      />
     </div>
   );
 }
