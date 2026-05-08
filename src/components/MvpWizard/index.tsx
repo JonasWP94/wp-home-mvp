@@ -45,13 +45,12 @@ interface MvpProfile {
   steuererklaerung: 'ja' | 'nein' | '';
   energievertraege: 'ja' | 'nein' | '';
   girokonto: 'ja' | 'nein' | '';
-  neobroker: 'ja' | 'nein' | '';
 }
 
 const INITIAL: MvpProfile = {
   tenure: '', propertyType: '', heatingType: '', autoType: '', hasChildren: null,
   investitionen: '', sparziel: '', zeitaufwand: '',
-  steuererklaerung: '', energievertraege: '', girokonto: '', neobroker: '',
+  steuererklaerung: '', energievertraege: '', girokonto: '',
 };
 
 // ── Step Definitions ─────────────────────────────────────────────
@@ -263,7 +262,6 @@ export default function MvpWizard() {
           steuererklaerung: data.steuererklaerung,
           energievertraege: data.energievertraege,
           girokonto: data.girokonto,
-          neobroker: data.neobroker,
         }));
         setView('quiz');
       }}
