@@ -21,18 +21,23 @@ import {
 import MvpDashboard from '../MvpDashboard';
 import MvpThankYou from '../MvpThankYou';
 import MvpHomeLanding from '../MvpHomeLanding';
+import MvpSparZiel, { SparZielData } from '../MvpSparZiel';
 
 // ── Types ────────────────────────────────────────────────────────
 interface MvpProfile {
   tenure: 'miete' | 'eigentum' | '';
   propertyType: 'wohnung' | 'haus' | '';
-  heatingType: 'gas' | 'oel' | 'strom' | 'waermepumpe' | '';
+  heatingType: 'gas' | 'oel' | 'strom' | 'waermepumpe' | 'weiss_nicht' | '';
   autoType: 'verbrenner' | 'eauto' | 'hybrid' | 'keins' | '';
   hasChildren: boolean | null;
+  investitionen: 'keine' | 'gadgets' | 'projekte' | '';
+  sparziel: string;
+  zeitaufwand: string;
 }
 
 const INITIAL: MvpProfile = {
   tenure: '', propertyType: '', heatingType: '', autoType: '', hasChildren: null,
+  investitionen: '', sparziel: '', zeitaufwand: '',
 };
 
 // ── Design Tokens ────────────────────────────────────────────────
@@ -51,6 +56,17 @@ const TEXT_DIM = '#A0AEBB';
 
 // ── Step Definitions ─────────────────────────────────────────────
 const STEPS = [
+  {
+    key: 'investitionen' as const,
+    icon: IconBolt,
+    title: 'Wie viel möchten Sie investieren?',
+    sub: 'Wir passen Ihre Spartipps auf Ihren Investitionsrahmen an.',
+    options: [
+      { value: 'keine',    label: 'Keine',           icon: IconUser },
+      { value: 'gadgets',  label: 'Kleine Gadgets',  icon: IconPlug },
+      { value: 'projekte', label: 'Große Projekte',  icon: IconHome },
+    ],
+  },
   {
     key: 'propertyType' as const,
     icon: IconBuilding,
@@ -77,10 +93,11 @@ const STEPS = [
     title: 'Wie heizen Sie aktuell?',
     sub: 'Wir prüfen, ob Sie beim Heizen sparen oder von einem günstigeren System profitieren können.',
     options: [
-      { value: 'gas',        label: 'Gas',        icon: IconFlame },
-      { value: 'oel',        label: 'Öl',         icon: IconDroplet },
-      { value: 'strom',      label: 'Strom',      icon: IconBolt },
-      { value: 'waermepumpe', label: 'Wärmepumpe', icon: IconLeaf },
+      { value: 'gas',          label: 'Gas',            icon: IconFlame },
+      { value: 'oel',          label: 'Öl',             icon: IconDroplet },
+      { value: 'strom',        label: 'Strom',          icon: IconBolt },
+      { value: 'waermepumpe',  label: 'Wärmepumpe',     icon: IconLeaf },
+      { value: 'weiss_nicht',  label: 'Weiß ich nicht', icon: IconUser },
     ],
   },
   {
@@ -109,7 +126,7 @@ const STEPS = [
 
 const TOTAL = STEPS.length;
 
-type View = 'intro' | 'landing' | 'quiz' | 'loading' | 'results';
+type View = 'intro' | 'landing' | 'sparziel' | 'quiz' | 'loading' | 'results';
 
 // ── Loading Screen ────────────────────────────────────────────────
 const LOADING_STEPS = [
@@ -223,7 +240,7 @@ export default function MvpWizard() {
   }
 
   function goBack() {
-    if (step === 0) { setView('landing'); return; }
+    if (step === 0) { setView('sparziel'); return; }
     setDir(-1);
     setStep(s => s - 1);
   }
@@ -239,7 +256,16 @@ export default function MvpWizard() {
   }, [canNext, step, view]);
 
   if (view === 'intro') return <MvpThankYou onStart={() => setView('landing')} />;
-  if (view === 'landing') return <MvpHomeLanding onStart={() => setView('quiz')} onBack={() => setView('intro')} />;
+  if (view === 'landing') return <MvpHomeLanding onStart={() => setView('sparziel')} onBack={() => setView('intro')} />;
+  if (view === 'sparziel') return (
+    <MvpSparZiel
+      onDone={(data: SparZielData) => {
+        setProfile(p => ({ ...p, sparziel: data.sparziel, zeitaufwand: data.zeitaufwand }));
+        setView('quiz');
+      }}
+      onBack={() => setView('landing')}
+    />
+  );
   if (view === 'loading') return <LoadingScreen onDone={() => setView('results')} />;
   if (view === 'results' && finalProfile) return <MvpDashboard initialProfile={finalProfile} />;
 
