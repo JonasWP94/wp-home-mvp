@@ -57,17 +57,6 @@ const TEXT_DIM = '#A0AEBB';
 // ── Step Definitions ─────────────────────────────────────────────
 const STEPS = [
   {
-    key: 'investitionen' as const,
-    icon: IconBolt,
-    title: 'Wie viel möchten Sie investieren?',
-    sub: 'Wir passen Ihre Spartipps auf Ihren Investitionsrahmen an.',
-    options: [
-      { value: 'keine',    label: 'Keine',           icon: IconUser },
-      { value: 'gadgets',  label: 'Kleine Gadgets',  icon: IconPlug },
-      { value: 'projekte', label: 'Große Projekte',  icon: IconHome },
-    ],
-  },
-  {
     key: 'propertyType' as const,
     icon: IconBuilding,
     title: 'Wohnen Sie in einer Wohnung oder einem Haus?',
@@ -260,7 +249,7 @@ export default function MvpWizard() {
   if (view === 'sparziel') return (
     <MvpSparZiel
       onDone={(data: SparZielData) => {
-        setProfile(p => ({ ...p, sparziel: data.sparziel, zeitaufwand: data.zeitaufwand }));
+        setProfile(p => ({ ...p, sparziel: data.sparziel, zeitaufwand: data.zeitaufwand, investitionen: data.investitionen as MvpProfile['investitionen'] }));
         setView('quiz');
       }}
       onBack={() => setView('landing')}
