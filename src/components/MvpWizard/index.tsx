@@ -57,7 +57,7 @@ const STEPS = [
     sub: 'Damit empfehlen wir Ihnen die passenden Energiespar-Optionen für Ihre Wohnsituation.',
     options: [
       { value: 'wohnung', label: 'Wohnung', icon: IconBuilding },
-      { value: 'haus',    label: 'Haus / EFH', icon: IconHome },
+      { value: 'haus',    label: 'Haus', icon: IconHome },
     ],
   },
   {
@@ -141,6 +141,12 @@ export default function MvpWizard() {
     setStep(s => s + 1);
   }
 
+  function skip() {
+    if (isLast) { finish(profile); return; }
+    setDir(1);
+    setStep(s => s + 1);
+  }
+
   function goBack() {
     if (step === 0) { setView('intro'); return; }
     setDir(-1);
@@ -181,15 +187,7 @@ export default function MvpWizard() {
           <img src="/apps/wpilot-home/assets/logo-wp.png" alt="WP" height={22} style={{ objectFit: 'contain' }} />
           <span style={{ fontSize: 13, fontWeight: 700, color: TEXT, fontFamily: "'Poppins', sans-serif", letterSpacing: '0.05em' }}>HOME</span>
         </div>
-        <div style={{ display: 'flex', gap: 6, flex: 1, justifyContent: 'center' }}>
-          {STEPS.map((_, i) => (
-            <div key={i} style={{
-              width: i === step ? 24 : 8, height: 8, borderRadius: 4,
-              background: i <= step ? BLUE : BORDER,
-              transition: 'all 0.3s', flexShrink: 0,
-            }} />
-          ))}
-        </div>
+        <div style={{ flex: 1 }} />
       </div>
 
       {/* ── Progress bar ──────────────────────────────────── */}
@@ -235,6 +233,19 @@ export default function MvpWizard() {
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+              {isLast && (
+                <button
+                  onClick={skip}
+                  style={{
+                    background: 'none', border: 'none', cursor: 'pointer',
+                    fontSize: 13, color: TEXT_DIM, fontWeight: 500,
+                    padding: '4px 0 10px', textAlign: 'right' as const,
+                    display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 4,
+                  }}
+                >
+                  Überspringen <IconArrowRight size={13} stroke={1.5} />
+                </button>
+              )}
               {current.options.map(opt => {
                 const isSelected = String(currentValue) === String(opt.value);
                 const OptIcon = opt.icon;
