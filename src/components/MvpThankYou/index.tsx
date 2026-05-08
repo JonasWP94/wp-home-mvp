@@ -68,7 +68,7 @@ export default function MvpThankYou({ onStart }: Props = {}) {
       </div>
 
       {/* ── Content ───────────────────────────────────────── */}
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '20px 20px 24px' }}>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '20px 20px 24px' }}>
         <div style={{ width: '100%', maxWidth: 780 }}>
 
           {/* Checkmark + Headline */}
@@ -168,6 +168,7 @@ export default function MvpThankYou({ onStart }: Props = {}) {
             {/* Card 2 – Freunde einladen */}
             <motion.button
               whileTap={{ scale: 0.98 }}
+              onClick={() => { window.location.href = 'https://konto.wechselpilot.com/freunde-werben'; }}
               style={{
                 width: '100%', background: WHITE,
                 border: `2px solid ${BORDER}`, borderRadius: 14,
