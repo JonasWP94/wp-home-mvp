@@ -234,22 +234,23 @@ function SavingsPill({ amount }: { amount: string }) {
           <IconCheck size={24} stroke={2.8} color={WHITE} />
         </motion.div>
 
-        {/* Text block — width:0 initially so check disc stays centered in 64px circle */}
+        {/* Text block — maxWidth:0 initially so check disc stays centered in 64px circle */}
         <motion.div
-          initial={{ width: 0, opacity: 0 }}
-          animate={{ width: 'auto', opacity: 1 }}
+          initial={{ maxWidth: 0, opacity: 0 }}
+          animate={{ maxWidth: '100%', opacity: 1 }}
           transition={{
-            width:   { delay: 1.65, duration: 0.4 },
-            opacity: { delay: 1.7,  duration: 0.3 },
+            maxWidth: { delay: 1.65, duration: 0.4 },
+            opacity:  { delay: 1.7,  duration: 0.3 },
           }}
           style={{
-            flex: 'none',
+            flex: 1,
             display: 'flex', alignItems: 'center',
+            justifyContent: 'space-between',
             overflow: 'hidden', whiteSpace: 'nowrap',
           }}
         >
           <span style={{
-            paddingLeft: 14, paddingRight: 14,
+            paddingLeft: 14,
             fontSize: 14, fontWeight: FW_REGULAR,
             letterSpacing: '-0.01em', fontFamily: "'Poppins', sans-serif",
           }}>
@@ -257,7 +258,7 @@ function SavingsPill({ amount }: { amount: string }) {
           </span>
           <span style={{
             fontSize: 19, fontWeight: FW_BOLD,
-            letterSpacing: '-0.01em', paddingRight: 22,
+            letterSpacing: '-0.01em', paddingRight: 22, paddingLeft: 14,
             fontFamily: "'Poppins', sans-serif",
           }}>
             {amount}
