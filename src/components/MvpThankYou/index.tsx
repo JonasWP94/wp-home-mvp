@@ -38,7 +38,7 @@ export default function MvpThankYou({ onStart }: Props = {}) {
       <WpHeader
         rightSlot={
           <button
-            onClick={() => { window.location.href = '/apps/wpilot-home/mvp-dashboard.html'; }}
+            onClick={() => { window.location.href = 'https://konto.wechselpilot.com/übersicht'; }}
             style={{
               background: WHITE, border: `1.5px solid ${BORDER}`,
               borderRadius: RADIUS_SM, padding: '6px 12px',
