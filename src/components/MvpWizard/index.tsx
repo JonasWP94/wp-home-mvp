@@ -61,11 +61,11 @@ const STEPS = [
   {
     key: 'propertyType' as const,
     icon: IconBuilding,
-    title: 'Wohnen Sie in einer Wohnung oder einem Haus?',
+    title: 'Wohnen Sie in einem Haus oder in einer Wohnung?',
     sub: 'Damit empfehlen wir Ihnen die passenden Energiespar-Optionen für Ihre Wohnsituation.',
     options: [
-      { value: 'wohnung', label: 'Wohnung', icon: IconBuilding },
       { value: 'haus',    label: 'Haus',    icon: IconHome },
+      { value: 'wohnung', label: 'Wohnung', icon: IconBuilding },
     ],
   },
   {
