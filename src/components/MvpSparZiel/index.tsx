@@ -48,7 +48,7 @@ const ZEITAUFWAND = [
 const INVESTITIONEN = [
   { value: 'Keine',           sub: 'Nur kostenfrei',          Icon: IconMinus },
   { value: 'Kleine Gadgets',  sub: 'Bis ca. 100 €',           Icon: IconCpu },
-  { value: 'Große Projekte',  sub: 'Sanierung & Umbau',       Icon: IconBuildingCommunity },
+  { value: 'Größere Projekte', sub: 'Sanierung & Umbau',       Icon: IconBuildingCommunity },
 ];
 
 function OptionCard({
@@ -65,7 +65,7 @@ function OptionCard({
         background: selected ? BLUE_VERY_BRIGHT : WHITE,
         border: `1.5px solid ${selected ? ACCENT : BORDER}`,
         borderRadius: RADIUS_MD,
-        padding: '10px 12px',
+        padding: '13px 12px',
         display: 'flex', flexDirection: 'row',
         alignItems: 'center', gap: 10,
         cursor: 'pointer', transition: 'all 0.15s', textAlign: 'left' as const,
