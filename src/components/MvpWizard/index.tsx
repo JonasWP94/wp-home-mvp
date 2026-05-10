@@ -131,7 +131,7 @@ function LoadingScreen({ onDone }: { onDone: () => void }) {
   const [barPct, setBarPct] = React.useState(0);
 
   React.useEffect(() => {
-    const duration = 2400;
+    const duration = 3120;
     const start = performance.now();
     let rafId: number;
 
@@ -156,16 +156,33 @@ function LoadingScreen({ onDone }: { onDone: () => void }) {
       display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
       padding: '40px 24px', fontFamily: "'Poppins', sans-serif",
     }}>
-      <motion.div
-        animate={{ rotate: 360 }}
-        transition={{ repeat: Infinity, duration: 1, ease: 'linear' }}
-        style={{
-          width: 56, height: 56, borderRadius: 28,
-          border: `3px solid ${BLUE_VERY_BRIGHT}`,
-          borderTopColor: ACCENT,
-          marginBottom: 28,
-        }}
-      />
+      <style>{`
+        @keyframes wp-shimmer {
+          0%   { transform: translateX(-100%); }
+          100% { transform: translateX(500%); }
+        }
+      `}</style>
+
+      {/* Glowing spinner */}
+      <div style={{ position: 'relative', marginBottom: 32 }}>
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{ repeat: Infinity, duration: 0.85, ease: 'linear' }}
+          style={{
+            width: 64, height: 64, borderRadius: 32,
+            border: `4px solid ${BLUE_VERY_BRIGHT}`,
+            borderTopColor: ACCENT,
+            boxShadow: `0 0 28px rgba(42,111,166,0.35), 0 0 10px rgba(42,111,166,0.18)`,
+          }}
+        />
+        {/* Inner glow disc */}
+        <div style={{
+          position: 'absolute', inset: 10,
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(42,111,166,0.12) 0%, transparent 70%)',
+          pointerEvents: 'none',
+        }} />
+      </div>
 
       <AnimatePresence mode="wait">
         <motion.p
@@ -176,18 +193,34 @@ function LoadingScreen({ onDone }: { onDone: () => void }) {
           transition={{ duration: 0.25 }}
           style={{
             fontSize: TEXT_MD, fontWeight: FW_SEMIBOLD,
-            color: PRIMARY, marginBottom: 24, textAlign: 'center',
+            color: PRIMARY, marginBottom: 28, textAlign: 'center',
           }}
         >
           {LOADING_STEPS[idx]}
         </motion.p>
       </AnimatePresence>
 
-      <div style={{ width: '100%', maxWidth: 280, height: 4, background: BORDER, borderRadius: 2, overflow: 'hidden' }}>
+      {/* Progress bar with shimmer */}
+      <div style={{
+        width: '100%', maxWidth: 280, height: 5,
+        background: BORDER, borderRadius: 3, overflow: 'hidden',
+      }}>
         <div style={{
-          height: '100%', background: ACCENT, borderRadius: 2,
-          width: `${barPct * 100}%`, transition: 'width 0.05s linear',
-        }} />
+          height: '100%',
+          background: `linear-gradient(90deg, ${ACCENT} 0%, #4b9fd4 100%)`,
+          borderRadius: 3,
+          width: `${barPct * 100}%`,
+          transition: 'width 0.05s linear',
+          position: 'relative', overflow: 'hidden',
+          boxShadow: `0 0 8px rgba(42,111,166,0.5)`,
+        }}>
+          <div style={{
+            position: 'absolute', top: 0, bottom: 0,
+            width: '30%',
+            background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.45), transparent)',
+            animation: 'wp-shimmer 1.4s infinite',
+          }} />
+        </div>
       </div>
     </div>
   );
