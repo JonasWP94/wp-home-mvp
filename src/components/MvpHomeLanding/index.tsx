@@ -85,22 +85,19 @@ export default function MvpHomeLanding({ onStart, onBack }: Props) {
             </WpButton>
           </motion.div>
 
-          {/* Trust + optional hint */}
-          <motion.div
+          {/* Optional hint */}
+          <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4 }}
             style={{
-              display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10,
+              fontSize: 12, color: GREY_800, lineHeight: 1.5,
+              textAlign: 'center', margin: 0,
+              maxWidth: 420, marginLeft: 'auto', marginRight: 'auto',
             }}
           >
-            <span style={{ fontSize: 13, color: GREY_800, fontWeight: FW_REGULAR }}>
-              Bereits <strong style={{ color: PRIMARY, fontWeight: FW_SEMIBOLD }}>400.000+ Haushalte</strong> gespart
-            </span>
-            <p style={{ fontSize: 12, color: GREY_800, lineHeight: 1.5, textAlign: 'center', margin: 0, maxWidth: 420 }}>
-              Alle Infos optional. Je mehr Infos Sie teilen, desto besser die Spartipps.
-            </p>
-          </motion.div>
+            Alle Infos optional. Je mehr Infos Sie teilen, desto besser die Spartipps.
+          </motion.p>
 
         </div>
       </div>
