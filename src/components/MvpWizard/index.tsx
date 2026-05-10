@@ -296,7 +296,7 @@ export default function MvpWizard() {
             animate="center"
             exit="exit"
             transition={{ duration: 0.25 }}
-            style={{ width: '100%', maxWidth: 460 }}
+            style={{ width: '100%', maxWidth: 560 }}
           >
             <div style={{ textAlign: 'center', marginBottom: 28 }}>
               <div style={{
