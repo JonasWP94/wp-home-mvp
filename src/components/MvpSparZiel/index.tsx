@@ -66,21 +66,20 @@ function OptionCard({
         background: selected ? BLUE_VERY_BRIGHT : WHITE,
         border: `1.5px solid ${selected ? ACCENT : BORDER}`,
         borderRadius: RADIUS_MD,
-        padding: '14px 10px 12px',
-        display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8,
-        cursor: 'pointer', transition: 'all 0.15s', textAlign: 'center' as const,
+        padding: '14px 14px 12px',
+        display: 'flex', flexDirection: 'column',
+        alignItems: 'flex-start', justifyContent: 'space-between',
+        gap: 18, minHeight: 96,
+        cursor: 'pointer', transition: 'all 0.15s', textAlign: 'left' as const,
         position: 'relative',
         fontFamily: "'Poppins', sans-serif",
+        boxShadow: '0 1px 2px rgba(0,0,0,0.03)',
       }}
     >
-      <div style={{
-        width: 38, height: 38, borderRadius: RADIUS_SM,
-        background: selected ? ACCENT : GREY_200,
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        transition: 'all 0.15s',
-      }}>
-        <Icon size={19} stroke={1.8} color={selected ? WHITE : GREY_800} />
-      </div>
+      {/* Icon top-left, naked */}
+      <Icon size={22} stroke={2} color={selected ? ACCENT : GREY_800} />
+
+      {/* Label + sub bottom-left */}
       <div style={{ minWidth: 0, width: '100%' }}>
         <div style={{
           fontSize: TEXT_XS + 1, fontWeight: FW_SEMIBOLD,
@@ -93,8 +92,8 @@ function OptionCard({
       </div>
       {selected && (
         <div style={{
-          position: 'absolute', top: 6, right: 6,
-          width: 16, height: 16, borderRadius: 8,
+          position: 'absolute', top: 8, right: 8,
+          width: 18, height: 18, borderRadius: 9,
           background: ACCENT, display: 'flex', alignItems: 'center', justifyContent: 'center',
         }}>
           <IconCheck size={11} stroke={3} color={WHITE} />
