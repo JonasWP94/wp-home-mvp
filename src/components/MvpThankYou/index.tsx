@@ -92,21 +92,6 @@ export default function MvpThankYou({ onStart }: Props = {}) {
             </p>
           </motion.div>
 
-          {/* Section heading */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.3 }}
-            style={{ textAlign: 'center', marginBottom: 10 }}
-          >
-            <p style={{
-              fontSize: 11, fontWeight: FW_BOLD, color: ACCENT,
-              letterSpacing: '0.1em',
-            }}>
-              WOMIT WÜRDEN SIE GERN WEITERMACHEN?
-            </p>
-          </motion.div>
-
           {/* Savings pill — same width as cards grid */}
           <motion.div
             initial={{ opacity: 0, y: 8 }}
