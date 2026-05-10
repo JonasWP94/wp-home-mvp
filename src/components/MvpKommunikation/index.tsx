@@ -113,7 +113,7 @@ export default function MvpKommunikation({ onDone, onBack }: Props) {
       minHeight: '100dvh', background: BG, display: 'flex', flexDirection: 'column',
       fontFamily: "'Poppins', sans-serif",
     }}>
-      <WpHeader showProgress progressPct={45} />
+      <WpHeader showProgress progressPct={92} />
 
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '32px 24px 120px' }}>
         <div style={{ width: '100%', maxWidth: 820 }}>
