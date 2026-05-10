@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import {
   IconReceiptTax,
-  IconBolt,
   IconCreditCard,
 } from '@tabler/icons-react';
 import {
@@ -17,7 +16,6 @@ import WpBottomNav from '../_WpBottomNav';
 
 export interface EssentialsData {
   steuererklaerung: boolean;
-  energievertraege: boolean;
   girokonto:        boolean;
 }
 
@@ -27,9 +25,8 @@ interface Props {
 }
 
 const QUESTIONS: { key: keyof EssentialsData; label: string; sub: string; Icon: React.ComponentType<{ size?: number; stroke?: number; color?: string }> }[] = [
-  { key: 'steuererklaerung', label: 'Steuererklärung schon erledigt?',     sub: 'Ø 1.095 € Rückerstattung pro Jahr',                Icon: IconReceiptTax },
-  { key: 'energievertraege', label: 'Energieverträge optimiert?',          sub: 'Strom & Gas regelmäßig wechseln spart hunderte €', Icon: IconBolt },
-  { key: 'girokonto',        label: 'Haben Sie ein kostenloses Girokonto?', sub: 'Bis zu 60 € Kontoführungsgebühren / Jahr',         Icon: IconCreditCard },
+  { key: 'steuererklaerung', label: 'Steuererklärung schon erledigt?',     sub: 'Ø 1.095 € Rückerstattung pro Jahr',          Icon: IconReceiptTax },
+  { key: 'girokonto',        label: 'Haben Sie ein kostenloses Girokonto?', sub: 'Bis zu 60 € Kontoführungsgebühren / Jahr',  Icon: IconCreditCard },
 ];
 
 // ── iOS-style Toggle ─────────────────────────────────────────────
@@ -108,7 +105,7 @@ function ToggleRow({
 
 export default function MvpEssentials({ onDone, onBack }: Props) {
   const [data, setData] = useState<EssentialsData>({
-    steuererklaerung: false, energievertraege: false, girokonto: false,
+    steuererklaerung: false, girokonto: false,
   });
 
   return (
@@ -128,7 +125,7 @@ export default function MvpEssentials({ onDone, onBack }: Props) {
                 fontSize: 11, fontWeight: FW_BOLD, color: ACCENT,
                 letterSpacing: '0.1em', marginBottom: 8,
               }}>
-                ESSENTIELLE TIPPS
+                BASICS: FINANZEN
               </div>
               <h1 style={{
                 fontSize: TEXT_LG + 4, fontWeight: FW_SEMIBOLD,
