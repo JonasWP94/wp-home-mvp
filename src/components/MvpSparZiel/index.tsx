@@ -65,53 +65,49 @@ function OptionCard({
         background: selected ? BLUE_VERY_BRIGHT : WHITE,
         border: `1.5px solid ${selected ? ACCENT : BORDER}`,
         borderRadius: RADIUS_MD,
-        padding: '16px 18px',
+        padding: '10px 12px',
         display: 'flex', flexDirection: 'row',
-        alignItems: 'center', gap: 14,
+        alignItems: 'center', gap: 10,
         cursor: 'pointer', transition: 'all 0.15s', textAlign: 'left' as const,
         position: 'relative',
         fontFamily: "'Poppins', sans-serif",
         boxShadow: '0 1px 2px rgba(0,0,0,0.03)',
       }}
     >
-      <Icon size={24} stroke={2} color={selected ? ACCENT : GREY_800} style={{ flexShrink: 0 }} />
+      <Icon size={20} stroke={2} color={selected ? ACCENT : GREY_800} style={{ flexShrink: 0 }} />
 
       <div style={{ flex: 1, minWidth: 0 }}>
         <div style={{
-          fontSize: TEXT_SM, fontWeight: FW_SEMIBOLD,
-          color: selected ? BLUE_DARK : PRIMARY, lineHeight: 1.25,
+          fontSize: 13, fontWeight: FW_SEMIBOLD,
+          color: selected ? BLUE_DARK : PRIMARY, lineHeight: 1.2,
         }}>{label}</div>
         <div style={{
-          fontSize: TEXT_XS, fontWeight: FW_REGULAR,
-          color: GREY_800, marginTop: 2, lineHeight: 1.4,
+          fontSize: 11, fontWeight: FW_REGULAR,
+          color: GREY_800, marginTop: 2, lineHeight: 1.3,
         }}>{sub}</div>
       </div>
 
       <div style={{
         flexShrink: 0,
-        width: 20, height: 20, borderRadius: 10,
+        width: 18, height: 18, borderRadius: 9,
         background: selected ? ACCENT : 'transparent',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         transition: 'background 0.15s',
       }}>
-        {selected && <IconCheck size={12} stroke={3} color={WHITE} />}
+        {selected && <IconCheck size={11} stroke={3} color={WHITE} />}
       </div>
     </button>
   );
 }
 
-function SectionHeader({ label, title, sub }: { label: string; title: string; sub?: string }) {
+function SectionHeader({ label, title }: { label: string; title: string }) {
   return (
-    <div style={{ marginBottom: 12 }}>
+    <div style={{ marginBottom: 8, display: 'flex', alignItems: 'baseline', gap: 10, flexWrap: 'wrap' }}>
       <div style={{
-        fontSize: 11, fontWeight: FW_BOLD, color: ACCENT,
-        letterSpacing: '0.09em', marginBottom: 4,
+        fontSize: 10, fontWeight: FW_BOLD, color: ACCENT,
+        letterSpacing: '0.1em',
       }}>{label}</div>
-      <div style={{ fontSize: TEXT_MD + 1, fontWeight: FW_SEMIBOLD, color: PRIMARY, lineHeight: 1.3 }}>{title}</div>
-      {sub && <div style={{
-        fontSize: TEXT_XS + 1, fontWeight: FW_REGULAR,
-        color: GREY_800, marginTop: 6, lineHeight: 1.5,
-      }}>{sub}</div>}
+      <div style={{ fontSize: 14, fontWeight: FW_SEMIBOLD, color: PRIMARY, lineHeight: 1.3 }}>{title}</div>
     </div>
   );
 }
@@ -129,31 +125,25 @@ export default function MvpSparZiel({ onDone, onBack }: Props) {
     }}>
       <WpHeader showProgress progressPct={20} />
 
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '32px 24px 120px' }}>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '20px 24px 100px' }}>
         <div style={{ width: '100%', maxWidth: 820 }}>
 
-          <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
+          <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.25 }}>
 
-            <div style={{ textAlign: 'center', marginBottom: 32 }}>
-              <div style={{
-                fontSize: 11, fontWeight: FW_BOLD, color: ACCENT,
-                letterSpacing: '0.1em', marginBottom: 8,
-              }}>
-                IHRE PRÄFERENZEN
-              </div>
+            <div style={{ textAlign: 'center', marginBottom: 18 }}>
               <h1 style={{
-                fontSize: TEXT_LG + 4, fontWeight: FW_SEMIBOLD,
-                color: PRIMARY, lineHeight: 1.25, marginBottom: 8,
+                fontSize: 22, fontWeight: FW_SEMIBOLD,
+                color: PRIMARY, lineHeight: 1.2, marginBottom: 4,
                 letterSpacing: '-0.01em',
               }}>
                 Stellen Sie Ihren Sparplan ein
               </h1>
-              <p style={{ fontSize: TEXT_SM, color: GREY_800, lineHeight: 1.55, fontWeight: FW_REGULAR }}>
+              <p style={{ fontSize: 13, color: GREY_800, lineHeight: 1.45, fontWeight: FW_REGULAR }}>
                 Damit wir die Tipps optimal auf Sie zuschneiden können.
               </p>
             </div>
 
-            <div style={{ marginBottom: 28 }}>
+            <div style={{ marginBottom: 14 }}>
               <SectionHeader label="SPARZIEL" title="Was ist Ihr Sparziel?" />
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8 }}>
                 {SPARZIELE.map(opt => (
@@ -169,7 +159,7 @@ export default function MvpSparZiel({ onDone, onBack }: Props) {
               </div>
             </div>
 
-            <div style={{ marginBottom: 28 }}>
+            <div style={{ marginBottom: 14 }}>
               <SectionHeader
                 label="ZEITAUFWAND"
                 title="Wie viel Zeit möchten Sie investieren?"
