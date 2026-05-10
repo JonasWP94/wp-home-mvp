@@ -25,8 +25,8 @@ interface Props {
 }
 
 const QUESTIONS: { key: keyof KommunikationData; label: string; sub: string; Icon: React.ComponentType<{ size?: number; stroke?: number; color?: string }> }[] = [
-  { key: 'mobilfunk', label: 'Mobilfunk', sub: 'Tarif neu verhandeln spart Ø 180 € / Jahr',  Icon: IconDeviceMobile },
-  { key: 'internet',  label: 'Internet',  sub: 'Anbieterwechsel spart Ø 240 € / Jahr',       Icon: IconWifi },
+  { key: 'internet',  label: 'Internet-Vertrag aktuell',   sub: 'Anbieterwechsel spart Ø 240 € / Jahr',      Icon: IconWifi },
+  { key: 'mobilfunk', label: 'Mobilfunk-Vertrag aktuell', sub: 'Tarif neu verhandeln spart Ø 180 € / Jahr', Icon: IconDeviceMobile },
 ];
 
 // ── iOS-style Toggle ─────────────────────────────────────────────
