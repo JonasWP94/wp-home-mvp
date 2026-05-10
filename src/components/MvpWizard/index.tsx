@@ -31,6 +31,7 @@ import MvpThankYou from '../MvpThankYou';
 import MvpHomeLanding from '../MvpHomeLanding';
 import MvpSparZiel, { SparZielData } from '../MvpSparZiel';
 import MvpEssentials, { EssentialsData } from '../MvpEssentials';
+import MvpKommunikation, { KommunikationData } from '../MvpKommunikation';
 
 // ── Types ────────────────────────────────────────────────────────
 interface MvpProfile {
@@ -44,12 +45,15 @@ interface MvpProfile {
   zeitaufwand: string;
   steuererklaerung: boolean;
   girokonto: boolean;
+  mobilfunk: boolean;
+  internet: boolean;
 }
 
 const INITIAL: MvpProfile = {
   tenure: '', propertyType: '', heatingType: '', autoType: '', hasChildren: null,
   investitionen: '', sparziel: '', zeitaufwand: '',
   steuererklaerung: false, girokonto: false,
+  mobilfunk: false, internet: false,
 };
 
 // ── Step Definitions ─────────────────────────────────────────────
@@ -113,7 +117,7 @@ const STEPS = [
 
 const TOTAL = STEPS.length;
 
-type View = 'intro' | 'landing' | 'sparziel' | 'essentials' | 'quiz' | 'loading' | 'results';
+type View = 'intro' | 'landing' | 'sparziel' | 'essentials' | 'kommunikation' | 'quiz' | 'loading' | 'results';
 
 // Paper plane icon (custom SVG)
 function PaperPlaneIcon() {
@@ -364,7 +368,7 @@ export default function MvpWizard() {
   }
 
   function goBack() {
-    if (step === 0) { setView('essentials'); return; }
+    if (step === 0) { setView('kommunikation'); return; }
     setDir(-1);
     setStep(s => s - 1);
   }
@@ -398,9 +402,22 @@ export default function MvpWizard() {
           steuererklaerung: data.steuererklaerung,
           girokonto: data.girokonto,
         }));
-        setView('quiz');
+        setView('kommunikation');
       }}
       onBack={() => setView('sparziel')}
+    />
+  );
+  if (view === 'kommunikation') return (
+    <MvpKommunikation
+      onDone={(data: KommunikationData) => {
+        setProfile(p => ({
+          ...p,
+          mobilfunk: data.mobilfunk,
+          internet: data.internet,
+        }));
+        setView('quiz');
+      }}
+      onBack={() => setView('essentials')}
     />
   );
   if (view === 'loading') return <LoadingScreen onDone={() => setView('results')} />;
