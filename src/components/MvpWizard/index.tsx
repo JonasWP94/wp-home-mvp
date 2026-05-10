@@ -116,32 +116,72 @@ const TOTAL = STEPS.length;
 
 type View = 'intro' | 'landing' | 'sparziel' | 'essentials' | 'quiz' | 'loading' | 'results';
 
-// ── Loading Screen ────────────────────────────────────────────────
+// Paper plane icon (custom SVG)
+function PaperPlaneIcon() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white"
+      strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M3 3l18 9-18 9 4-9-4-9z" fill="white" />
+    </svg>
+  );
+}
+
+// ── Loading Screen (Plane collecting coins) ──────────────────────
 const LOADING_STEPS = [
   'Antworten werden ausgewertet …',
+  'Ihr Einsparpotenzial wird berechnet …',
   'Spartipps werden personalisiert …',
   'Ihr Spar-Dashboard wird erstellt …',
 ];
 
+const COIN_COUNT = 6;
+const COIN_VALUE = 50; // € per coin
+const LOADING_DURATION = 6200; // ms
+const PLANE_RADIUS = 86;
+const TRACK_SIZE = 220;
+
 function LoadingScreen({ onDone }: { onDone: () => void }) {
   const [idx, setIdx] = React.useState(0);
   const [barPct, setBarPct] = React.useState(0);
+  const [angle, setAngle] = React.useState(0); // 0..360 (deg)
+  const [collected, setCollected] = React.useState<boolean[]>(() => Array(COIN_COUNT).fill(false));
+  const [score, setScore] = React.useState(0);
 
   React.useEffect(() => {
-    const duration = 2400;
     const start = performance.now();
     let rafId: number;
+    let lastCollected = Array(COIN_COUNT).fill(false);
 
     function tick(now: number) {
-      const pct = Math.min((now - start) / duration, 1);
+      const pct = Math.min((now - start) / LOADING_DURATION, 1);
       setBarPct(pct);
+
+      // 1 full lap over the entire duration
+      const a = pct * 360;
+      setAngle(a);
+
+      // Update collected coins (coin i is at angle (i * 360 / N))
+      let changed = false;
+      const next = [...lastCollected];
+      let s = 0;
+      for (let i = 0; i < COIN_COUNT; i++) {
+        const coinAngle = (i * 360) / COIN_COUNT;
+        if (a >= coinAngle && !next[i]) {
+          next[i] = true; changed = true;
+        }
+        if (next[i]) s += COIN_VALUE;
+      }
+      if (changed) {
+        lastCollected = next;
+        setCollected(next);
+        setScore(s);
+      }
+
       const stepIdx = Math.min(Math.floor(pct * LOADING_STEPS.length), LOADING_STEPS.length - 1);
       setIdx(stepIdx);
-      if (pct < 1) {
-        rafId = requestAnimationFrame(tick);
-      } else {
-        setTimeout(onDone, 120);
-      }
+
+      if (pct < 1) rafId = requestAnimationFrame(tick);
+      else setTimeout(onDone, 350);
     }
     rafId = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(rafId);
@@ -153,17 +193,113 @@ function LoadingScreen({ onDone }: { onDone: () => void }) {
       display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
       padding: '40px 24px', fontFamily: "'Poppins', sans-serif",
     }}>
-      <motion.div
-        animate={{ rotate: 360 }}
-        transition={{ repeat: Infinity, duration: 1, ease: 'linear' }}
-        style={{
-          width: 56, height: 56, borderRadius: 28,
-          border: `3px solid ${BLUE_VERY_BRIGHT}`,
-          borderTopColor: ACCENT,
-          marginBottom: 28,
-        }}
-      />
+      {/* Track + plane + coins */}
+      <div style={{
+        position: 'relative',
+        width: TRACK_SIZE, height: TRACK_SIZE,
+        marginBottom: 24,
+      }}>
+        {/* Dashed track circle */}
+        <svg
+          viewBox={`0 0 ${TRACK_SIZE} ${TRACK_SIZE}`}
+          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }}
+        >
+          <circle
+            cx={TRACK_SIZE / 2} cy={TRACK_SIZE / 2} r={PLANE_RADIUS}
+            stroke={BLUE_VERY_BRIGHT} strokeWidth="2" strokeDasharray="3 6" fill="none"
+          />
+        </svg>
 
+        {/* Coins around the circle */}
+        {Array.from({ length: COIN_COUNT }).map((_, i) => {
+          // angle 0 = top (we use -90 offset because cos/sin start at right)
+          const a = ((i * 360) / COIN_COUNT) - 90;
+          const rad = (a * Math.PI) / 180;
+          const cx = TRACK_SIZE / 2 + PLANE_RADIUS * Math.cos(rad);
+          const cy = TRACK_SIZE / 2 + PLANE_RADIUS * Math.sin(rad);
+          const isCollected = collected[i];
+          return (
+            <motion.div
+              key={i}
+              initial={false}
+              animate={{
+                opacity: isCollected ? 0 : 1,
+                scale: isCollected ? 1.6 : 1,
+                y: isCollected ? -12 : 0,
+              }}
+              transition={{ duration: 0.45, ease: 'easeOut' }}
+              style={{
+                position: 'absolute',
+                left: cx - 14, top: cy - 14,
+                width: 28, height: 28, borderRadius: 14,
+                background: 'linear-gradient(135deg, #FFC93C 0%, #F9AA00 100%)',
+                color: PRIMARY,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontSize: 12, fontWeight: 800, letterSpacing: '-0.02em',
+                boxShadow: '0 2px 6px rgba(249,170,0,0.45), inset 0 -2px 0 rgba(0,0,0,0.06)',
+                border: '1.5px solid #ffd75c',
+              }}
+            >
+              €
+            </motion.div>
+          );
+        })}
+
+        {/* Plane wrapper — rotates around centre */}
+        <div style={{
+          position: 'absolute', inset: 0,
+          transform: `rotate(${angle}deg)`,
+          transformOrigin: 'center',
+        }}>
+          {/* Plane positioned at top of circle, pointing right (along tangent direction = clockwise) */}
+          <div style={{
+            position: 'absolute',
+            left: TRACK_SIZE / 2,
+            top: TRACK_SIZE / 2 - PLANE_RADIUS,
+            width: 0, height: 0,
+          }}>
+            <div style={{
+              transform: 'translate(-50%, -50%) rotate(45deg)',
+              width: 38, height: 38,
+              borderRadius: 19,
+              background: PRIMARY,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              boxShadow: '0 4px 12px rgba(36,60,71,0.35)',
+            }}>
+              <PaperPlaneIcon />
+            </div>
+          </div>
+        </div>
+
+        {/* Collected total in centre */}
+        <div style={{
+          position: 'absolute', inset: 0,
+          display: 'flex', flexDirection: 'column',
+          alignItems: 'center', justifyContent: 'center',
+          pointerEvents: 'none',
+        }}>
+          <motion.div
+            key={score}
+            initial={{ scale: 1.25, opacity: 0.6 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ type: 'spring', stiffness: 320, damping: 22 }}
+            style={{
+              fontSize: 26, fontWeight: 800, color: PRIMARY,
+              letterSpacing: '-0.02em', lineHeight: 1,
+            }}
+          >
+            {score} €
+          </motion.div>
+          <div style={{
+            fontSize: 10, fontWeight: 700, color: GREY_800,
+            letterSpacing: '0.08em', marginTop: 6,
+          }}>
+            EINGESAMMELT
+          </div>
+        </div>
+      </div>
+
+      {/* Step label */}
       <AnimatePresence mode="wait">
         <motion.p
           key={idx}
@@ -174,6 +310,7 @@ function LoadingScreen({ onDone }: { onDone: () => void }) {
           style={{
             fontSize: TEXT_MD, fontWeight: FW_SEMIBOLD,
             color: PRIMARY, marginBottom: 24, textAlign: 'center',
+            minHeight: 22,
           }}
         >
           {LOADING_STEPS[idx]}
