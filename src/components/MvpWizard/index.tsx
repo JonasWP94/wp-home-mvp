@@ -288,27 +288,26 @@ export default function MvpWizard() {
     setProfile(p => ({ ...p, [current.key]: val }));
   }
 
-  function finish(fp: MvpProfile) {
-    localStorage.setItem('wpilot_mvp_profile', JSON.stringify(fp));
-    setFinalProfile(fp);
-    setView('loading');
+  function quizDone(fp: MvpProfile) {
+    setProfile(fp);
+    setView('essentials');
   }
 
   function goNext() {
     if (!canNext) return;
-    if (isLast) { finish(profile); return; }
+    if (isLast) { quizDone(profile); return; }
     setDir(1);
     setStep(s => s + 1);
   }
 
   function skip() {
-    if (isLast) { finish(profile); return; }
+    if (isLast) { quizDone(profile); return; }
     setDir(1);
     setStep(s => s + 1);
   }
 
   function goBack() {
-    if (step === 0) { setView('kommunikation'); return; }
+    if (step === 0) { setView('sparziel'); return; }
     setDir(-1);
     setStep(s => s - 1);
   }
@@ -329,7 +328,7 @@ export default function MvpWizard() {
     <MvpSparZiel
       onDone={(data: SparZielData) => {
         setProfile(p => ({ ...p, sparziel: data.sparziel, zeitaufwand: data.zeitaufwand, investitionen: data.investitionen as MvpProfile['investitionen'] }));
-        setView('essentials');
+        setView('quiz');
       }}
       onBack={() => setView('landing')}
     />
@@ -344,18 +343,17 @@ export default function MvpWizard() {
         }));
         setView('kommunikation');
       }}
-      onBack={() => setView('sparziel')}
+      onBack={() => setView('quiz')}
     />
   );
   if (view === 'kommunikation') return (
     <MvpKommunikation
       onDone={(data: KommunikationData) => {
-        setProfile(p => ({
-          ...p,
-          mobilfunk: data.mobilfunk,
-          internet: data.internet,
-        }));
-        setView('quiz');
+        const fp = { ...profile, mobilfunk: data.mobilfunk, internet: data.internet };
+        localStorage.setItem('wpilot_mvp_profile', JSON.stringify(fp));
+        setProfile(fp);
+        setFinalProfile(fp);
+        setView('loading');
       }}
       onBack={() => setView('essentials')}
     />
@@ -369,7 +367,7 @@ export default function MvpWizard() {
     exit:   (d: number) => ({ x: d > 0 ? -80 :  80, opacity: 0 }),
   };
 
-  const progressPct = 50 + ((step + 1) / TOTAL) * 50;
+  const progressPct = 25 + ((step + 1) / TOTAL) * 50;
 
   return (
     <div style={{
@@ -430,7 +428,7 @@ export default function MvpWizard() {
                       select(val);
                       setTimeout(() => {
                         if (isLast) {
-                          finish({ ...profile, [current.key]: val });
+                          quizDone({ ...profile, [current.key]: val });
                         } else {
                           setDir(1);
                           setStep(s => s + 1);
