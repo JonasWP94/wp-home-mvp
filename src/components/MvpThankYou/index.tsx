@@ -220,7 +220,7 @@ function SavingsPill({ amount }: { amount: string }) {
           justifyContent: 'center',
         }}
       >
-        {/* Check disc — centered initially, moves left as pill expands */}
+        {/* Check disc — centered initially, then sits on left as pill expands */}
         <motion.div
           initial={{ scale: 0, rotate: -90 }}
           animate={{ scale: 1, rotate: 0 }}
@@ -234,35 +234,35 @@ function SavingsPill({ amount }: { amount: string }) {
           <IconCheck size={24} stroke={2.8} color={WHITE} />
         </motion.div>
 
-        {/* Label */}
-        <motion.span
-          initial={{ opacity: 0, width: 0 }}
-          animate={{ opacity: 1, width: 'auto' }}
-          transition={{ delay: 1.65, duration: 0.35 }}
+        {/* Text block — width:0 initially so check disc stays centered in 64px circle */}
+        <motion.div
+          initial={{ width: 0, opacity: 0 }}
+          animate={{ width: 'auto', opacity: 1 }}
+          transition={{
+            width:   { delay: 1.65, duration: 0.4 },
+            opacity: { delay: 1.7,  duration: 0.3 },
+          }}
           style={{
-            flex: 1, paddingLeft: 14,
+            flex: 'none',
+            display: 'flex', alignItems: 'center',
+            overflow: 'hidden', whiteSpace: 'nowrap',
+          }}
+        >
+          <span style={{
+            paddingLeft: 14, paddingRight: 14,
             fontSize: 14, fontWeight: FW_REGULAR,
             letterSpacing: '-0.01em', fontFamily: "'Poppins', sans-serif",
-            overflow: 'hidden',
-          }}
-        >
-          Ihre voraussichtliche Ersparnis dieses Jahr
-        </motion.span>
-
-        {/* Amount */}
-        <motion.span
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.85, duration: 0.3 }}
-          style={{
+          }}>
+            Ihre voraussichtliche Ersparnis dieses Jahr
+          </span>
+          <span style={{
             fontSize: 19, fontWeight: FW_BOLD,
-            letterSpacing: '-0.01em', flexShrink: 0,
-            paddingRight: 22,
+            letterSpacing: '-0.01em', paddingRight: 22,
             fontFamily: "'Poppins', sans-serif",
-          }}
-        >
-          {amount}
-        </motion.span>
+          }}>
+            {amount}
+          </span>
+        </motion.div>
       </motion.div>
     </div>
   );
