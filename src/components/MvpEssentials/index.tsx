@@ -9,7 +9,7 @@ import {
   GREEN,
   RADIUS_MD, RADIUS_SM,
   TEXT_XS, TEXT_SM, TEXT_LG,
-  FW_REGULAR, FW_SEMIBOLD, FW_BOLD,
+  FW_REGULAR, FW_SEMIBOLD,
 } from '../_tokens';
 import WpHeader from '../_WpHeader';
 import WpBottomNav from '../_WpBottomNav';
@@ -121,18 +121,12 @@ export default function MvpEssentials({ onDone, onBack }: Props) {
           <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
 
             <div style={{ textAlign: 'center', marginBottom: 28 }}>
-              <div style={{
-                fontSize: 11, fontWeight: FW_BOLD, color: ACCENT,
-                letterSpacing: '0.1em', marginBottom: 8,
-              }}>
-                BASICS: FINANZEN
-              </div>
               <h1 style={{
                 fontSize: TEXT_LG + 4, fontWeight: FW_SEMIBOLD,
                 color: PRIMARY, lineHeight: 1.25, marginBottom: 8,
                 letterSpacing: '-0.01em',
               }}>
-                Haben Sie die Basics schon erledigt?
+                Basics: <span style={{ color: ACCENT }}>Finanzen</span>
               </h1>
               <p style={{ fontSize: TEXT_SM, color: GREY_800, lineHeight: 1.55, fontWeight: FW_REGULAR }}>
                 Aktivieren Sie, was bereits erledigt ist — alles andere zeigen wir Ihnen als Spartipp.
