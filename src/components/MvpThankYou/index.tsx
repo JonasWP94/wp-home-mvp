@@ -61,40 +61,43 @@ export default function MvpThankYou({ onStart }: Props = {}) {
       }}>
         <div style={{ width: '100%', maxWidth: 820 }}>
 
-          {/* Animated savings pill (above headline) */}
-          <SavingsPill amount="475 €" />
-
-          {/* Headline */}
+          {/* Glückwunsch + Headline */}
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.2 }}
+            transition={{ delay: 0.15 }}
             style={{ textAlign: 'center', marginBottom: 28 }}
           >
-            <h1 style={{
+            <div style={{
               fontSize: TEXT_2XL - 4, fontWeight: FW_BOLD,
-              color: PRIMARY, lineHeight: 1.2, marginBottom: 10,
+              color: PRIMARY, lineHeight: 1.15, marginBottom: 8,
               letterSpacing: '-0.02em',
-              maxWidth: 560, marginLeft: 'auto', marginRight: 'auto',
             }}>
-              Glückwunsch! Sie haben Wechselpilot erfolgreich beauftragt.
+              Glückwunsch!
+            </div>
+            <h1 style={{
+              fontSize: TEXT_LG + 2, fontWeight: FW_SEMIBOLD,
+              color: PRIMARY, lineHeight: 1.3, marginBottom: 10,
+              letterSpacing: '-0.01em',
+              maxWidth: 520, marginLeft: 'auto', marginRight: 'auto',
+            }}>
+              Sie haben Wechselpilot erfolgreich beauftragt.
             </h1>
             <p style={{
               fontSize: TEXT_MD - 1, color: GREY_800, lineHeight: 1.55,
               fontWeight: FW_REGULAR,
-              maxWidth: 520, marginLeft: 'auto', marginRight: 'auto',
+              maxWidth: 480, marginLeft: 'auto', marginRight: 'auto',
             }}>
               Ab jetzt übernehmen wir. Sie brauchen nichts weiter zu tun.
             </p>
           </motion.div>
-
 
           {/* Section heading */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3 }}
-            style={{ textAlign: 'center', marginBottom: 14 }}
+            style={{ textAlign: 'center', marginBottom: 10 }}
           >
             <p style={{
               fontSize: 11, fontWeight: FW_BOLD, color: ACCENT,
@@ -104,11 +107,21 @@ export default function MvpThankYou({ onStart }: Props = {}) {
             </p>
           </motion.div>
 
+          {/* Savings pill — same width as cards grid */}
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
+            style={{ marginBottom: 10 }}
+          >
+            <SavingsPill amount="475 €" />
+          </motion.div>
+
           {/* Action Cards */}
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 }}
+            transition={{ delay: 0.6 }}
             style={{
               display: 'grid',
               gridTemplateColumns: 'repeat(3, 1fr)',
@@ -214,60 +227,56 @@ export default function MvpThankYou({ onStart }: Props = {}) {
 function SavingsPill({ amount }: { amount: string }) {
   return (
     <div style={{
-      display: 'flex', justifyContent: 'center', marginBottom: 24, marginTop: 4,
-      perspective: 800,
+      width: '100%',
+      height: 56, borderRadius: 14,
+      background: GREEN_DARK,
+      color: WHITE,
+      display: 'flex', alignItems: 'center',
+      paddingLeft: 8, paddingRight: 20,
+      boxShadow: '0 4px 16px rgba(23,122,82,0.2)',
+      overflow: 'hidden',
     }}>
+      {/* Check disc */}
       <motion.div
-        initial={{ width: 56, opacity: 0 }}
-        animate={{ width: 'auto', opacity: 1 }}
-        transition={{
-          width: { delay: 0.7, duration: 0.6, ease: [0.22, 1, 0.36, 1] },
-          opacity: { duration: 0.3 },
-        }}
+        initial={{ scale: 0, rotate: -90 }}
+        animate={{ scale: 1, rotate: 0 }}
+        transition={{ type: 'spring', stiffness: 300, damping: 18, delay: 0.55 }}
         style={{
-          height: 56, borderRadius: 999,
-          background: GREEN_DARK,
-          color: WHITE,
-          display: 'inline-flex', alignItems: 'center',
-          paddingLeft: 6, paddingRight: 0,
-          overflow: 'hidden', whiteSpace: 'nowrap',
-          boxShadow: '0 6px 20px rgba(23,122,82,0.22)',
+          width: 40, height: 40, borderRadius: 20, flexShrink: 0,
+          background: 'rgba(255,255,255,0.18)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
         }}
       >
-        {/* Check disc */}
-        <motion.div
-          initial={{ scale: 0, rotate: -90 }}
-          animate={{ scale: 1, rotate: 0 }}
-          transition={{ type: 'spring', stiffness: 300, damping: 18, delay: 0.15 }}
-          style={{
-            width: 44, height: 44, borderRadius: 22,
-            background: 'rgba(255,255,255,0.18)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            flexShrink: 0,
-          }}
-        >
-          <IconCheck size={24} stroke={2.8} color={WHITE} />
-        </motion.div>
-
-        {/* Text — fades in after pill expands */}
-        <motion.div
-          initial={{ opacity: 0, x: -6 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 1.05, duration: 0.35 }}
-          style={{
-            display: 'inline-flex', alignItems: 'center', gap: 6,
-            paddingLeft: 14, paddingRight: 22,
-            fontFamily: "'Poppins', sans-serif",
-          }}
-        >
-          <span style={{ fontSize: 14, fontWeight: FW_REGULAR, opacity: 0.92, letterSpacing: '-0.01em' }}>
-            Ihre voraussichtliche Ersparnis dieses Jahr
-          </span>
-          <span style={{ fontSize: 18, fontWeight: FW_BOLD, letterSpacing: '-0.01em' }}>
-            {amount}
-          </span>
-        </motion.div>
+        <IconCheck size={22} stroke={2.8} color={WHITE} />
       </motion.div>
+
+      {/* Label */}
+      <motion.span
+        initial={{ opacity: 0, x: -6 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ delay: 0.7, duration: 0.3 }}
+        style={{
+          flex: 1, paddingLeft: 14,
+          fontSize: 14, fontWeight: FW_REGULAR, opacity: 0.92,
+          letterSpacing: '-0.01em', fontFamily: "'Poppins', sans-serif",
+        }}
+      >
+        Ihre voraussichtliche Ersparnis dieses Jahr
+      </motion.span>
+
+      {/* Amount */}
+      <motion.span
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.85, duration: 0.3 }}
+        style={{
+          fontSize: 18, fontWeight: FW_BOLD,
+          letterSpacing: '-0.01em', flexShrink: 0,
+          fontFamily: "'Poppins', sans-serif",
+        }}
+      >
+        {amount}
+      </motion.span>
     </div>
   );
 }
