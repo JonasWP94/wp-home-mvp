@@ -3,7 +3,6 @@ import { motion } from 'framer-motion';
 import {
   IconCheck,
   IconBolt,
-  IconFlame,
   IconGift,
   IconUsers,
   IconChevronRight,
@@ -13,13 +12,12 @@ import {
   IconHome,
 } from '@tabler/icons-react';
 import {
-  ACCENT, PRIMARY, BG, WHITE, BORDER, GREY_700, GREY_800,
-  YELLOW, YELLOW_BRIGHT,
-  GREEN, GREEN_DARK, GREEN_BRIGHT,
-  BLUE_VERY_BRIGHT,
+  ACCENT, PRIMARY, BG, WHITE, BORDER, GREY_200, GREY_700, GREY_800,
+  YELLOW,
+  GREEN_DARK,
   RADIUS_MD, RADIUS_LG, RADIUS_SM,
-  TEXT_XS, TEXT_SM, TEXT_MD, TEXT_LG, TEXT_2XL,
-  FW_REGULAR, FW_MEDIUM, FW_SEMIBOLD, FW_BOLD,
+  TEXT_XS, TEXT_SM, TEXT_MD, TEXT_2XL,
+  FW_REGULAR, FW_SEMIBOLD, FW_BOLD,
   SHADOW_SM,
 } from '../_tokens';
 import WpHeader from '../_WpHeader';
@@ -63,28 +61,13 @@ export default function MvpThankYou({ onStart }: Props = {}) {
       }}>
         <div style={{ width: '100%', maxWidth: 820 }}>
 
-          {/* Checkmark + Headline */}
+          {/* Headline */}
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            style={{ textAlign: 'center', marginBottom: 28 }}
+            transition={{ delay: 0.05 }}
+            style={{ textAlign: 'center', marginBottom: 24 }}
           >
-            <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ type: 'spring', stiffness: 260, damping: 20 }}
-              style={{
-                width: 64, height: 64, borderRadius: 32,
-                background: GREEN_DARK,
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                margin: '0 auto 14px',
-                boxShadow: `0 4px 16px rgba(23,122,82,0.30)`,
-              }}
-            >
-              <IconCheck size={32} stroke={2.5} color={WHITE} />
-            </motion.div>
-
             <h1 style={{
               fontSize: TEXT_2XL - 4, fontWeight: FW_BOLD,
               color: PRIMARY, lineHeight: 1.2, marginBottom: 10,
@@ -100,14 +83,11 @@ export default function MvpThankYou({ onStart }: Props = {}) {
             }}>
               Ab jetzt übernehmen wir. Sie brauchen nichts weiter zu tun.
             </p>
-            <p style={{
-              fontSize: TEXT_MD, fontWeight: FW_SEMIBOLD,
-              color: GREEN_DARK, lineHeight: 1.3, marginTop: 12,
-            }}>
-              Ihre voraussichtliche Ersparnis dieses Jahr:{' '}
-              <span style={{ fontSize: TEXT_LG, fontWeight: FW_BOLD }}>475 €</span>
-            </p>
           </motion.div>
+
+          {/* Animated savings pill: check first, then text expands to the right */}
+          <SavingsPill amount="475 €" />
+
 
           {/* Section heading */}
           <motion.div
@@ -139,34 +119,21 @@ export default function MvpThankYou({ onStart }: Props = {}) {
             {/* Card 1 */}
             <ActionCard
               onClick={() => { window.location.href = 'https://konto.wechselpilot.com/neuer-zähler'; }}
-              hoverColor={ACCENT}
-              hoverBg={BLUE_VERY_BRIGHT}
-              iconBg={BLUE_VERY_BRIGHT}
-              icon={
-                <div style={{ display: 'flex', gap: 1, alignItems: 'center' }}>
-                  <IconBolt size={18} stroke={1.6} color={ACCENT} />
-                  <IconFlame size={18} stroke={1.6} color={YELLOW} />
-                </div>
-              }
+              icon={<IconBolt size={20} stroke={1.8} color={GREY_800} />}
               title="Weiteren Zähler anlegen"
               sub="Strom, Gas oder Fernwärme"
-              chevColor={undefined}
             />
 
             {/* Card 2 */}
             <ActionCard
               onClick={() => { window.location.href = 'https://konto.wechselpilot.com/freunde-werben'; }}
-              hoverColor={YELLOW}
-              hoverBg={YELLOW_BRIGHT}
-              iconBg={YELLOW_BRIGHT}
-              icon={<IconUsers size={22} stroke={1.6} color={YELLOW} />}
+              icon={<IconUsers size={20} stroke={1.8} color={GREY_800} />}
               title="Freunde einladen"
               subRich={
                 <>
-                  <span style={{ fontWeight: FW_BOLD, color: YELLOW, fontSize: TEXT_SM }}>50 €</span> Prämie pro Person
+                  <span style={{ fontWeight: FW_SEMIBOLD, color: PRIMARY }}>50 €</span> Prämie pro Person
                 </>
               }
-              chevColor={undefined}
             />
 
             {/* Card 3 */}
@@ -175,26 +142,21 @@ export default function MvpThankYou({ onStart }: Props = {}) {
                 if (onStart) onStart();
                 else window.location.href = '/apps/wpilot-home/mvp.html';
               }}
-              highlight
-              hoverColor={GREEN_DARK}
-              hoverBg="#f0faf4"
-              iconBg={GREEN_BRIGHT}
               icon={
                 <div style={{ position: 'relative', display: 'inline-flex' }}>
-                  <IconGift size={22} stroke={1.6} color={GREEN_DARK} />
+                  <IconGift size={20} stroke={1.8} color={GREY_800} />
                   <div style={{
-                    position: 'absolute', top: -4, right: -6,
-                    width: 16, height: 16, borderRadius: 8,
-                    background: '#EF4444', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    position: 'absolute', top: -5, right: -6,
+                    width: 14, height: 14, borderRadius: 7,
+                    background: PRIMARY, display: 'flex', alignItems: 'center', justifyContent: 'center',
                     border: `2px solid ${WHITE}`,
                   }}>
-                    <span style={{ fontSize: 8, fontWeight: FW_BOLD, color: WHITE }}>1</span>
+                    <span style={{ fontSize: 8, fontWeight: FW_BOLD, color: WHITE, lineHeight: 1 }}>1</span>
                   </div>
                 </div>
               }
               title="Noch mehr sparen"
               sub="Willkommensgeschenk abholen"
-              chevColor={GREEN_DARK}
             />
           </motion.div>
 
@@ -215,10 +177,10 @@ export default function MvpThankYou({ onStart }: Props = {}) {
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
               <div style={{
                 width: 34, height: 34, borderRadius: RADIUS_SM,
-                background: YELLOW_BRIGHT, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                background: GREY_200, display: 'flex', alignItems: 'center', justifyContent: 'center',
                 flexShrink: 0,
               }}>
-                <IconStar size={18} stroke={1.8} color={YELLOW} />
+                <IconStar size={18} stroke={1.8} color={GREY_800} />
               </div>
               <div style={{ textAlign: 'left' }}>
                 <p style={{ fontSize: TEXT_SM, fontWeight: FW_SEMIBOLD, color: PRIMARY, lineHeight: 1.25 }}>
@@ -281,20 +243,77 @@ export default function MvpThankYou({ onStart }: Props = {}) {
   );
 }
 
+// ── Savings Pill ─────────────────────────────────────────────────
+function SavingsPill({ amount }: { amount: string }) {
+  return (
+    <div style={{
+      display: 'flex', justifyContent: 'center', marginBottom: 32,
+      perspective: 800,
+    }}>
+      <motion.div
+        initial={{ width: 56, opacity: 0 }}
+        animate={{ width: 'auto', opacity: 1 }}
+        transition={{
+          width: { delay: 0.7, duration: 0.6, ease: [0.22, 1, 0.36, 1] },
+          opacity: { duration: 0.3 },
+        }}
+        style={{
+          height: 56, borderRadius: 999,
+          background: GREEN_DARK,
+          color: WHITE,
+          display: 'inline-flex', alignItems: 'center',
+          paddingLeft: 6, paddingRight: 0,
+          overflow: 'hidden', whiteSpace: 'nowrap',
+          boxShadow: '0 6px 20px rgba(23,122,82,0.22)',
+        }}
+      >
+        {/* Check disc */}
+        <motion.div
+          initial={{ scale: 0, rotate: -90 }}
+          animate={{ scale: 1, rotate: 0 }}
+          transition={{ type: 'spring', stiffness: 300, damping: 18, delay: 0.15 }}
+          style={{
+            width: 44, height: 44, borderRadius: 22,
+            background: 'rgba(255,255,255,0.18)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            flexShrink: 0,
+          }}
+        >
+          <IconCheck size={24} stroke={2.8} color={WHITE} />
+        </motion.div>
+
+        {/* Text — fades in after pill expands */}
+        <motion.div
+          initial={{ opacity: 0, x: -6 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 1.05, duration: 0.35 }}
+          style={{
+            display: 'inline-flex', alignItems: 'center', gap: 6,
+            paddingLeft: 14, paddingRight: 22,
+            fontFamily: "'Poppins', sans-serif",
+          }}
+        >
+          <span style={{ fontSize: 14, fontWeight: FW_REGULAR, opacity: 0.92, letterSpacing: '-0.01em' }}>
+            Ihre voraussichtliche Ersparnis dieses Jahr
+          </span>
+          <span style={{ fontSize: 18, fontWeight: FW_BOLD, letterSpacing: '-0.01em' }}>
+            {amount}
+          </span>
+        </motion.div>
+      </motion.div>
+    </div>
+  );
+}
+
 // ── Action Card sub-component ────────────────────────────────────
 function ActionCard({
-  onClick, icon, title, sub, subRich, chevColor, highlight, hoverColor, hoverBg, iconBg,
+  onClick, icon, title, sub, subRich,
 }: {
   onClick: () => void;
   icon: React.ReactNode;
   title: string;
   sub?: string;
   subRich?: React.ReactNode;
-  chevColor?: string;
-  highlight?: boolean;
-  hoverColor: string;
-  hoverBg: string;
-  iconBg: string;
 }) {
   return (
     <motion.button
@@ -302,29 +321,21 @@ function ActionCard({
       onClick={onClick}
       style={{
         width: '100%',
-        background: highlight ? `linear-gradient(135deg, ${GREEN_BRIGHT} 0%, #f0faf4 100%)` : WHITE,
-        border: highlight ? `2px solid ${GREEN_DARK}33` : `1.5px solid ${BORDER}`,
+        background: WHITE,
+        border: `1.5px solid ${BORDER}`,
         borderRadius: RADIUS_MD,
         padding: '12px 14px',
         cursor: 'pointer',
         display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 12,
-        textAlign: 'left' as const, transition: 'all 0.15s',
+        textAlign: 'left' as const, transition: 'border-color 0.15s',
         fontFamily: "'Poppins', sans-serif",
       }}
-      onMouseEnter={e => {
-        const t = e.currentTarget as HTMLElement;
-        t.style.borderColor = hoverColor;
-        if (!highlight) t.style.background = hoverBg;
-      }}
-      onMouseLeave={e => {
-        const t = e.currentTarget as HTMLElement;
-        t.style.borderColor = highlight ? `${GREEN_DARK}33` : BORDER;
-        if (!highlight) t.style.background = WHITE;
-      }}
+      onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = GREY_700; }}
+      onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = BORDER; }}
     >
       <div style={{
         width: 40, height: 40, borderRadius: RADIUS_SM, flexShrink: 0,
-        background: iconBg, display: 'flex', alignItems: 'center', justifyContent: 'center',
+        background: GREY_200, display: 'flex', alignItems: 'center', justifyContent: 'center',
       }}>
         {icon}
       </div>
@@ -336,7 +347,7 @@ function ActionCard({
           {subRich ?? sub}
         </div>
       </div>
-      <IconChevronRight size={16} stroke={1.8} color={chevColor ?? GREY_700} style={{ flexShrink: 0 }} />
+      <IconChevronRight size={16} stroke={1.8} color={GREY_700} style={{ flexShrink: 0 }} />
     </motion.button>
   );
 }
