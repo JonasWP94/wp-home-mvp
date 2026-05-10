@@ -25,8 +25,8 @@ interface Props {
 }
 
 const QUESTIONS: { key: keyof EssentialsData; label: string; sub: string; Icon: React.ComponentType<{ size?: number; stroke?: number; color?: string }> }[] = [
-  { key: 'steuererklaerung', label: 'Steuererklärung schon erledigt?',     sub: 'Ø 1.095 € Rückerstattung pro Jahr',          Icon: IconReceiptTax },
-  { key: 'girokonto',        label: 'Haben Sie ein kostenloses Girokonto?', sub: 'Bis zu 60 € Kontoführungsgebühren / Jahr',  Icon: IconCreditCard },
+  { key: 'steuererklaerung', label: 'Steuererklärung erledigt',        sub: 'Ø 1.095 € Rückerstattung pro Jahr',         Icon: IconReceiptTax },
+  { key: 'girokonto',        label: 'Kostenloses Girokonto vorhanden', sub: 'Bis zu 60 € Kontoführungsgebühren / Jahr', Icon: IconCreditCard },
 ];
 
 // ── iOS-style Toggle ─────────────────────────────────────────────
