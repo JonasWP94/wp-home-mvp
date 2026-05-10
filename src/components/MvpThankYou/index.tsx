@@ -226,21 +226,22 @@ export default function MvpThankYou({ onStart }: Props = {}) {
 // ── Savings Pill ─────────────────────────────────────────────────
 function SavingsPill({ amount }: { amount: string }) {
   return (
-    <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-start' }}>
+    <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
       <motion.div
-        initial={{ width: 60 }}
-        animate={{ width: '100%' }}
-        transition={{ delay: 0.5, duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+        initial={{ width: 64, borderRadius: 32 }}
+        animate={{ width: '100%', borderRadius: 14 }}
+        transition={{ delay: 0.55, duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
         style={{
-          height: 64, borderRadius: 14,
+          height: 64,
           background: GREEN_DARK, color: WHITE,
           display: 'flex', alignItems: 'center',
           paddingLeft: 10, paddingRight: 22,
           overflow: 'hidden', whiteSpace: 'nowrap',
           boxShadow: '0 4px 18px rgba(23,122,82,0.22)',
+          justifyContent: 'center',
         }}
       >
-        {/* Check disc */}
+        {/* Check disc — centered initially, moves left as pill expands */}
         <motion.div
           initial={{ scale: 0, rotate: -90 }}
           animate={{ scale: 1, rotate: 0 }}
@@ -256,13 +257,14 @@ function SavingsPill({ amount }: { amount: string }) {
 
         {/* Label */}
         <motion.span
-          initial={{ opacity: 0, x: -8 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 1.0, duration: 0.35 }}
+          initial={{ opacity: 0, width: 0 }}
+          animate={{ opacity: 1, width: 'auto' }}
+          transition={{ delay: 1.05, duration: 0.35 }}
           style={{
             flex: 1, paddingLeft: 14,
             fontSize: 14, fontWeight: FW_REGULAR, opacity: 0.92,
             letterSpacing: '-0.01em', fontFamily: "'Poppins', sans-serif",
+            overflow: 'hidden',
           }}
         >
           Ihre voraussichtliche Ersparnis dieses Jahr
@@ -272,7 +274,7 @@ function SavingsPill({ amount }: { amount: string }) {
         <motion.span
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 1.15, duration: 0.3 }}
+          transition={{ delay: 1.2, duration: 0.3 }}
           style={{
             fontSize: 19, fontWeight: FW_BOLD,
             letterSpacing: '-0.01em', flexShrink: 0,
