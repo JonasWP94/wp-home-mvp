@@ -93,7 +93,7 @@ export default function MvpThankYou({ onStart }: Props = {}) {
           </motion.div>
 
           {/* Savings pill — same width as cards grid */}
-          <div style={{ marginBottom: 10 }}>
+          <div style={{ marginBottom: 14 }}>
             <SavingsPill amount="475 €" />
           </div>
 
@@ -106,7 +106,7 @@ export default function MvpThankYou({ onStart }: Props = {}) {
               display: 'grid',
               gridTemplateColumns: 'repeat(3, 1fr)',
               gap: 12,
-              marginBottom: 20,
+              marginBottom: 14,
             }}
           >
             <ActionCard
@@ -215,7 +215,6 @@ function SavingsPill({ amount }: { amount: string }) {
           height: 64,
           background: GREEN_DARK, color: WHITE,
           display: 'flex', alignItems: 'center',
-          paddingLeft: 10, paddingRight: 22,
           overflow: 'hidden', whiteSpace: 'nowrap',
           boxShadow: '0 4px 18px rgba(23,122,82,0.22)',
           justifyContent: 'center',
@@ -242,7 +241,7 @@ function SavingsPill({ amount }: { amount: string }) {
           transition={{ delay: 1.65, duration: 0.35 }}
           style={{
             flex: 1, paddingLeft: 14,
-            fontSize: 14, fontWeight: FW_REGULAR, opacity: 0.92,
+            fontSize: 14, fontWeight: FW_REGULAR,
             letterSpacing: '-0.01em', fontFamily: "'Poppins', sans-serif",
             overflow: 'hidden',
           }}
@@ -258,6 +257,7 @@ function SavingsPill({ amount }: { amount: string }) {
           style={{
             fontSize: 19, fontWeight: FW_BOLD,
             letterSpacing: '-0.01em', flexShrink: 0,
+            paddingRight: 22,
             fontFamily: "'Poppins', sans-serif",
           }}
         >
