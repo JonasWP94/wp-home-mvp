@@ -100,14 +100,14 @@ function OptionCard({
   );
 }
 
-function SectionHeader({ label, title }: { label: string; title: string }) {
+function SectionHeader({ title }: { title: string }) {
   return (
-    <div style={{ marginBottom: 8, display: 'flex', alignItems: 'baseline', gap: 10, flexWrap: 'wrap' }}>
-      <div style={{
-        fontSize: 10, fontWeight: FW_BOLD, color: ACCENT,
-        letterSpacing: '0.1em',
-      }}>{label}</div>
-      <div style={{ fontSize: 14, fontWeight: FW_SEMIBOLD, color: PRIMARY, lineHeight: 1.3 }}>{title}</div>
+    <div style={{
+      marginBottom: 10,
+      fontSize: 15, fontWeight: FW_SEMIBOLD, color: PRIMARY, lineHeight: 1.3,
+      letterSpacing: '-0.005em',
+    }}>
+      {title}
     </div>
   );
 }
@@ -130,21 +130,21 @@ export default function MvpSparZiel({ onDone, onBack }: Props) {
 
           <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.25 }}>
 
-            <div style={{ textAlign: 'center', marginBottom: 18 }}>
+            <div style={{ textAlign: 'center', marginBottom: 24 }}>
               <h1 style={{
-                fontSize: 22, fontWeight: FW_SEMIBOLD,
-                color: PRIMARY, lineHeight: 1.2, marginBottom: 4,
-                letterSpacing: '-0.01em',
+                fontSize: 26, fontWeight: FW_BOLD,
+                color: PRIMARY, lineHeight: 1.15, marginBottom: 6,
+                letterSpacing: '-0.02em',
               }}>
-                Stellen Sie Ihren Sparplan ein
+                Was passt zu Ihnen?
               </h1>
               <p style={{ fontSize: 13, color: GREY_800, lineHeight: 1.45, fontWeight: FW_REGULAR }}>
-                Damit wir die Tipps optimal auf Sie zuschneiden können.
+                Drei kurze Fragen für Ihren persönlichen Sparplan.
               </p>
             </div>
 
-            <div style={{ marginBottom: 14 }}>
-              <SectionHeader label="SPARZIEL" title="Was ist Ihr Sparziel?" />
+            <div style={{ marginBottom: 18 }}>
+              <SectionHeader title="Was ist Ihr Sparziel?" />
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8 }}>
                 {SPARZIELE.map(opt => (
                   <OptionCard
@@ -159,11 +159,8 @@ export default function MvpSparZiel({ onDone, onBack }: Props) {
               </div>
             </div>
 
-            <div style={{ marginBottom: 14 }}>
-              <SectionHeader
-                label="ZEITAUFWAND"
-                title="Wie viel Zeit möchten Sie investieren?"
-              />
+            <div style={{ marginBottom: 18 }}>
+              <SectionHeader title="Wie viel Zeit möchten Sie investieren?" />
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8 }}>
                 {ZEITAUFWAND.map(opt => (
                   <OptionCard
@@ -179,7 +176,7 @@ export default function MvpSparZiel({ onDone, onBack }: Props) {
             </div>
 
             <div>
-              <SectionHeader label="INVESTITIONSBEREITSCHAFT" title="Was sind Sie bereit zu investieren?" />
+              <SectionHeader title="Was sind Sie bereit zu investieren?" />
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8 }}>
                 {INVESTITIONEN.map(opt => (
                   <OptionCard
