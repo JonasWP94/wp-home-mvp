@@ -6,11 +6,11 @@ import {
   IconGift,
   IconUsers,
   IconChevronRight,
-  IconArrowRight,
   IconStar,
   IconStarFilled,
   IconHome,
 } from '@tabler/icons-react';
+import WpButton from '../_WpButton';
 import {
   ACCENT, PRIMARY, BG, WHITE, BORDER, GREY_200, GREY_700, GREY_800,
   YELLOW,
@@ -195,22 +195,12 @@ export default function MvpThankYou({ onStart }: Props = {}) {
             </div>
 
             {rating > 0 && (
-              <motion.button
+              <motion.div
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
-                whileTap={{ scale: 0.95 }}
-                style={{
-                  background: YELLOW, border: 'none', borderRadius: RADIUS_MD,
-                  padding: '8px 18px', fontSize: TEXT_XS + 1, fontWeight: FW_SEMIBOLD,
-                  color: PRIMARY, cursor: 'pointer',
-                  boxShadow: `0 2px 8px rgba(249,170,0,0.30)`,
-                  display: 'inline-flex', alignItems: 'center', gap: 5,
-                  transition: 'all 0.15s',
-                  fontFamily: "'Poppins', sans-serif",
-                }}
               >
-                Absenden <IconArrowRight size={14} stroke={2} />
-              </motion.button>
+                <WpButton size="md">Absenden</WpButton>
+              </motion.div>
             )}
           </motion.div>
 
