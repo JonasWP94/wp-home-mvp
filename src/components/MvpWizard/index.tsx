@@ -193,7 +193,7 @@ function LoadingScreen({ onDone }: { onDone: () => void }) {
   const [barPct, setBarPct] = React.useState(0);
 
   React.useEffect(() => {
-    const duration = 3120;
+    const duration = 4000;
     const start = performance.now();
     let rafId: number;
 
