@@ -47,7 +47,7 @@ const ZEITAUFWAND = [
 
 const INVESTITIONEN = [
   { value: 'Keine',           sub: 'Nur kostenfrei',          Icon: IconMinus },
-  { value: 'Kleine Gadgets',  sub: 'Bis ca. 100 €',           Icon: IconCpu },
+  { value: 'Kleine Anschaffungen', sub: 'Bis ca. 100 €',      Icon: IconCpu },
   { value: 'Größere Projekte', sub: 'Sanierung & Umbau',       Icon: IconBuildingCommunity },
 ];
 
