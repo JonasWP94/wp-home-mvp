@@ -119,7 +119,7 @@ export default function MvpEssentials({ onDone, onBack }: Props) {
       <WpHeader showProgress progressPct={35} />
 
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '32px 24px 120px' }}>
-        <div style={{ width: '100%', maxWidth: 560 }}>
+        <div style={{ width: '100%', maxWidth: 820 }}>
 
           <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
 
