@@ -77,7 +77,7 @@ export default function MvpThankYou({ onStart }: Props = {}) {
               letterSpacing: '-0.02em',
               maxWidth: 560, marginLeft: 'auto', marginRight: 'auto',
             }}>
-              Glückwunsch — Sie haben Wechselpilot erfolgreich beauftragt.
+              Glückwunsch! Sie haben Wechselpilot erfolgreich beauftragt.
             </h1>
             <p style={{
               fontSize: TEXT_MD - 1, color: GREY_800, lineHeight: 1.55,
