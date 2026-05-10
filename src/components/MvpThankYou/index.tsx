@@ -87,22 +87,25 @@ export default function MvpThankYou({ onStart }: Props = {}) {
 
             <h1 style={{
               fontSize: TEXT_2XL - 4, fontWeight: FW_BOLD,
-              color: PRIMARY, lineHeight: 1.15, marginBottom: 8,
+              color: PRIMARY, lineHeight: 1.2, marginBottom: 10,
               letterSpacing: '-0.02em',
+              maxWidth: 560, marginLeft: 'auto', marginRight: 'auto',
             }}>
-              Glückwunsch!
+              Glückwunsch — Sie haben Wechselpilot erfolgreich beauftragt.
             </h1>
             <p style={{
-              fontSize: TEXT_SM, color: GREY_800, lineHeight: 1.5,
-              marginBottom: 6, fontWeight: FW_REGULAR,
+              fontSize: TEXT_MD - 1, color: GREY_800, lineHeight: 1.55,
+              fontWeight: FW_REGULAR,
+              maxWidth: 520, marginLeft: 'auto', marginRight: 'auto',
             }}>
-              Sie haben Wechselpilot erfolgreich beauftragt.
+              Ab jetzt übernehmen wir. Sie brauchen nichts weiter zu tun.
             </p>
             <p style={{
               fontSize: TEXT_MD, fontWeight: FW_SEMIBOLD,
-              color: GREEN_DARK, lineHeight: 1.3,
+              color: GREEN_DARK, lineHeight: 1.3, marginTop: 12,
             }}>
-              Sie sparen dieses Jahr bereits <span style={{ fontSize: TEXT_LG, fontWeight: FW_BOLD }}>XXX €</span>
+              Ihre voraussichtliche Ersparnis dieses Jahr:{' '}
+              <span style={{ fontSize: TEXT_LG, fontWeight: FW_BOLD }}>475 €</span>
             </p>
           </motion.div>
 
@@ -301,11 +304,11 @@ function ActionCard({
         width: '100%',
         background: highlight ? `linear-gradient(135deg, ${GREEN_BRIGHT} 0%, #f0faf4 100%)` : WHITE,
         border: highlight ? `2px solid ${GREEN_DARK}33` : `1.5px solid ${BORDER}`,
-        borderRadius: RADIUS_LG,
-        padding: '18px 14px',
+        borderRadius: RADIUS_MD,
+        padding: '12px 14px',
         cursor: 'pointer',
-        display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10,
-        textAlign: 'center' as const, transition: 'all 0.15s',
+        display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 12,
+        textAlign: 'left' as const, transition: 'all 0.15s',
         fontFamily: "'Poppins', sans-serif",
       }}
       onMouseEnter={e => {
@@ -320,22 +323,20 @@ function ActionCard({
       }}
     >
       <div style={{
-        width: 46, height: 46, borderRadius: RADIUS_MD,
+        width: 40, height: 40, borderRadius: RADIUS_SM, flexShrink: 0,
         background: iconBg, display: 'flex', alignItems: 'center', justifyContent: 'center',
       }}>
         {icon}
       </div>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-        <div style={{ textAlign: 'left' as const }}>
-          <div style={{ fontSize: TEXT_SM, fontWeight: FW_SEMIBOLD, color: PRIMARY, lineHeight: 1.25 }}>
-            {title}
-          </div>
-          <div style={{ fontSize: TEXT_XS, color: GREY_800, fontWeight: FW_REGULAR, marginTop: 2 }}>
-            {subRich ?? sub}
-          </div>
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <div style={{ fontSize: TEXT_SM, fontWeight: FW_SEMIBOLD, color: PRIMARY, lineHeight: 1.25 }}>
+          {title}
         </div>
-        <IconChevronRight size={16} stroke={1.6} color={chevColor ?? GREY_700} style={{ flexShrink: 0, marginTop: 2 }} />
+        <div style={{ fontSize: TEXT_XS, color: GREY_800, fontWeight: FW_REGULAR, marginTop: 2, lineHeight: 1.35 }}>
+          {subRich ?? sub}
+        </div>
       </div>
+      <IconChevronRight size={16} stroke={1.8} color={chevColor ?? GREY_700} style={{ flexShrink: 0 }} />
     </motion.button>
   );
 }
