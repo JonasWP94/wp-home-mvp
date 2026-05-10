@@ -43,14 +43,13 @@ interface MvpProfile {
   sparziel: string;
   zeitaufwand: string;
   steuererklaerung: boolean;
-  energievertraege: boolean;
   girokonto: boolean;
 }
 
 const INITIAL: MvpProfile = {
   tenure: '', propertyType: '', heatingType: '', autoType: '', hasChildren: null,
   investitionen: '', sparziel: '', zeitaufwand: '',
-  steuererklaerung: false, energievertraege: false, girokonto: false,
+  steuererklaerung: false, girokonto: false,
 };
 
 // ── Step Definitions ─────────────────────────────────────────────
@@ -397,7 +396,6 @@ export default function MvpWizard() {
         setProfile(p => ({
           ...p,
           steuererklaerung: data.steuererklaerung,
-          energievertraege: data.energievertraege,
           girokonto: data.girokonto,
         }));
         setView('quiz');
