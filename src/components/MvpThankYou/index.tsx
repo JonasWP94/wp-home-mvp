@@ -61,12 +61,15 @@ export default function MvpThankYou({ onStart }: Props = {}) {
       }}>
         <div style={{ width: '100%', maxWidth: 820 }}>
 
+          {/* Animated savings pill (above headline) */}
+          <SavingsPill amount="475 €" />
+
           {/* Headline */}
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.05 }}
-            style={{ textAlign: 'center', marginBottom: 24 }}
+            transition={{ delay: 1.2 }}
+            style={{ textAlign: 'center', marginBottom: 28 }}
           >
             <h1 style={{
               fontSize: TEXT_2XL - 4, fontWeight: FW_BOLD,
@@ -84,9 +87,6 @@ export default function MvpThankYou({ onStart }: Props = {}) {
               Ab jetzt übernehmen wir. Sie brauchen nichts weiter zu tun.
             </p>
           </motion.div>
-
-          {/* Animated savings pill: check first, then text expands to the right */}
-          <SavingsPill amount="475 €" />
 
 
           {/* Section heading */}
@@ -116,47 +116,24 @@ export default function MvpThankYou({ onStart }: Props = {}) {
               marginBottom: 20,
             }}
           >
-            {/* Card 1 */}
             <ActionCard
               onClick={() => { window.location.href = 'https://konto.wechselpilot.com/neuer-zähler'; }}
-              icon={<IconBolt size={20} stroke={1.8} color={GREY_800} />}
+              icon={<IconBolt size={26} stroke={2} color={ACCENT} />}
               title="Weiteren Zähler anlegen"
-              sub="Strom, Gas oder Fernwärme"
             />
-
-            {/* Card 2 */}
             <ActionCard
               onClick={() => { window.location.href = 'https://konto.wechselpilot.com/freunde-werben'; }}
-              icon={<IconUsers size={20} stroke={1.8} color={GREY_800} />}
+              icon={<IconUsers size={26} stroke={2} color={YELLOW} />}
               title="Freunde einladen"
-              subRich={
-                <>
-                  <span style={{ fontWeight: FW_SEMIBOLD, color: PRIMARY }}>50 €</span> Prämie pro Person
-                </>
-              }
             />
-
-            {/* Card 3 */}
             <ActionCard
               onClick={() => {
                 if (onStart) onStart();
                 else window.location.href = '/apps/wpilot-home/mvp.html';
               }}
-              icon={
-                <div style={{ position: 'relative', display: 'inline-flex' }}>
-                  <IconGift size={20} stroke={1.8} color={GREY_800} />
-                  <div style={{
-                    position: 'absolute', top: -5, right: -6,
-                    width: 14, height: 14, borderRadius: 7,
-                    background: PRIMARY, display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    border: `2px solid ${WHITE}`,
-                  }}>
-                    <span style={{ fontSize: 8, fontWeight: FW_BOLD, color: WHITE, lineHeight: 1 }}>1</span>
-                  </div>
-                </div>
-              }
+              icon={<IconGift size={26} stroke={2} color={GREEN_DARK} />}
               title="Noch mehr sparen"
-              sub="Willkommensgeschenk abholen"
+              badge
             />
           </motion.div>
 
@@ -247,7 +224,7 @@ export default function MvpThankYou({ onStart }: Props = {}) {
 function SavingsPill({ amount }: { amount: string }) {
   return (
     <div style={{
-      display: 'flex', justifyContent: 'center', marginBottom: 32,
+      display: 'flex', justifyContent: 'center', marginBottom: 24, marginTop: 4,
       perspective: 800,
     }}>
       <motion.div
@@ -305,15 +282,14 @@ function SavingsPill({ amount }: { amount: string }) {
   );
 }
 
-// ── Action Card sub-component ────────────────────────────────────
+// ── Action Card (Screenshot-Style) ───────────────────────────────
 function ActionCard({
-  onClick, icon, title, sub, subRich,
+  onClick, icon, title, badge,
 }: {
   onClick: () => void;
   icon: React.ReactNode;
   title: string;
-  sub?: string;
-  subRich?: React.ReactNode;
+  badge?: boolean;
 }) {
   return (
     <motion.button
@@ -322,32 +298,43 @@ function ActionCard({
       style={{
         width: '100%',
         background: WHITE,
-        border: `1.5px solid ${BORDER}`,
-        borderRadius: RADIUS_MD,
-        padding: '12px 14px',
+        border: `1px solid ${BORDER}`,
+        borderRadius: RADIUS_LG,
+        padding: '18px 18px',
         cursor: 'pointer',
-        display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 12,
-        textAlign: 'left' as const, transition: 'border-color 0.15s',
+        display: 'flex', flexDirection: 'column',
+        alignItems: 'flex-start', justifyContent: 'space-between',
+        gap: 32, minHeight: 110,
+        textAlign: 'left' as const, transition: 'border-color 0.15s, transform 0.15s',
         fontFamily: "'Poppins', sans-serif",
+        position: 'relative',
+        boxShadow: '0 1px 2px rgba(0,0,0,0.04)',
       }}
       onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = GREY_700; }}
       onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = BORDER; }}
     >
-      <div style={{
-        width: 40, height: 40, borderRadius: RADIUS_SM, flexShrink: 0,
-        background: GREY_200, display: 'flex', alignItems: 'center', justifyContent: 'center',
-      }}>
+      {/* Icon top-left, naked (no container) */}
+      <div style={{ position: 'relative', display: 'inline-flex' }}>
         {icon}
+        {badge && (
+          <div style={{
+            position: 'absolute', top: -6, right: -8,
+            width: 16, height: 16, borderRadius: 8,
+            background: PRIMARY, display: 'flex', alignItems: 'center', justifyContent: 'center',
+            border: `2px solid ${WHITE}`,
+          }}>
+            <span style={{ fontSize: 9, fontWeight: FW_BOLD, color: WHITE, lineHeight: 1 }}>1</span>
+          </div>
+        )}
       </div>
-      <div style={{ flex: 1, minWidth: 0 }}>
-        <div style={{ fontSize: TEXT_SM, fontWeight: FW_SEMIBOLD, color: PRIMARY, lineHeight: 1.25 }}>
+
+      {/* Title + chevron bottom-left */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+        <span style={{ fontSize: TEXT_SM + 1, fontWeight: FW_SEMIBOLD, color: PRIMARY, lineHeight: 1.25 }}>
           {title}
-        </div>
-        <div style={{ fontSize: TEXT_XS, color: GREY_800, fontWeight: FW_REGULAR, marginTop: 2, lineHeight: 1.35 }}>
-          {subRich ?? sub}
-        </div>
+        </span>
+        <IconChevronRight size={16} stroke={2} color={PRIMARY} style={{ flexShrink: 0 }} />
       </div>
-      <IconChevronRight size={16} stroke={1.8} color={GREY_700} style={{ flexShrink: 0 }} />
     </motion.button>
   );
 }
