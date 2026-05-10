@@ -173,7 +173,7 @@ export default function MvpSparZiel({ onDone, onBack }: Props) {
             </div>
 
             <div>
-              <SectionHeader title="Was sind Sie bereit zu investieren?" />
+              <SectionHeader title="Zu welchen Investitionen sind Sie bereit?" />
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8 }}>
                 {INVESTITIONEN.map(opt => (
                   <OptionCard
