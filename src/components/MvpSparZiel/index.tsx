@@ -58,8 +58,7 @@ function OptionCard({
   label: string; sub: string; selected: boolean; onClick: () => void;
 }) {
   return (
-    <motion.button
-      whileTap={{ scale: 0.98 }}
+    <button
       onClick={onClick}
       style={{
         width: '100%',
@@ -88,16 +87,16 @@ function OptionCard({
         }}>{sub}</div>
       </div>
 
-      {selected && (
-        <div style={{
-          flexShrink: 0,
-          width: 20, height: 20, borderRadius: 10,
-          background: ACCENT, display: 'flex', alignItems: 'center', justifyContent: 'center',
-        }}>
-          <IconCheck size={12} stroke={3} color={WHITE} />
-        </div>
-      )}
-    </motion.button>
+      <div style={{
+        flexShrink: 0,
+        width: 20, height: 20, borderRadius: 10,
+        background: selected ? ACCENT : 'transparent',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        transition: 'background 0.15s',
+      }}>
+        {selected && <IconCheck size={12} stroke={3} color={WHITE} />}
+      </div>
+    </button>
   );
 }
 
@@ -174,7 +173,6 @@ export default function MvpSparZiel({ onDone, onBack }: Props) {
               <SectionHeader
                 label="ZEITAUFWAND"
                 title="Wie viel Zeit möchten Sie investieren?"
-                sub="Mehr Zeitaufwand = mehr Ersparnis und Cashback. Wir passen die Vorschläge an Ihren Aufwand an."
               />
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8 }}>
                 {ZEITAUFWAND.map(opt => (
