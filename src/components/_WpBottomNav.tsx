@@ -1,9 +1,10 @@
 import React from 'react';
-import { IconArrowLeft, IconArrowRight } from '@tabler/icons-react';
+import { IconArrowLeft } from '@tabler/icons-react';
 import {
-  ACCENT, BORDER, WHITE, PRIMARY, GREY_700,
-  RADIUS_MD, FW_SEMIBOLD,
+  BORDER, WHITE, PRIMARY, GREY_800,
+  FW_SEMIBOLD,
 } from './_tokens';
+import WpButton from './_WpButton';
 
 interface Props {
   onBack?: () => void;
@@ -28,12 +29,14 @@ export default function WpBottomNav({
         <button
           onClick={onBack}
           style={{
-            background: WHITE, border: `1.5px solid ${BORDER}`,
-            borderRadius: RADIUS_MD, padding: '10px 16px',
-            fontSize: 14, fontWeight: FW_SEMIBOLD, color: PRIMARY,
+            background: 'transparent', border: 'none',
+            padding: '8px 12px',
+            fontSize: 14, fontWeight: FW_SEMIBOLD, color: GREY_800,
             cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6,
-            transition: 'all 0.15s',
+            transition: 'color 0.15s', fontFamily: "'Poppins', sans-serif",
           }}
+          onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = PRIMARY; }}
+          onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = GREY_800; }}
         >
           <IconArrowLeft size={16} stroke={2} /> Zurück
         </button>
@@ -42,20 +45,9 @@ export default function WpBottomNav({
       {middle ?? <div />}
 
       {onNext ? (
-        <button
-          onClick={onNext}
-          disabled={nextDisabled}
-          style={{
-            background: nextDisabled ? BORDER : ACCENT,
-            border: 'none', borderRadius: RADIUS_MD, padding: '10px 20px',
-            fontSize: 14, fontWeight: FW_SEMIBOLD, color: nextDisabled ? GREY_700 : WHITE,
-            cursor: nextDisabled ? 'not-allowed' : 'pointer', transition: 'all 0.15s',
-            boxShadow: nextDisabled ? 'none' : `0 2px 8px rgba(42,111,166,0.30)`,
-            display: 'flex', alignItems: 'center', gap: 6,
-          }}
-        >
-          {nextLabel} <IconArrowRight size={16} stroke={2} />
-        </button>
+        <WpButton onClick={onNext} disabled={nextDisabled} size="md">
+          {nextLabel}
+        </WpButton>
       ) : <div />}
     </div>
   );
