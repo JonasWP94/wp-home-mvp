@@ -76,15 +76,12 @@ function OptionCard({
     >
       <Icon size={20} stroke={2} color={selected ? ACCENT : GREY_800} style={{ flexShrink: 0 }} />
 
-      <div style={{ flex: 1, minWidth: 0 }}>
-        <div style={{
-          fontSize: 13, fontWeight: FW_SEMIBOLD,
-          color: selected ? BLUE_DARK : PRIMARY, lineHeight: 1.2,
-        }}>{label}</div>
-        <div style={{
-          fontSize: 11, fontWeight: FW_REGULAR,
-          color: GREY_800, marginTop: 2, lineHeight: 1.3,
-        }}>{sub}</div>
+      <div style={{
+        flex: 1, minWidth: 0,
+        fontSize: 13, fontWeight: FW_SEMIBOLD,
+        color: selected ? BLUE_DARK : PRIMARY, lineHeight: 1.25,
+      }}>
+        {label}
       </div>
 
       <div style={{
