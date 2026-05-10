@@ -65,7 +65,7 @@ export default function MvpThankYou({ onStart }: Props = {}) {
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.15 }}
+            transition={{ delay: 0.1, duration: 0.35 }}
             style={{ textAlign: 'center', marginBottom: 28 }}
           >
             <div style={{
@@ -93,20 +93,15 @@ export default function MvpThankYou({ onStart }: Props = {}) {
           </motion.div>
 
           {/* Savings pill — same width as cards grid */}
-          <motion.div
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5 }}
-            style={{ marginBottom: 10 }}
-          >
+          <div style={{ marginBottom: 10 }}>
             <SavingsPill amount="475 €" />
-          </motion.div>
+          </div>
 
           {/* Action Cards */}
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6 }}
+            transition={{ delay: 2.4, duration: 0.4 }}
             style={{
               display: 'grid',
               gridTemplateColumns: 'repeat(3, 1fr)',
@@ -139,7 +134,7 @@ export default function MvpThankYou({ onStart }: Props = {}) {
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.55 }}
+            transition={{ delay: 3.0, duration: 0.4 }}
             style={{
               background: WHITE,
               border: `1px solid ${BORDER}`, borderRadius: RADIUS_LG,
@@ -215,7 +210,7 @@ function SavingsPill({ amount }: { amount: string }) {
       <motion.div
         initial={{ width: 64, borderRadius: 32 }}
         animate={{ width: '100%', borderRadius: 14 }}
-        transition={{ delay: 0.55, duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+        transition={{ delay: 1.1, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
         style={{
           height: 64,
           background: GREEN_DARK, color: WHITE,
@@ -230,7 +225,7 @@ function SavingsPill({ amount }: { amount: string }) {
         <motion.div
           initial={{ scale: 0, rotate: -90 }}
           animate={{ scale: 1, rotate: 0 }}
-          transition={{ type: 'spring', stiffness: 300, damping: 18, delay: 0.15 }}
+          transition={{ type: 'spring', stiffness: 300, damping: 18, delay: 0.5 }}
           style={{
             width: 44, height: 44, borderRadius: 22, flexShrink: 0,
             background: 'rgba(255,255,255,0.18)',
@@ -244,7 +239,7 @@ function SavingsPill({ amount }: { amount: string }) {
         <motion.span
           initial={{ opacity: 0, width: 0 }}
           animate={{ opacity: 1, width: 'auto' }}
-          transition={{ delay: 1.05, duration: 0.35 }}
+          transition={{ delay: 1.65, duration: 0.35 }}
           style={{
             flex: 1, paddingLeft: 14,
             fontSize: 14, fontWeight: FW_REGULAR, opacity: 0.92,
@@ -259,7 +254,7 @@ function SavingsPill({ amount }: { amount: string }) {
         <motion.span
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 1.2, duration: 0.3 }}
+          transition={{ delay: 1.85, duration: 0.3 }}
           style={{
             fontSize: 19, fontWeight: FW_BOLD,
             letterSpacing: '-0.01em', flexShrink: 0,
