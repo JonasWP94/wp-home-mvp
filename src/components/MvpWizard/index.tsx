@@ -119,10 +119,72 @@ const TOTAL = STEPS.length;
 
 type View = 'intro' | 'landing' | 'sparziel' | 'essentials' | 'kommunikation' | 'quiz' | 'loading' | 'results';
 
+// ── Radar Animation ───────────────────────────────────────────────
+const BLIPS = [
+  { top: '28%', left: '62%', delay: 0.6 },
+  { top: '58%', left: '38%', delay: 1.4 },
+  { top: '40%', left: '25%', delay: 2.1 },
+];
+
+function RadarAnimation() {
+  const SIZE = 80;
+  const rings = [1, 0.67, 0.34];
+  return (
+    <div style={{ position: 'relative', width: SIZE, height: SIZE, marginBottom: 36 }}>
+      {/* Rings */}
+      {rings.map((scale, i) => (
+        <div key={i} style={{
+          position: 'absolute',
+          top: `${((1 - scale) / 2) * 100}%`,
+          left: `${((1 - scale) / 2) * 100}%`,
+          width: `${scale * 100}%`,
+          height: `${scale * 100}%`,
+          borderRadius: '50%',
+          border: `1px solid rgba(42,111,166,${0.12 + i * 0.08})`,
+        }} />
+      ))}
+
+      {/* Sweep */}
+      <motion.div
+        animate={{ rotate: 360 }}
+        transition={{ repeat: Infinity, duration: 2.2, ease: 'linear' }}
+        style={{
+          position: 'absolute', inset: 0, borderRadius: '50%',
+          background: 'conic-gradient(from 0deg, rgba(42,111,166,0.22) 0deg, transparent 70deg)',
+        }}
+      />
+
+      {/* Blips */}
+      {BLIPS.map((b, i) => (
+        <motion.div
+          key={i}
+          initial={{ opacity: 0, scale: 0 }}
+          animate={{ opacity: [0, 1, 0], scale: [0, 1, 0] }}
+          transition={{ delay: b.delay, duration: 0.6, repeat: Infinity, repeatDelay: 2.2 - 0.6 }}
+          style={{
+            position: 'absolute', top: b.top, left: b.left,
+            width: 4, height: 4, borderRadius: 2,
+            background: ACCENT,
+            boxShadow: `0 0 6px ${ACCENT}`,
+          }}
+        />
+      ))}
+
+      {/* Center dot */}
+      <div style={{
+        position: 'absolute', top: '50%', left: '50%',
+        transform: 'translate(-50%,-50%)',
+        width: 4, height: 4, borderRadius: 2,
+        background: ACCENT, opacity: 0.7,
+      }} />
+    </div>
+  );
+}
+
 // ── Loading Screen ────────────────────────────────────────────────
 const LOADING_STEPS = [
   'Antworten werden ausgewertet …',
-  'Spartipps werden personalisiert …',
+  'Sparmaßnahmen werden gesucht …',
   'Ihr Spar-Dashboard wird erstellt …',
 ];
 
@@ -163,26 +225,8 @@ function LoadingScreen({ onDone }: { onDone: () => void }) {
         }
       `}</style>
 
-      {/* Glowing spinner */}
-      <div style={{ position: 'relative', marginBottom: 32 }}>
-        <motion.div
-          animate={{ rotate: 360 }}
-          transition={{ repeat: Infinity, duration: 0.85, ease: 'linear' }}
-          style={{
-            width: 64, height: 64, borderRadius: 32,
-            border: `4px solid ${BLUE_VERY_BRIGHT}`,
-            borderTopColor: ACCENT,
-            boxShadow: `0 0 28px rgba(42,111,166,0.35), 0 0 10px rgba(42,111,166,0.18)`,
-          }}
-        />
-        {/* Inner glow disc */}
-        <div style={{
-          position: 'absolute', inset: 10,
-          borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(42,111,166,0.12) 0%, transparent 70%)',
-          pointerEvents: 'none',
-        }} />
-      </div>
+      {/* Radar */}
+      <RadarAnimation />
 
       <AnimatePresence mode="wait">
         <motion.p
