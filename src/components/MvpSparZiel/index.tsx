@@ -66,37 +66,35 @@ function OptionCard({
         background: selected ? BLUE_VERY_BRIGHT : WHITE,
         border: `1.5px solid ${selected ? ACCENT : BORDER}`,
         borderRadius: RADIUS_MD,
-        padding: '14px 14px 12px',
-        display: 'flex', flexDirection: 'column',
-        alignItems: 'flex-start', justifyContent: 'space-between',
-        gap: 18, minHeight: 96,
+        padding: '16px 18px',
+        display: 'flex', flexDirection: 'row',
+        alignItems: 'center', gap: 14,
         cursor: 'pointer', transition: 'all 0.15s', textAlign: 'left' as const,
         position: 'relative',
         fontFamily: "'Poppins', sans-serif",
         boxShadow: '0 1px 2px rgba(0,0,0,0.03)',
       }}
     >
-      {/* Icon top-left, naked */}
-      <Icon size={22} stroke={2} color={selected ? ACCENT : GREY_800} />
+      <Icon size={24} stroke={2} color={selected ? ACCENT : GREY_800} style={{ flexShrink: 0 }} />
 
-      {/* Label + sub bottom-left */}
-      <div style={{ minWidth: 0, width: '100%' }}>
+      <div style={{ flex: 1, minWidth: 0 }}>
         <div style={{
-          fontSize: TEXT_XS + 1, fontWeight: FW_SEMIBOLD,
+          fontSize: TEXT_SM, fontWeight: FW_SEMIBOLD,
           color: selected ? BLUE_DARK : PRIMARY, lineHeight: 1.25,
         }}>{label}</div>
         <div style={{
-          fontSize: 10.5, fontWeight: FW_REGULAR,
-          color: GREY_800, marginTop: 3, lineHeight: 1.35,
+          fontSize: TEXT_XS, fontWeight: FW_REGULAR,
+          color: GREY_800, marginTop: 2, lineHeight: 1.4,
         }}>{sub}</div>
       </div>
+
       {selected && (
         <div style={{
-          position: 'absolute', top: 8, right: 8,
-          width: 18, height: 18, borderRadius: 9,
+          flexShrink: 0,
+          width: 20, height: 20, borderRadius: 10,
           background: ACCENT, display: 'flex', alignItems: 'center', justifyContent: 'center',
         }}>
-          <IconCheck size={11} stroke={3} color={WHITE} />
+          <IconCheck size={12} stroke={3} color={WHITE} />
         </div>
       )}
     </motion.button>
@@ -133,7 +131,7 @@ export default function MvpSparZiel({ onDone, onBack }: Props) {
       <WpHeader showProgress progressPct={20} />
 
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '32px 24px 120px' }}>
-        <div style={{ width: '100%', maxWidth: 520 }}>
+        <div style={{ width: '100%', maxWidth: 820 }}>
 
           <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
 
