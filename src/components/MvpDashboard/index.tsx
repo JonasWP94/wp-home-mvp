@@ -26,6 +26,19 @@ import {
   IconDroplet,
   IconChevronDown,
   IconPencil,
+  IconTrendingDown,
+  IconRocket,
+  IconClock,
+  IconTool,
+  IconMinus,
+  IconCpu,
+  IconBuildingCommunity,
+  IconCreditCard,
+  IconDeviceMobile,
+  IconWifi,
+  IconTarget,
+  IconHourglass,
+  IconCoins,
 } from '@tabler/icons-react';
 
 // ── Types ────────────────────────────────────────────────────────
@@ -35,6 +48,15 @@ interface MvpProfile {
   heatingType: 'gas' | 'oel' | 'strom' | 'waermepumpe' | '';
   autoType: 'verbrenner' | 'eauto' | 'hybrid' | 'keins' | '';
   hasChildren: boolean | null;
+  // Spar-Präferenzen
+  sparziel?: string;
+  zeitaufwand?: string;
+  investitionen?: string;
+  // Basics
+  steuererklaerung?: boolean;
+  girokonto?: boolean;
+  mobilfunk?: boolean;
+  internet?: boolean;
 }
 
 interface MvpTip {
@@ -100,6 +122,74 @@ const PROFILE_FIELDS = [
     options: [
       { value: 'true',  label: 'Ja',   icon: IconUsers },
       { value: 'false', label: 'Nein', icon: IconUser },
+    ],
+  },
+  // ── Spar-Präferenzen ────────────────────────────────────────
+  {
+    key: 'sparziel' as const,
+    label: 'Sparziel',
+    icon: IconTarget,
+    options: [
+      { value: 'Laufende Kosten senken', label: 'Laufende Kosten senken', icon: IconTrendingDown },
+      { value: 'Einmalig viel sparen',   label: 'Einmalig viel sparen',   icon: IconBolt },
+      { value: 'Ökologisch & sparsam',   label: 'Ökologisch & sparsam',   icon: IconLeaf },
+    ],
+  },
+  {
+    key: 'zeitaufwand' as const,
+    label: 'Zeitaufwand',
+    icon: IconHourglass,
+    options: [
+      { value: 'Mühelos',  label: 'Mühelos',  icon: IconRocket },
+      { value: 'Moderat',  label: 'Moderat',  icon: IconClock },
+      { value: 'Intensiv', label: 'Intensiv', icon: IconTool },
+    ],
+  },
+  {
+    key: 'investitionen' as const,
+    label: 'Investitionsbereitschaft',
+    icon: IconCoins,
+    options: [
+      { value: 'Keine',               label: 'Keine',               icon: IconMinus },
+      { value: 'Kleine Anschaffungen', label: 'Kleine Anschaffungen', icon: IconCpu },
+      { value: 'Größere Projekte',    label: 'Größere Projekte',    icon: IconBuildingCommunity },
+    ],
+  },
+  // ── Basics ──────────────────────────────────────────────────
+  {
+    key: 'steuererklaerung' as const,
+    label: 'Steuererklärung',
+    icon: IconReceipt,
+    options: [
+      { value: 'true',  label: 'Erledigt',   icon: IconCheck },
+      { value: 'false', label: 'Noch offen', icon: IconX },
+    ],
+  },
+  {
+    key: 'girokonto' as const,
+    label: 'Kostenloses Girokonto',
+    icon: IconCreditCard,
+    options: [
+      { value: 'true',  label: 'Vorhanden',     icon: IconCheck },
+      { value: 'false', label: 'Nicht vorhanden', icon: IconX },
+    ],
+  },
+  {
+    key: 'internet' as const,
+    label: 'Internet-Vertrag',
+    icon: IconWifi,
+    options: [
+      { value: 'true',  label: 'Aktuell',        icon: IconCheck },
+      { value: 'false', label: 'Nicht aktuell',  icon: IconX },
+    ],
+  },
+  {
+    key: 'mobilfunk' as const,
+    label: 'Mobilfunk-Vertrag',
+    icon: IconDeviceMobile,
+    options: [
+      { value: 'true',  label: 'Aktuell',        icon: IconCheck },
+      { value: 'false', label: 'Nicht aktuell',  icon: IconX },
     ],
   },
 ];
@@ -319,7 +409,7 @@ function ProfileEditView({
   }
 
   function selectOption(fieldKey: string, value: string) {
-    const coerced: any = fieldKey === 'hasChildren' ? value === 'true' : value;
+    const coerced: any = value === 'true' ? true : value === 'false' ? false : value;
     const updated = { ...local, [fieldKey]: coerced };
     setLocal(updated);
     localStorage.setItem('wpilot_mvp_profile', JSON.stringify(updated));
@@ -332,7 +422,7 @@ function ProfileEditView({
       {/* Header */}
       <div style={{
         position: 'sticky', top: 0, zIndex: 100,
-        background: 'rgba(245,246,248,0.95)', backdropFilter: 'blur(12px)',
+        background: 'rgba(243,243,245,0.95)', backdropFilter: 'blur(12px)',
         borderBottom: `1px solid ${BORDER}`, padding: '12px 20px',
         display: 'flex', alignItems: 'center', gap: 12,
       }}>
@@ -606,7 +696,7 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
       {/* Header */}
       <div style={{
         position: 'sticky', top: 0, zIndex: 100,
-        background: 'rgba(245,246,248,0.95)', backdropFilter: 'blur(12px)',
+        background: 'rgba(243,243,245,0.95)', backdropFilter: 'blur(12px)',
         borderBottom: `1px solid ${BORDER}`, padding: '12px 20px',
         display: 'flex', alignItems: 'center', gap: 10,
       }}>
