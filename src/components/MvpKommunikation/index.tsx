@@ -129,7 +129,7 @@ export default function MvpKommunikation({ onDone, onBack }: Props) {
                 Basics: <span style={{ color: ACCENT }}>Kommunikation</span>
               </h1>
               <p style={{ fontSize: TEXT_SM, color: GREY_800, lineHeight: 1.55, fontWeight: FW_REGULAR }}>
-                Haben Sie diese Verträge in den letzten 24 Monaten gewechselt?
+                Aktivieren Sie, was bereits optimiert ist — alles andere zeigen wir Ihnen als Spartipp.
               </p>
             </div>
 
