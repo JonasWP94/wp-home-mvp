@@ -11,7 +11,6 @@ import {
   IconStarFilled,
   IconHome,
 } from '@tabler/icons-react';
-import WpButton from '../_WpButton';
 import {
   ACCENT, PRIMARY, BG, WHITE, BORDER, GREY_200, GREY_700, GREY_800,
   YELLOW,
@@ -28,8 +27,16 @@ interface Props {
 }
 
 export default function MvpThankYou({ onStart }: Props = {}) {
-  const [rating, setRating] = useState(0);
+  const [rating, setRating] = useState<number>(() => {
+    const v = typeof window !== 'undefined' ? localStorage.getItem('wpilot_thx_rating') : null;
+    return v ? Number(v) : 0;
+  });
   const [hoverStar, setHoverStar] = useState(0);
+
+  function saveRating(n: number) {
+    setRating(n);
+    try { localStorage.setItem('wpilot_thx_rating', String(n)); } catch {}
+  }
 
   return (
     <div style={{
@@ -182,7 +189,7 @@ export default function MvpThankYou({ onStart }: Props = {}) {
                     key={n}
                     whileHover={{ scale: 1.15 }}
                     whileTap={{ scale: 0.9 }}
-                    onClick={() => setRating(n)}
+                    onClick={() => saveRating(n)}
                     onMouseEnter={() => setHoverStar(n)}
                     onMouseLeave={() => setHoverStar(0)}
                     style={{
@@ -199,14 +206,6 @@ export default function MvpThankYou({ onStart }: Props = {}) {
               })}
             </div>
 
-            {rating > 0 && (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-              >
-                <WpButton size="md">Absenden</WpButton>
-              </motion.div>
-            )}
           </motion.div>
 
         </div>
