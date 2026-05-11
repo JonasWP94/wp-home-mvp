@@ -44,31 +44,40 @@ export default function MvpHomeLanding({ onStart, onBack }: Props) {
         <div style={{ width: '100%', maxWidth: 720 }}>
 
           {/* Eyebrow */}
-          <motion.div
+          <motion.p
             initial={{ opacity: 0, y: -4 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3 }}
             style={{
-              display: 'inline-flex', alignItems: 'center', gap: 10,
-              marginBottom: 18,
+              fontSize: 11, fontWeight: FW_BOLD, color: ACCENT,
+              letterSpacing: '0.1em', margin: '0 0 14px',
             }}
           >
-            <p style={{
-              fontSize: 11, fontWeight: FW_BOLD, color: ACCENT,
-              letterSpacing: '0.1em', margin: 0,
-            }}>
-              WECHSELPILOT PRÄSENTIERT
-            </p>
+            WECHSELPILOT PRÄSENTIERT
+          </motion.p>
+
+          {/* Wechselpilot HOME Logo */}
+          <motion.div
+            initial={{ opacity: 0, y: -4 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.05, duration: 0.35 }}
+            style={{
+              display: 'inline-flex', alignItems: 'center', gap: 10,
+              marginBottom: 22,
+            }}
+          >
+            <img
+              src="/apps/wpilot-home/assets/logo-wp.png"
+              alt="Wechselpilot"
+              style={{ height: 36, objectFit: 'contain' }}
+            />
             <span style={{
-              fontSize: 9, fontWeight: FW_BOLD,
-              color: ACCENT,
-              background: 'rgba(42,111,166,0.1)',
-              border: `1px solid rgba(42,111,166,0.25)`,
-              padding: '2px 7px',
-              borderRadius: 4,
-              letterSpacing: '0.08em',
+              background: YELLOW, borderRadius: 8,
+              padding: '6px 12px',
+              fontFamily: "'Poppins', sans-serif",
+              display: 'inline-flex', alignItems: 'center', lineHeight: 1,
             }}>
-              BETA
+              <span style={{ fontSize: 15, fontWeight: FW_BOLD, color: PRIMARY, letterSpacing: '0.06em' }}>HOME</span>
             </span>
           </motion.div>
 

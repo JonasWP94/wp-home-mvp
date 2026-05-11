@@ -2,7 +2,7 @@ import React from 'react';
 import { IconArrowLeft } from '@tabler/icons-react';
 import {
   YELLOW, PRIMARY, BORDER, GREY_200, GREY_800,
-  RADIUS_SM, FW_BOLD, FW_MEDIUM, FW_SEMIBOLD,
+  RADIUS_SM, FW_BOLD, FW_SEMIBOLD,
 } from './_tokens';
 
 interface Props {
@@ -32,12 +32,11 @@ export default function WpHeader({ onBack, rightSlot, showProgress, progressPct 
         />
         <span style={{
           background: YELLOW, borderRadius: 6,
-          padding: '2px 7px 3px',
+          padding: '4px 8px',
           fontFamily: "'Poppins', sans-serif",
-          display: 'inline-flex', flexDirection: 'column', alignItems: 'center', lineHeight: 1,
+          display: 'inline-flex', alignItems: 'center', lineHeight: 1,
         }}>
           <span style={{ fontSize: 11, fontWeight: FW_BOLD, color: PRIMARY, letterSpacing: '0.06em' }}>HOME</span>
-          <span style={{ fontSize: 7, fontWeight: FW_MEDIUM, color: PRIMARY, opacity: 0.7, letterSpacing: '0.04em' }}>beta</span>
         </span>
 
         <div style={{ flex: 1 }} />
