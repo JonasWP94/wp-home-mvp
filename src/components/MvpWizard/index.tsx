@@ -98,7 +98,7 @@ const STEPS = [
   {
     key: 'autoType' as const,
     icon: IconCar,
-    title: 'Welches Fahrzeug nutzen Sie?',
+    title: 'Welche/s Fahrzeug/e nutzen Sie?',
     sub: 'Je nach Fahrzeug zeigen wir Ihnen, wie Sie bei Kraftstoff, Versicherung oder Ladestrom sparen.',
     options: [
       { value: 'verbrenner', label: 'Verbrenner', icon: IconCar },
