@@ -21,7 +21,7 @@ export default function WpHeader({ onBack, rightSlot, showProgress, progressPct 
         background: 'rgba(243,243,245,0.95)', backdropFilter: 'blur(12px)',
         borderBottom: `1px solid ${BORDER}`,
         padding: '12px 16px',
-        display: 'flex', alignItems: 'center', gap: 10,
+        display: 'flex', alignItems: 'center', gap: 6,
         height: 56, boxSizing: 'border-box',
       }}>
         <style>{`@media(min-width:640px){.wp-header{padding:12px 24px !important;}}`}</style>
@@ -32,8 +32,8 @@ export default function WpHeader({ onBack, rightSlot, showProgress, progressPct 
           style={{ objectFit: 'contain' }}
         />
         <span style={{
-          background: YELLOW, borderRadius: 6,
-          padding: '4px 8px',
+          background: YELLOW, borderRadius: 999,
+          padding: '4px 10px',
           fontFamily: "'Poppins', sans-serif",
           display: 'inline-flex', alignItems: 'center', lineHeight: 1,
         }}>

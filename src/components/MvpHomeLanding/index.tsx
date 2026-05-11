@@ -6,7 +6,7 @@ import {
   TEXT_MD,
   FW_REGULAR, FW_SEMIBOLD, FW_BOLD,
 } from '../_tokens';
-import logoWp from '../assets/logo-wp.png';
+import logoWp from '../../assets/logo-wp.png';
 import WpHeader from '../_WpHeader';
 import WpButton from '../_WpButton';
 
@@ -63,7 +63,7 @@ export default function MvpHomeLanding({ onStart, onBack }: Props) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.05, duration: 0.35 }}
             style={{
-              display: 'inline-flex', alignItems: 'center', gap: 10,
+              display: 'inline-flex', alignItems: 'center', gap: 6,
               marginBottom: 22,
             }}
           >
@@ -73,8 +73,8 @@ export default function MvpHomeLanding({ onStart, onBack }: Props) {
               style={{ height: 36, objectFit: 'contain' }}
             />
             <span style={{
-              background: YELLOW, borderRadius: 8,
-              padding: '6px 12px',
+              background: YELLOW, borderRadius: 999,
+              padding: '6px 14px',
               fontFamily: "'Poppins', sans-serif",
               display: 'inline-flex', alignItems: 'center', lineHeight: 1,
             }}>
