@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import {
   IconCheck,
   IconBolt,
+  IconFlame,
   IconSparkles,
   IconUsers,
   IconChevronRight,
@@ -117,7 +118,12 @@ export default function MvpThankYou({ onStart }: Props = {}) {
           >
             <ActionCard
               onClick={() => { window.location.href = 'https://konto.wechselpilot.com/neuer-zähler'; }}
-              icon={<IconBolt size={26} stroke={2} color={ACCENT} />}
+              icon={
+                <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+                  <IconBolt size={26} stroke={2} color={ACCENT} />
+                  <IconFlame size={24} stroke={2} color="#e85d4a" />
+                </div>
+              }
               title="Weiteren Zähler anlegen"
             />
             <ActionCard
