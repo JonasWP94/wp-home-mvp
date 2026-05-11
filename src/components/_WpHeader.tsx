@@ -1,5 +1,6 @@
 import React from 'react';
 import { IconArrowLeft } from '@tabler/icons-react';
+import logoWp from '../assets/logo-wp.png';
 import {
   YELLOW, PRIMARY, BORDER, GREY_200, GREY_800,
   RADIUS_SM, FW_BOLD, FW_SEMIBOLD,
@@ -25,7 +26,7 @@ export default function WpHeader({ onBack, rightSlot, showProgress, progressPct 
       }}>
         <style>{`@media(min-width:640px){.wp-header{padding:12px 24px !important;}}`}</style>
         <img
-          src="/apps/wpilot-home/assets/logo-wp.png"
+          src={logoWp}
           alt="Wechselpilot"
           height={30}
           style={{ objectFit: 'contain' }}

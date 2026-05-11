@@ -6,6 +6,7 @@ import {
   TEXT_MD,
   FW_REGULAR, FW_SEMIBOLD, FW_BOLD,
 } from '../_tokens';
+import logoWp from '../assets/logo-wp.png';
 import WpHeader from '../_WpHeader';
 import WpButton from '../_WpButton';
 
@@ -67,7 +68,7 @@ export default function MvpHomeLanding({ onStart, onBack }: Props) {
             }}
           >
             <img
-              src="/apps/wpilot-home/assets/logo-wp.png"
+              src={logoWp}
               alt="Wechselpilot"
               style={{ height: 36, objectFit: 'contain' }}
             />
