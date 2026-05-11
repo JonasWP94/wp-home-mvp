@@ -411,9 +411,6 @@ export default function MvpWizard() {
               }}>
                 {current.title}
               </h1>
-              <p style={{ fontSize: TEXT_SM, color: GREY_800, lineHeight: 1.55, fontWeight: FW_REGULAR }}>
-                {current.sub}
-              </p>
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
