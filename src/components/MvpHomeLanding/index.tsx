@@ -94,7 +94,7 @@ export default function MvpHomeLanding({ onStart, onBack }: Props) {
               marginBottom: 14, textAlign: 'center',
             }}
           >
-            Der <span style={{ color: YELLOW }}>CFO</span> für Ihr Wohnzimmer.
+            Ihr <span style={{ color: YELLOW }}>Spar-Coach</span> für Zuhause.
           </motion.h1>
 
           {/* Subline */}

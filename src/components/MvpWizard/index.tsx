@@ -62,7 +62,7 @@ const STEPS = [
     key: 'propertyType' as const,
     icon: IconBuilding,
     title: 'Wohnen Sie in einem Haus oder in einer Wohnung?',
-    sub: 'Damit empfehlen wir Ihnen die passenden Energiespar-Optionen für Ihre Wohnsituation.',
+    sub: 'Damit empfehlen wir Ihnen die passenden Spar-Optionen für Ihre Wohnsituation.',
     options: [
       { value: 'haus',    label: 'Haus',    icon: IconHome },
       { value: 'wohnung', label: 'Wohnung', icon: IconBuilding },
@@ -473,20 +473,18 @@ export default function MvpWizard() {
                   </motion.button>
                 );
               })}
-              {isLast && (
-                <button
-                  onClick={skip}
-                  style={{
-                    background: 'none', border: 'none', cursor: 'pointer',
-                    fontSize: TEXT_XS + 1, color: GREY_700, fontWeight: FW_MEDIUM,
-                    padding: '12px 0 4px', textAlign: 'center' as const,
-                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4,
-                    width: '100%', fontFamily: "'Poppins', sans-serif",
-                  }}
-                >
-                  Überspringen <IconArrowRight size={13} stroke={1.5} />
-                </button>
-              )}
+              <button
+                onClick={skip}
+                style={{
+                  background: 'none', border: 'none', cursor: 'pointer',
+                  fontSize: TEXT_XS + 1, color: GREY_700, fontWeight: FW_MEDIUM,
+                  padding: '12px 0 4px', textAlign: 'center' as const,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4,
+                  width: '100%', fontFamily: "'Poppins', sans-serif",
+                }}
+              >
+                Überspringen <IconArrowRight size={13} stroke={1.5} />
+              </button>
             </div>
           </motion.div>
         </AnimatePresence>

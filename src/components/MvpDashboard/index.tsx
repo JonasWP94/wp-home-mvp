@@ -200,6 +200,7 @@ const ALL_TIPS: MvpTip[] = [
   {
     id: 'strom-gas-wechsel',
     title: 'Strom/Gas wechseln',
+    description: 'Der Wechsel zu einem günstigeren Anbieter ist in wenigen Minuten erledigt und spart oft mehrere hundert Euro pro Jahr — plus attraktive Wechselboni.',
     partner: 'Octopus, Tibber, Lichtblick',
     priority: 3, category: 'energie', icon: IconBolt,
     savingsHg2: 836, savingsHg3: 836,
@@ -208,6 +209,7 @@ const ALL_TIPS: MvpTip[] = [
   {
     id: 'thermostate',
     title: 'Smarte Thermostate',
+    description: 'Smarte Thermostate heizen automatisch nur, wenn Sie zuhause sind. Das reduziert Ihre Heizkosten um bis zu 30 % — ohne dass Sie an Komfort verlieren.',
     partner: 'tado°, Homematic IP',
     priority: 3, category: 'heizung', icon: IconTemperature,
     savingsHg2: 180, savingsHg3: 220,
@@ -216,6 +218,7 @@ const ALL_TIPS: MvpTip[] = [
   {
     id: 'waermepumpe',
     title: 'Wärmepumpe',
+    description: 'Eine Wärmepumpe nutzt Umweltwärme statt Gas oder Öl und ist langfristig deutlich günstiger. Bis zu 70 % Förderung vom Staat machen die Umstellung attraktiv.',
     partner: 'Thermondo, 1KOMMA5°',
     priority: 2, category: 'heizung', icon: IconLeaf,
     savingsHg2: 700, savingsHg3: 700,
@@ -224,6 +227,7 @@ const ALL_TIPS: MvpTip[] = [
   {
     id: 'solaranlage',
     title: 'Solaranlage',
+    description: 'Eigener Solarstrom vom Dach senkt die Stromrechnung dauerhaft. Mit Speicher decken Sie bis zu 80 % Ihres Bedarfs selbst — und produzieren wetterunabhängig den günstigsten Strom.',
     partner: 'Enpal, Zolar',
     priority: 2, category: 'solar', icon: IconSun,
     savingsHg2: 300, savingsHg3: 300,
@@ -232,6 +236,7 @@ const ALL_TIPS: MvpTip[] = [
   {
     id: 'balkonkraftwerk',
     title: 'Balkonkraftwerk',
+    description: 'Eine Mini-Solaranlage am Balkon kostet wenig, ist einfach zu installieren und produziert kostenlosen Strom für Ihren Haushalt — auch in Mietwohnungen erlaubt.',
     partner: 'Yuma, Priwatt',
     priority: 2, category: 'solar', icon: IconSun,
     savingsHg2: 180, savingsHg3: 200,
@@ -240,6 +245,7 @@ const ALL_TIPS: MvpTip[] = [
   {
     id: 'kfz-versicherung',
     title: 'KFZ-Versicherung wechseln',
+    description: 'KFZ-Tarife unterscheiden sich oft um mehrere hundert Euro. Ein Vergleich dauert nur Minuten und der Wechsel zum 1. Januar ist unkompliziert.',
     partner: 'Clark, Tarifcheck, HUK24',
     priority: 3, category: 'mobilitaet', icon: IconCar,
     savingsHg2: 800, savingsHg3: 800,
@@ -248,6 +254,7 @@ const ALL_TIPS: MvpTip[] = [
   {
     id: 'thg-praemie',
     title: 'THG-Prämie',
+    description: 'Als E-Auto-Fahrer haben Sie Anspruch auf die staatliche THG-Prämie — einfach online beantragen und das Geld jährlich kassieren.',
     partner: 'Geld für eAuto',
     priority: 1, category: 'mobilitaet', icon: IconBatteryCharging,
     savingsHg2: 630, savingsHg3: 630,
@@ -256,6 +263,7 @@ const ALL_TIPS: MvpTip[] = [
   {
     id: 'wallbox',
     title: 'Wallbox / Laden zuhause',
+    description: 'Mit einer Wallbox laden Sie zuhause deutlich günstiger und schneller als an öffentlichen Säulen. In Kombination mit Solarstrom maximieren Sie die Ersparnis.',
     partner: 'Enpal, charge.cloud',
     priority: 1, category: 'mobilitaet', icon: IconBatteryCharging,
     savingsHg2: 280, savingsHg3: 280,
@@ -264,9 +272,28 @@ const ALL_TIPS: MvpTip[] = [
   {
     id: 'hausrat-haftpflicht',
     title: 'Hausrat-/Haftpflicht',
+    description: 'Veraltete Versicherungstarife kosten unnötig Geld. Ein Vergleich zeigt schnell, ob Sie bei gleicher Leistung günstigere Anbieter finden.',
     partner: 'Clark',
     priority: 2, category: 'versicherung', icon: IconShield,
     savingsHg2: 160, savingsHg3: 160,
+    condition: () => true,
+  },
+  {
+    id: 'internet-wechsel',
+    title: 'Internet-Anbieter wechseln',
+    description: 'Stammkunden zahlen oft deutlich mehr als Neukunden. Mit einem Anbieterwechsel oder einem Anruf beim aktuellen Anbieter senken Sie monatlich Ihre Internetkosten.',
+    partner: 'Verivox, Check24',
+    priority: 2, category: 'kommunikation', icon: IconWifi,
+    savingsHg2: 240, savingsHg3: 240,
+    condition: () => true,
+  },
+  {
+    id: 'mobilfunk-wechsel',
+    title: 'Mobilfunk-Tarif optimieren',
+    description: 'Mobilfunkanbieter bieten Neukunden meist deutlich günstigere Konditionen. Tarifvergleich oder Nachverhandeln reduziert Ihre Handykosten spürbar.',
+    partner: 'Check24, Verivox',
+    priority: 2, category: 'kommunikation', icon: IconDeviceMobile,
+    savingsHg2: 180, savingsHg3: 180,
     condition: () => true,
   },
   {
@@ -286,6 +313,7 @@ const ALL_TIPS: MvpTip[] = [
   {
     id: 'kostenloses-girokonto',
     title: 'Kostenloses Girokonto',
+    description: 'Viele Banken berechnen 5–10 € Kontoführungsgebühren pro Monat. Ein kostenloses Girokonto bei einer Direktbank spart diese Gebühren komplett — bei gleicher Funktionalität.',
     partner: 'ING, DKB',
     priority: 1, category: 'finanzen', icon: IconPig,
     savingsHg2: 120, savingsHg3: 120,
@@ -345,6 +373,10 @@ function buildClusters(profile: MvpProfile, tips: MvpTip[]): { title: string; ti
     {
       key: 'finanzen',
       title: 'Steuern & Finanzen',
+    },
+    {
+      key: 'kommunikation',
+      title: 'Internet & Mobilfunk',
     },
   ];
 
@@ -441,12 +473,18 @@ function ProfileEditView({
         <div style={{ width: 80 }} />
       </div>
 
-      <div style={{ maxWidth: 540, margin: '0 auto', padding: '20px 16px 40px', width: '100%' }}>
+      <div className="mvp-profile-container" style={{ maxWidth: 720, margin: '0 auto', padding: '20px 16px 40px', width: '100%' }}>
+        <style>{`
+          @media(min-width:900px){
+            .mvp-profile-container{max-width:980px !important;padding:24px 24px 40px !important;}
+            .mvp-profile-grid{display:grid !important;grid-template-columns:repeat(2, 1fr) !important;gap:10px 14px !important;}
+          }
+        `}</style>
         <p style={{ fontSize: 13, color: TEXT_MUTED, marginBottom: 20, lineHeight: 1.5 }}>
           Tippen Sie auf ein Feld, um Ihre Angabe direkt zu ändern. Die Empfehlungen werden sofort aktualisiert.
         </p>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+        <div className="mvp-profile-grid" style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
           {PROFILE_FIELDS.map(field => {
             const isOpen = openField === field.key;
             const FieldIcon = field.icon;
@@ -632,7 +670,16 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
 
   const tips = useMemo(() => {
     if (!profile) return [];
-    return ALL_TIPS.filter(t => t.condition(profile) && !removed.has(t.id));
+    return ALL_TIPS.filter(t => {
+      if (!t.condition(profile)) return false;
+      if (removed.has(t.id)) return false;
+      // Hide tips that user already completed in Basics steps
+      if (t.id === 'steuererklaerung' && profile.steuererklaerung) return false;
+      if (t.id === 'kostenloses-girokonto' && profile.girokonto) return false;
+      if (t.id === 'internet-wechsel' && profile.internet) return false;
+      if (t.id === 'mobilfunk-wechsel' && profile.mobilfunk) return false;
+      return true;
+    });
   }, [profile, removed]);
 
   const removedTips = useMemo(() => {
@@ -685,9 +732,9 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
   }
 
   const profilePills = [
-    { type: 'tenure',   label: profile.tenure === 'eigentum' ? 'Eigentum' : 'Miete',                                                          value: profile.tenure },
     { type: 'property', label: profile.propertyType === 'haus' ? 'Haus' : 'Wohnung',                                                          value: profile.propertyType },
-    { type: 'heating',  label: ({ gas: 'Gas', oel: 'Öl', strom: 'Strom', waermepumpe: 'Wärmepumpe' } as any)[profile.heatingType] || '',       value: profile.heatingType },
+    { type: 'tenure',   label: profile.tenure === 'eigentum' ? 'Eigentum' : 'Miete',                                                          value: profile.tenure },
+    { type: 'heating',  label: ({ gas: 'Gas', oel: 'Öl', strom: 'Strom', waermepumpe: 'Wärmepumpe', weiss_nicht: 'Heizung unklar' } as any)[profile.heatingType] || 'Keine Angabe', value: profile.heatingType },
     { type: 'auto',     label: ({ verbrenner: 'Verbrenner', eauto: 'E-Auto', hybrid: 'Hybrid', keins: 'Kein Auto' } as any)[profile.autoType], value: profile.autoType },
     { type: 'children', label: profile.hasChildren ? 'Mit Kindern' : 'Ohne Kinder',                                                            value: profile.hasChildren ? 'mit' : 'ohne' },
   ];
@@ -711,16 +758,16 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
           <span style={{ fontSize: 11, fontWeight: 700, color: '#243c47', letterSpacing: '0.06em' }}>HOME</span>
         </span>
         <div style={{ flex: 1 }} />
-        <button onClick={() => setView('profile')} style={{
-          background: 'none', border: `1px solid ${BORDER}`, borderRadius: 8,
-          padding: '6px 12px', fontSize: 12, fontWeight: 500, color: TEXT_MUTED, cursor: 'pointer',
-          display: 'flex', alignItems: 'center', gap: 4,
-        }}>
-          <IconPencil size={13} stroke={1.5} /> Profil ändern
-        </button>
       </div>
 
-      <div style={{ maxWidth: 680, margin: '0 auto', padding: '20px 16px 40px' }}>
+      <div className="mvp-dash-container" style={{ maxWidth: 680, margin: '0 auto', padding: '20px 16px 40px' }}>
+        <style>{`
+          @media(min-width:900px){
+            .mvp-dash-container{max-width:1180px !important;padding:24px 24px 40px !important;}
+            .mvp-clusters{display:grid !important;grid-template-columns:repeat(2, 1fr) !important;gap:20px 28px !important;}
+            .mvp-clusters > div{margin-bottom:0 !important;}
+          }
+        `}</style>
 
         {/* Hero */}
         <motion.div
@@ -772,13 +819,13 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
               {p.label}
             </span>
           ))}
-          <span style={{ marginLeft: 'auto', display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 12, color: TEXT_MUTED }}>
-            <IconPencil size={13} stroke={1.5} /> ändern
+          <span style={{ marginLeft: 'auto', display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 12, color: TEXT_MUTED, fontWeight: 600 }}>
+            <IconPencil size={13} stroke={1.5} /> Angaben ändern
           </span>
         </div>
 
         {/* Clustered tips */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 28 }}>
+        <div className="mvp-clusters" style={{ display: 'flex', flexDirection: 'column', gap: 28 }}>
           {clusters.map((cluster, ci) => (
             <div key={cluster.title}>
               {/* Cluster heading */}
@@ -794,7 +841,6 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
                 {cluster.tips.map((tip, i) => {
                   const isDone = done.has(tip.id);
                   const isExpanded = expanded === tip.id;
-                  const pri = PRIORITY_COLORS[tip.priority];
                   const TipIcon = tip.icon;
                   const savings = getSavings(tip);
                   return (
@@ -822,9 +868,6 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
                             </div>
                             <div style={{ fontSize: 12, color: TEXT_MUTED }}>{fmt(savings)} € / Jahr</div>
                           </div>
-                          <span style={{ fontSize: 10, fontWeight: 700, padding: '4px 8px', borderRadius: 6, background: pri.bg, color: pri.text, flexShrink: 0, whiteSpace: 'nowrap' }}>
-                            {pri.label}
-                          </span>
                           <button
                             onClick={e => { e.stopPropagation(); toggleDone(tip.id); }}
                             style={{
@@ -850,13 +893,15 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
                             >
                               <div style={{ padding: '14px 16px 16px', borderTop: `1px solid ${BORDER}` }}>
                                 {tip.description && (
-                                  <p style={{ fontSize: 13, color: TEXT_MUTED, lineHeight: 1.6, marginBottom: 14 }}>{tip.description}</p>
+                                  <p style={{ fontSize: 13, color: TEXT, lineHeight: 1.6, marginBottom: 12, fontWeight: 400 }}>{tip.description}</p>
                                 )}
-                                <span style={{ fontSize: 12, background: GREEN_LT, borderRadius: 8, padding: '6px 12px', color: GREEN, fontWeight: 500, display: 'inline-flex', alignItems: 'center', gap: 5 }}>
-                                  💰 {fmt(savings)} € / Jahr
-                                </span>
+                                {tip.partner && (
+                                  <p style={{ fontSize: 11, color: TEXT_MUTED, marginBottom: 12, fontWeight: 500 }}>
+                                    Empfohlene Partner: {tip.partner}
+                                  </p>
+                                )}
                                 {tip.partnerLinks && tip.partnerLinks.length > 0 && (
-                                  <div style={{ display: 'flex', gap: 10, marginTop: 14, flexWrap: 'wrap' }}>
+                                  <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
                                     {tip.partnerLinks.map(pl => (
                                       <a key={pl.name} href={pl.url} target="_blank" rel="noopener noreferrer" style={{
                                         display: 'inline-flex', alignItems: 'center', gap: 6,
