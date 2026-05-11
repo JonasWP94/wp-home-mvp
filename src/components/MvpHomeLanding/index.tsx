@@ -44,19 +44,6 @@ export default function MvpHomeLanding({ onStart, onBack }: Props) {
 
         <div style={{ width: '100%', maxWidth: 720 }}>
 
-          {/* Eyebrow */}
-          <motion.p
-            initial={{ opacity: 0, y: -4 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
-            style={{
-              fontSize: 11, fontWeight: FW_BOLD, color: ACCENT,
-              letterSpacing: '0.1em', margin: '0 0 14px',
-            }}
-          >
-            WECHSELPILOT PRÄSENTIERT
-          </motion.p>
-
           {/* Wechselpilot HOME Logo */}
           <motion.div
             initial={{ opacity: 0, y: -4 }}
