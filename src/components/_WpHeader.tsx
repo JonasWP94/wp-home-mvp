@@ -15,14 +15,15 @@ interface Props {
 export default function WpHeader({ onBack, rightSlot, showProgress, progressPct = 0 }: Props) {
   return (
     <>
-      <div style={{
+      <div className="wp-header" style={{
         position: 'sticky', top: 0, zIndex: 100,
         background: 'rgba(243,243,245,0.95)', backdropFilter: 'blur(12px)',
         borderBottom: `1px solid ${BORDER}`,
-        padding: '12px 24px',
+        padding: '12px 16px',
         display: 'flex', alignItems: 'center', gap: 10,
         height: 56, boxSizing: 'border-box',
       }}>
+        <style>{`@media(min-width:640px){.wp-header{padding:12px 24px !important;}}`}</style>
         <img
           src="/apps/wpilot-home/assets/logo-wp.png"
           alt="Wechselpilot"

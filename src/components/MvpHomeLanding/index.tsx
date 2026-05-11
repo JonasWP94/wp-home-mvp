@@ -22,11 +22,12 @@ export default function MvpHomeLanding({ onStart, onBack }: Props) {
     }}>
       <WpHeader onBack={onBack} />
 
-      <div style={{
+      <div className="wp-landing" style={{
         flex: 1, display: 'flex', flexDirection: 'column',
         alignItems: 'center', justifyContent: 'center',
-        padding: '40px 24px 140px', textAlign: 'center',
+        padding: '32px 20px 140px', textAlign: 'center',
       }}>
+        <style>{`@media(min-width:640px){.wp-landing{padding:40px 24px 140px !important;}}`}</style>
         <style>{`
           @media(min-width:640px){
             .wp-cta-inline{display:inline-flex !important;}

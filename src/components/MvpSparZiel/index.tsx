@@ -122,7 +122,12 @@ export default function MvpSparZiel({ onDone, onBack }: Props) {
     }}>
       <WpHeader showProgress progressPct={20} />
 
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '20px 24px 100px' }}>
+      <div className="wp-page" style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '20px 16px 100px' }}>
+        <style>{`
+          @media(min-width:640px){
+            .wp-page{padding:24px 24px 100px !important;}
+          }
+        `}</style>
         <div style={{ width: '100%', maxWidth: 820 }}>
 
           <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.25 }}>
@@ -142,7 +147,7 @@ export default function MvpSparZiel({ onDone, onBack }: Props) {
 
             <div style={{ marginBottom: 18 }}>
               <SectionHeader title="Was ist Ihr Sparziel?" />
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8 }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 8 }}>
                 {SPARZIELE.map(opt => (
                   <OptionCard
                     key={opt.value}
@@ -158,7 +163,7 @@ export default function MvpSparZiel({ onDone, onBack }: Props) {
 
             <div style={{ marginBottom: 18 }}>
               <SectionHeader title="Wie viel Zeit möchten Sie investieren?" />
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8 }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 8 }}>
                 {ZEITAUFWAND.map(opt => (
                   <OptionCard
                     key={opt.value}
@@ -174,7 +179,7 @@ export default function MvpSparZiel({ onDone, onBack }: Props) {
 
             <div>
               <SectionHeader title="Zu welchen Investitionen sind Sie bereit?" />
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8 }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 8 }}>
                 {INVESTITIONEN.map(opt => (
                   <OptionCard
                     key={opt.value}

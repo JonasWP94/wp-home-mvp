@@ -115,7 +115,8 @@ export default function MvpEssentials({ onDone, onBack }: Props) {
     }}>
       <WpHeader showProgress progressPct={82} />
 
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '32px 24px 120px' }}>
+      <div className="wp-page-ess" style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '24px 16px 120px' }}>
+        <style>{`@media(min-width:640px){.wp-page-ess{padding:32px 24px 120px !important;}}`}</style>
         <div style={{ width: '100%', maxWidth: 820 }}>
 
           <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>

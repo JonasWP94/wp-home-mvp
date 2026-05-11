@@ -376,7 +376,8 @@ export default function MvpWizard() {
     }}>
       <WpHeader showProgress progressPct={progressPct} />
 
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '32px 24px 120px' }}>
+      <div className="wp-page-quiz" style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '24px 16px 120px' }}>
+        <style>{`@media(min-width:640px){.wp-page-quiz{padding:32px 24px 120px !important;}}`}</style>
         <AnimatePresence mode="wait" custom={dir}>
           <motion.div
             key={step}

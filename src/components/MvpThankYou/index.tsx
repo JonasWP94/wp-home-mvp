@@ -54,11 +54,16 @@ export default function MvpThankYou({ onStart }: Props = {}) {
         }
       />
 
-      <div style={{
+      <div className="wp-page-thx" style={{
         flex: 1, display: 'flex', flexDirection: 'column',
         alignItems: 'center', justifyContent: 'center',
-        padding: '32px 24px',
+        padding: '24px 16px',
       }}>
+        <style>{`
+          @media(min-width:640px){
+            .wp-page-thx{padding:32px 24px !important;}
+          }
+        `}</style>
         <div style={{ width: '100%', maxWidth: 820 }}>
 
           {/* Glückwunsch + Headline */}
@@ -104,7 +109,7 @@ export default function MvpThankYou({ onStart }: Props = {}) {
             transition={{ delay: 2.4, duration: 0.4 }}
             style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(3, 1fr)',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
               gap: 12,
               marginBottom: 14,
             }}
@@ -248,12 +253,21 @@ function SavingsPill({ amount }: { amount: string }) {
             overflow: 'hidden', whiteSpace: 'nowrap',
           }}
         >
+          <style>{`
+            .wp-pill-label-long { display: inline; }
+            .wp-pill-label-short { display: none; }
+            @media(max-width:519px){
+              .wp-pill-label-long { display: none; }
+              .wp-pill-label-short { display: inline; }
+            }
+          `}</style>
           <span style={{
             paddingLeft: 14, paddingRight: 14,
             fontSize: 14, fontWeight: FW_REGULAR,
             letterSpacing: '-0.01em', fontFamily: "'Poppins', sans-serif",
           }}>
-            Ihre voraussichtliche Ersparnis dieses Jahr
+            <span className="wp-pill-label-long">Ihre voraussichtliche Ersparnis dieses Jahr</span>
+            <span className="wp-pill-label-short">Ersparnis dieses Jahr</span>
           </span>
           <span style={{
             fontSize: 19, fontWeight: FW_BOLD,

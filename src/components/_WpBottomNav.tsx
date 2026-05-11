@@ -18,13 +18,14 @@ export default function WpBottomNav({
   onBack, onNext, nextLabel = 'Weiter', nextDisabled, middle,
 }: Props) {
   return (
-    <div style={{
+    <div className="wp-bottom-nav" style={{
       position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 100,
       background: 'rgba(255,255,255,0.97)', backdropFilter: 'blur(12px)',
       borderTop: `1px solid ${BORDER}`,
-      padding: '14px 24px',
-      display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12,
+      padding: '12px 16px',
+      display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8,
     }}>
+      <style>{`@media(min-width:640px){.wp-bottom-nav{padding:14px 24px !important;gap:12px !important;}}`}</style>
       {onBack ? (
         <button
           onClick={onBack}
