@@ -16,6 +16,8 @@ import {
   IconBatteryCharging,
   IconBike,
   IconPlug,
+  IconPlus,
+  IconMinus,
 } from '@tabler/icons-react';
 import {
   ACCENT, BLUE_VERY_BRIGHT, BLUE_DARK,
@@ -38,7 +40,8 @@ interface MvpProfile {
   tenure: 'miete' | 'eigentum' | '';
   propertyType: 'wohnung' | 'haus' | '';
   heatingType: 'gas' | 'oel' | 'strom' | 'waermepumpe' | 'weiss_nicht' | '';
-  autoType: 'verbrenner' | 'eauto' | 'hybrid' | 'keins' | '';
+  autoType: 'verbrenner' | 'eauto' | 'hybrid' | 'keins' | 'has-vehicles' | '';
+  vehicles: { verbrenner: number; eauto: number; hybrid: number };
   hasChildren: boolean | null;
   investitionen: 'keine' | 'gadgets' | 'projekte' | '';
   sparziel: string;
@@ -51,6 +54,7 @@ interface MvpProfile {
 
 const INITIAL: MvpProfile = {
   tenure: '', propertyType: '', heatingType: '', autoType: '', hasChildren: null,
+  vehicles: { verbrenner: 0, eauto: 0, hybrid: 0 },
   investitionen: '', sparziel: '', zeitaufwand: '',
   steuererklaerung: false, girokonto: false,
   mobilfunk: false, internet: false,
@@ -280,9 +284,25 @@ export default function MvpWizard() {
 
   const current = STEPS[step];
   const currentValue = profile[current.key];
-  const canNext = currentValue !== '' && currentValue !== null;
+  const isVehicleStep = current.key === 'autoType';
+  const vehicleTotal = profile.vehicles.verbrenner + profile.vehicles.eauto + profile.vehicles.hybrid;
+  const canNext = isVehicleStep
+    ? (profile.autoType === 'keins' || vehicleTotal > 0)
+    : (currentValue !== '' && currentValue !== null);
   const isLast = step === TOTAL - 1;
   const StepIcon = current.icon;
+
+  function setVehicleCount(type: 'verbrenner' | 'eauto' | 'hybrid', delta: number) {
+    setProfile(p => {
+      const newVehicles = { ...p.vehicles, [type]: Math.max(0, p.vehicles[type] + delta) };
+      const total = newVehicles.verbrenner + newVehicles.eauto + newVehicles.hybrid;
+      return { ...p, vehicles: newVehicles, autoType: total > 0 ? 'has-vehicles' : '' };
+    });
+  }
+
+  function setNoVehicle() {
+    setProfile(p => ({ ...p, autoType: 'keins', vehicles: { verbrenner: 0, eauto: 0, hybrid: 0 } }));
+  }
 
   function select(val: any) {
     setProfile(p => ({ ...p, [current.key]: val }));
@@ -414,7 +434,15 @@ export default function MvpWizard() {
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-              {current.options.map(opt => {
+              {isVehicleStep ? (
+                <VehicleSelector
+                  vehicles={profile.vehicles}
+                  noVehicle={profile.autoType === 'keins'}
+                  onIncrement={(t) => setVehicleCount(t, +1)}
+                  onDecrement={(t) => setVehicleCount(t, -1)}
+                  onNoVehicle={setNoVehicle}
+                />
+              ) : current.options.map(opt => {
                 const isSelected = String(currentValue) === String(opt.value);
                 const OptIcon = opt.icon;
                 return (
@@ -499,5 +527,148 @@ export default function MvpWizard() {
         }
       />
     </div>
+  );
+}
+
+// ── Vehicle Selector (multi-select with counts) ──────────────────
+type VehicleType = 'verbrenner' | 'eauto' | 'hybrid';
+
+const VEHICLE_OPTS: { type: VehicleType; label: string; icon: React.ComponentType<{ size?: number; stroke?: number; color?: string }> }[] = [
+  { type: 'verbrenner', label: 'Verbrenner', icon: IconCar },
+  { type: 'eauto',      label: 'E-Auto',     icon: IconBatteryCharging },
+  { type: 'hybrid',     label: 'Hybrid',     icon: IconPlug },
+];
+
+function VehicleSelector({
+  vehicles, noVehicle, onIncrement, onDecrement, onNoVehicle,
+}: {
+  vehicles: { verbrenner: number; eauto: number; hybrid: number };
+  noVehicle: boolean;
+  onIncrement: (t: VehicleType) => void;
+  onDecrement: (t: VehicleType) => void;
+  onNoVehicle: () => void;
+}) {
+  return (
+    <>
+      {VEHICLE_OPTS.map(opt => {
+        const count = vehicles[opt.type];
+        const isSelected = count > 0;
+        const OptIcon = opt.icon;
+        return (
+          <div
+            key={opt.type}
+            onClick={() => { if (!isSelected) onIncrement(opt.type); }}
+            style={{
+              width: '100%',
+              background: isSelected ? BLUE_VERY_BRIGHT : WHITE,
+              border: `1.5px solid ${isSelected ? ACCENT : BORDER}`,
+              borderRadius: RADIUS_MD, padding: '12px 16px',
+              display: 'flex', alignItems: 'center', gap: 14,
+              cursor: isSelected ? 'default' : 'pointer', transition: 'all 0.15s',
+              textAlign: 'left' as const,
+              fontFamily: "'Poppins', sans-serif",
+            }}
+          >
+            <div style={{
+              width: 38, height: 38, borderRadius: RADIUS_SM,
+              background: isSelected ? ACCENT : GREY_200,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              flexShrink: 0, transition: 'all 0.15s',
+            }}>
+              <OptIcon size={20} stroke={1.8} color={isSelected ? WHITE : GREY_800} />
+            </div>
+            <span style={{
+              flex: 1,
+              fontSize: TEXT_MD - 1, fontWeight: FW_SEMIBOLD,
+              color: isSelected ? BLUE_DARK : PRIMARY,
+            }}>
+              {opt.label}
+            </span>
+            {isSelected ? (
+              <div
+                onClick={e => e.stopPropagation()}
+                style={{
+                  display: 'inline-flex', alignItems: 'center', gap: 4,
+                  background: WHITE, borderRadius: 999, padding: '4px',
+                  border: `1px solid ${ACCENT}`,
+                }}
+              >
+                <button
+                  onClick={() => onDecrement(opt.type)}
+                  style={{
+                    width: 28, height: 28, borderRadius: 14, border: 'none',
+                    background: 'transparent', cursor: 'pointer',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    color: ACCENT,
+                  }}
+                >
+                  <IconMinus size={16} stroke={2.5} />
+                </button>
+                <span style={{
+                  minWidth: 20, textAlign: 'center',
+                  fontSize: 15, fontWeight: FW_BOLD, color: BLUE_DARK,
+                }}>
+                  {count}
+                </span>
+                <button
+                  onClick={() => onIncrement(opt.type)}
+                  style={{
+                    width: 28, height: 28, borderRadius: 14, border: 'none',
+                    background: ACCENT, cursor: 'pointer',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    color: WHITE,
+                  }}
+                >
+                  <IconPlus size={16} stroke={2.5} />
+                </button>
+              </div>
+            ) : (
+              <span style={{ fontSize: 12, color: GREY_700, fontWeight: FW_MEDIUM }}>
+                Hinzufügen
+              </span>
+            )}
+          </div>
+        );
+      })}
+
+      {/* Kein Auto - mutually exclusive */}
+      <div
+        onClick={onNoVehicle}
+        style={{
+          width: '100%',
+          background: noVehicle ? BLUE_VERY_BRIGHT : WHITE,
+          border: `1.5px solid ${noVehicle ? ACCENT : BORDER}`,
+          borderRadius: RADIUS_MD, padding: '14px 16px',
+          display: 'flex', alignItems: 'center', gap: 14,
+          cursor: 'pointer', transition: 'all 0.15s',
+          fontFamily: "'Poppins', sans-serif",
+        }}
+      >
+        <div style={{
+          width: 38, height: 38, borderRadius: RADIUS_SM,
+          background: noVehicle ? ACCENT : GREY_200,
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          flexShrink: 0,
+        }}>
+          <IconBike size={20} stroke={1.8} color={noVehicle ? WHITE : GREY_800} />
+        </div>
+        <span style={{
+          flex: 1,
+          fontSize: TEXT_MD - 1, fontWeight: FW_SEMIBOLD,
+          color: noVehicle ? BLUE_DARK : PRIMARY,
+        }}>
+          Kein Auto
+        </span>
+        {noVehicle && (
+          <div style={{
+            flexShrink: 0,
+            width: 22, height: 22, borderRadius: 11,
+            background: ACCENT, display: 'flex', alignItems: 'center', justifyContent: 'center',
+          }}>
+            <IconCheck size={14} stroke={2.5} color={WHITE} />
+          </div>
+        )}
+      </div>
+    </>
   );
 }

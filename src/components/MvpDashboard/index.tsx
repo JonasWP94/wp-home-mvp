@@ -47,7 +47,8 @@ interface MvpProfile {
   tenure: 'miete' | 'eigentum' | '';
   propertyType: 'wohnung' | 'haus' | '';
   heatingType: 'gas' | 'oel' | 'strom' | 'waermepumpe' | '';
-  autoType: 'verbrenner' | 'eauto' | 'hybrid' | 'keins' | '';
+  autoType: 'verbrenner' | 'eauto' | 'hybrid' | 'keins' | 'has-vehicles' | '';
+  vehicles?: { verbrenner: number; eauto: number; hybrid: number };
   hasChildren: boolean | null;
   // Spar-Präferenzen
   sparziel?: string;
@@ -249,7 +250,7 @@ const ALL_TIPS: MvpTip[] = [
     partner: 'Clark, Tarifcheck, HUK24',
     priority: 3, category: 'mobilitaet', icon: IconCar,
     savingsHg2: 800, savingsHg3: 800,
-    condition: (p) => p.autoType !== 'keins',
+    condition: (p) => p.autoType !== 'keins' && p.autoType !== '',
   },
   {
     id: 'thg-praemie',
@@ -258,7 +259,7 @@ const ALL_TIPS: MvpTip[] = [
     partner: 'Geld für eAuto',
     priority: 1, category: 'mobilitaet', icon: IconBatteryCharging,
     savingsHg2: 630, savingsHg3: 630,
-    condition: (p) => p.autoType === 'eauto',
+    condition: (p) => (p.vehicles?.eauto ?? 0) > 0 || p.autoType === 'eauto',
   },
   {
     id: 'wallbox',
@@ -267,7 +268,7 @@ const ALL_TIPS: MvpTip[] = [
     partner: 'Enpal, charge.cloud',
     priority: 1, category: 'mobilitaet', icon: IconBatteryCharging,
     savingsHg2: 280, savingsHg3: 280,
-    condition: (p) => p.autoType === 'hybrid',
+    condition: (p) => (p.vehicles?.hybrid ?? 0) > 0 || (p.vehicles?.eauto ?? 0) > 0 || p.autoType === 'hybrid',
   },
   {
     id: 'hausrat-haftpflicht',
@@ -735,7 +736,18 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
     { type: 'property', label: profile.propertyType === 'haus' ? 'Haus' : 'Wohnung',                                                          value: profile.propertyType },
     { type: 'tenure',   label: profile.tenure === 'eigentum' ? 'Eigentum' : 'Miete',                                                          value: profile.tenure },
     { type: 'heating',  label: ({ gas: 'Gas', oel: 'Öl', strom: 'Strom', waermepumpe: 'Wärmepumpe', weiss_nicht: 'Heizung unklar' } as any)[profile.heatingType] || 'Keine Angabe', value: profile.heatingType },
-    { type: 'auto',     label: ({ verbrenner: 'Verbrenner', eauto: 'E-Auto', hybrid: 'Hybrid', keins: 'Kein Auto' } as any)[profile.autoType], value: profile.autoType },
+    { type: 'auto',     label: (() => {
+        if (profile.autoType === 'keins') return 'Kein Auto';
+        const v = profile.vehicles;
+        if (v && (v.verbrenner + v.eauto + v.hybrid) > 0) {
+          const parts: string[] = [];
+          if (v.verbrenner > 0) parts.push(`${v.verbrenner}× Verbrenner`);
+          if (v.eauto > 0)      parts.push(`${v.eauto}× E-Auto`);
+          if (v.hybrid > 0)     parts.push(`${v.hybrid}× Hybrid`);
+          return parts.join(', ');
+        }
+        return ({ verbrenner: 'Verbrenner', eauto: 'E-Auto', hybrid: 'Hybrid' } as any)[profile.autoType] || 'Fahrzeug';
+      })(), value: profile.autoType },
     { type: 'children', label: profile.hasChildren ? 'Mit Kindern' : 'Ohne Kinder',                                                            value: profile.hasChildren ? 'mit' : 'ohne' },
   ];
 
