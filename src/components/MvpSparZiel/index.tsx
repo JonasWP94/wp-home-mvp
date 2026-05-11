@@ -65,33 +65,33 @@ function OptionCard({
         background: selected ? BLUE_VERY_BRIGHT : WHITE,
         border: `1.5px solid ${selected ? ACCENT : BORDER}`,
         borderRadius: RADIUS_MD,
-        padding: '13px 12px',
+        padding: '18px 16px',
         display: 'flex', flexDirection: 'row',
-        alignItems: 'center', gap: 10,
+        alignItems: 'center', gap: 12,
         cursor: 'pointer', transition: 'all 0.15s', textAlign: 'left' as const,
         position: 'relative',
         fontFamily: "'Poppins', sans-serif",
         boxShadow: '0 1px 2px rgba(0,0,0,0.03)',
       }}
     >
-      <Icon size={20} stroke={2} color={selected ? ACCENT : GREY_800} style={{ flexShrink: 0 }} />
+      <Icon size={22} stroke={2} color={selected ? ACCENT : GREY_800} style={{ flexShrink: 0 }} />
 
       <div style={{
         flex: 1, minWidth: 0,
-        fontSize: 13, fontWeight: FW_SEMIBOLD,
-        color: selected ? BLUE_DARK : PRIMARY, lineHeight: 1.25,
+        fontSize: 14, fontWeight: FW_SEMIBOLD,
+        color: selected ? BLUE_DARK : PRIMARY, lineHeight: 1.3,
       }}>
         {label}
       </div>
 
       <div style={{
         flexShrink: 0,
-        width: 18, height: 18, borderRadius: 9,
+        width: 20, height: 20, borderRadius: 10,
         background: selected ? ACCENT : 'transparent',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         transition: 'background 0.15s',
       }}>
-        {selected && <IconCheck size={11} stroke={3} color={WHITE} />}
+        {selected && <IconCheck size={12} stroke={3} color={WHITE} />}
       </div>
     </button>
   );
