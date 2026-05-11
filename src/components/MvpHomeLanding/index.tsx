@@ -94,7 +94,7 @@ export default function MvpHomeLanding({ onStart, onBack }: Props) {
               marginBottom: 14, textAlign: 'center',
             }}
           >
-            Ihr <span style={{ color: YELLOW }}>Spar-Coach</span> für Zuhause.
+            Ihr <span style={{ color: YELLOW }}>Spar-Lotse</span> für's Wohnzimmer.
           </motion.h1>
 
           {/* Subline */}
