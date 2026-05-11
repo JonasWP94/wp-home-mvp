@@ -39,8 +39,6 @@ import {
   IconTarget,
   IconHourglass,
   IconCoins,
-  IconShieldCheck,
-  IconHomeShield,
 } from '@tabler/icons-react';
 import logoWp from '../../assets/logo-wp.png';
 
@@ -60,8 +58,6 @@ interface MvpProfile {
   girokonto?: boolean;
   mobilfunk?: boolean;
   internet?: boolean;
-  haftpflicht?: boolean;
-  hausrat?: boolean;
 }
 
 interface MvpTip {
@@ -192,24 +188,6 @@ const PROFILE_FIELDS = [
     key: 'mobilfunk' as const,
     label: 'Mobilfunk-Vertrag',
     icon: IconDeviceMobile,
-    options: [
-      { value: 'true',  label: 'Aktuell',        icon: IconCheck },
-      { value: 'false', label: 'Nicht aktuell',  icon: IconX },
-    ],
-  },
-  {
-    key: 'haftpflicht' as const,
-    label: 'Haftpflichtversicherung',
-    icon: IconShieldCheck,
-    options: [
-      { value: 'true',  label: 'Aktuell',        icon: IconCheck },
-      { value: 'false', label: 'Nicht aktuell',  icon: IconX },
-    ],
-  },
-  {
-    key: 'hausrat' as const,
-    label: 'Hausratversicherung',
-    icon: IconHomeShield,
     options: [
       { value: 'true',  label: 'Aktuell',        icon: IconCheck },
       { value: 'false', label: 'Nicht aktuell',  icon: IconX },

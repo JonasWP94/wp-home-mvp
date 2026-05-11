@@ -32,7 +32,6 @@ import MvpHomeLanding from '../MvpHomeLanding';
 import MvpSparZiel, { SparZielData } from '../MvpSparZiel';
 import MvpEssentials, { EssentialsData } from '../MvpEssentials';
 import MvpKommunikation, { KommunikationData } from '../MvpKommunikation';
-import MvpVersicherungen, { VersicherungenData } from '../MvpVersicherungen';
 
 // ── Types ────────────────────────────────────────────────────────
 interface MvpProfile {
@@ -48,8 +47,6 @@ interface MvpProfile {
   girokonto: boolean;
   mobilfunk: boolean;
   internet: boolean;
-  haftpflicht: boolean;
-  hausrat: boolean;
 }
 
 const INITIAL: MvpProfile = {
@@ -57,7 +54,6 @@ const INITIAL: MvpProfile = {
   investitionen: '', sparziel: '', zeitaufwand: '',
   steuererklaerung: false, girokonto: false,
   mobilfunk: false, internet: false,
-  haftpflicht: false, hausrat: false,
 };
 
 // ── Step Definitions ─────────────────────────────────────────────
@@ -121,7 +117,7 @@ const STEPS = [
 
 const TOTAL = STEPS.length;
 
-type View = 'intro' | 'landing' | 'sparziel' | 'essentials' | 'kommunikation' | 'versicherungen' | 'quiz' | 'loading' | 'results';
+type View = 'intro' | 'landing' | 'sparziel' | 'essentials' | 'kommunikation' | 'quiz' | 'loading' | 'results';
 
 // ── Radar Animation ───────────────────────────────────────────────
 const BLIPS = [
@@ -353,22 +349,13 @@ export default function MvpWizard() {
   if (view === 'kommunikation') return (
     <MvpKommunikation
       onDone={(data: KommunikationData) => {
-        setProfile(p => ({ ...p, mobilfunk: data.mobilfunk, internet: data.internet }));
-        setView('versicherungen');
-      }}
-      onBack={() => setView('essentials')}
-    />
-  );
-  if (view === 'versicherungen') return (
-    <MvpVersicherungen
-      onDone={(data: VersicherungenData) => {
-        const fp = { ...profile, haftpflicht: data.haftpflicht, hausrat: data.hausrat };
+        const fp = { ...profile, mobilfunk: data.mobilfunk, internet: data.internet };
         localStorage.setItem('wpilot_mvp_profile', JSON.stringify(fp));
         setProfile(fp);
         setFinalProfile(fp);
         setView('loading');
       }}
-      onBack={() => setView('kommunikation')}
+      onBack={() => setView('essentials')}
     />
   );
   if (view === 'loading') return <LoadingScreen onDone={() => setView('results')} />;

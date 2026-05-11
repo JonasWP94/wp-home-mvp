@@ -113,7 +113,7 @@ export default function MvpKommunikation({ onDone, onBack }: Props) {
       minHeight: '100dvh', background: BG, display: 'flex', flexDirection: 'column',
       fontFamily: "'Poppins', sans-serif",
     }}>
-      <WpHeader showProgress progressPct={88} />
+      <WpHeader showProgress progressPct={92} />
 
       <div className="wp-page-kom" style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '24px 16px 120px' }}>
         <style>{`@media(min-width:640px){.wp-page-kom{padding:32px 24px 120px !important;}}`}</style>
