@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import {
   IconCheck,
   IconBolt,
-  IconGift,
+  IconSparkles,
   IconUsers,
   IconChevronRight,
   IconStar,
@@ -129,7 +129,7 @@ export default function MvpThankYou({ onStart }: Props = {}) {
                 if (onStart) onStart();
                 else window.location.href = '/apps/wpilot-home/mvp.html';
               }}
-              icon={<IconGift size={26} stroke={2} color={GREEN_DARK} />}
+              icon={<IconSparkles size={26} stroke={2} color={GREEN_DARK} />}
               title="Noch mehr sparen"
               badge
             />
