@@ -36,6 +36,7 @@ export default function MvpThankYou({ onStart }: Props = {}) {
       fontFamily: "'Poppins', sans-serif",
     }}>
       <WpHeader
+        hideHomeBadge
         rightSlot={
           <button
             onClick={() => { window.location.href = 'https://konto.wechselpilot.com/übersicht'; }}

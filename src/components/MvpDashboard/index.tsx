@@ -40,6 +40,7 @@ import {
   IconHourglass,
   IconCoins,
 } from '@tabler/icons-react';
+import logoWp from '../../assets/logo-wp.png';
 
 // ── Types ────────────────────────────────────────────────────────
 interface MvpProfile {
@@ -700,8 +701,15 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
         borderBottom: `1px solid ${BORDER}`, padding: '12px 20px',
         display: 'flex', alignItems: 'center', gap: 10,
       }}>
-        <img src="/apps/wpilot-home/assets/logo-wp.png" alt="WP" height={22} style={{ objectFit: 'contain', flexShrink: 0 }} />
-        <span style={{ fontSize: 13, fontWeight: 700, color: TEXT, fontFamily: "'Poppins', sans-serif", letterSpacing: '0.05em' }}>HOME</span>
+        <img src={logoWp} alt="Wechselpilot" height={28} style={{ objectFit: 'contain', flexShrink: 0 }} />
+        <span style={{
+          background: '#f9aa00', borderRadius: 999,
+          padding: '4px 10px',
+          fontFamily: "'Poppins', sans-serif",
+          display: 'inline-flex', alignItems: 'center', lineHeight: 1,
+        }}>
+          <span style={{ fontSize: 11, fontWeight: 700, color: '#243c47', letterSpacing: '0.06em' }}>HOME</span>
+        </span>
         <div style={{ flex: 1 }} />
         <button onClick={() => setView('profile')} style={{
           background: 'none', border: `1px solid ${BORDER}`, borderRadius: 8,

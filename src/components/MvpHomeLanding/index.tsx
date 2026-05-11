@@ -21,7 +21,7 @@ export default function MvpHomeLanding({ onStart, onBack }: Props) {
       minHeight: '100dvh', background: BG, display: 'flex', flexDirection: 'column',
       fontFamily: "'Poppins', sans-serif",
     }}>
-      <WpHeader onBack={onBack} />
+      <WpHeader onBack={onBack} hideHomeBadge />
 
       <div className="wp-landing" style={{
         flex: 1, display: 'flex', flexDirection: 'column',

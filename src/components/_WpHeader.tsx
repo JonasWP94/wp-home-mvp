@@ -11,9 +11,10 @@ interface Props {
   rightSlot?: React.ReactNode;
   showProgress?: boolean;
   progressPct?: number;
+  hideHomeBadge?: boolean;
 }
 
-export default function WpHeader({ onBack, rightSlot, showProgress, progressPct = 0 }: Props) {
+export default function WpHeader({ onBack, rightSlot, showProgress, progressPct = 0, hideHomeBadge }: Props) {
   return (
     <>
       <div className="wp-header" style={{
@@ -31,14 +32,16 @@ export default function WpHeader({ onBack, rightSlot, showProgress, progressPct 
           height={30}
           style={{ objectFit: 'contain' }}
         />
-        <span style={{
-          background: YELLOW, borderRadius: 999,
-          padding: '4px 10px',
-          fontFamily: "'Poppins', sans-serif",
-          display: 'inline-flex', alignItems: 'center', lineHeight: 1,
-        }}>
-          <span style={{ fontSize: 11, fontWeight: FW_BOLD, color: PRIMARY, letterSpacing: '0.06em' }}>HOME</span>
-        </span>
+        {!hideHomeBadge && (
+          <span style={{
+            background: YELLOW, borderRadius: 999,
+            padding: '4px 10px',
+            fontFamily: "'Poppins', sans-serif",
+            display: 'inline-flex', alignItems: 'center', lineHeight: 1,
+          }}>
+            <span style={{ fontSize: 11, fontWeight: FW_BOLD, color: PRIMARY, letterSpacing: '0.06em' }}>HOME</span>
+          </span>
+        )}
 
         <div style={{ flex: 1 }} />
 
