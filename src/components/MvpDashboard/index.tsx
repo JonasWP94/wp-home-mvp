@@ -320,23 +320,6 @@ function buildClusters(profile: MvpProfile, tips: MvpTip[]): { title: string; ti
       ),
     },
     {
-      key: 'solar',
-      title:
-        profile.propertyType === 'haus' && profile.tenure === 'eigentum'
-          ? 'Solar für Ihr Haus'
-          : profile.tenure === 'eigentum'
-          ? 'Solar für Ihre Eigentumswohnung'
-          : 'Solar für Ihre Mietwohnung',
-    },
-    {
-      key: 'mobilitaet',
-      title:
-        profile.autoType === 'eauto'      ? 'Spartipps für Ihr E-Auto' :
-        profile.autoType === 'hybrid'     ? 'Spartipps für Ihr Hybrid-Fahrzeug' :
-        profile.autoType === 'verbrenner' ? 'Spartipps für Ihr Auto' :
-        'Mobilität',
-    },
-    {
       key: 'versicherung',
       title: profile.hasChildren ? 'Versicherung & Schutz für Ihre Familie' : 'Versicherung & Schutz',
     },
@@ -347,6 +330,23 @@ function buildClusters(profile: MvpProfile, tips: MvpTip[]): { title: string; ti
     {
       key: 'kommunikation',
       title: 'Internet & Mobilfunk',
+    },
+    {
+      key: 'mobilitaet',
+      title:
+        profile.autoType === 'eauto'      ? 'Spartipps für Ihr E-Auto' :
+        profile.autoType === 'hybrid'     ? 'Spartipps für Ihr Hybrid-Fahrzeug' :
+        profile.autoType === 'verbrenner' ? 'Spartipps für Ihr Auto' :
+        'Mobilität',
+    },
+    {
+      key: 'solar',
+      title:
+        profile.propertyType === 'haus' && profile.tenure === 'eigentum'
+          ? 'Solar für Ihr Haus'
+          : profile.tenure === 'eigentum'
+          ? 'Solar für Ihre Eigentumswohnung'
+          : 'Solar für Ihre Mietwohnung',
     },
   ];
 
