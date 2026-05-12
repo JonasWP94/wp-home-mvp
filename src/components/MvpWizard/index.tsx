@@ -31,7 +31,6 @@ import WpBottomNav from '../_WpBottomNav';
 import MvpDashboard from '../MvpDashboard';
 import MvpThankYou from '../MvpThankYou';
 import MvpHomeLanding from '../MvpHomeLanding';
-import MvpSparZiel, { SparZielData } from '../MvpSparZiel';
 import MvpEssentials, { EssentialsData } from '../MvpEssentials';
 import MvpKommunikation, { KommunikationData } from '../MvpKommunikation';
 
@@ -121,7 +120,7 @@ const STEPS = [
 
 const TOTAL = STEPS.length;
 
-type View = 'intro' | 'landing' | 'sparziel' | 'essentials' | 'kommunikation' | 'quiz' | 'loading' | 'results';
+type View = 'intro' | 'landing' | 'essentials' | 'kommunikation' | 'quiz' | 'loading' | 'results';
 
 // ── Radar Animation ───────────────────────────────────────────────
 const BLIPS = [
@@ -327,7 +326,7 @@ export default function MvpWizard() {
   }
 
   function goBack() {
-    if (step === 0) { setView('sparziel'); return; }
+    if (step === 0) { setView('landing'); return; }
     setDir(-1);
     setStep(s => s - 1);
   }
@@ -343,16 +342,7 @@ export default function MvpWizard() {
   }, [canNext, step, view]);
 
   if (view === 'intro') return <MvpThankYou onStart={() => setView('landing')} />;
-  if (view === 'landing') return <MvpHomeLanding onStart={() => setView('sparziel')} onBack={() => setView('intro')} />;
-  if (view === 'sparziel') return (
-    <MvpSparZiel
-      onDone={(data: SparZielData) => {
-        setProfile(p => ({ ...p, sparziel: data.sparziel, zeitaufwand: data.zeitaufwand, investitionen: data.investitionen as MvpProfile['investitionen'] }));
-        setView('quiz');
-      }}
-      onBack={() => setView('landing')}
-    />
-  );
+  if (view === 'landing') return <MvpHomeLanding onStart={() => setView('quiz')} onBack={() => setView('intro')} />;
   if (view === 'essentials') return (
     <MvpEssentials
       onDone={(data: EssentialsData) => {

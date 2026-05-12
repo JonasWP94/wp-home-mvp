@@ -126,37 +126,6 @@ const PROFILE_FIELDS = [
       { value: 'false', label: 'Nein', icon: IconUser },
     ],
   },
-  // ── Spar-Präferenzen ────────────────────────────────────────
-  {
-    key: 'sparziel' as const,
-    label: 'Sparziel',
-    icon: IconTarget,
-    options: [
-      { value: 'Laufende Kosten senken', label: 'Laufende Kosten senken', icon: IconTrendingDown },
-      { value: 'Einmalig viel sparen',   label: 'Einmalig viel sparen',   icon: IconBolt },
-      { value: 'Ökologisch & sparsam',   label: 'Ökologisch & sparsam',   icon: IconLeaf },
-    ],
-  },
-  {
-    key: 'zeitaufwand' as const,
-    label: 'Zeitaufwand',
-    icon: IconHourglass,
-    options: [
-      { value: 'Mühelos',  label: 'Mühelos',  icon: IconRocket },
-      { value: 'Moderat',  label: 'Moderat',  icon: IconClock },
-      { value: 'Intensiv', label: 'Intensiv', icon: IconTool },
-    ],
-  },
-  {
-    key: 'investitionen' as const,
-    label: 'Investitionsbereitschaft',
-    icon: IconCoins,
-    options: [
-      { value: 'Keine',               label: 'Keine',               icon: IconMinus },
-      { value: 'Kleine Anschaffungen', label: 'Kleine Anschaffungen', icon: IconCpu },
-      { value: 'Größere Projekte',    label: 'Größere Projekte',    icon: IconBuildingCommunity },
-    ],
-  },
   // ── Basics ──────────────────────────────────────────────────
   {
     key: 'steuererklaerung' as const,
