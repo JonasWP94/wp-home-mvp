@@ -474,42 +474,57 @@ function ProfileEditView({
                   transition: 'border-color 0.2s',
                 }}
               >
-                {/* Row header */}
+                {/* Row: static label left, interactive dropdown right */}
                 <div
-                  onClick={() => setOpenField(isOpen ? null : field.key)}
                   style={{
-                    padding: '14px 16px',
+                    padding: '12px 14px',
                     display: 'flex', alignItems: 'center', gap: 12,
-                    cursor: 'pointer', userSelect: 'none',
+                    userSelect: 'none',
                   }}
                 >
                   <div style={{
-                    width: 38, height: 38, borderRadius: 10, flexShrink: 0,
-                    background: isOpen ? BLUE : BLUE_LT,
+                    width: 36, height: 36, borderRadius: 10, flexShrink: 0,
+                    background: BLUE_LT,
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    transition: 'background 0.2s',
                   }}>
-                    <FieldIcon size={20} stroke={1.5} color={isOpen ? WHITE : BLUE} />
-                  </div>
-                  <div style={{ flex: 1 }}>
-                    <div style={{ fontSize: 11, fontWeight: 600, color: TEXT_MUTED, letterSpacing: '0.04em', marginBottom: 2 }}>
-                      {field.label.toUpperCase()}
-                    </div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                      <CurrentIcon size={15} stroke={1.5} color={BLUE_DK} />
-                      <span style={{ fontSize: 15, fontWeight: 700, color: TEXT }}>
-                        {currentOpt?.label ?? '–'}
-                      </span>
-                    </div>
+                    <FieldIcon size={19} stroke={1.5} color={BLUE} />
                   </div>
                   <div style={{
-                    color: TEXT_DIM,
-                    transition: 'transform 0.25s ease',
-                    transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)',
-                    display: 'flex',
+                    flex: 1, minWidth: 0,
+                    fontSize: 13, fontWeight: 600, color: TEXT,
+                    letterSpacing: '0.01em',
                   }}>
-                    <IconChevronDown size={18} stroke={1.5} />
+                    {field.label}
                   </div>
+                  <button
+                    onClick={() => setOpenField(isOpen ? null : field.key)}
+                    style={{
+                      display: 'inline-flex', alignItems: 'center', gap: 6,
+                      background: isOpen ? BLUE : BLUE_LT,
+                      color: isOpen ? WHITE : BLUE_DK,
+                      border: 'none',
+                      borderRadius: 999,
+                      padding: '7px 12px 7px 12px',
+                      fontSize: 13, fontWeight: 700,
+                      cursor: 'pointer',
+                      fontFamily: 'inherit',
+                      transition: 'all 0.15s',
+                      flexShrink: 0,
+                      maxWidth: '60%',
+                    }}
+                  >
+                    <CurrentIcon size={14} stroke={1.8} color={isOpen ? WHITE : BLUE} />
+                    <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                      {currentOpt?.label ?? '– wählen'}
+                    </span>
+                    <IconChevronDown
+                      size={15} stroke={2}
+                      style={{
+                        transition: 'transform 0.25s ease',
+                        transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)',
+                      }}
+                    />
+                  </button>
                 </div>
 
                 {/* Options — AnimatePresence on the wrapper only, no layout */}
