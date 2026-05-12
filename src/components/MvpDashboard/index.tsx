@@ -644,7 +644,12 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
   const [profile, setProfile] = useState<MvpProfile | null>(initialProfile ?? null);
   const [view, setView] = useState<'dashboard' | 'profile'>('dashboard');
   const [done, setDone] = useState<Set<string>>(() => {
-    try { return new Set(JSON.parse(localStorage.getItem('wpilot_mvp_done') || '[]')); } catch { return new Set(); }
+    try {
+      const stored = new Set(JSON.parse(localStorage.getItem('wpilot_mvp_done') || '[]')) as Set<string>;
+      // Strom tip is always considered done — user already benefits from Wechselpilot
+      stored.add('strom-wechsel');
+      return stored;
+    } catch { return new Set(['strom-wechsel']); }
   });
   const [removed, setRemoved] = useState<Set<string>>(() => {
     try { return new Set(JSON.parse(localStorage.getItem('wpilot_mvp_removed') || '[]')); } catch { return new Set(); }
@@ -900,18 +905,30 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
                             </div>
                             <div style={{ fontSize: 12, color: TEXT_MUTED }}>{fmt(savings)} € / Jahr</div>
                           </div>
-                          <button
-                            onClick={e => { e.stopPropagation(); toggleDone(tip.id); }}
-                            style={{
-                              width: 28, height: 28, borderRadius: 8, flexShrink: 0,
-                              border: isDone ? 'none' : `2px solid ${BORDER}`,
-                              background: isDone ? GREEN : 'transparent',
-                              color: isDone ? WHITE : 'transparent',
-                              cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.15s',
-                            }}
-                          >
-                            <IconCheck size={16} stroke={2} />
-                          </button>
+                          {tip.id === 'strom-wechsel' ? (
+                            <span style={{
+                              display: 'inline-flex', alignItems: 'center', gap: 5,
+                              background: GREEN_LT, color: GREEN,
+                              borderRadius: 999, padding: '6px 12px',
+                              fontSize: 13, fontWeight: 700, flexShrink: 0, whiteSpace: 'nowrap',
+                            }}>
+                              <IconCheck size={13} stroke={2.5} />
+                              {fmt(savings)} €
+                            </span>
+                          ) : (
+                            <button
+                              onClick={e => { e.stopPropagation(); toggleDone(tip.id); }}
+                              style={{
+                                width: 28, height: 28, borderRadius: 8, flexShrink: 0,
+                                border: isDone ? 'none' : `2px solid ${BORDER}`,
+                                background: isDone ? GREEN : 'transparent',
+                                color: isDone ? WHITE : 'transparent',
+                                cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.15s',
+                              }}
+                            >
+                              <IconCheck size={16} stroke={2} />
+                            </button>
+                          )}
                         </div>
 
                         <AnimatePresence>
