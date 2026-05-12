@@ -655,9 +655,8 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
 
   const tips = useMemo(() => {
     if (!profile) return [];
-    return ALL_TIPS.filter(t => {
+    const base = ALL_TIPS.filter(t => {
       if (!t.condition(profile)) return false;
-      if (removed.has(t.id)) return false;
       // Hide tips that user already completed in Basics steps
       if (t.id === 'steuererklaerung' && profile.steuererklaerung) return false;
       if (t.id === 'kostenloses-girokonto' && profile.girokonto) return false;
@@ -665,6 +664,30 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
       if (t.id === 'mobilfunk-wechsel' && profile.mobilfunk) return false;
       return true;
     });
+
+    // Expand per-vehicle tips (KfZ-Versicherung per car, THG-Prämie per E-Auto)
+    const v = profile.vehicles ?? { verbrenner: 0, eauto: 0, hybrid: 0 };
+    const vehicleCount = v.verbrenner + v.eauto + v.hybrid;
+    // Legacy fallback: if no vehicles object but autoType set, treat as 1 vehicle
+    const legacyVehicle = vehicleCount === 0 && profile.autoType && profile.autoType !== 'keins' && profile.autoType !== '' ? 1 : 0;
+    const totalVehicles = vehicleCount || legacyVehicle;
+
+    const expanded: MvpTip[] = [];
+    for (const t of base) {
+      if (t.id === 'kfz-versicherung' && totalVehicles > 1) {
+        for (let i = 1; i <= totalVehicles; i++) {
+          expanded.push({ ...t, id: `${t.id}-${i}`, title: `${t.title} (Fahrzeug ${i})` });
+        }
+      } else if (t.id === 'thg-praemie' && v.eauto > 1) {
+        for (let i = 1; i <= v.eauto; i++) {
+          expanded.push({ ...t, id: `${t.id}-${i}`, title: `${t.title} (E-Auto ${i})` });
+        }
+      } else {
+        expanded.push(t);
+      }
+    }
+
+    return expanded.filter(t => !removed.has(t.id));
   }, [profile, removed]);
 
   const removedTips = useMemo(() => {
