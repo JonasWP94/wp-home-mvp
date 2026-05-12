@@ -67,6 +67,8 @@ interface MvpTip {
   description?: string;
   partner: string;
   partnerLinks?: { name: string; url: string; logo: string }[];
+  actionLabel?: string;
+  actionUrl?: string;
   priority: 3 | 2 | 1;
   category: string;
   icon: React.ComponentType<{ size?: number; stroke?: number; color?: string }>;
@@ -168,12 +170,23 @@ const PROFILE_FIELDS = [
 // ── Tips ─────────────────────────────────────────────────────────
 const ALL_TIPS: MvpTip[] = [
   {
-    id: 'strom-gas-wechsel',
-    title: 'Strom/Gas wechseln',
-    description: 'Der Wechsel zu einem günstigeren Anbieter ist in wenigen Minuten erledigt und spart oft mehrere hundert Euro pro Jahr — plus attraktive Wechselboni.',
+    id: 'strom-wechsel',
+    title: 'Stromtarif wechseln',
+    description: 'Mit Wechselpilot übernehmen wir den Wechsel komplett für Sie — automatisch zum besten Tarif, Jahr für Jahr. Sie zahlen nichts, profitieren aber dauerhaft von der günstigsten Stromrechnung.',
     partner: 'Octopus, Tibber, Lichtblick',
     priority: 3, category: 'energie', icon: IconBolt,
-    savingsHg2: 836, savingsHg3: 836,
+    savingsHg2: 475, savingsHg3: 475,
+    condition: () => true,
+  },
+  {
+    id: 'gas-wechsel',
+    title: 'Gastarif wechseln',
+    description: 'Wechselpilot prüft Ihren Gastarif automatisch jedes Jahr und wechselt für Sie zum günstigsten Anbieter — ohne dass Sie selbst aktiv werden müssen. Komplett kostenlos und ohne Aufwand.',
+    actionLabel: 'Jetzt Zähler anlegen',
+    actionUrl: 'https://konto.wechselpilot.com/neuer-zähler',
+    partner: 'Vattenfall, E.ON, EnBW',
+    priority: 3, category: 'energie', icon: IconFlame,
+    savingsHg2: 361, savingsHg3: 361,
     condition: () => true,
   },
   {
@@ -914,7 +927,25 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
                                 {tip.description && (
                                   <p style={{ fontSize: 13, color: TEXT, lineHeight: 1.6, marginBottom: 12, fontWeight: 400 }}>{tip.description}</p>
                                 )}
-                                {tip.partner && (
+                                {tip.actionLabel && tip.actionUrl && (
+                                  <a
+                                    href={tip.actionUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    onClick={e => e.stopPropagation()}
+                                    style={{
+                                      display: 'inline-flex', alignItems: 'center', gap: 6,
+                                      background: DARK, color: WHITE,
+                                      borderRadius: 999, padding: '10px 18px',
+                                      fontSize: 13, fontWeight: 700, textDecoration: 'none',
+                                      marginBottom: 12,
+                                    }}
+                                  >
+                                    {tip.actionLabel}
+                                    <IconArrowRight size={14} stroke={2.5} />
+                                  </a>
+                                )}
+                                {!tip.actionLabel && tip.partner && (
                                   <p style={{ fontSize: 11, color: TEXT_MUTED, marginBottom: 12, fontWeight: 500 }}>
                                     Empfohlene Partner: {tip.partner}
                                   </p>
