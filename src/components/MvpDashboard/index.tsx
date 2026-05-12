@@ -312,16 +312,16 @@ function buildClusters(profile: MvpProfile, tips: MvpTip[]): { title: string; ti
       title: 'Energie & Tarife',
     },
     {
+      key: 'versicherung',
+      title: profile.hasChildren ? 'Versicherung & Schutz für Ihre Familie' : 'Versicherung & Schutz',
+    },
+    {
       key: 'heizung',
       title: heizungLabel[profile.heatingType] ?? (
         profile.tenure === 'eigentum' && profile.propertyType === 'haus'
           ? 'Heizung & Modernisierung'
           : 'Heizung optimieren'
       ),
-    },
-    {
-      key: 'versicherung',
-      title: profile.hasChildren ? 'Versicherung & Schutz für Ihre Familie' : 'Versicherung & Schutz',
     },
     {
       key: 'finanzen',
