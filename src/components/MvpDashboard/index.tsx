@@ -438,7 +438,7 @@ function ProfileEditView({
           <IconArrowLeft size={16} stroke={1.5} /> Zurück
         </button>
         <div style={{ flex: 1, textAlign: 'center' }}>
-          <span style={{ fontSize: 15, fontWeight: 700, color: TEXT }}>Ihr Profil</span>
+          <span style={{ fontSize: 15, fontWeight: 700, color: TEXT }}>Ihre Angaben</span>
         </div>
         <div style={{ width: 80 }} />
       </div>
@@ -984,7 +984,7 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
           <p style={{ fontSize: 12, color: TEXT_MUTED }}>
             {tips.length} Empfehlungen · {fmt(total)} € Potenzial ·{' '}
             <button onClick={() => setView('profile')} style={{ background: 'none', border: 'none', color: BLUE, fontSize: 12, fontWeight: 500, cursor: 'pointer', padding: 0 }}>
-              Profil ändern
+              Angaben ändern
             </button>
           </p>
         </div>
