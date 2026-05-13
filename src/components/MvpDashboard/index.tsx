@@ -872,10 +872,10 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
         <div style={{ flex: 1 }} />
       </div>
 
-      <div className="mvp-dash-container" style={{ maxWidth: 680, margin: '0 auto', padding: '20px 16px 40px' }}>
+      <div className="mvp-dash-container" style={{ maxWidth: 720, margin: '0 auto', padding: '20px 16px 40px' }}>
         <style>{`
           @media(min-width:900px){
-            .mvp-dash-container{max-width:1180px !important;padding:24px 24px 40px !important;}
+            .mvp-dash-container{max-width:980px !important;padding:24px 24px 40px !important;}
             .mvp-clusters{display:block !important;column-count:2 !important;column-gap:28px !important;}
             .mvp-clusters > div{break-inside:avoid;-webkit-column-break-inside:avoid;page-break-inside:avoid;margin-bottom:20px !important;}
           }
