@@ -1835,11 +1835,15 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
                 <style>{`
                   .mvp-overlay-grid{display:flex;flex-direction:column;}
                   .mvp-overlay-left{padding:28px;}
-                  .mvp-overlay-right{padding:24px;overflow-y:auto;max-height:60vh;}
+                  .mvp-overlay-right{position:relative;display:flex;flex-direction:column;max-height:60vh;}
+                  .mvp-overlay-right-scroll{flex:1;overflow-y:auto;padding:24px 24px 14px;}
+                  .mvp-overlay-footer{position:sticky;bottom:0;background:#fff;border-top:1px solid #E2E8F0;padding:14px 24px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
                   @media(min-width:760px){
                     .mvp-overlay-grid{flex-direction:row;height:auto;max-height:92vh;}
                     .mvp-overlay-left{flex:0 0 340px;padding:36px 32px;}
-                    .mvp-overlay-right{flex:1;padding:36px 36px 28px;max-height:92vh;}
+                    .mvp-overlay-right{flex:1;max-height:92vh;}
+                    .mvp-overlay-right-scroll{padding:36px 36px 16px;}
+                    .mvp-overlay-footer{padding:16px 36px;}
                   }
                 `}</style>
 
@@ -1911,12 +1915,12 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
                   </div>
 
                   {/* RIGHT — content */}
-                  <div className="mvp-overlay-right" style={{ position: 'relative' }}>
+                  <div className="mvp-overlay-right">
                     {/* Close */}
                     <button
                       onClick={() => setOverlayTipId(null)}
                       style={{
-                        position: 'absolute', top: 14, right: 14, zIndex: 2,
+                        position: 'absolute', top: 14, right: 14, zIndex: 3,
                         width: 32, height: 32, borderRadius: 16,
                         border: 'none', background: '#f3f4f6', color: TEXT_MUTED,
                         cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -1926,6 +1930,7 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
                       <IconX size={18} stroke={2} />
                     </button>
 
+                    <div className="mvp-overlay-right-scroll">
                     {/* Badges row */}
                     <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 16, paddingRight: 40 }}>
                       {tip.effort && (
@@ -2025,12 +2030,9 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
                       </div>
                     )}
 
-                    {/* Footer */}
-                    <div style={{
-                      display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap',
-                      paddingTop: 16, marginTop: 10,
-                      borderTop: `1px solid ${BORDER}`,
-                    }}>
+                    </div>
+                    {/* Sticky footer */}
+                    <div className="mvp-overlay-footer">
                       <div style={{ fontSize: 10, color: TEXT_MUTED, flex: 1, minWidth: 0 }}>
                         Werbung · Empfehlung kostenfrei
                       </div>
