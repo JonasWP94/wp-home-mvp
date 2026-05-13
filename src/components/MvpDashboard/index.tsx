@@ -695,10 +695,10 @@ function ProfileEditView({
       >
         <div style={{
           width: 36, height: 36, borderRadius: 10, flexShrink: 0,
-          background: BLUE_LT,
+          background: DARK,
           display: 'flex', alignItems: 'center', justifyContent: 'center',
         }}>
-          <FieldIcon size={19} stroke={1.5} color={BLUE} />
+          <FieldIcon size={19} stroke={1.6} color={WHITE} />
         </div>
 
         <div style={{
@@ -883,10 +883,10 @@ function ProfileEditView({
                 }}>
                   <div style={{
                     width: 28, height: 28, borderRadius: 8, flexShrink: 0,
-                    background: BLUE_LT,
+                    background: DARK,
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                   }}>
-                    <SectionIcon size={16} stroke={1.5} color={BLUE} />
+                    <SectionIcon size={16} stroke={1.6} color={WHITE} />
                   </div>
                   <span style={{
                     fontSize: 13, fontWeight: 700, color: TEXT,
@@ -929,10 +929,10 @@ function ProfileEditView({
                             >
                               <div style={{
                                 width: 36, height: 36, borderRadius: 10, flexShrink: 0,
-                                background: BLUE_LT,
+                                background: DARK,
                                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                               }}>
-                                <VIcon size={19} stroke={1.5} color={BLUE} />
+                                <VIcon size={19} stroke={1.6} color={WHITE} />
                               </div>
                               <div style={{
                                 flex: 1, minWidth: 0,
@@ -975,10 +975,10 @@ function ProfileEditView({
                         }}>
                           <div style={{
                             width: 36, height: 36, borderRadius: 10, flexShrink: 0,
-                            background: BLUE_LT,
+                            background: DARK,
                             display: 'flex', alignItems: 'center', justifyContent: 'center',
                           }}>
-                            <IconBike size={19} stroke={1.5} color={BLUE} />
+                            <IconBike size={19} stroke={1.6} color={WHITE} />
                           </div>
                           <div style={{ flex: 1, fontSize: 14, fontWeight: 600, color: TEXT }}>
                             Kein Auto
@@ -1462,10 +1462,10 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
                       >
                         <div
                           onClick={() => setExpanded(isExpanded ? null : tip.id)}
-                          style={{ padding: '14px 16px', display: 'flex', alignItems: 'center', gap: 12, cursor: 'pointer' }}
+                          style={{ padding: '16px 18px', display: 'flex', alignItems: 'center', gap: 14, cursor: 'pointer' }}
                         >
-                          <div style={{ width: 40, height: 40, borderRadius: 12, background: BLUE_LT, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                            <TipIcon size={22} stroke={1.5} color={BLUE} />
+                          <div style={{ width: 44, height: 44, borderRadius: 12, background: DARK, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                            <TipIcon size={22} stroke={1.6} color={WHITE} />
                           </div>
                           <div style={{ flex: 1, minWidth: 0 }}>
                             <div style={{ fontSize: 15, fontWeight: 700, color: TEXT, lineHeight: 1.3, textDecoration: isDone ? 'line-through' : 'none', marginBottom: 2 }}>
