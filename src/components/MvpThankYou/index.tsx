@@ -123,7 +123,7 @@ export default function MvpThankYou({ onStart }: Props = {}) {
             <motion.div
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 2.4, duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
+              transition={{ delay: 1.4, duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
             >
               <ActionCard
                 onClick={() => { window.location.href = 'https://konto.wechselpilot.com/neuer-zähler'; }}
@@ -139,7 +139,7 @@ export default function MvpThankYou({ onStart }: Props = {}) {
             <motion.div
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 2.55, duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
+              transition={{ delay: 1.5, duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
             >
               <ActionCard
                 onClick={() => { window.location.href = 'https://konto.wechselpilot.com/freunde-werben'; }}
@@ -150,7 +150,7 @@ export default function MvpThankYou({ onStart }: Props = {}) {
             <motion.div
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 2.7, duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
+              transition={{ delay: 1.6, duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
             >
               <ActionCard
                 onClick={() => {
@@ -168,7 +168,7 @@ export default function MvpThankYou({ onStart }: Props = {}) {
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 3.0, duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ delay: 1.85, duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
             style={{
               background: WHITE,
               border: `1px solid ${BORDER}`, borderRadius: RADIUS_LG,
@@ -236,7 +236,7 @@ function SavingsPill({ amount }: { amount: string }) {
       <motion.div
         initial={{ width: 64, borderRadius: 32 }}
         animate={{ width: '100%', borderRadius: 14 }}
-        transition={{ delay: 1.1, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+        transition={{ delay: 0.65, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
         style={{
           height: 64,
           background: GREEN_DARK, color: WHITE,
@@ -250,7 +250,7 @@ function SavingsPill({ amount }: { amount: string }) {
         <motion.div
           initial={{ scale: 0, rotate: -90 }}
           animate={{ scale: 1, rotate: 0 }}
-          transition={{ type: 'spring', stiffness: 300, damping: 18, delay: 0.5 }}
+          transition={{ type: 'spring', stiffness: 320, damping: 18, delay: 0.25 }}
           style={{
             width: 44, height: 44, borderRadius: 22, flexShrink: 0,
             background: 'rgba(255,255,255,0.18)',
@@ -265,8 +265,8 @@ function SavingsPill({ amount }: { amount: string }) {
           initial={{ width: 0, opacity: 0 }}
           animate={{ width: 'auto', opacity: 1 }}
           transition={{
-            width:   { delay: 1.65, duration: 0.4 },
-            opacity: { delay: 1.7,  duration: 0.3 },
+            width:   { delay: 1.1, duration: 0.3 },
+            opacity: { delay: 1.15, duration: 0.25 },
           }}
           style={{
             flex: 'none',
