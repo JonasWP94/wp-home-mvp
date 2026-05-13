@@ -1188,6 +1188,12 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
   const nextBestTip = useMemo(() => {
     const open = tips.filter(t => !done.has(t.id));
     if (open.length === 0) return null;
+    // Strom + Gas Wechsel haben höchste Priorität
+    const strom = open.find(t => t.id === 'strom-wechsel');
+    if (strom) return strom;
+    const gas = open.find(t => t.id === 'gas-wechsel');
+    if (gas) return gas;
+    // Fallback: höchste Ersparnis
     return open.slice().sort((a, b) => getSavings(b) - getSavings(a))[0];
   }, [tips, done, hg]);
 
