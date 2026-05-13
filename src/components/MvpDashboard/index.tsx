@@ -1825,59 +1825,117 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
                 onClick={e => e.stopPropagation()}
                 style={{
                   background: WHITE, borderRadius: 22,
-                  maxWidth: 920, width: '100%', maxHeight: '92vh', overflowY: 'auto',
+                  maxWidth: 960, width: '100%', maxHeight: '92vh', overflow: 'hidden',
                   boxShadow: '0 30px 70px rgba(0,0,0,0.28), 0 8px 24px rgba(0,0,0,0.12)',
                   position: 'relative',
                   willChange: 'transform, opacity',
                   transformOrigin: 'center bottom',
                 }}
               >
-                {/* Close */}
-                <button
-                  onClick={() => setOverlayTipId(null)}
-                  style={{
-                    position: 'absolute', top: 14, right: 14, zIndex: 1,
-                    width: 32, height: 32, borderRadius: 16,
-                    border: 'none', background: '#f3f4f6', color: TEXT_MUTED,
-                    cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  }}
-                  aria-label="Schließen"
-                >
-                  <IconX size={18} stroke={2} />
-                </button>
+                <style>{`
+                  .mvp-overlay-grid{display:flex;flex-direction:column;}
+                  .mvp-overlay-left{padding:28px;}
+                  .mvp-overlay-right{padding:24px;overflow-y:auto;max-height:60vh;}
+                  @media(min-width:760px){
+                    .mvp-overlay-grid{flex-direction:row;height:auto;max-height:92vh;}
+                    .mvp-overlay-left{flex:0 0 340px;padding:36px 32px;}
+                    .mvp-overlay-right{flex:1;padding:36px 36px 28px;max-height:92vh;}
+                  }
+                `}</style>
 
-                <div style={{ padding: '40px 44px 36px' }}>
-                  {/* Title + icon */}
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 16, paddingRight: 40 }}>
+                <div className="mvp-overlay-grid">
+                  {/* LEFT — dark hero panel */}
+                  <div className="mvp-overlay-left" style={{
+                    background: 'linear-gradient(160deg, #243c47 0%, #1c2e3f 60%, #1c2e3f 100%)',
+                    color: WHITE,
+                    position: 'relative', overflow: 'hidden',
+                    display: 'flex', flexDirection: 'column',
+                  }}>
+                    {/* Deco watermark */}
                     <div style={{
-                      width: 56, height: 56, borderRadius: 14,
-                      background: DARK,
-                      display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      flexShrink: 0,
+                      position: 'absolute', bottom: -40, right: -40,
+                      width: 200, height: 200,
+                      opacity: 0.05,
                     }}>
-                      <TipIcon size={28} stroke={1.6} color={WHITE} />
+                      <TipIcon size={200} stroke={1} color={WHITE} />
                     </div>
-                    <div style={{ minWidth: 0 }}>
-                      <h2 style={{ fontSize: 24, fontWeight: 700, color: TEXT, lineHeight: 1.2, margin: 0 }}>
+
+                    <div style={{ position: 'relative', zIndex: 1 }}>
+                      <div style={{
+                        fontSize: 10, fontWeight: 700, color: ORANGE,
+                        letterSpacing: '0.16em', marginBottom: 16,
+                      }}>
+                        IHR SPARTIPP
+                      </div>
+                      <h2 style={{
+                        fontSize: 22, fontWeight: 800, lineHeight: 1.15,
+                        textTransform: 'uppercase', letterSpacing: '-0.005em',
+                        margin: 0, marginBottom: 24,
+                      }}>
                         {tip.title}
                       </h2>
-                      <div style={{ fontSize: 14, color: GREEN, fontWeight: 700, marginTop: 4 }}>
-                        bis zu {fmt(hg === 3 ? tip.savingsHg3 : tip.savingsHg2)} € / Jahr
+                      <div style={{
+                        fontSize: 60, fontWeight: 800, color: ORANGE, lineHeight: 1,
+                        letterSpacing: '-3px', marginBottom: 8,
+                      }}>
+                        {fmt(hg === 3 ? tip.savingsHg3 : tip.savingsHg2)}€
+                      </div>
+                      <div style={{ fontSize: 13, opacity: 0.85, fontWeight: 500 }}>
+                        pro Jahr · konkret für Ihren Haushalt
                       </div>
                     </div>
+
+                    <div style={{ flex: 1 }} />
+
+                    {/* Personalization footer */}
+                    {(() => {
+                      const propLabel = profile.propertyType === 'haus' ? 'Hauseigentum' : 'Wohnung';
+                      const tenLabel  = profile.tenure === 'eigentum' ? 'im Eigentum' : profile.tenure === 'miete' ? 'zur Miete' : '';
+                      const ctx = profile.propertyType || profile.tenure
+                        ? `Basierend auf Ihrer Situation: ${propLabel}${tenLabel ? ' ' + tenLabel : ''}.`
+                        : 'Basierend auf Ihren persönlichen Angaben.';
+                      return (
+                        <div style={{ position: 'relative', zIndex: 1, marginTop: 24 }}>
+                          <div style={{
+                            fontSize: 11, fontWeight: 700, color: ORANGE,
+                            marginBottom: 4,
+                          }}>
+                            Persönlich für Sie:
+                          </div>
+                          <div style={{ fontSize: 12, opacity: 0.85, lineHeight: 1.5 }}>
+                            {ctx}
+                          </div>
+                        </div>
+                      );
+                    })()}
                   </div>
 
-                  {/* Meta badges (effort + difficulty) */}
-                  {(tip.effort || tip.difficulty) && (
-                    <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 18 }}>
+                  {/* RIGHT — content */}
+                  <div className="mvp-overlay-right" style={{ position: 'relative' }}>
+                    {/* Close */}
+                    <button
+                      onClick={() => setOverlayTipId(null)}
+                      style={{
+                        position: 'absolute', top: 14, right: 14, zIndex: 2,
+                        width: 32, height: 32, borderRadius: 16,
+                        border: 'none', background: '#f3f4f6', color: TEXT_MUTED,
+                        cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      }}
+                      aria-label="Schließen"
+                    >
+                      <IconX size={18} stroke={2} />
+                    </button>
+
+                    {/* Badges row */}
+                    <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 16, paddingRight: 40 }}>
                       {tip.effort && (
                         <span style={{
                           display: 'inline-flex', alignItems: 'center', gap: 6,
-                          background: BLUE_LT, color: BLUE_DK,
-                          padding: '6px 12px', borderRadius: 999,
-                          fontSize: 12, fontWeight: 700,
+                          background: '#f0f3f7', color: TEXT,
+                          padding: '7px 13px', borderRadius: 999,
+                          fontSize: 12, fontWeight: 600,
                         }}>
-                          <IconClock size={13} stroke={2} /> {tip.effort}
+                          <IconClock size={13} stroke={2} color={TEXT_MUTED} /> {tip.effort}
                         </span>
                       )}
                       {tip.difficulty && (
@@ -1887,93 +1945,115 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
                             : tip.difficulty === 'Mittel' ? ORANGE_LT : '#fce7e7',
                           color: tip.difficulty === 'Einfach' ? GREEN
                             : tip.difficulty === 'Mittel' ? '#92400e' : '#c52828',
-                          padding: '6px 12px', borderRadius: 999,
+                          padding: '7px 13px', borderRadius: 999,
                           fontSize: 12, fontWeight: 700,
+                          border: tip.difficulty === 'Einfach' ? `1px solid ${GREEN}` : `1px solid currentColor`,
                         }}>
                           {tip.difficulty}
                         </span>
                       )}
+                      {ctaUrl && (
+                        <span style={{
+                          display: 'inline-flex', alignItems: 'center',
+                          background: ORANGE_LT, color: '#92400e',
+                          padding: '7px 13px', borderRadius: 999,
+                          fontSize: 12, fontWeight: 700,
+                          border: `1px solid #f5c842`,
+                        }}>
+                          Wechselservice inklusive
+                        </span>
+                      )}
                     </div>
-                  )}
 
-                  {tip.description && (
-                    <p style={{ fontSize: 15, color: TEXT, lineHeight: 1.65, marginBottom: 18, fontWeight: 400 }}>
-                      {tip.description}
-                    </p>
-                  )}
-
-                  {/* Why */}
-                  {tip.why && (
-                    <div style={{
-                      background: '#f9fafb',
-                      borderLeft: `3px solid ${BLUE}`,
-                      borderRadius: 8,
-                      padding: '14px 18px',
-                      marginBottom: 24,
-                    }}>
-                      <div style={{
-                        fontSize: 11, fontWeight: 700, color: BLUE,
-                        letterSpacing: '0.1em', marginBottom: 6,
-                      }}>
-                        WARUM DAS SPART
-                      </div>
-                      <p style={{ fontSize: 14, color: TEXT, lineHeight: 1.6, margin: 0 }}>
-                        {tip.why}
+                    {/* Description */}
+                    {tip.description && (
+                      <p style={{ fontSize: 14, color: TEXT, lineHeight: 1.65, marginBottom: 18, fontWeight: 400 }}>
+                        {tip.description}
                       </p>
-                    </div>
-                  )}
+                    )}
 
-                  {/* How-to steps */}
-                  {tip.howTo && tip.howTo.length > 0 && (
-                    <div style={{ marginBottom: 28 }}>
-                      <h3 style={{
-                        fontSize: 12, fontWeight: 700, color: BLUE,
-                        letterSpacing: '0.1em', margin: '0 0 16px',
+                    {/* Why */}
+                    {tip.why && (
+                      <div style={{
+                        background: '#f9fafb',
+                        borderLeft: `3px solid ${BLUE}`,
+                        borderRadius: 8,
+                        padding: '12px 16px',
+                        marginBottom: 22,
                       }}>
-                        SO SETZEN SIE DEN TIPP UM
-                      </h3>
-                      <ol style={{ paddingLeft: 0, margin: 0, listStyle: 'none' }}>
-                        {tip.howTo.map((step, i) => (
-                          <li key={i} style={{
-                            display: 'flex', gap: 16, marginBottom: 14, alignItems: 'flex-start',
-                          }}>
-                            <span style={{
-                              flexShrink: 0,
-                              width: 28, height: 28, borderRadius: 14,
-                              background: BLUE, color: WHITE,
-                              fontSize: 13, fontWeight: 700,
-                              display: 'flex', alignItems: 'center', justifyContent: 'center',
-                              marginTop: 1,
-                            }}>
-                              {i + 1}
-                            </span>
-                            <span style={{ fontSize: 14, color: TEXT, lineHeight: 1.65 }}>
-                              {step}
-                            </span>
-                          </li>
-                        ))}
-                      </ol>
-                    </div>
-                  )}
+                        <div style={{
+                          fontSize: 10, fontWeight: 700, color: BLUE,
+                          letterSpacing: '0.12em', marginBottom: 6,
+                        }}>
+                          WARUM DAS SPART
+                        </div>
+                        <p style={{ fontSize: 13, color: TEXT, lineHeight: 1.6, margin: 0 }}>
+                          {tip.why}
+                        </p>
+                      </div>
+                    )}
 
-                  {/* CTA */}
-                  {ctaUrl && (
-                    <a
-                      href={ctaUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{
-                        display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
-                        background: DARK, color: WHITE,
-                        borderRadius: 999, padding: '14px 24px',
-                        fontSize: 14, fontWeight: 700, textDecoration: 'none',
-                        width: '100%', boxSizing: 'border-box',
-                      }}
-                    >
-                      {tip.actionLabel || 'Jetzt loslegen'}
-                      <IconArrowRight size={16} stroke={2.5} />
-                    </a>
-                  )}
+                    {/* How-to steps */}
+                    {tip.howTo && tip.howTo.length > 0 && (
+                      <div style={{ marginBottom: 22 }}>
+                        <h3 style={{
+                          fontSize: 11, fontWeight: 700, color: TEXT,
+                          letterSpacing: '0.12em', margin: '0 0 14px',
+                        }}>
+                          IN {tip.howTo.length} SCHRITT{tip.howTo.length === 1 ? '' : 'EN'} ERLEDIGT
+                        </h3>
+                        <ol style={{ paddingLeft: 0, margin: 0, listStyle: 'none' }}>
+                          {tip.howTo.map((step, i) => (
+                            <li key={i} style={{
+                              display: 'flex', gap: 12, marginBottom: 12, alignItems: 'flex-start',
+                            }}>
+                              <span style={{
+                                flexShrink: 0,
+                                width: 22, height: 22, borderRadius: 11,
+                                background: GREEN_LT, color: GREEN,
+                                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                marginTop: 2,
+                              }}>
+                                <IconCheck size={14} stroke={2.5} />
+                              </span>
+                              <span style={{ fontSize: 13.5, color: TEXT, lineHeight: 1.6 }}>
+                                {step}
+                              </span>
+                            </li>
+                          ))}
+                        </ol>
+                      </div>
+                    )}
+
+                    {/* Footer */}
+                    <div style={{
+                      display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap',
+                      paddingTop: 16, marginTop: 10,
+                      borderTop: `1px solid ${BORDER}`,
+                    }}>
+                      <div style={{ fontSize: 10, color: TEXT_MUTED, flex: 1, minWidth: 0 }}>
+                        Werbung · Empfehlung kostenfrei
+                      </div>
+                      {ctaUrl && (
+                        <a
+                          href={ctaUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{
+                            display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+                            background: ORANGE, color: '#243c47',
+                            borderRadius: 999, padding: '11px 22px',
+                            fontSize: 13, fontWeight: 800, textDecoration: 'none',
+                            textTransform: 'uppercase', letterSpacing: '0.04em',
+                            boxShadow: '0 4px 12px rgba(249,170,0,0.3)',
+                          }}
+                        >
+                          {tip.actionLabel || 'Jetzt sparen'}
+                          <IconArrowRight size={14} stroke={2.5} />
+                        </a>
+                      )}
+                    </div>
+                  </div>
                 </div>
               </motion.div>
             </motion.div>
