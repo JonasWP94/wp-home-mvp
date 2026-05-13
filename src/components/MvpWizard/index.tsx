@@ -18,6 +18,11 @@ import {
   IconPlug,
   IconPlus,
   IconMinus,
+  IconX,
+  IconReceipt,
+  IconCreditCard,
+  IconWifi,
+  IconDeviceMobile,
 } from '@tabler/icons-react';
 import {
   ACCENT, BLUE_VERY_BRIGHT, BLUE_DARK,
@@ -45,18 +50,18 @@ interface MvpProfile {
   investitionen: 'keine' | 'gadgets' | 'projekte' | '';
   sparziel: string;
   zeitaufwand: string;
-  steuererklaerung: boolean;
-  girokonto: boolean;
-  mobilfunk: boolean;
-  internet: boolean;
+  steuererklaerung: boolean | null;
+  girokonto: boolean | null;
+  mobilfunk: boolean | null;
+  internet: boolean | null;
 }
 
 const INITIAL: MvpProfile = {
   tenure: '', propertyType: '', heatingType: '', autoType: '', hasChildren: null,
   vehicles: { verbrenner: 0, eauto: 0, hybrid: 0 },
   investitionen: '', sparziel: '', zeitaufwand: '',
-  steuererklaerung: false, girokonto: false,
-  mobilfunk: false, internet: false,
+  steuererklaerung: null, girokonto: null,
+  mobilfunk: null, internet: null,
 };
 
 // ── Step Definitions ─────────────────────────────────────────────
@@ -107,13 +112,43 @@ const STEPS = [
     ],
   },
   {
-    key: 'hasChildren' as const,
-    icon: IconUsers,
-    title: 'Leben Kinder in Ihrem Haushalt?',
-    sub: 'Familien profitieren von zusätzlichen Spar-Angeboten bei Versicherungen und Energietarifen.',
+    key: 'steuererklaerung' as const,
+    icon: IconReceipt,
+    title: 'Haben Sie Ihre Steuererklärung schon erledigt?',
+    sub: '',
     options: [
-      { value: 'true',  label: 'Ja',   icon: IconUsers },
-      { value: 'false', label: 'Nein', icon: IconUser },
+      { value: 'true',  label: 'Ja, erledigt',  icon: IconCheck },
+      { value: 'false', label: 'Noch nicht',    icon: IconX },
+    ],
+  },
+  {
+    key: 'girokonto' as const,
+    icon: IconCreditCard,
+    title: 'Haben Sie ein kostenloses Girokonto?',
+    sub: '',
+    options: [
+      { value: 'true',  label: 'Ja, vorhanden',  icon: IconCheck },
+      { value: 'false', label: 'Noch nicht',     icon: IconX },
+    ],
+  },
+  {
+    key: 'internet' as const,
+    icon: IconWifi,
+    title: 'Ist Ihr Internet-Vertrag aktuell?',
+    sub: '',
+    options: [
+      { value: 'true',  label: 'Ja, aktuell',   icon: IconCheck },
+      { value: 'false', label: 'Eher nicht',    icon: IconX },
+    ],
+  },
+  {
+    key: 'mobilfunk' as const,
+    icon: IconDeviceMobile,
+    title: 'Ist Ihr Mobilfunk-Vertrag aktuell?',
+    sub: '',
+    options: [
+      { value: 'true',  label: 'Ja, aktuell',   icon: IconCheck },
+      { value: 'false', label: 'Eher nicht',    icon: IconX },
     ],
   },
 ];
@@ -287,7 +322,7 @@ export default function MvpWizard() {
   const vehicleTotal = profile.vehicles.verbrenner + profile.vehicles.eauto + profile.vehicles.hybrid;
   const canNext = isVehicleStep
     ? (profile.autoType === 'keins' || vehicleTotal > 0)
-    : (currentValue !== '' && currentValue !== null);
+    : (currentValue !== '' && currentValue !== null && currentValue !== undefined);
   const isLast = step === TOTAL - 1;
   const StepIcon = current.icon;
 
@@ -308,8 +343,10 @@ export default function MvpWizard() {
   }
 
   function quizDone(fp: MvpProfile) {
+    localStorage.setItem('wpilot_mvp_profile', JSON.stringify(fp));
     setProfile(fp);
-    setView('essentials');
+    setFinalProfile(fp);
+    setView('loading');
   }
 
   function goNext() {

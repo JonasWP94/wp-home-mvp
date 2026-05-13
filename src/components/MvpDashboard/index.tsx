@@ -119,15 +119,6 @@ const PROFILE_FIELDS = [
       { value: 'keins',      label: 'Kein Auto',  icon: IconBike },
     ],
   },
-  {
-    key: 'hasChildren' as const,
-    label: 'Kinder im Haushalt',
-    icon: IconUsers,
-    options: [
-      { value: 'true',  label: 'Ja',   icon: IconUsers },
-      { value: 'false', label: 'Nein', icon: IconUser },
-    ],
-  },
   // ── Basics ──────────────────────────────────────────────────
   {
     key: 'steuererklaerung' as const,
@@ -773,7 +764,6 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
         }
         return ({ verbrenner: 'Verbrenner', eauto: 'E-Auto', hybrid: 'Hybrid' } as any)[profile.autoType] || 'Fahrzeug';
       })(), value: profile.autoType },
-    { type: 'children', label: profile.hasChildren ? 'Mit Kindern' : 'Ohne Kinder',                                                            value: profile.hasChildren ? 'mit' : 'ohne' },
   ];
 
   return (
