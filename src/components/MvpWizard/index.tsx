@@ -36,41 +36,10 @@ import WpBottomNav from '../_WpBottomNav';
 import MvpDashboard from '../MvpDashboard';
 import MvpThankYou from '../MvpThankYou';
 import MvpHomeLanding from '../MvpHomeLanding';
-import MvpEssentials, { EssentialsData } from '../MvpEssentials';
-import MvpKommunikation, { KommunikationData } from '../MvpKommunikation';
-import MvpVersicherungen, { VersicherungenData } from '../MvpVersicherungen';
-
-// ── Types ────────────────────────────────────────────────────────
-interface MvpProfile {
-  tenure: 'miete' | 'eigentum' | '';
-  propertyType: 'wohnung' | 'haus' | '';
-  heatingType: 'gas' | 'oel' | 'strom' | 'waermepumpe' | 'weiss_nicht' | '';
-  autoType: 'verbrenner' | 'eauto' | 'hybrid' | 'keins' | 'has-vehicles' | '';
-  vehicles: { verbrenner: number; eauto: number; hybrid: number };
-  hasChildren: boolean | null;
-  investitionen: 'keine' | 'gadgets' | 'projekte' | '';
-  sparziel: string;
-  zeitaufwand: string;
-  steuererklaerung: boolean | null;
-  girokonto: boolean | null;
-  mobilfunk: boolean | null;
-  internet: boolean | null;
-  haftpflicht: boolean | null;
-  hausrat: boolean | null;
-  berufsunfaehigkeit: boolean | null;
-  gebaeude: boolean | null;
-  kfzVersicherung: boolean | null;
-}
-
-const INITIAL: MvpProfile = {
-  tenure: '', propertyType: '', heatingType: '', autoType: '', hasChildren: null,
-  vehicles: { verbrenner: 0, eauto: 0, hybrid: 0 },
-  investitionen: '', sparziel: '', zeitaufwand: '',
-  steuererklaerung: null, girokonto: null,
-  mobilfunk: null, internet: null,
-  haftpflicht: null, hausrat: null, berufsunfaehigkeit: null,
-  gebaeude: null, kfzVersicherung: null,
-};
+import MvpBasics, { BasicsData } from '../MvpBasics';
+import { useReducedMotion } from '../_useReducedMotion';
+import type { MvpProfile } from '../_types';
+import { INITIAL_PROFILE as INITIAL } from '../_types';
 
 // ── Step Definitions ─────────────────────────────────────────────
 const STEPS = [
@@ -124,7 +93,7 @@ const STEPS = [
 
 const TOTAL = STEPS.length;
 
-type View = 'intro' | 'landing' | 'essentials' | 'kommunikation' | 'versicherungen' | 'quiz' | 'loading' | 'results';
+type View = 'intro' | 'landing' | 'basics' | 'quiz' | 'loading' | 'results';
 
 // ── Radar Animation ───────────────────────────────────────────────
 const BLIPS = [
@@ -135,10 +104,11 @@ const BLIPS = [
 
 function RadarAnimation() {
   const SIZE = 140;
+  const reduced = useReducedMotion();
   return (
     <div style={{ position: 'relative', width: SIZE, height: SIZE }}>
-      {/* Outer pulse rings */}
-      {[0, 1, 2].map(i => (
+      {/* Outer pulse rings (skipped when reduced motion) */}
+      {!reduced && [0, 1, 2].map(i => (
         <motion.div
           key={`pulse-${i}`}
           initial={{ scale: 0.4, opacity: 0.6 }}
@@ -426,7 +396,7 @@ export default function MvpWizard() {
 
   function quizDone(fp: MvpProfile) {
     setProfile(fp);
-    setView('essentials');
+    setView('basics');
   }
 
   function goNext() {
@@ -461,52 +431,43 @@ export default function MvpWizard() {
 
   if (view === 'intro') return <MvpThankYou onStart={() => setView('landing')} />;
   if (view === 'landing') return <MvpHomeLanding onStart={() => setView('quiz')} onBack={() => setView('intro')} />;
-  if (view === 'essentials') return (
-    <MvpEssentials
-      onDone={(data: EssentialsData) => {
-        setProfile(p => ({
-          ...p,
-          steuererklaerung: data.steuererklaerung,
-          girokonto: data.girokonto,
-        }));
-        setView('kommunikation');
-      }}
-      onBack={() => setView('quiz')}
-    />
-  );
-  if (view === 'kommunikation') return (
-    <MvpKommunikation
-      onDone={(data: KommunikationData) => {
-        setProfile(p => ({ ...p, mobilfunk: data.mobilfunk, internet: data.internet }));
-        setView('versicherungen');
-      }}
-      onBack={() => setView('essentials')}
-    />
-  );
-  if (view === 'versicherungen') {
-    const hasVehicle = profile.autoType !== 'keins' && (
-      profile.vehicles.verbrenner + profile.vehicles.eauto + profile.vehicles.hybrid > 0
-      || (profile.autoType !== '' && profile.autoType !== 'keins')
-    );
+  if (view === 'basics') {
+    const totalVehicles = profile.vehicles.verbrenner + profile.vehicles.eauto + profile.vehicles.hybrid;
+    const hasVehicle = totalVehicles > 0;
     return (
-      <MvpVersicherungen
+      <MvpBasics
+        initial={{
+          steuererklaerung: profile.steuererklaerung,
+          girokonto: profile.girokonto,
+          internet: profile.internet,
+          mobilfunk: profile.mobilfunk,
+          haftpflicht: profile.haftpflicht,
+          hausrat: profile.hausrat,
+          berufsunfaehigkeit: profile.berufsunfaehigkeit,
+          gebaeude: profile.gebaeude,
+          kfzVersicherung: profile.kfzVersicherung,
+        }}
         showGebaeude={profile.propertyType === 'haus' && profile.tenure === 'eigentum'}
         showKfz={hasVehicle}
-        onDone={(data: VersicherungenData) => {
+        onDone={(data: BasicsData) => {
           const fp = {
             ...profile,
+            steuererklaerung: data.steuererklaerung,
+            girokonto: data.girokonto,
+            internet: data.internet,
+            mobilfunk: data.mobilfunk,
             haftpflicht: data.haftpflicht,
             hausrat: data.hausrat,
             berufsunfaehigkeit: data.berufsunfaehigkeit,
-            gebaeude: data.gebaeude ?? null,
-            kfzVersicherung: data.kfzVersicherung ?? null,
+            gebaeude: data.gebaeude,
+            kfzVersicherung: data.kfzVersicherung,
           };
           localStorage.setItem('wpilot_mvp_profile', JSON.stringify(fp));
           setProfile(fp);
           setFinalProfile(fp);
           setView('loading');
         }}
-        onBack={() => setView('kommunikation')}
+        onBack={() => setView('quiz')}
       />
     );
   }

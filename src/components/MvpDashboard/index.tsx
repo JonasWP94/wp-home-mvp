@@ -45,30 +45,7 @@ import {
   IconPlus,
 } from '@tabler/icons-react';
 import logoWp from '../../assets/logo-wp.png';
-
-// ── Types ────────────────────────────────────────────────────────
-interface MvpProfile {
-  tenure: 'miete' | 'eigentum' | '';
-  propertyType: 'wohnung' | 'haus' | '';
-  heatingType: 'gas' | 'oel' | 'strom' | 'waermepumpe' | '';
-  autoType: 'verbrenner' | 'eauto' | 'hybrid' | 'keins' | 'has-vehicles' | '';
-  vehicles?: { verbrenner: number; eauto: number; hybrid: number };
-  hasChildren: boolean | null;
-  // Spar-Präferenzen
-  sparziel?: string;
-  zeitaufwand?: string;
-  investitionen?: string;
-  // Basics
-  steuererklaerung?: boolean;
-  girokonto?: boolean;
-  mobilfunk?: boolean;
-  internet?: boolean;
-  haftpflicht?: boolean;
-  hausrat?: boolean;
-  berufsunfaehigkeit?: boolean;
-  gebaeude?: boolean;
-  kfzVersicherung?: boolean;
-}
+import type { MvpProfile } from '../_types';
 
 interface MvpTip {
   id: string;
