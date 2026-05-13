@@ -111,11 +111,8 @@ export default function MvpThankYou({ onStart }: Props = {}) {
             <SavingsPill amount="475 €" />
           </div>
 
-          {/* Action Cards */}
-          <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 2.4, duration: 0.4 }}
+          {/* Action Cards — staggered entry */}
+          <div
             style={{
               display: 'grid',
               gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
@@ -123,37 +120,55 @@ export default function MvpThankYou({ onStart }: Props = {}) {
               marginBottom: 14,
             }}
           >
-            <ActionCard
-              onClick={() => { window.location.href = 'https://konto.wechselpilot.com/neuer-zähler'; }}
-              icon={
-                <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
-                  <IconBolt size={26} stroke={2} color={ACCENT} />
-                  <IconFlame size={24} stroke={2} color="#e85d4a" />
-                </div>
-              }
-              title="Weiteren Zähler anlegen"
-            />
-            <ActionCard
-              onClick={() => { window.location.href = 'https://konto.wechselpilot.com/freunde-werben'; }}
-              icon={<IconUsers size={26} stroke={2} color={YELLOW} />}
-              title="Freunde einladen"
-            />
-            <ActionCard
-              onClick={() => {
-                if (onStart) onStart();
-                else window.location.href = '/apps/wpilot-home/mvp.html';
-              }}
-              icon={<IconSparkles size={26} stroke={2} color={GREEN_DARK} />}
-              title="Noch mehr sparen"
-              badge
-            />
-          </motion.div>
+            <motion.div
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 2.4, duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <ActionCard
+                onClick={() => { window.location.href = 'https://konto.wechselpilot.com/neuer-zähler'; }}
+                icon={
+                  <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+                    <IconBolt size={26} stroke={2} color={ACCENT} />
+                    <IconFlame size={24} stroke={2} color="#e85d4a" />
+                  </div>
+                }
+                title="Weiteren Zähler anlegen"
+              />
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 2.55, duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <ActionCard
+                onClick={() => { window.location.href = 'https://konto.wechselpilot.com/freunde-werben'; }}
+                icon={<IconUsers size={26} stroke={2} color={YELLOW} />}
+                title="Freunde einladen"
+              />
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 2.7, duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <ActionCard
+                onClick={() => {
+                  if (onStart) onStart();
+                  else window.location.href = '/apps/wpilot-home/mvp.html';
+                }}
+                icon={<IconSparkles size={26} stroke={2} color={GREEN_DARK} />}
+                title="Noch mehr sparen"
+                badge
+              />
+            </motion.div>
+          </div>
 
           {/* Rating */}
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 3.0, duration: 0.4 }}
+            transition={{ delay: 3.0, duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
             style={{
               background: WHITE,
               border: `1px solid ${BORDER}`, borderRadius: RADIUS_LG,
