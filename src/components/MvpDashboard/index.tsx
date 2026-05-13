@@ -42,6 +42,7 @@ import {
   IconShieldCheck,
   IconHomeShield,
   IconHeartHandshake,
+  IconPlus,
 } from '@tabler/icons-react';
 import logoWp from '../../assets/logo-wp.png';
 
@@ -606,6 +607,45 @@ function ProfileEditView({
     setOpenField(null);
   }
 
+  function updateLocal(patch: Partial<MvpProfile>) {
+    const updated = { ...local, ...patch };
+    setLocal(updated);
+    localStorage.setItem('wpilot_mvp_profile', JSON.stringify(updated));
+    onSave(updated);
+  }
+
+  type VehicleType = 'verbrenner' | 'eauto' | 'hybrid';
+  const VEHICLE_META: Record<VehicleType, { label: string; icon: React.ComponentType<{ size?: number; stroke?: number; color?: string }> }> = {
+    verbrenner: { label: 'Verbrenner', icon: IconCar },
+    eauto:      { label: 'E-Auto',     icon: IconBatteryCharging },
+    hybrid:     { label: 'Hybrid',     icon: IconPlug },
+  };
+
+  function addVehicle(type: VehicleType) {
+    const v = local.vehicles ?? { verbrenner: 0, eauto: 0, hybrid: 0 };
+    updateLocal({
+      vehicles: { ...v, [type]: v[type] + 1 },
+      autoType: 'has-vehicles',
+    });
+  }
+
+  function removeVehicle(type: VehicleType) {
+    const v = local.vehicles ?? { verbrenner: 0, eauto: 0, hybrid: 0 };
+    const newV = { ...v, [type]: Math.max(0, v[type] - 1) };
+    const total = newV.verbrenner + newV.eauto + newV.hybrid;
+    updateLocal({
+      vehicles: newV,
+      autoType: total > 0 ? 'has-vehicles' : '',
+    });
+  }
+
+  function setNoVehicle() {
+    updateLocal({
+      vehicles: { verbrenner: 0, eauto: 0, hybrid: 0 },
+      autoType: 'keins',
+    });
+  }
+
   // Section grouping
   const SECTIONS: { key: string; title: string; icon: React.ComponentType<{ size?: number; stroke?: number; color?: string }>; fieldKeys: string[] }[] = [
     { key: 'wohnen',        title: 'Wohnsituation',  icon: IconHome,          fieldKeys: ['propertyType', 'tenure', 'heatingType'] },
@@ -824,8 +864,9 @@ function ProfileEditView({
             const sectionFields = section.fieldKeys
               .map(k => PROFILE_FIELDS.find(f => f.key === k))
               .filter(Boolean) as typeof PROFILE_FIELDS;
-            if (sectionFields.length === 0) return null;
             const SectionIcon = section.icon;
+            const isMobility = section.key === 'mobilitaet';
+            if (sectionFields.length === 0 && !isMobility) return null;
             return (
               <div key={section.key}>
                 <div style={{
@@ -847,9 +888,168 @@ function ProfileEditView({
                   </span>
                   <div style={{ flex: 1, height: 1, background: BORDER }} />
                 </div>
-                <div className="mvp-profile-section-grid" style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                  {sectionFields.map(field => renderRow(field))}
-                </div>
+                {isMobility ? (() => {
+                  const v = local.vehicles ?? { verbrenner: 0, eauto: 0, hybrid: 0 };
+                  const total = v.verbrenner + v.eauto + v.hybrid;
+                  const isKeins = local.autoType === 'keins';
+                  const vehicleList: { type: VehicleType; key: string }[] = [];
+                  (['verbrenner', 'eauto', 'hybrid'] as const).forEach(t => {
+                    for (let i = 0; i < v[t]; i++) vehicleList.push({ type: t, key: `${t}-${i}` });
+                  });
+                  return (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                      {/* Individual vehicle rows */}
+                      <AnimatePresence initial={false}>
+                        {vehicleList.map(({ type, key }) => {
+                          const meta = VEHICLE_META[type];
+                          const VIcon = meta.icon;
+                          return (
+                            <motion.div
+                              key={key}
+                              layout
+                              initial={{ opacity: 0, y: -4 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              exit={{ opacity: 0, height: 0, marginBottom: 0 }}
+                              transition={{ duration: 0.18 }}
+                              style={{
+                                background: WHITE,
+                                border: `1px solid ${BORDER}`,
+                                borderRadius: 14,
+                                padding: '12px 14px',
+                                display: 'flex', alignItems: 'center', gap: 12,
+                              }}
+                            >
+                              <div style={{
+                                width: 36, height: 36, borderRadius: 10, flexShrink: 0,
+                                background: BLUE_LT,
+                                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                              }}>
+                                <VIcon size={19} stroke={1.5} color={BLUE} />
+                              </div>
+                              <div style={{
+                                flex: 1, minWidth: 0,
+                                fontSize: 14, fontWeight: 600, color: TEXT,
+                              }}>
+                                {meta.label}
+                              </div>
+                              <button
+                                onClick={() => removeVehicle(type)}
+                                aria-label="Entfernen"
+                                style={{
+                                  display: 'inline-flex', alignItems: 'center', gap: 4,
+                                  background: 'transparent',
+                                  color: TEXT_MUTED,
+                                  border: `1px solid ${BORDER}`,
+                                  borderRadius: 999,
+                                  padding: '6px 10px',
+                                  fontSize: 12, fontWeight: 600,
+                                  cursor: 'pointer',
+                                  fontFamily: 'inherit',
+                                }}
+                                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = '#dc2626'; (e.currentTarget as HTMLElement).style.borderColor = '#dc2626'; }}
+                                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = TEXT_MUTED; (e.currentTarget as HTMLElement).style.borderColor = BORDER; }}
+                              >
+                                <IconX size={13} stroke={2} /> Entfernen
+                              </button>
+                            </motion.div>
+                          );
+                        })}
+                      </AnimatePresence>
+
+                      {/* Kein Auto status */}
+                      {isKeins && total === 0 && (
+                        <div style={{
+                          background: WHITE,
+                          border: `1px solid ${BORDER}`,
+                          borderRadius: 14,
+                          padding: '12px 14px',
+                          display: 'flex', alignItems: 'center', gap: 12,
+                        }}>
+                          <div style={{
+                            width: 36, height: 36, borderRadius: 10, flexShrink: 0,
+                            background: BLUE_LT,
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          }}>
+                            <IconBike size={19} stroke={1.5} color={BLUE} />
+                          </div>
+                          <div style={{ flex: 1, fontSize: 14, fontWeight: 600, color: TEXT }}>
+                            Kein Auto
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Empty state */}
+                      {!isKeins && total === 0 && (
+                        <div style={{
+                          padding: '10px 14px',
+                          fontSize: 12, color: TEXT_MUTED,
+                          fontStyle: 'italic',
+                        }}>
+                          Noch kein Fahrzeug erfasst.
+                        </div>
+                      )}
+
+                      {/* Add buttons */}
+                      <div style={{
+                        display: 'flex', gap: 8, flexWrap: 'wrap',
+                        marginTop: 4, padding: '0 4px',
+                      }}>
+                        {(['verbrenner', 'eauto', 'hybrid'] as VehicleType[]).map(t => {
+                          const VIcon = VEHICLE_META[t].icon;
+                          return (
+                            <button
+                              key={t}
+                              onClick={() => addVehicle(t)}
+                              style={{
+                                display: 'inline-flex', alignItems: 'center', gap: 5,
+                                background: BLUE_LT, color: BLUE_DK,
+                                border: 'none',
+                                borderRadius: 999,
+                                padding: '7px 12px',
+                                fontSize: 12, fontWeight: 700,
+                                cursor: 'pointer',
+                                fontFamily: 'inherit',
+                              }}
+                            >
+                              <IconPlus size={13} stroke={2} color={BLUE} />
+                              <VIcon size={13} stroke={1.8} color={BLUE_DK} />
+                              {VEHICLE_META[t].label}
+                            </button>
+                          );
+                        })}
+                        <button
+                          onClick={setNoVehicle}
+                          style={{
+                            display: 'inline-flex', alignItems: 'center', gap: 5,
+                            background: isKeins ? BLUE : 'transparent',
+                            color: isKeins ? WHITE : TEXT_MUTED,
+                            border: `1px solid ${isKeins ? BLUE : BORDER}`,
+                            borderRadius: 999,
+                            padding: '7px 12px',
+                            fontSize: 12, fontWeight: 700,
+                            cursor: 'pointer',
+                            fontFamily: 'inherit',
+                            marginLeft: 'auto',
+                          }}
+                        >
+                          <IconBike size={13} stroke={1.8} color={isKeins ? WHITE : TEXT_MUTED} />
+                          Kein Auto
+                        </button>
+                      </div>
+
+                      {/* KFZ-Versicherung row stays as normal field */}
+                      {sectionFields.find(f => f.key === 'kfzVersicherung') && total > 0 && (
+                        <div style={{ marginTop: 6 }}>
+                          {renderRow(sectionFields.find(f => f.key === 'kfzVersicherung')!)}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })() : (
+                  <div className="mvp-profile-section-grid" style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                    {sectionFields.map(field => renderRow(field))}
+                  </div>
+                )}
               </div>
             );
           })}
