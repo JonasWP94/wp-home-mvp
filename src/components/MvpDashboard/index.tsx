@@ -569,12 +569,20 @@ function fmt(n: number) { return n.toLocaleString('de-DE'); }
 // ── Animated Counter ─────────────────────────────────────────────
 function AnimatedCounter({ value, suffix = '' }: { value: number; suffix?: string }) {
   const [display, setDisplay] = useState(0);
+  const hasAnimatedRef = React.useRef(false);
   useEffect(() => {
+    if (hasAnimatedRef.current) {
+      // Already animated once — snap to new value without re-animating
+      setDisplay(value);
+      return;
+    }
+    hasAnimatedRef.current = true;
     const duration = 1200;
     const t0 = performance.now();
+    const target = value;
     function tick(now: number) {
       const p = Math.min((now - t0) / duration, 1);
-      setDisplay(Math.round((1 - Math.pow(1 - p, 3)) * value));
+      setDisplay(Math.round((1 - Math.pow(1 - p, 3)) * target));
       if (p < 1) requestAnimationFrame(tick);
     }
     requestAnimationFrame(tick);
@@ -1283,35 +1291,46 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
           <div style={{ position: 'absolute', top: -30, right: -30, width: 120, height: 120, borderRadius: 60, background: 'rgba(255,255,255,0.06)' }} />
 
           <style>{`
-            .mvp-hero-grid{display:flex;flex-direction:column;gap:16px;position:relative;z-index:1;}
+            .mvp-hero-grid{display:flex;flex-direction:column;gap:14px;position:relative;z-index:1;}
+            .mvp-hero-headline{}
+            .mvp-hero-stats{display:flex;gap:10px;}
+            .mvp-hero-next{}
             @media(min-width:760px){
-              .mvp-hero-grid{flex-direction:row;align-items:stretch;}
-              .mvp-hero-main{flex:1;min-width:0;}
-              .mvp-hero-next{flex:0 0 320px;}
+              .mvp-hero-grid{
+                display:grid;
+                grid-template-columns:1fr 300px;
+                grid-template-rows:auto auto;
+                gap:14px 18px;
+                align-items:stretch;
+              }
+              .mvp-hero-headline{grid-column:1;grid-row:1;}
+              .mvp-hero-stats{grid-column:1;grid-row:2;}
+              .mvp-hero-next{grid-column:2;grid-row:1 / 3;}
             }
           `}</style>
 
           <div className="mvp-hero-grid">
-            <div className="mvp-hero-main">
+            <div className="mvp-hero-headline">
               <div style={{ fontSize: 11, fontWeight: 600, opacity: 0.85, marginBottom: 8, letterSpacing: '0.05em' }}>Ihr Sparpotenzial pro Jahr</div>
-              <div style={{ display: 'flex', alignItems: 'baseline', gap: 6, marginBottom: 8 }}>
-                <span style={{ fontSize: 42, fontWeight: 800, lineHeight: 1, letterSpacing: '-2px' }}><AnimatedCounter value={total} /></span>
-                <span style={{ fontSize: 20, fontWeight: 700, opacity: 0.8 }}>€</span>
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: 6, marginBottom: 6 }}>
+                <span style={{ fontSize: 44, fontWeight: 800, lineHeight: 1, letterSpacing: '-2px' }}><AnimatedCounter value={total} /></span>
+                <span style={{ fontSize: 22, fontWeight: 700, opacity: 0.8 }}>€</span>
               </div>
-              <div style={{ fontSize: 12, opacity: 0.7, marginBottom: 16 }}>{tips.length} Empfehlungen basierend auf Ihren Antworten</div>
-              <div style={{ display: 'flex', gap: 10 }}>
-                <div style={{ background: 'rgba(255,255,255,0.15)', borderRadius: 12, padding: '10px 14px', flex: '1 1 0' }}>
-                  <div style={{ fontSize: 18, fontWeight: 700 }}><AnimatedCounter value={doneTotal} suffix=" €" /></div>
-                  <div style={{ fontSize: 10, opacity: 0.8 }}>Erledigt</div>
-                </div>
-                <div style={{ background: 'rgba(255,255,255,0.15)', borderRadius: 12, padding: '10px 14px', flex: '1 1 0' }}>
-                  <div style={{ fontSize: 18, fontWeight: 700 }}>{doneCount}/{tips.length}</div>
-                  <div style={{ fontSize: 10, opacity: 0.8 }}>Tipps erledigt</div>
-                </div>
+              <div style={{ fontSize: 12, opacity: 0.7 }}>{tips.length} Empfehlungen basierend auf Ihren Antworten</div>
+            </div>
+
+            <div className="mvp-hero-stats">
+              <div style={{ background: 'rgba(255,255,255,0.15)', borderRadius: 12, padding: '10px 14px', flex: '1 1 0' }}>
+                <div style={{ fontSize: 18, fontWeight: 700 }}><AnimatedCounter value={doneTotal} suffix=" €" /></div>
+                <div style={{ fontSize: 10, opacity: 0.8 }}>Erledigt</div>
+              </div>
+              <div style={{ background: 'rgba(255,255,255,0.15)', borderRadius: 12, padding: '10px 14px', flex: '1 1 0' }}>
+                <div style={{ fontSize: 18, fontWeight: 700 }}>{doneCount}/{tips.length}</div>
+                <div style={{ fontSize: 10, opacity: 0.8 }}>Tipps erledigt</div>
               </div>
             </div>
 
-            {/* Next best step — sits top-right inside hero, glass style */}
+            {/* Next best step — vertical card spanning both rows on desktop */}
             {nextBestTip && (() => {
               const NextIcon = nextBestTip.icon;
               const nextSavings = getSavings(nextBestTip);
@@ -1321,15 +1340,16 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
                   onClick={() => setOverlayTipId(nextBestTip.id)}
                   style={{
                     background: 'rgba(255,255,255,0.15)',
-                    border: '1px solid rgba(255,255,255,0.2)',
+                    border: '1px solid rgba(255,255,255,0.22)',
                     borderRadius: 14,
-                    padding: '14px 16px',
-                    display: 'flex', flexDirection: 'column', justifyContent: 'space-between',
-                    gap: 10, color: WHITE,
+                    padding: '16px 18px',
+                    display: 'flex', flexDirection: 'column', justifyContent: 'center',
+                    gap: 12, color: WHITE,
                     cursor: 'pointer',
                     fontFamily: 'inherit',
                     textAlign: 'left' as const,
                     transition: 'background 0.15s, border-color 0.15s',
+                    minHeight: '100%',
                   }}
                   onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.22)'; }}
                   onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.15)'; }}
@@ -1338,27 +1358,31 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
                     fontSize: 10, fontWeight: 700,
                     letterSpacing: '0.1em', opacity: 0.85,
                   }}>
-                    EMPFOHLENER NÄCHSTER SCHRITT
+                    NÄCHSTER SCHRITT
                   </div>
 
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                    <div style={{
-                      width: 38, height: 38, borderRadius: 10,
-                      background: 'rgba(255,255,255,0.2)',
-                      display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      flexShrink: 0,
-                    }}>
-                      <NextIcon size={20} stroke={1.6} color={WHITE} />
+                  <div style={{
+                    width: 48, height: 48, borderRadius: 12,
+                    background: 'rgba(255,255,255,0.22)',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  }}>
+                    <NextIcon size={24} stroke={1.5} color={WHITE} />
+                  </div>
+
+                  <div>
+                    <div style={{ fontSize: 15, fontWeight: 700, lineHeight: 1.3 }}>
+                      {nextBestTip.title}
                     </div>
-                    <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ fontSize: 14, fontWeight: 700, lineHeight: 1.25 }}>
-                        {nextBestTip.title}
-                      </div>
-                      <div style={{ fontSize: 11, opacity: 0.8, marginTop: 2 }}>
-                        bis zu {fmt(nextSavings)} € / Jahr
-                      </div>
+                    <div style={{ fontSize: 12, opacity: 0.85, marginTop: 3 }}>
+                      bis zu {fmt(nextSavings)} € / Jahr
                     </div>
-                    <IconArrowRight size={18} stroke={2.2} color={WHITE} style={{ flexShrink: 0, opacity: 0.85 }} />
+                  </div>
+
+                  <div style={{
+                    display: 'inline-flex', alignItems: 'center', gap: 5,
+                    fontSize: 12, fontWeight: 700, opacity: 0.95,
+                  }}>
+                    Tipp anschauen <IconArrowRight size={14} stroke={2.4} />
                   </div>
                 </button>
               );
