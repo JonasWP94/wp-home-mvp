@@ -53,7 +53,7 @@ export const TEXT       = PRIMARY;
 export const TEXT_MUTED = GREY_800;
 export const TEXT_DIM   = GREY_700;
 export const BORDER     = GREY_300;
-export const BG         = GREY_200;
+export const BG         = '#F4F6FA';
 
 // Radii
 export const RADIUS_XS   = 4;

@@ -551,7 +551,7 @@ const GREEN_LT  = '#E8F5EF';
 const ORANGE    = '#F9AA00';
 const ORANGE_LT = '#FEF3C7';
 const DARK      = '#2C3E50';
-const BG        = '#F5F6F8';
+const BG        = '#F4F6FA';
 const WHITE     = '#FFFFFF';
 const BORDER    = '#E2E8F0';
 const TEXT      = DARK;
@@ -836,7 +836,7 @@ function ProfileEditView({
       {/* Header */}
       <div style={{
         position: 'sticky', top: 0, zIndex: 100,
-        background: 'rgba(243,243,245,0.95)', backdropFilter: 'blur(12px)',
+        background: 'rgba(244,246,250,0.95)', backdropFilter: 'blur(12px)',
         borderBottom: `1px solid ${BORDER}`, padding: '12px 20px',
         display: 'flex', alignItems: 'center', gap: 12,
       }}>
@@ -1268,7 +1268,7 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
       {/* Header */}
       <div style={{
         position: 'sticky', top: 0, zIndex: 100,
-        background: 'rgba(243,243,245,0.95)', backdropFilter: 'blur(12px)',
+        background: 'rgba(244,246,250,0.95)', backdropFilter: 'blur(12px)',
         borderBottom: `1px solid ${BORDER}`, padding: '12px 20px',
         display: 'flex', alignItems: 'center', gap: 10,
       }}>

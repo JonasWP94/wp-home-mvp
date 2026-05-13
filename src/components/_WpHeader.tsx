@@ -19,7 +19,7 @@ export default function WpHeader({ onBack, rightSlot, showProgress, progressPct 
     <>
       <div className="wp-header" style={{
         position: 'sticky', top: 0, zIndex: 100,
-        background: 'rgba(243,243,245,0.95)', backdropFilter: 'blur(12px)',
+        background: 'rgba(244,246,250,0.95)', backdropFilter: 'blur(12px)',
         borderBottom: `1px solid ${BORDER}`,
         padding: '12px 16px',
         display: 'flex', alignItems: 'center', gap: 6,
