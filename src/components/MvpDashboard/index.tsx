@@ -1119,6 +1119,11 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
   const [expanded, setExpanded] = useState<string | null>(null);
   const [overlayTipId, setOverlayTipId] = useState<string | null>(null);
   const [showRemoved, setShowRemoved] = useState(false);
+  const [savedAmounts, setSavedAmounts] = useState<Record<string, number>>(() => {
+    try { return JSON.parse(localStorage.getItem('wpilot_mvp_saved_amounts') || '{}'); } catch { return {}; }
+  });
+  const [editingSavingsId, setEditingSavingsId] = useState<string | null>(null);
+  const [savingsInput, setSavingsInput] = useState<string>('');
 
   useEffect(() => {
     if (initialProfile) return;
@@ -1130,9 +1135,13 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
 
   useEffect(() => { localStorage.setItem('wpilot_mvp_done',    JSON.stringify([...done]));    }, [done]);
   useEffect(() => { localStorage.setItem('wpilot_mvp_removed', JSON.stringify([...removed])); }, [removed]);
+  useEffect(() => { localStorage.setItem('wpilot_mvp_saved_amounts', JSON.stringify(savedAmounts)); }, [savedAmounts]);
 
   const hg = profile?.hasChildren ? 3 : 2;
-  const getSavings = (tip: MvpTip) => hg === 3 ? tip.savingsHg3 : tip.savingsHg2;
+  const getSavings = (tip: MvpTip) => {
+    if (done.has(tip.id) && savedAmounts[tip.id] !== undefined) return savedAmounts[tip.id];
+    return hg === 3 ? tip.savingsHg3 : tip.savingsHg2;
+  };
 
   const tips = useMemo(() => {
     if (!profile) return [];
@@ -1517,40 +1526,145 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
                                   </div>
                                 )}
 
-                                {tip.id !== 'strom-wechsel' && (
-                                  <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: 4 }}>
-                                    <button
-                                      onClick={e => { e.stopPropagation(); toggleDone(tip.id); setExpanded(null); }}
-                                      style={{
-                                        flexShrink: 0,
-                                        background: isDone ? GREEN_LT : '#eef0f3',
-                                        color: isDone ? GREEN : TEXT,
-                                        border: 'none',
-                                        borderRadius: 999, padding: '10px 16px',
-                                        fontSize: 13, fontWeight: 700, cursor: 'pointer',
-                                        display: 'inline-flex', alignItems: 'center', gap: 6,
-                                        fontFamily: 'inherit',
-                                      }}
-                                    >
-                                      {isDone ? <><IconCheck size={14} stroke={2.5} /> Erledigt</> : 'Erledigt'}
-                                    </button>
-                                    <button
-                                      onClick={e => { e.stopPropagation(); setOverlayTipId(tip.id); }}
-                                      style={{
-                                        marginLeft: 'auto',
-                                        display: 'inline-flex', alignItems: 'center', gap: 6,
-                                        background: DARK, color: WHITE,
-                                        border: 'none',
-                                        borderRadius: 999, padding: '10px 18px',
-                                        fontSize: 13, fontWeight: 700, cursor: 'pointer',
-                                        fontFamily: 'inherit',
-                                      }}
-                                    >
-                                      {tip.actionLabel || 'Tipp umsetzen'}
-                                      <IconArrowRight size={14} stroke={2.5} />
-                                    </button>
-                                  </div>
-                                )}
+                                {tip.id !== 'strom-wechsel' && (() => {
+                                  const isEditing = editingSavingsId === tip.id;
+                                  const defaultAmount = String(savedAmounts[tip.id] ?? (hg === 3 ? tip.savingsHg3 : tip.savingsHg2));
+
+                                  function confirmSavings(e: React.MouseEvent) {
+                                    e.stopPropagation();
+                                    const num = Number(savingsInput.replace(/[^\d]/g, ''));
+                                    const amount = isNaN(num) ? Number(defaultAmount) : num;
+                                    setSavedAmounts(prev => ({ ...prev, [tip.id]: amount }));
+                                    setDone(prev => { const n = new Set(prev); n.add(tip.id); return n; });
+                                    setEditingSavingsId(null);
+                                    setSavingsInput('');
+                                    setExpanded(null);
+                                  }
+
+                                  function startEditing(e: React.MouseEvent) {
+                                    e.stopPropagation();
+                                    setSavingsInput(defaultAmount);
+                                    setEditingSavingsId(tip.id);
+                                  }
+
+                                  function resetDone(e: React.MouseEvent) {
+                                    e.stopPropagation();
+                                    setDone(prev => { const n = new Set(prev); n.delete(tip.id); return n; });
+                                    setSavedAmounts(prev => {
+                                      const next = { ...prev }; delete next[tip.id]; return next;
+                                    });
+                                  }
+
+                                  if (isEditing) {
+                                    return (
+                                      <div style={{ marginTop: 6, display: 'flex', flexDirection: 'column', gap: 10 }}>
+                                        <div style={{ fontSize: 12, fontWeight: 600, color: TEXT }}>
+                                          Wie viel sparen Sie damit pro Jahr?
+                                        </div>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                                          <div style={{
+                                            display: 'inline-flex', alignItems: 'center', gap: 4,
+                                            background: WHITE,
+                                            border: `1.5px solid ${BLUE}`,
+                                            borderRadius: 10, padding: '8px 12px',
+                                            flex: 1, maxWidth: 220,
+                                          }}>
+                                            <input
+                                              type="text"
+                                              inputMode="numeric"
+                                              autoFocus
+                                              value={savingsInput}
+                                              onClick={e => e.stopPropagation()}
+                                              onChange={e => setSavingsInput(e.target.value.replace(/[^\d]/g, ''))}
+                                              onKeyDown={e => { if (e.key === 'Enter') confirmSavings(e as any); }}
+                                              style={{
+                                                border: 'none', outline: 'none', background: 'transparent',
+                                                flex: 1, minWidth: 0,
+                                                fontSize: 14, fontWeight: 700, color: TEXT,
+                                                fontFamily: 'inherit',
+                                              }}
+                                              placeholder="0"
+                                            />
+                                            <span style={{ fontSize: 13, fontWeight: 700, color: TEXT_MUTED }}>€ / Jahr</span>
+                                          </div>
+                                          <button
+                                            onClick={confirmSavings}
+                                            style={{
+                                              background: GREEN, color: WHITE, border: 'none',
+                                              borderRadius: 999, padding: '10px 16px',
+                                              fontSize: 13, fontWeight: 700, cursor: 'pointer',
+                                              display: 'inline-flex', alignItems: 'center', gap: 5,
+                                              fontFamily: 'inherit',
+                                            }}
+                                          >
+                                            <IconCheck size={14} stroke={2.5} /> Übernehmen
+                                          </button>
+                                          <button
+                                            onClick={e => { e.stopPropagation(); setEditingSavingsId(null); setSavingsInput(''); }}
+                                            style={{
+                                              background: 'transparent', color: TEXT_MUTED, border: 'none',
+                                              fontSize: 13, fontWeight: 600, cursor: 'pointer',
+                                              fontFamily: 'inherit', padding: '8px 4px',
+                                            }}
+                                          >
+                                            Abbrechen
+                                          </button>
+                                        </div>
+                                      </div>
+                                    );
+                                  }
+
+                                  return (
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: 4 }}>
+                                      {isDone ? (
+                                        <button
+                                          onClick={resetDone}
+                                          style={{
+                                            flexShrink: 0,
+                                            background: '#eef0f3', color: TEXT,
+                                            border: 'none',
+                                            borderRadius: 999, padding: '10px 16px',
+                                            fontSize: 13, fontWeight: 700, cursor: 'pointer',
+                                            display: 'inline-flex', alignItems: 'center', gap: 6,
+                                            fontFamily: 'inherit',
+                                          }}
+                                        >
+                                          <IconX size={14} stroke={2.4} /> Zurücksetzen
+                                        </button>
+                                      ) : (
+                                        <button
+                                          onClick={startEditing}
+                                          style={{
+                                            flexShrink: 0,
+                                            background: '#eef0f3', color: TEXT,
+                                            border: 'none',
+                                            borderRadius: 999, padding: '10px 16px',
+                                            fontSize: 13, fontWeight: 700, cursor: 'pointer',
+                                            display: 'inline-flex', alignItems: 'center', gap: 6,
+                                            fontFamily: 'inherit',
+                                          }}
+                                        >
+                                          Erledigt
+                                        </button>
+                                      )}
+                                      <button
+                                        onClick={e => { e.stopPropagation(); setOverlayTipId(tip.id); }}
+                                        style={{
+                                          marginLeft: 'auto',
+                                          display: 'inline-flex', alignItems: 'center', gap: 6,
+                                          background: DARK, color: WHITE,
+                                          border: 'none',
+                                          borderRadius: 999, padding: '10px 18px',
+                                          fontSize: 13, fontWeight: 700, cursor: 'pointer',
+                                          fontFamily: 'inherit',
+                                        }}
+                                      >
+                                        {tip.actionLabel || 'Tipp umsetzen'}
+                                        <IconArrowRight size={14} stroke={2.5} />
+                                      </button>
+                                    </div>
+                                  );
+                                })()}
                               </div>
                             </motion.div>
                           )}
