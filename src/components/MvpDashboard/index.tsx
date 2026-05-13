@@ -1000,71 +1000,85 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
           }}
         >
           <div style={{ position: 'absolute', top: -30, right: -30, width: 120, height: 120, borderRadius: 60, background: 'rgba(255,255,255,0.06)' }} />
-          <div style={{ position: 'relative', zIndex: 1 }}>
-            <div style={{ fontSize: 11, fontWeight: 600, opacity: 0.85, marginBottom: 8, letterSpacing: '0.05em' }}>Ihr Sparpotenzial pro Jahr</div>
-            <div style={{ display: 'flex', alignItems: 'baseline', gap: 6, marginBottom: 8 }}>
-              <span style={{ fontSize: 42, fontWeight: 800, lineHeight: 1, letterSpacing: '-2px' }}><AnimatedCounter value={total} /></span>
-              <span style={{ fontSize: 20, fontWeight: 700, opacity: 0.8 }}>€</span>
-            </div>
-            <div style={{ fontSize: 12, opacity: 0.7, marginBottom: 16 }}>{tips.length} Empfehlungen basierend auf Ihren Antworten</div>
-            <div style={{ display: 'flex', gap: 10 }}>
-              <div style={{ background: 'rgba(255,255,255,0.15)', borderRadius: 12, padding: '10px 14px', flex: '1 1 0' }}>
-                <div style={{ fontSize: 18, fontWeight: 700 }}><AnimatedCounter value={doneTotal} suffix=" €" /></div>
-                <div style={{ fontSize: 10, opacity: 0.8 }}>Erledigt</div>
+
+          <style>{`
+            .mvp-hero-grid{display:flex;flex-direction:column;gap:16px;position:relative;z-index:1;}
+            @media(min-width:760px){
+              .mvp-hero-grid{flex-direction:row;align-items:stretch;}
+              .mvp-hero-main{flex:1;min-width:0;}
+              .mvp-hero-next{flex:0 0 320px;}
+            }
+          `}</style>
+
+          <div className="mvp-hero-grid">
+            <div className="mvp-hero-main">
+              <div style={{ fontSize: 11, fontWeight: 600, opacity: 0.85, marginBottom: 8, letterSpacing: '0.05em' }}>Ihr Sparpotenzial pro Jahr</div>
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: 6, marginBottom: 8 }}>
+                <span style={{ fontSize: 42, fontWeight: 800, lineHeight: 1, letterSpacing: '-2px' }}><AnimatedCounter value={total} /></span>
+                <span style={{ fontSize: 20, fontWeight: 700, opacity: 0.8 }}>€</span>
               </div>
-              <div style={{ background: 'rgba(255,255,255,0.15)', borderRadius: 12, padding: '10px 14px', flex: '1 1 0' }}>
-                <div style={{ fontSize: 18, fontWeight: 700 }}>{doneCount}/{tips.length}</div>
-                <div style={{ fontSize: 10, opacity: 0.8 }}>Tipps erledigt</div>
+              <div style={{ fontSize: 12, opacity: 0.7, marginBottom: 16 }}>{tips.length} Empfehlungen basierend auf Ihren Antworten</div>
+              <div style={{ display: 'flex', gap: 10 }}>
+                <div style={{ background: 'rgba(255,255,255,0.15)', borderRadius: 12, padding: '10px 14px', flex: '1 1 0' }}>
+                  <div style={{ fontSize: 18, fontWeight: 700 }}><AnimatedCounter value={doneTotal} suffix=" €" /></div>
+                  <div style={{ fontSize: 10, opacity: 0.8 }}>Erledigt</div>
+                </div>
+                <div style={{ background: 'rgba(255,255,255,0.15)', borderRadius: 12, padding: '10px 14px', flex: '1 1 0' }}>
+                  <div style={{ fontSize: 18, fontWeight: 700 }}>{doneCount}/{tips.length}</div>
+                  <div style={{ fontSize: 10, opacity: 0.8 }}>Tipps erledigt</div>
+                </div>
               </div>
             </div>
 
-            {/* Next best step — white card inside hero */}
+            {/* Next best step — sits top-right inside hero, glass style */}
             {nextBestTip && (() => {
               const NextIcon = nextBestTip.icon;
               const nextSavings = getSavings(nextBestTip);
               return (
                 <button
+                  className="mvp-hero-next"
                   onClick={() => setOverlayTipId(nextBestTip.id)}
                   style={{
-                    marginTop: 14,
-                    width: '100%',
-                    background: WHITE,
-                    border: 'none',
+                    background: 'rgba(255,255,255,0.15)',
+                    border: '1px solid rgba(255,255,255,0.2)',
                     borderRadius: 14,
                     padding: '14px 16px',
-                    display: 'flex', alignItems: 'center', gap: 14,
+                    display: 'flex', flexDirection: 'column', justifyContent: 'space-between',
+                    gap: 10, color: WHITE,
                     cursor: 'pointer',
                     fontFamily: 'inherit',
                     textAlign: 'left' as const,
-                    boxShadow: '0 4px 16px rgba(0,0,0,0.12)',
-                    transition: 'transform 0.15s, box-shadow 0.15s',
+                    transition: 'background 0.15s, border-color 0.15s',
                   }}
-                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(-1px)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 6px 20px rgba(0,0,0,0.18)'; }}
-                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(0)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 4px 16px rgba(0,0,0,0.12)'; }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.22)'; }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.15)'; }}
                 >
                   <div style={{
-                    width: 40, height: 40, borderRadius: 12,
-                    background: BLUE_LT,
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    flexShrink: 0,
+                    fontSize: 10, fontWeight: 700,
+                    letterSpacing: '0.1em', opacity: 0.85,
                   }}>
-                    <NextIcon size={22} stroke={1.5} color={BLUE} />
+                    EMPFOHLENER NÄCHSTER SCHRITT
                   </div>
-                  <div style={{ flex: 1, minWidth: 0 }}>
+
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                     <div style={{
-                      fontSize: 10, fontWeight: 700, color: BLUE,
-                      letterSpacing: '0.1em', marginBottom: 2,
+                      width: 38, height: 38, borderRadius: 10,
+                      background: 'rgba(255,255,255,0.2)',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      flexShrink: 0,
                     }}>
-                      EMPFOHLENER NÄCHSTER SCHRITT
+                      <NextIcon size={20} stroke={1.6} color={WHITE} />
                     </div>
-                    <div style={{ fontSize: 14, fontWeight: 700, color: TEXT, lineHeight: 1.3 }}>
-                      {nextBestTip.title}
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ fontSize: 14, fontWeight: 700, lineHeight: 1.25 }}>
+                        {nextBestTip.title}
+                      </div>
+                      <div style={{ fontSize: 11, opacity: 0.8, marginTop: 2 }}>
+                        bis zu {fmt(nextSavings)} € / Jahr
+                      </div>
                     </div>
-                    <div style={{ fontSize: 11, color: TEXT_MUTED, marginTop: 2 }}>
-                      bis zu {fmt(nextSavings)} € / Jahr
-                    </div>
+                    <IconArrowRight size={18} stroke={2.2} color={WHITE} style={{ flexShrink: 0, opacity: 0.85 }} />
                   </div>
-                  <IconArrowRight size={18} stroke={2.2} color={DARK} style={{ flexShrink: 0 }} />
                 </button>
               );
             })()}
