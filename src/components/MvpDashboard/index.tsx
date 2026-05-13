@@ -77,6 +77,7 @@ interface MvpTip {
   partnerLinks?: { name: string; url: string; logo: string }[];
   actionLabel?: string;
   actionUrl?: string;
+  howTo?: string[];
   priority: 3 | 2 | 1;
   category: string;
   icon: React.ComponentType<{ size?: number; stroke?: number; color?: string }>;
@@ -217,6 +218,11 @@ const ALL_TIPS: MvpTip[] = [
     id: 'strom-wechsel',
     title: 'Stromtarif wechseln',
     description: 'Mit Wechselpilot übernehmen wir den Wechsel komplett für Sie — automatisch zum besten Tarif, Jahr für Jahr. Sie zahlen nichts, profitieren aber dauerhaft von der günstigsten Stromrechnung.',
+    howTo: [
+      'Bei Wechselpilot kostenlos registrieren und Stromzähler hinterlegen.',
+      'Wechselpilot vergleicht jährlich automatisch alle verfügbaren Tarife.',
+      'Wir wickeln Kündigung und Wechsel zum neuen Anbieter ab — Sie müssen nichts tun.',
+    ],
     partner: 'Octopus, Tibber, Lichtblick',
     priority: 3, category: 'energie', icon: IconBolt,
     savingsHg2: 475, savingsHg3: 475,
@@ -228,6 +234,11 @@ const ALL_TIPS: MvpTip[] = [
     description: 'Wechselpilot prüft Ihren Gastarif automatisch jedes Jahr und wechselt für Sie zum günstigsten Anbieter — ohne dass Sie selbst aktiv werden müssen. Komplett kostenlos und ohne Aufwand.',
     actionLabel: 'Jetzt Zähler anlegen',
     actionUrl: 'https://konto.wechselpilot.com/neuer-zähler',
+    howTo: [
+      'Auf "Jetzt Zähler anlegen" klicken.',
+      'Gas-Zählernummer und Verbrauch im Wechselpilot-Konto eintragen.',
+      'Wechselpilot übernimmt ab sofort den jährlichen Tarifvergleich und Wechsel.',
+    ],
     partner: 'Vattenfall, E.ON, EnBW',
     priority: 3, category: 'energie', icon: IconFlame,
     savingsHg2: 361, savingsHg3: 361,
@@ -237,6 +248,11 @@ const ALL_TIPS: MvpTip[] = [
     id: 'thermostate',
     title: 'Smarte Thermostate',
     description: 'Smarte Thermostate heizen automatisch nur, wenn Sie zuhause sind. Das reduziert Ihre Heizkosten um bis zu 30 % — ohne dass Sie an Komfort verlieren.',
+    howTo: [
+      'Smarte Thermostate eines Herstellers (tado°, Homematic IP) auswählen — Starter-Set ab ca. 100 €.',
+      'Alte Thermostate gegen die smarten austauschen (Werkzeuglos in 5 Minuten pro Heizkörper).',
+      'In der App Heizzeiten einstellen oder automatisch via GPS heizen lassen.',
+    ],
     partner: 'tado°, Homematic IP',
     priority: 3, category: 'heizung', icon: IconTemperature,
     savingsHg2: 180, savingsHg3: 220,
@@ -246,6 +262,12 @@ const ALL_TIPS: MvpTip[] = [
     id: 'waermepumpe',
     title: 'Wärmepumpe',
     description: 'Eine Wärmepumpe nutzt Umweltwärme statt Gas oder Öl und ist langfristig deutlich günstiger. Bis zu 70 % Förderung vom Staat machen die Umstellung attraktiv.',
+    howTo: [
+      'BAFA-Förderantrag prüfen — bis zu 70 % der Kosten werden bezuschusst.',
+      '2–3 Angebote von Fachbetrieben einholen (Thermondo, 1KOMMA5° oder lokal).',
+      'Energieberater hinzuziehen, falls eine größere Sanierung mitläuft.',
+      'Auftrag erteilen — Installation dauert meist 1–3 Tage.',
+    ],
     partner: 'Thermondo, 1KOMMA5°',
     priority: 2, category: 'heizung', icon: IconLeaf,
     savingsHg2: 700, savingsHg3: 700,
@@ -255,6 +277,12 @@ const ALL_TIPS: MvpTip[] = [
     id: 'solaranlage',
     title: 'Solaranlage',
     description: 'Eigener Solarstrom vom Dach senkt die Stromrechnung dauerhaft. Mit Speicher decken Sie bis zu 80 % Ihres Bedarfs selbst — und produzieren wetterunabhängig den günstigsten Strom.',
+    howTo: [
+      'Dach-Eignung prüfen (Ausrichtung, Verschattung) — kostenlose Beratung bei Enpal, Zolar etc.',
+      '2–3 Angebote vergleichen: Kauf, Pacht oder Finanzierung.',
+      'Einspeisevergütung und Eigenverbrauch beim Anbieter durchrechnen lassen.',
+      'Installation dauert meist 1–2 Tage — Anmeldung beim Netzbetreiber übernimmt der Anbieter.',
+    ],
     partner: 'Enpal, Zolar',
     priority: 2, category: 'solar', icon: IconSun,
     savingsHg2: 300, savingsHg3: 300,
@@ -264,6 +292,12 @@ const ALL_TIPS: MvpTip[] = [
     id: 'balkonkraftwerk',
     title: 'Balkonkraftwerk',
     description: 'Eine Mini-Solaranlage am Balkon kostet wenig, ist einfach zu installieren und produziert kostenlosen Strom für Ihren Haushalt — auch in Mietwohnungen erlaubt.',
+    howTo: [
+      'Bei Mietwohnung: kurze Info an Vermieter (seit 2024 in der Regel nicht mehr genehmigungspflichtig).',
+      '800-Watt-Set bestellen (Yuma, Priwatt) — Komplettpaket ab ca. 500 €.',
+      'Selbst montieren: Modul am Balkongeländer befestigen, Wechselrichter anschließen, Stecker in die Steckdose.',
+      'Im Marktstammdatenregister anmelden (5 Minuten online).',
+    ],
     partner: 'Yuma, Priwatt',
     priority: 2, category: 'solar', icon: IconSun,
     savingsHg2: 180, savingsHg3: 200,
@@ -273,6 +307,11 @@ const ALL_TIPS: MvpTip[] = [
     id: 'kfz-versicherung',
     title: 'KFZ-Versicherung wechseln',
     description: 'KFZ-Tarife unterscheiden sich oft um mehrere hundert Euro. Ein Vergleich dauert nur Minuten und der Wechsel zum 1. Januar ist unkompliziert.',
+    howTo: [
+      'Vergleichsportal nutzen (Check24, Tarifcheck, Clark) — Eingabe dauert ca. 5 Minuten.',
+      'Aktuelle Versicherung bis spätestens 30. November kündigen.',
+      'Neuen Vertrag direkt online abschließen — Schadenfreiheitsklasse wird automatisch übertragen.',
+    ],
     partner: 'Clark, Tarifcheck, HUK24',
     priority: 3, category: 'mobilitaet', icon: IconCar,
     savingsHg2: 800, savingsHg3: 800,
@@ -282,6 +321,12 @@ const ALL_TIPS: MvpTip[] = [
     id: 'thg-praemie',
     title: 'THG-Prämie',
     description: 'Als E-Auto-Fahrer haben Sie Anspruch auf die staatliche THG-Prämie — einfach online beantragen und das Geld jährlich kassieren.',
+    howTo: [
+      'Anbieter mit der höchsten Auszahlung wählen (z.B. Geld für eAuto, Emobia).',
+      'Fahrzeugschein-Foto und IBAN hochladen — dauert 2 Minuten.',
+      'Auszahlung erfolgt nach Bestätigung durch das Umweltbundesamt (ca. 4–8 Wochen).',
+      'Jedes Jahr wiederholen — gleicher Anbieter automatisch.',
+    ],
     partner: 'Geld für eAuto',
     priority: 1, category: 'mobilitaet', icon: IconBatteryCharging,
     savingsHg2: 630, savingsHg3: 630,
@@ -291,6 +336,11 @@ const ALL_TIPS: MvpTip[] = [
     id: 'wallbox',
     title: 'Wallbox / Laden zuhause',
     description: 'Mit einer Wallbox laden Sie zuhause deutlich günstiger und schneller als an öffentlichen Säulen. In Kombination mit Solarstrom maximieren Sie die Ersparnis.',
+    howTo: [
+      '11 kW Wallbox auswählen (genehmigungsfrei beim Netzbetreiber).',
+      'Elektriker beauftragen — Installation dauert meist einen halben Tag.',
+      'Bei Solaranlage: Wallbox so konfigurieren, dass sie überschüssigen PV-Strom nutzt.',
+    ],
     partner: 'Enpal, charge.cloud',
     priority: 1, category: 'mobilitaet', icon: IconBatteryCharging,
     savingsHg2: 280, savingsHg3: 280,
@@ -300,6 +350,11 @@ const ALL_TIPS: MvpTip[] = [
     id: 'haftpflicht-versicherung',
     title: 'Privathaftpflicht abschließen',
     description: 'Die Privathaftpflicht schützt vor existenzbedrohenden Schadensersatzforderungen — bereits ab wenigen Euro pro Monat. Praktisch unverzichtbar für jeden Haushalt.',
+    howTo: [
+      'Auf Deckungssumme von mindestens 10 Mio. € achten.',
+      'Familientarif wählen, wenn Partner/Kinder mit abgesichert werden sollen.',
+      'Online vergleichen (Check24, Clark) und direkt abschließen — gilt sofort.',
+    ],
     partner: 'Clark, Check24',
     priority: 3, category: 'versicherung', icon: IconShieldCheck,
     savingsHg2: 80, savingsHg3: 80,
@@ -309,6 +364,11 @@ const ALL_TIPS: MvpTip[] = [
     id: 'hausrat-versicherung',
     title: 'Hausratversicherung optimieren',
     description: 'Veraltete Hausrat-Tarife kosten unnötig Geld. Ein Vergleich zeigt schnell, ob Sie bei gleicher Leistung günstigere Anbieter finden.',
+    howTo: [
+      'Versicherungssumme passend zur Wohnungsgröße berechnen (Faustregel: ca. 650 €/qm).',
+      'Tarifvergleich starten (Check24, Clark) — alte Police hochladen.',
+      'Bei Wechsel: alte Versicherung mit Sonderkündigungsrecht im Schadenfall oder zum Ablauf kündigen.',
+    ],
     partner: 'Clark, Check24',
     priority: 2, category: 'versicherung', icon: IconHomeShield,
     savingsHg2: 120, savingsHg3: 120,
@@ -318,6 +378,12 @@ const ALL_TIPS: MvpTip[] = [
     id: 'berufsunfaehigkeit-versicherung',
     title: 'Berufsunfähigkeitsversicherung',
     description: 'Eine BU-Versicherung sichert Ihr Einkommen ab, falls Sie durch Krankheit oder Unfall nicht mehr arbeiten können — eine der wichtigsten Absicherungen überhaupt.',
+    howTo: [
+      'Unabhängige Beratung holen (Clark, MLP, freier Makler) — BU ist beratungsintensiv.',
+      'Gesundheitsfragen ehrlich und vollständig beantworten.',
+      'Auf Verzicht auf abstrakte Verweisung achten und genug Rentenhöhe wählen.',
+      'Je früher abschließen, desto günstiger der Beitrag.',
+    ],
     partner: 'Clark, MLP',
     priority: 2, category: 'versicherung', icon: IconHeartHandshake,
     savingsHg2: 0, savingsHg3: 0,
@@ -327,6 +393,11 @@ const ALL_TIPS: MvpTip[] = [
     id: 'gebaeude-versicherung',
     title: 'Wohngebäudeversicherung optimieren',
     description: 'Eine Wohngebäudeversicherung ist für Hauseigentümer Pflicht. Ein Tarifvergleich spart oft mehrere hundert Euro pro Jahr — bei gleicher Absicherung.',
+    howTo: [
+      'Gebäudewert (Wert 1914) ermitteln — aus Bauunterlagen oder Berechnung über den Vergleichsrechner.',
+      'Tarife vergleichen (Check24, Clark) — auf Elementarschäden und Glasversicherung achten.',
+      'Bei Beitragserhöhung gilt Sonderkündigungsrecht — innerhalb 1 Monats kündigbar.',
+    ],
     partner: 'Clark, Check24',
     priority: 2, category: 'versicherung', icon: IconBuilding,
     savingsHg2: 280, savingsHg3: 280,
@@ -336,6 +407,12 @@ const ALL_TIPS: MvpTip[] = [
     id: 'internet-wechsel',
     title: 'Internet-Anbieter wechseln',
     description: 'Stammkunden zahlen oft deutlich mehr als Neukunden. Mit einem Anbieterwechsel oder einem Anruf beim aktuellen Anbieter senken Sie monatlich Ihre Internetkosten.',
+    howTo: [
+      'Vertragsende prüfen (alte Rechnung) und Kündigungsfrist beachten.',
+      'Tarif-Vergleich starten (Verivox, Check24) — Verfügbarkeit nach PLZ filtern.',
+      'Wechselservice nutzen — neuer Anbieter übernimmt Kündigung und Portierung automatisch.',
+      'Alternative: aktuellen Anbieter anrufen und Neukunden-Rabatt verhandeln.',
+    ],
     partner: 'Verivox, Check24',
     priority: 2, category: 'kommunikation', icon: IconWifi,
     savingsHg2: 240, savingsHg3: 240,
@@ -345,6 +422,12 @@ const ALL_TIPS: MvpTip[] = [
     id: 'mobilfunk-wechsel',
     title: 'Mobilfunk-Tarif optimieren',
     description: 'Mobilfunkanbieter bieten Neukunden meist deutlich günstigere Konditionen. Tarifvergleich oder Nachverhandeln reduziert Ihre Handykosten spürbar.',
+    howTo: [
+      'Aktuellen Datenverbrauch in der App des Anbieters prüfen.',
+      'Tarif-Vergleich (Check24, Verivox) — bestpassenden Tarif mit gleichem Datenvolumen wählen.',
+      'Rufnummer-Mitnahme aktivieren — Wechsel erfolgt automatisch zum Vertragsende.',
+      'Tipp: Bei aktuellem Anbieter Rabatt-Hotline anrufen — oft 30 % günstiger zum gleichen Tarif.',
+    ],
     partner: 'Check24, Verivox',
     priority: 2, category: 'kommunikation', icon: IconDeviceMobile,
     savingsHg2: 180, savingsHg3: 180,
@@ -354,6 +437,12 @@ const ALL_TIPS: MvpTip[] = [
     id: 'steuererklaerung',
     title: 'Steuererklärung einreichen',
     description: 'Mit einer Steuer-App geht es ganz einfach — auch ohne Steuerwissen. Antworten auf Fragen geben, fertig. Durchschnittliche Rückerstattung: über 1.000 €.',
+    howTo: [
+      'Steuer-App wählen (Taxfix, WISO Steuer, Zasta) — kostenlose Vorberechnung möglich.',
+      'Fragen Schritt für Schritt beantworten (ca. 30–60 Minuten).',
+      'Steuererklärung digital ans Finanzamt senden — kein Papierkram.',
+      'Rückerstattung kommt im Schnitt nach 4–6 Wochen aufs Konto.',
+    ],
     partner: 'Taxfix, WISO, Zasta',
     partnerLinks: [
       { name: 'Taxfix', url: 'https://taxfix.de',           logo: '/apps/wpilot-home/assets/partners/taxfix.png' },
@@ -368,6 +457,12 @@ const ALL_TIPS: MvpTip[] = [
     id: 'kostenloses-girokonto',
     title: 'Kostenloses Girokonto',
     description: 'Viele Banken berechnen 5–10 € Kontoführungsgebühren pro Monat. Ein kostenloses Girokonto bei einer Direktbank spart diese Gebühren komplett — bei gleicher Funktionalität.',
+    howTo: [
+      'Anbieter wählen (ING, DKB, Comdirect) — auf "wirklich kostenlos" achten (kein Mindesteingang).',
+      'Online-Konto-Eröffnung mit Video-Ident — dauert ca. 15 Minuten.',
+      'Gehalt-Umzugsservice nutzen, alle Lastschriften werden automatisch migriert.',
+      'Altes Konto erst schließen, wenn alles auf dem neuen läuft (Übergang 1–2 Monate).',
+    ],
     partner: 'ING, DKB',
     priority: 1, category: 'finanzen', icon: IconPig,
     savingsHg2: 120, savingsHg3: 120,
@@ -726,6 +821,7 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
     try { return new Set(JSON.parse(localStorage.getItem('wpilot_mvp_removed') || '[]')); } catch { return new Set(); }
   });
   const [expanded, setExpanded] = useState<string | null>(null);
+  const [overlayTipId, setOverlayTipId] = useState<string | null>(null);
   const [showRemoved, setShowRemoved] = useState(false);
 
   useEffect(() => {
@@ -1050,22 +1146,21 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
                                     >
                                       {isDone ? <><IconCheck size={14} stroke={2.5} /> Erledigt</> : 'Erledigt'}
                                     </button>
-                                    <a
-                                      href={tip.actionUrl || tip.partnerLinks?.[0]?.url || '#'}
-                                      target={tip.actionUrl || tip.partnerLinks?.[0]?.url ? '_blank' : undefined}
-                                      rel="noopener noreferrer"
-                                      onClick={e => e.stopPropagation()}
+                                    <button
+                                      onClick={e => { e.stopPropagation(); setOverlayTipId(tip.id); }}
                                       style={{
                                         marginLeft: 'auto',
                                         display: 'inline-flex', alignItems: 'center', gap: 6,
                                         background: DARK, color: WHITE,
+                                        border: 'none',
                                         borderRadius: 999, padding: '10px 18px',
-                                        fontSize: 13, fontWeight: 700, textDecoration: 'none',
+                                        fontSize: 13, fontWeight: 700, cursor: 'pointer',
+                                        fontFamily: 'inherit',
                                       }}
                                     >
                                       {tip.actionLabel || 'Tipp umsetzen'}
                                       <IconArrowRight size={14} stroke={2.5} />
-                                    </a>
+                                    </button>
                                   </div>
                                 )}
                               </div>
@@ -1148,6 +1243,162 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
           </p>
         </div>
       </div>
+
+      {/* How-to Overlay */}
+      <AnimatePresence>
+        {overlayTipId && (() => {
+          const tip = tips.find(t => t.id === overlayTipId) || ALL_TIPS.find(t => t.id === overlayTipId.replace(/-\d+$/, ''));
+          if (!tip) return null;
+          const TipIcon = tip.icon;
+          const ctaUrl = tip.actionUrl || tip.partnerLinks?.[0]?.url;
+          return (
+            <motion.div
+              key="backdrop"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              onClick={() => setOverlayTipId(null)}
+              style={{
+                position: 'fixed', inset: 0, zIndex: 200,
+                background: 'rgba(15,25,40,0.55)', backdropFilter: 'blur(6px)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                padding: 16, fontFamily: "'Poppins', sans-serif",
+              }}
+            >
+              <motion.div
+                initial={{ opacity: 0, y: 20, scale: 0.97 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 10, scale: 0.98 }}
+                transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+                onClick={e => e.stopPropagation()}
+                style={{
+                  background: WHITE, borderRadius: 18,
+                  maxWidth: 560, width: '100%', maxHeight: '90vh', overflowY: 'auto',
+                  boxShadow: '0 24px 60px rgba(0,0,0,0.25)',
+                  position: 'relative',
+                }}
+              >
+                {/* Close */}
+                <button
+                  onClick={() => setOverlayTipId(null)}
+                  style={{
+                    position: 'absolute', top: 14, right: 14, zIndex: 1,
+                    width: 32, height: 32, borderRadius: 16,
+                    border: 'none', background: '#f3f4f6', color: TEXT_MUTED,
+                    cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  }}
+                  aria-label="Schließen"
+                >
+                  <IconX size={18} stroke={2} />
+                </button>
+
+                <div style={{ padding: '28px 24px 24px' }}>
+                  {/* Title + icon */}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 14, paddingRight: 36 }}>
+                    <div style={{
+                      width: 44, height: 44, borderRadius: 12,
+                      background: BLUE_LT,
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      flexShrink: 0,
+                    }}>
+                      <TipIcon size={24} stroke={1.5} color={BLUE} />
+                    </div>
+                    <h2 style={{ fontSize: 18, fontWeight: 700, color: TEXT, lineHeight: 1.3, margin: 0 }}>
+                      {tip.title}
+                    </h2>
+                  </div>
+
+                  {tip.description && (
+                    <p style={{ fontSize: 13, color: TEXT_MUTED, lineHeight: 1.55, marginBottom: 18 }}>
+                      {tip.description}
+                    </p>
+                  )}
+
+                  {/* How-to steps */}
+                  {tip.howTo && tip.howTo.length > 0 && (
+                    <div style={{ marginBottom: 18 }}>
+                      <h3 style={{
+                        fontSize: 11, fontWeight: 700, color: BLUE,
+                        letterSpacing: '0.08em', margin: '0 0 10px',
+                      }}>
+                        SO SETZEN SIE DEN TIPP UM
+                      </h3>
+                      <ol style={{ paddingLeft: 0, margin: 0, listStyle: 'none' }}>
+                        {tip.howTo.map((step, i) => (
+                          <li key={i} style={{
+                            display: 'flex', gap: 12, marginBottom: 10, alignItems: 'flex-start',
+                          }}>
+                            <span style={{
+                              flexShrink: 0,
+                              width: 22, height: 22, borderRadius: 11,
+                              background: BLUE, color: WHITE,
+                              fontSize: 11, fontWeight: 700,
+                              display: 'flex', alignItems: 'center', justifyContent: 'center',
+                              marginTop: 1,
+                            }}>
+                              {i + 1}
+                            </span>
+                            <span style={{ fontSize: 13, color: TEXT, lineHeight: 1.55 }}>
+                              {step}
+                            </span>
+                          </li>
+                        ))}
+                      </ol>
+                    </div>
+                  )}
+
+                  {/* Partner info */}
+                  {tip.partner && (
+                    <p style={{
+                      fontSize: 12, color: TEXT_MUTED, lineHeight: 1.5,
+                      marginBottom: 18, padding: '10px 14px',
+                      background: '#f9fafb', borderRadius: 10,
+                    }}>
+                      <strong style={{ color: TEXT }}>Empfohlene Partner: </strong>
+                      {tip.partner}
+                    </p>
+                  )}
+
+                  {/* Partner logos */}
+                  {tip.partnerLinks && tip.partnerLinks.length > 0 && (
+                    <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginBottom: 18 }}>
+                      {tip.partnerLinks.map(pl => (
+                        <a key={pl.name} href={pl.url} target="_blank" rel="noopener noreferrer" style={{
+                          display: 'inline-flex', alignItems: 'center', gap: 6,
+                          background: WHITE, border: `1px solid ${BORDER}`, borderRadius: 10,
+                          padding: '6px 12px', textDecoration: 'none',
+                        }}>
+                          <img src={pl.logo} alt={pl.name} height={22} style={{ objectFit: 'contain' }} />
+                        </a>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* CTA */}
+                  {ctaUrl && (
+                    <a
+                      href={ctaUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{
+                        display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+                        background: DARK, color: WHITE,
+                        borderRadius: 999, padding: '12px 22px',
+                        fontSize: 14, fontWeight: 700, textDecoration: 'none',
+                        width: '100%', boxSizing: 'border-box',
+                      }}
+                    >
+                      {tip.actionLabel || 'Jetzt loslegen'}
+                      <IconArrowRight size={16} stroke={2.5} />
+                    </a>
+                  )}
+                </div>
+              </motion.div>
+            </motion.div>
+          );
+        })()}
+      </AnimatePresence>
     </div>
   );
 }
