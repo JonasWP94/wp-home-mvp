@@ -219,9 +219,9 @@ const ALL_TIPS: MvpTip[] = [
     title: 'Stromtarif wechseln',
     description: 'Mit Wechselpilot übernehmen wir den Wechsel komplett für Sie — automatisch zum besten Tarif, Jahr für Jahr. Sie zahlen nichts, profitieren aber dauerhaft von der günstigsten Stromrechnung.',
     howTo: [
-      'Bei Wechselpilot kostenlos registrieren und Stromzähler hinterlegen.',
-      'Wechselpilot vergleicht jährlich automatisch alle verfügbaren Tarife.',
-      'Wir wickeln Kündigung und Wechsel zum neuen Anbieter ab — Sie müssen nichts tun.',
+      'Im Wechselpilot-Konto Ihren Stromzähler mit aktueller Zählernummer und Jahresverbrauch (kWh) hinterlegen.',
+      'Wechselpilot vergleicht ab sofort jährlich alle Tarife in Ihrer Postleitzahl.',
+      'Beim Fund eines besseren Tarifs übernimmt Wechselpilot Kündigung, Wechsel und Übergangsfristen automatisch.',
     ],
     partner: 'Octopus, Tibber, Lichtblick',
     priority: 3, category: 'energie', icon: IconBolt,
@@ -235,9 +235,9 @@ const ALL_TIPS: MvpTip[] = [
     actionLabel: 'Jetzt Zähler anlegen',
     actionUrl: 'https://konto.wechselpilot.com/neuer-zähler',
     howTo: [
-      'Auf "Jetzt Zähler anlegen" klicken.',
-      'Gas-Zählernummer und Verbrauch im Wechselpilot-Konto eintragen.',
-      'Wechselpilot übernimmt ab sofort den jährlichen Tarifvergleich und Wechsel.',
+      'Auf "Jetzt Zähler anlegen" klicken und im Wechselpilot-Konto den Gas-Zähler hinzufügen.',
+      'Zählernummer und Jahresverbrauch (kWh) aus der letzten Jahresabrechnung übernehmen.',
+      'Wechselpilot übernimmt ab sofort den jährlichen Tarifvergleich und Wechsel — kein weiteres Zutun nötig.',
     ],
     partner: 'Vattenfall, E.ON, EnBW',
     priority: 3, category: 'energie', icon: IconFlame,
@@ -249,9 +249,10 @@ const ALL_TIPS: MvpTip[] = [
     title: 'Smarte Thermostate',
     description: 'Smarte Thermostate heizen automatisch nur, wenn Sie zuhause sind. Das reduziert Ihre Heizkosten um bis zu 30 % — ohne dass Sie an Komfort verlieren.',
     howTo: [
-      'Smarte Thermostate eines Herstellers (tado°, Homematic IP) auswählen — Starter-Set ab ca. 100 €.',
-      'Alte Thermostate gegen die smarten austauschen (Werkzeuglos in 5 Minuten pro Heizkörper).',
-      'In der App Heizzeiten einstellen oder automatisch via GPS heizen lassen.',
+      'Starter-Set für ca. 100–150 € bestellen (Bridge + Thermostate je nach Heizkörperzahl).',
+      'Alte Thermostat-Köpfe abschrauben und die neuen werkzeuglos aufsetzen (ca. 5 Min pro Heizkörper).',
+      'In der App Heiz-Zeitpläne anlegen oder Geofencing aktivieren — Heizung läuft nur, wenn Sie zuhause sind.',
+      'Räume gezielt absenken (Bad warm, Schlafzimmer kühl) — Heizkosten sinken um 20–30 %.',
     ],
     partner: 'tado°, Homematic IP',
     priority: 3, category: 'heizung', icon: IconTemperature,
@@ -263,10 +264,10 @@ const ALL_TIPS: MvpTip[] = [
     title: 'Wärmepumpe',
     description: 'Eine Wärmepumpe nutzt Umweltwärme statt Gas oder Öl und ist langfristig deutlich günstiger. Bis zu 70 % Förderung vom Staat machen die Umstellung attraktiv.',
     howTo: [
-      'BAFA-Förderantrag prüfen — bis zu 70 % der Kosten werden bezuschusst.',
-      '2–3 Angebote von Fachbetrieben einholen (Thermondo, 1KOMMA5° oder lokal).',
-      'Energieberater hinzuziehen, falls eine größere Sanierung mitläuft.',
-      'Auftrag erteilen — Installation dauert meist 1–3 Tage.',
+      'Vor-Ort-Beratung buchen — die Dimensionierung der Wärmepumpe hängt von Wärmebedarf und Heizflächen ab.',
+      'BEG-Förderung über BAFA prüfen: bis zu 70 % Zuschuss (Einkommens-Bonus + Effizienz-Bonus addiert).',
+      'Zwei bis drei Festpreis-Angebote einholen — Preisspanne 18.000–35.000 € inkl. Einbau und Förderung.',
+      'Auftrag erteilen — Einbau dauert meist 2–5 Werktage. Alte Heizung wird gleich mit ausgebaut.',
     ],
     partner: 'Thermondo, 1KOMMA5°',
     priority: 2, category: 'heizung', icon: IconLeaf,
@@ -278,10 +279,10 @@ const ALL_TIPS: MvpTip[] = [
     title: 'Solaranlage',
     description: 'Eigener Solarstrom vom Dach senkt die Stromrechnung dauerhaft. Mit Speicher decken Sie bis zu 80 % Ihres Bedarfs selbst — und produzieren wetterunabhängig den günstigsten Strom.',
     howTo: [
-      'Dach-Eignung prüfen (Ausrichtung, Verschattung) — kostenlose Beratung bei Enpal, Zolar etc.',
-      '2–3 Angebote vergleichen: Kauf, Pacht oder Finanzierung.',
-      'Einspeisevergütung und Eigenverbrauch beim Anbieter durchrechnen lassen.',
-      'Installation dauert meist 1–2 Tage — Anmeldung beim Netzbetreiber übernimmt der Anbieter.',
+      'Dach-Eignung prüfen: Ausrichtung Süd/Ost-West, Neigung 20–60°, möglichst keine Verschattung.',
+      'Anlagengröße kalkulieren: ca. 1 kWp pro 1.000 kWh Jahresverbrauch + 50 % Reserve für E-Auto/Wärmepumpe.',
+      'Drei Festpreis-Angebote vergleichen (Kauf, Finanzierung oder Pacht) — auf 25 Jahre Modul-Garantie achten.',
+      'Auftrag erteilen — Installation 1–2 Tage, Anmeldung bei Netzbetreiber und Marktstammdatenregister läuft mit.',
     ],
     partner: 'Enpal, Zolar',
     priority: 2, category: 'solar', icon: IconSun,
@@ -293,10 +294,11 @@ const ALL_TIPS: MvpTip[] = [
     title: 'Balkonkraftwerk',
     description: 'Eine Mini-Solaranlage am Balkon kostet wenig, ist einfach zu installieren und produziert kostenlosen Strom für Ihren Haushalt — auch in Mietwohnungen erlaubt.',
     howTo: [
-      'Bei Mietwohnung: kurze Info an Vermieter (seit 2024 in der Regel nicht mehr genehmigungspflichtig).',
-      '800-Watt-Set bestellen (Yuma, Priwatt) — Komplettpaket ab ca. 500 €.',
-      'Selbst montieren: Modul am Balkongeländer befestigen, Wechselrichter anschließen, Stecker in die Steckdose.',
-      'Im Marktstammdatenregister anmelden (5 Minuten online).',
+      'Mieter: kurze Info an Vermieter — seit 2024 in der Regel nicht mehr genehmigungspflichtig.',
+      '800-Watt-Komplettset (2 Module + Wechselrichter) bestellen — Preis ca. 400–700 €.',
+      'Montage: Module am Balkongeländer befestigen, Wechselrichter anschließen, Schuko-Stecker in die Steckdose.',
+      'Im Marktstammdatenregister online anmelden — dauert 5 Minuten, ist Pflicht.',
+      'Amortisation: 4–6 Jahre, danach 15+ Jahre kostenloser Strom.',
     ],
     partner: 'Yuma, Priwatt',
     priority: 2, category: 'solar', icon: IconSun,
@@ -308,9 +310,10 @@ const ALL_TIPS: MvpTip[] = [
     title: 'KFZ-Versicherung wechseln',
     description: 'KFZ-Tarife unterscheiden sich oft um mehrere hundert Euro. Ein Vergleich dauert nur Minuten und der Wechsel zum 1. Januar ist unkompliziert.',
     howTo: [
-      'Vergleichsportal nutzen (Check24, Tarifcheck, Clark) — Eingabe dauert ca. 5 Minuten.',
-      'Aktuelle Versicherung bis spätestens 30. November kündigen.',
-      'Neuen Vertrag direkt online abschließen — Schadenfreiheitsklasse wird automatisch übertragen.',
+      'Aktuelle Jahresprämie und Vertragsende prüfen (steht auf der Rechnung) — Standard-Kündigungsfrist ist 30. November.',
+      'Online-Tarifvergleich in ca. 5 Minuten durchführen — Fahrzeugschein und Schadenfreiheitsklasse bereithalten.',
+      'Bei besserem Angebot: aktuelle Versicherung schriftlich kündigen und neuen Vertrag zum 1. Januar abschließen.',
+      'Schadenfreiheitsklasse wird automatisch vom alten Versicherer übertragen.',
     ],
     partner: 'Clark, Tarifcheck, HUK24',
     priority: 3, category: 'mobilitaet', icon: IconCar,
@@ -322,10 +325,10 @@ const ALL_TIPS: MvpTip[] = [
     title: 'THG-Prämie',
     description: 'Als E-Auto-Fahrer haben Sie Anspruch auf die staatliche THG-Prämie — einfach online beantragen und das Geld jährlich kassieren.',
     howTo: [
-      'Anbieter mit der höchsten Auszahlung wählen (z.B. Geld für eAuto, Emobia).',
-      'Fahrzeugschein-Foto und IBAN hochladen — dauert 2 Minuten.',
-      'Auszahlung erfolgt nach Bestätigung durch das Umweltbundesamt (ca. 4–8 Wochen).',
-      'Jedes Jahr wiederholen — gleicher Anbieter automatisch.',
+      'THG-Quoten-Vermittler mit Festpreis-Garantie wählen — Auszahlung 2025 liegt bei ca. 70–110 € je E-Auto.',
+      'Fahrzeugschein-Foto (Vorder- und Rückseite) und IBAN online hochladen — dauert ca. 2 Minuten.',
+      'Vermittler reicht die Quote beim Umweltbundesamt ein. Auszahlung erfolgt nach 6–10 Wochen aufs Konto.',
+      'Antrag jedes Kalenderjahr erneut stellen — viele Vermittler erinnern automatisch.',
     ],
     partner: 'Geld für eAuto',
     priority: 1, category: 'mobilitaet', icon: IconBatteryCharging,
@@ -337,9 +340,10 @@ const ALL_TIPS: MvpTip[] = [
     title: 'Wallbox / Laden zuhause',
     description: 'Mit einer Wallbox laden Sie zuhause deutlich günstiger und schneller als an öffentlichen Säulen. In Kombination mit Solarstrom maximieren Sie die Ersparnis.',
     howTo: [
-      '11 kW Wallbox auswählen (genehmigungsfrei beim Netzbetreiber).',
-      'Elektriker beauftragen — Installation dauert meist einen halben Tag.',
-      'Bei Solaranlage: Wallbox so konfigurieren, dass sie überschüssigen PV-Strom nutzt.',
+      '11 kW Wallbox auswählen — genehmigungsfrei beim Netzbetreiber, ab 22 kW genehmigungspflichtig.',
+      'Elektriker für Anschluss buchen (eigene Leitung mit FI Typ B notwendig) — Materialpreis ca. 600–1.000 €.',
+      'Wallbox anmelden beim Netzbetreiber (Pflicht, online in ca. 5 Min möglich).',
+      'Mit PV-Anlage koppeln: Überschussladen aktivieren — lädt nur, wenn Solarstrom übrig ist.',
     ],
     partner: 'Enpal, charge.cloud',
     priority: 1, category: 'mobilitaet', icon: IconBatteryCharging,
@@ -351,9 +355,10 @@ const ALL_TIPS: MvpTip[] = [
     title: 'Privathaftpflicht abschließen',
     description: 'Die Privathaftpflicht schützt vor existenzbedrohenden Schadensersatzforderungen — bereits ab wenigen Euro pro Monat. Praktisch unverzichtbar für jeden Haushalt.',
     howTo: [
-      'Auf Deckungssumme von mindestens 10 Mio. € achten.',
-      'Familientarif wählen, wenn Partner/Kinder mit abgesichert werden sollen.',
-      'Online vergleichen (Check24, Clark) und direkt abschließen — gilt sofort.',
+      'Deckungssumme von mindestens 10 Mio. € wählen — höher kostet kaum mehr und sichert auch Großschäden ab.',
+      'Familientarif wählen, falls Partner oder Kinder mit abgesichert werden sollen.',
+      'Auf Forderungsausfalldeckung und mindestens 6 Monate rückwirkenden Schutz für unverschuldete Schäden achten.',
+      'Online-Abschluss in ca. 5 Min — Versicherungsschutz beginnt am selben Tag.',
     ],
     partner: 'Clark, Check24',
     priority: 3, category: 'versicherung', icon: IconShieldCheck,
@@ -365,9 +370,10 @@ const ALL_TIPS: MvpTip[] = [
     title: 'Hausratversicherung optimieren',
     description: 'Veraltete Hausrat-Tarife kosten unnötig Geld. Ein Vergleich zeigt schnell, ob Sie bei gleicher Leistung günstigere Anbieter finden.',
     howTo: [
-      'Versicherungssumme passend zur Wohnungsgröße berechnen (Faustregel: ca. 650 €/qm).',
-      'Tarifvergleich starten (Check24, Clark) — alte Police hochladen.',
-      'Bei Wechsel: alte Versicherung mit Sonderkündigungsrecht im Schadenfall oder zum Ablauf kündigen.',
+      'Versicherungssumme berechnen: Faustregel ca. 650 € pro qm Wohnfläche (Standard-Ausstattung) bzw. höher bei wertvollerer Einrichtung.',
+      'Tarifvergleich online starten — auf Elementarschäden (Hochwasser, Starkregen) und Fahrraddiebstahl-Klausel achten.',
+      'Mindestens 5 Mio. € Deckung bei Hausrat + Glasversicherung wählen, falls relevant.',
+      'Kündigung erfolgt zum nächsten Ablaufdatum (3 Monate Frist) oder per Sonderkündigung nach Beitragserhöhung.',
     ],
     partner: 'Clark, Check24',
     priority: 2, category: 'versicherung', icon: IconHomeShield,
@@ -379,10 +385,10 @@ const ALL_TIPS: MvpTip[] = [
     title: 'Berufsunfähigkeitsversicherung',
     description: 'Eine BU-Versicherung sichert Ihr Einkommen ab, falls Sie durch Krankheit oder Unfall nicht mehr arbeiten können — eine der wichtigsten Absicherungen überhaupt.',
     howTo: [
-      'Unabhängige Beratung holen (Clark, MLP, freier Makler) — BU ist beratungsintensiv.',
-      'Gesundheitsfragen ehrlich und vollständig beantworten.',
-      'Auf Verzicht auf abstrakte Verweisung achten und genug Rentenhöhe wählen.',
-      'Je früher abschließen, desto günstiger der Beitrag.',
+      'Beratungstermin mit einem unabhängigen Makler vereinbaren — BU ist beratungsintensiv, falsche Angaben führen zur Leistungsverweigerung.',
+      'Gesundheitsfragen ehrlich und vollständig beantworten — Behandlungen, Diagnosen, Therapien der letzten 5–10 Jahre.',
+      'Vertrag mit Verzicht auf abstrakte Verweisung und mindestens 60–70 % des Nettoeinkommens als BU-Rente wählen.',
+      'Je jünger und gesünder, desto günstiger — Abschluss vor 30 spart oft 30–50 % Beitrag.',
     ],
     partner: 'Clark, MLP',
     priority: 2, category: 'versicherung', icon: IconHeartHandshake,
@@ -394,9 +400,10 @@ const ALL_TIPS: MvpTip[] = [
     title: 'Wohngebäudeversicherung optimieren',
     description: 'Eine Wohngebäudeversicherung ist für Hauseigentümer Pflicht. Ein Tarifvergleich spart oft mehrere hundert Euro pro Jahr — bei gleicher Absicherung.',
     howTo: [
-      'Gebäudewert (Wert 1914) ermitteln — aus Bauunterlagen oder Berechnung über den Vergleichsrechner.',
-      'Tarife vergleichen (Check24, Clark) — auf Elementarschäden und Glasversicherung achten.',
-      'Bei Beitragserhöhung gilt Sonderkündigungsrecht — innerhalb 1 Monats kündigbar.',
+      'Wert 1914 ermitteln — aus alter Police oder Bauunterlagen (Wohnfläche × ca. 800 ist als grobe Schätzung möglich).',
+      'Tarifvergleich starten — auf Einschluss von Elementarschäden (Hochwasser, Erdrutsch, Starkregen) achten.',
+      'Selbstbeteiligung von 250–500 € senkt die Prämie spürbar — empfehlenswert bei eigener Rücklage.',
+      'Wechsel: zum Ablaufdatum (3 Monate Frist) oder per Sonderkündigung nach Beitragserhöhung.',
     ],
     partner: 'Clark, Check24',
     priority: 2, category: 'versicherung', icon: IconBuilding,
@@ -408,10 +415,10 @@ const ALL_TIPS: MvpTip[] = [
     title: 'Internet-Anbieter wechseln',
     description: 'Stammkunden zahlen oft deutlich mehr als Neukunden. Mit einem Anbieterwechsel oder einem Anruf beim aktuellen Anbieter senken Sie monatlich Ihre Internetkosten.',
     howTo: [
-      'Vertragsende prüfen (alte Rechnung) und Kündigungsfrist beachten.',
-      'Tarif-Vergleich starten (Verivox, Check24) — Verfügbarkeit nach PLZ filtern.',
-      'Wechselservice nutzen — neuer Anbieter übernimmt Kündigung und Portierung automatisch.',
-      'Alternative: aktuellen Anbieter anrufen und Neukunden-Rabatt verhandeln.',
+      'Vertragsende und Kündigungsfrist prüfen — meist 3 Monate vor Ablauf der Mindestlaufzeit.',
+      'Tarifvergleich nach Postleitzahl starten — Bandbreite, Mindestlaufzeit und Neukunden-Rabatt vergleichen.',
+      'Wechselservice nutzen: der neue Anbieter übernimmt Kündigung und Anschlussschaltung automatisch.',
+      'Alternative ohne Wechsel: bei aktuellem Anbieter Bestandskunden-Hotline anrufen und Neukunden-Tarif verhandeln — spart oft 30–40 %.',
     ],
     partner: 'Verivox, Check24',
     priority: 2, category: 'kommunikation', icon: IconWifi,
@@ -423,10 +430,10 @@ const ALL_TIPS: MvpTip[] = [
     title: 'Mobilfunk-Tarif optimieren',
     description: 'Mobilfunkanbieter bieten Neukunden meist deutlich günstigere Konditionen. Tarifvergleich oder Nachverhandeln reduziert Ihre Handykosten spürbar.',
     howTo: [
-      'Aktuellen Datenverbrauch in der App des Anbieters prüfen.',
-      'Tarif-Vergleich (Check24, Verivox) — bestpassenden Tarif mit gleichem Datenvolumen wählen.',
-      'Rufnummer-Mitnahme aktivieren — Wechsel erfolgt automatisch zum Vertragsende.',
-      'Tipp: Bei aktuellem Anbieter Rabatt-Hotline anrufen — oft 30 % günstiger zum gleichen Tarif.',
+      'Tatsächlichen Datenverbrauch der letzten 3 Monate in der App prüfen — meist deutlich unter dem gebuchten Volumen.',
+      'Tarifvergleich starten — passendes Datenvolumen + benötigte Features (5G, EU-Roaming, ggf. Allnet-Flat).',
+      'Rufnummer-Mitnahme im neuen Vertrag aktivieren — alter Vertrag wird automatisch zum Vertragsende gekündigt.',
+      'Alternative: bei Bestandsanbieter Kündigungs-Hotline anrufen und Rabatt fordern — spart oft 30–50 % ohne Wechsel.',
     ],
     partner: 'Check24, Verivox',
     priority: 2, category: 'kommunikation', icon: IconDeviceMobile,
@@ -438,10 +445,10 @@ const ALL_TIPS: MvpTip[] = [
     title: 'Steuererklärung einreichen',
     description: 'Mit einer Steuer-App geht es ganz einfach — auch ohne Steuerwissen. Antworten auf Fragen geben, fertig. Durchschnittliche Rückerstattung: über 1.000 €.',
     howTo: [
-      'Steuer-App wählen (Taxfix, WISO Steuer, Zasta) — kostenlose Vorberechnung möglich.',
-      'Fragen Schritt für Schritt beantworten (ca. 30–60 Minuten).',
-      'Steuererklärung digital ans Finanzamt senden — kein Papierkram.',
-      'Rückerstattung kommt im Schnitt nach 4–6 Wochen aufs Konto.',
+      'Unterlagen sammeln: Lohnsteuerbescheinigung, Krankenversicherungs-Beitrag, Quittungen für Werbungskosten, Spendenbelege.',
+      'Steuer-App öffnen — Fragen Schritt für Schritt beantworten, ca. 30–60 Minuten.',
+      'Vorberechnete Rückerstattung in der App ansehen — falls positiv, einreichen (digitale ELSTER-Signatur läuft automatisch).',
+      'Bescheid kommt in 4–10 Wochen — Rückerstattung wird auf das Konto überwiesen.',
     ],
     partner: 'Taxfix, WISO, Zasta',
     partnerLinks: [
@@ -458,10 +465,10 @@ const ALL_TIPS: MvpTip[] = [
     title: 'Kostenloses Girokonto',
     description: 'Viele Banken berechnen 5–10 € Kontoführungsgebühren pro Monat. Ein kostenloses Girokonto bei einer Direktbank spart diese Gebühren komplett — bei gleicher Funktionalität.',
     howTo: [
-      'Anbieter wählen (ING, DKB, Comdirect) — auf "wirklich kostenlos" achten (kein Mindesteingang).',
-      'Online-Konto-Eröffnung mit Video-Ident — dauert ca. 15 Minuten.',
-      'Gehalt-Umzugsservice nutzen, alle Lastschriften werden automatisch migriert.',
-      'Altes Konto erst schließen, wenn alles auf dem neuen läuft (Übergang 1–2 Monate).',
+      'Auf wirklich kostenlose Konditionen achten: keine Kontoführungsgebühr, kein Mindestgeldeingang, kostenlose Girocard.',
+      'Online-Eröffnung per Video-Ident — Ausweis bereithalten, Dauer ca. 15 Minuten.',
+      'Kontoumzugs-Service nutzen — alle Lastschriften und Daueraufträge werden automatisch übertragen.',
+      'Altes Konto erst kündigen, wenn alle Zahlungen 1–2 Monate sauber auf dem neuen Konto laufen.',
     ],
     partner: 'ING, DKB',
     priority: 1, category: 'finanzen', icon: IconPig,
@@ -1273,8 +1280,8 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
                 transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
                 onClick={e => e.stopPropagation()}
                 style={{
-                  background: WHITE, borderRadius: 18,
-                  maxWidth: 560, width: '100%', maxHeight: '90vh', overflowY: 'auto',
+                  background: WHITE, borderRadius: 20,
+                  maxWidth: 760, width: '100%', maxHeight: '92vh', overflowY: 'auto',
                   boxShadow: '0 24px 60px rgba(0,0,0,0.25)',
                   position: 'relative',
                 }}
@@ -1293,85 +1300,58 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
                   <IconX size={18} stroke={2} />
                 </button>
 
-                <div style={{ padding: '28px 24px 24px' }}>
+                <div style={{ padding: '36px 36px 32px' }}>
                   {/* Title + icon */}
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 14, paddingRight: 36 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 18, paddingRight: 36 }}>
                     <div style={{
-                      width: 44, height: 44, borderRadius: 12,
+                      width: 52, height: 52, borderRadius: 14,
                       background: BLUE_LT,
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
                       flexShrink: 0,
                     }}>
-                      <TipIcon size={24} stroke={1.5} color={BLUE} />
+                      <TipIcon size={28} stroke={1.5} color={BLUE} />
                     </div>
-                    <h2 style={{ fontSize: 18, fontWeight: 700, color: TEXT, lineHeight: 1.3, margin: 0 }}>
+                    <h2 style={{ fontSize: 22, fontWeight: 700, color: TEXT, lineHeight: 1.25, margin: 0 }}>
                       {tip.title}
                     </h2>
                   </div>
 
                   {tip.description && (
-                    <p style={{ fontSize: 13, color: TEXT_MUTED, lineHeight: 1.55, marginBottom: 18 }}>
+                    <p style={{ fontSize: 14, color: TEXT_MUTED, lineHeight: 1.6, marginBottom: 24 }}>
                       {tip.description}
                     </p>
                   )}
 
                   {/* How-to steps */}
                   {tip.howTo && tip.howTo.length > 0 && (
-                    <div style={{ marginBottom: 18 }}>
+                    <div style={{ marginBottom: 24 }}>
                       <h3 style={{
-                        fontSize: 11, fontWeight: 700, color: BLUE,
-                        letterSpacing: '0.08em', margin: '0 0 10px',
+                        fontSize: 12, fontWeight: 700, color: BLUE,
+                        letterSpacing: '0.1em', margin: '0 0 14px',
                       }}>
                         SO SETZEN SIE DEN TIPP UM
                       </h3>
                       <ol style={{ paddingLeft: 0, margin: 0, listStyle: 'none' }}>
                         {tip.howTo.map((step, i) => (
                           <li key={i} style={{
-                            display: 'flex', gap: 12, marginBottom: 10, alignItems: 'flex-start',
+                            display: 'flex', gap: 14, marginBottom: 14, alignItems: 'flex-start',
                           }}>
                             <span style={{
                               flexShrink: 0,
-                              width: 22, height: 22, borderRadius: 11,
+                              width: 26, height: 26, borderRadius: 13,
                               background: BLUE, color: WHITE,
-                              fontSize: 11, fontWeight: 700,
+                              fontSize: 13, fontWeight: 700,
                               display: 'flex', alignItems: 'center', justifyContent: 'center',
                               marginTop: 1,
                             }}>
                               {i + 1}
                             </span>
-                            <span style={{ fontSize: 13, color: TEXT, lineHeight: 1.55 }}>
+                            <span style={{ fontSize: 14, color: TEXT, lineHeight: 1.6 }}>
                               {step}
                             </span>
                           </li>
                         ))}
                       </ol>
-                    </div>
-                  )}
-
-                  {/* Partner info */}
-                  {tip.partner && (
-                    <p style={{
-                      fontSize: 12, color: TEXT_MUTED, lineHeight: 1.5,
-                      marginBottom: 18, padding: '10px 14px',
-                      background: '#f9fafb', borderRadius: 10,
-                    }}>
-                      <strong style={{ color: TEXT }}>Empfohlene Partner: </strong>
-                      {tip.partner}
-                    </p>
-                  )}
-
-                  {/* Partner logos */}
-                  {tip.partnerLinks && tip.partnerLinks.length > 0 && (
-                    <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginBottom: 18 }}>
-                      {tip.partnerLinks.map(pl => (
-                        <a key={pl.name} href={pl.url} target="_blank" rel="noopener noreferrer" style={{
-                          display: 'inline-flex', alignItems: 'center', gap: 6,
-                          background: WHITE, border: `1px solid ${BORDER}`, borderRadius: 10,
-                          padding: '6px 12px', textDecoration: 'none',
-                        }}>
-                          <img src={pl.logo} alt={pl.name} height={22} style={{ objectFit: 'contain' }} />
-                        </a>
-                      ))}
                     </div>
                   )}
 
@@ -1384,7 +1364,7 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
                       style={{
                         display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
                         background: DARK, color: WHITE,
-                        borderRadius: 999, padding: '12px 22px',
+                        borderRadius: 999, padding: '14px 24px',
                         fontSize: 14, fontWeight: 700, textDecoration: 'none',
                         width: '100%', boxSizing: 'border-box',
                       }}
