@@ -559,7 +559,7 @@ export default function MvpWizard() {
         onBack={goBack}
         onNext={goNext}
         nextDisabled={!canNext}
-        nextLabel={isLast ? 'Ergebnis anzeigen' : 'Weiter'}
+        nextLabel="Weiter"
         middle={
           <div style={{ fontSize: 12, color: GREY_800, fontWeight: FW_MEDIUM }}>
             {effectiveStep} / {effectiveTotal}

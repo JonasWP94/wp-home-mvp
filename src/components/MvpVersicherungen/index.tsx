@@ -174,6 +174,7 @@ export default function MvpVersicherungen({ onDone, onBack, showGebaeude, showKf
       <WpBottomNav
         onBack={onBack}
         onNext={() => onDone(data)}
+        nextLabel="Ergebnis anzeigen"
       />
     </div>
   );
