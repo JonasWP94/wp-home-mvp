@@ -1507,24 +1507,6 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
                                 {tip.description && (
                                   <p style={{ fontSize: 13, color: TEXT, lineHeight: 1.6, marginBottom: 12, fontWeight: 400 }}>{tip.description}</p>
                                 )}
-                                {tip.partner && !tip.actionUrl && (
-                                  <p style={{ fontSize: 11, color: TEXT_MUTED, marginBottom: 12, fontWeight: 500 }}>
-                                    Empfohlene Partner: {tip.partner}
-                                  </p>
-                                )}
-                                {tip.partnerLinks && tip.partnerLinks.length > 0 && (
-                                  <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginBottom: 12 }}>
-                                    {tip.partnerLinks.map(pl => (
-                                      <a key={pl.name} href={pl.url} target="_blank" rel="noopener noreferrer" onClick={e => e.stopPropagation()} style={{
-                                        display: 'inline-flex', alignItems: 'center', gap: 6,
-                                        background: WHITE, border: `1px solid ${BORDER}`, borderRadius: 10,
-                                        padding: '6px 12px', textDecoration: 'none',
-                                      }}>
-                                        <img src={pl.logo} alt={pl.name} height={20} style={{ objectFit: 'contain' }} />
-                                      </a>
-                                    ))}
-                                  </div>
-                                )}
 
                                 {tip.id !== 'strom-wechsel' && (() => {
                                   const isEditing = editingSavingsId === tip.id;
