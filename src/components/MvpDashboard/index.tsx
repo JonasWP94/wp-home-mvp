@@ -1317,29 +1317,36 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
           return (
             <motion.div
               key="backdrop"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
+              initial={{ opacity: 0, backdropFilter: 'blur(0px)' }}
+              animate={{ opacity: 1, backdropFilter: 'blur(8px)' }}
+              exit={{ opacity: 0, backdropFilter: 'blur(0px)' }}
+              transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
               onClick={() => setOverlayTipId(null)}
               style={{
                 position: 'fixed', inset: 0, zIndex: 200,
-                background: 'rgba(15,25,40,0.55)', backdropFilter: 'blur(6px)',
+                background: 'rgba(15,25,40,0.55)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 padding: 16, fontFamily: "'Poppins', sans-serif",
+                willChange: 'opacity, backdrop-filter',
               }}
             >
               <motion.div
-                initial={{ opacity: 0, y: 20, scale: 0.97 }}
+                initial={{ opacity: 0, y: 28, scale: 0.94 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: 10, scale: 0.98 }}
-                transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+                exit={{ opacity: 0, y: 16, scale: 0.96 }}
+                transition={{
+                  opacity: { duration: 0.3, ease: [0.4, 0, 0.2, 1] },
+                  y:       { type: 'spring', stiffness: 260, damping: 26, mass: 0.9 },
+                  scale:   { type: 'spring', stiffness: 260, damping: 26, mass: 0.9 },
+                }}
                 onClick={e => e.stopPropagation()}
                 style={{
                   background: WHITE, borderRadius: 20,
                   maxWidth: 760, width: '100%', maxHeight: '92vh', overflowY: 'auto',
-                  boxShadow: '0 24px 60px rgba(0,0,0,0.25)',
+                  boxShadow: '0 30px 70px rgba(0,0,0,0.28), 0 8px 24px rgba(0,0,0,0.12)',
                   position: 'relative',
+                  willChange: 'transform, opacity',
+                  transformOrigin: 'center bottom',
                 }}
               >
                 {/* Close */}
