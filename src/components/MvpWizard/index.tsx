@@ -241,7 +241,7 @@ function LoadingScreen({ onDone }: { onDone: () => void }) {
     function tick(now: number) {
       const pct = Math.min((now - start) / duration, 1);
       setBarPct(pct);
-      const stepIdx = Math.min(Math.floor(pct * LOADING_STEPS.length), LOADING_STEPS.length - 1);
+      const stepIdx = Math.max(0, Math.min(Math.floor(pct * LOADING_STEPS.length), LOADING_STEPS.length - 1));
       setIdx(stepIdx);
       if (pct < 1) {
         rafId = requestAnimationFrame(tick);
@@ -316,7 +316,7 @@ function LoadingScreen({ onDone }: { onDone: () => void }) {
                 color: PRIMARY, letterSpacing: '-0.01em', lineHeight: 1.3,
                 marginBottom: 6,
               }}>
-                {LOADING_STEPS[idx].replace(/ …$/, '')}
+                {(LOADING_STEPS[idx] ?? LOADING_STEPS[0]).replace(/ …$/, '')}
               </div>
               <div style={{
                 fontSize: 12, fontWeight: FW_MEDIUM,

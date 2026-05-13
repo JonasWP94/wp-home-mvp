@@ -570,22 +570,27 @@ function fmt(n: number) { return n.toLocaleString('de-DE'); }
 function AnimatedCounter({ value, suffix = '' }: { value: number; suffix?: string }) {
   const [display, setDisplay] = useState(0);
   const hasAnimatedRef = React.useRef(false);
+  const displayRef = React.useRef(0);
   useEffect(() => {
-    if (hasAnimatedRef.current) {
-      // Already animated once — snap to new value without re-animating
-      setDisplay(value);
-      return;
-    }
+    const isFirstRun = !hasAnimatedRef.current;
     hasAnimatedRef.current = true;
-    const duration = 1200;
-    const t0 = performance.now();
+    const from = isFirstRun ? 0 : displayRef.current;
     const target = value;
+    if (from === target) return;
+    // Initial mount: longer count-up. Subsequent changes: shorter smooth tween.
+    const duration = isFirstRun ? 1200 : 450;
+    const t0 = performance.now();
+    let rafId: number;
     function tick(now: number) {
       const p = Math.min((now - t0) / duration, 1);
-      setDisplay(Math.round((1 - Math.pow(1 - p, 3)) * target));
-      if (p < 1) requestAnimationFrame(tick);
+      const eased = 1 - Math.pow(1 - p, 3);
+      const v = Math.round(from + (target - from) * eased);
+      displayRef.current = v;
+      setDisplay(v);
+      if (p < 1) rafId = requestAnimationFrame(tick);
     }
-    requestAnimationFrame(tick);
+    rafId = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(rafId);
   }, [value]);
   return <>{fmt(display)}{suffix}</>;
 }
@@ -1191,9 +1196,9 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
   }, [profile, removed]);
 
   const clusters = useMemo(() => profile ? buildClusters(profile, tips) : [], [profile, tips]);
-  const total     = useMemo(() => tips.reduce((s, t) => s + getSavings(t), 0), [tips, hg]);
+  const total     = useMemo(() => tips.reduce((s, t) => s + getSavings(t), 0), [tips, hg, done, savedAmounts]);
   const doneCount = useMemo(() => tips.filter(t => done.has(t.id)).length, [tips, done]);
-  const doneTotal = useMemo(() => tips.filter(t => done.has(t.id)).reduce((s, t) => s + getSavings(t), 0), [tips, done, hg]);
+  const doneTotal = useMemo(() => tips.filter(t => done.has(t.id)).reduce((s, t) => s + getSavings(t), 0), [tips, done, hg, savedAmounts]);
   const nextBestTip = useMemo(() => {
     const open = tips.filter(t => !done.has(t.id));
     if (open.length === 0) return null;
@@ -1204,7 +1209,7 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
     if (gas) return gas;
     // Fallback: höchste Ersparnis
     return open.slice().sort((a, b) => getSavings(b) - getSavings(a))[0];
-  }, [tips, done, hg]);
+  }, [tips, done, hg, savedAmounts]);
 
   if (!profile) {
     return (
