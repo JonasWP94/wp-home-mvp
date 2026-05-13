@@ -123,7 +123,7 @@ export default function MvpThankYou({ onStart }: Props = {}) {
             <motion.div
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1.4, duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+              transition={{ delay: 1.85, duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
             >
               <ActionCard
                 onClick={() => { window.location.href = 'https://konto.wechselpilot.com/neuer-zähler'; }}
@@ -139,7 +139,7 @@ export default function MvpThankYou({ onStart }: Props = {}) {
             <motion.div
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1.5, duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+              transition={{ delay: 1.95, duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
             >
               <ActionCard
                 onClick={() => { window.location.href = 'https://konto.wechselpilot.com/freunde-werben'; }}
@@ -150,7 +150,7 @@ export default function MvpThankYou({ onStart }: Props = {}) {
             <motion.div
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1.6, duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+              transition={{ delay: 2.05, duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
             >
               <ActionCard
                 onClick={() => {
@@ -168,7 +168,7 @@ export default function MvpThankYou({ onStart }: Props = {}) {
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.85, duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ delay: 2.3, duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
             style={{
               background: WHITE,
               border: `1px solid ${BORDER}`, borderRadius: RADIUS_LG,
