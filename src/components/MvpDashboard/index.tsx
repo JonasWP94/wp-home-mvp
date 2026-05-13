@@ -1283,7 +1283,7 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
           initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}
           style={{
             background: 'linear-gradient(135deg, #0f4c3a 0%, #1a6b52 40%, #24a47d 100%)',
-            borderRadius: 18, padding: '24px 20px', color: WHITE,
+            borderRadius: 18, padding: '18px 20px', color: WHITE,
             position: 'relative', overflow: 'hidden',
             marginBottom: 14,
           }}
@@ -1291,16 +1291,16 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
           <div style={{ position: 'absolute', top: -30, right: -30, width: 120, height: 120, borderRadius: 60, background: 'rgba(255,255,255,0.06)' }} />
 
           <style>{`
-            .mvp-hero-grid{display:flex;flex-direction:column;gap:14px;position:relative;z-index:1;}
+            .mvp-hero-grid{display:flex;flex-direction:column;gap:10px;position:relative;z-index:1;}
             .mvp-hero-headline{}
-            .mvp-hero-stats{display:flex;gap:10px;}
+            .mvp-hero-stats{display:flex;gap:8px;}
             .mvp-hero-next{}
             @media(min-width:760px){
               .mvp-hero-grid{
                 display:grid;
-                grid-template-columns:1fr 300px;
+                grid-template-columns:1fr 280px;
                 grid-template-rows:auto auto;
-                gap:14px 18px;
+                gap:10px 16px;
                 align-items:stretch;
               }
               .mvp-hero-headline{grid-column:1;grid-row:1;}
@@ -1311,21 +1311,21 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
 
           <div className="mvp-hero-grid">
             <div className="mvp-hero-headline">
-              <div style={{ fontSize: 11, fontWeight: 600, opacity: 0.85, marginBottom: 8, letterSpacing: '0.05em' }}>Ihr Sparpotenzial pro Jahr</div>
-              <div style={{ display: 'flex', alignItems: 'baseline', gap: 6, marginBottom: 6 }}>
-                <span style={{ fontSize: 44, fontWeight: 800, lineHeight: 1, letterSpacing: '-2px' }}><AnimatedCounter value={total} /></span>
-                <span style={{ fontSize: 22, fontWeight: 700, opacity: 0.8 }}>€</span>
+              <div style={{ fontSize: 11, fontWeight: 600, opacity: 0.85, marginBottom: 4, letterSpacing: '0.05em' }}>Ihr Sparpotenzial pro Jahr</div>
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: 6, marginBottom: 4 }}>
+                <span style={{ fontSize: 38, fontWeight: 800, lineHeight: 1, letterSpacing: '-2px' }}><AnimatedCounter value={total} /></span>
+                <span style={{ fontSize: 20, fontWeight: 700, opacity: 0.8 }}>€</span>
               </div>
               <div style={{ fontSize: 12, opacity: 0.7 }}>{tips.length} Empfehlungen basierend auf Ihren Antworten</div>
             </div>
 
             <div className="mvp-hero-stats">
-              <div style={{ background: 'rgba(255,255,255,0.15)', borderRadius: 12, padding: '10px 14px', flex: '1 1 0' }}>
-                <div style={{ fontSize: 18, fontWeight: 700 }}><AnimatedCounter value={doneTotal} suffix=" €" /></div>
+              <div style={{ background: 'rgba(255,255,255,0.15)', borderRadius: 12, padding: '8px 12px', flex: '1 1 0' }}>
+                <div style={{ fontSize: 16, fontWeight: 700 }}><AnimatedCounter value={doneTotal} suffix=" €" /></div>
                 <div style={{ fontSize: 10, opacity: 0.8 }}>Erledigt</div>
               </div>
-              <div style={{ background: 'rgba(255,255,255,0.15)', borderRadius: 12, padding: '10px 14px', flex: '1 1 0' }}>
-                <div style={{ fontSize: 18, fontWeight: 700 }}>{doneCount}/{tips.length}</div>
+              <div style={{ background: 'rgba(255,255,255,0.15)', borderRadius: 12, padding: '8px 12px', flex: '1 1 0' }}>
+                <div style={{ fontSize: 16, fontWeight: 700 }}>{doneCount}/{tips.length}</div>
                 <div style={{ fontSize: 10, opacity: 0.8 }}>Tipps erledigt</div>
               </div>
             </div>
@@ -1342,9 +1342,9 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
                     background: 'rgba(255,255,255,0.15)',
                     border: '1px solid rgba(255,255,255,0.22)',
                     borderRadius: 14,
-                    padding: '16px 18px',
+                    padding: '12px 14px',
                     display: 'flex', flexDirection: 'column', justifyContent: 'center',
-                    gap: 12, color: WHITE,
+                    gap: 8, color: WHITE,
                     cursor: 'pointer',
                     fontFamily: 'inherit',
                     textAlign: 'left' as const,
@@ -1362,11 +1362,11 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
                   </div>
 
                   <div style={{
-                    width: 48, height: 48, borderRadius: 12,
+                    width: 40, height: 40, borderRadius: 10,
                     background: 'rgba(255,255,255,0.22)',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                   }}>
-                    <NextIcon size={24} stroke={1.5} color={WHITE} />
+                    <NextIcon size={20} stroke={1.5} color={WHITE} />
                   </div>
 
                   <div>
