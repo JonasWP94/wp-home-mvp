@@ -980,7 +980,7 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
                             </div>
                             <div style={{ fontSize: 12, color: TEXT_MUTED }}>{fmt(savings)} € / Jahr</div>
                           </div>
-                          {tip.id === 'strom-wechsel' ? (
+                          {tip.id === 'strom-wechsel' && (
                             <span style={{
                               display: 'inline-flex', alignItems: 'center', gap: 5,
                               background: GREEN_LT, color: GREEN,
@@ -990,20 +990,15 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
                               <IconCheck size={13} stroke={2.5} />
                               {fmt(savings)} €
                             </span>
-                          ) : (
-                            <button
-                              onClick={e => { e.stopPropagation(); toggleDone(tip.id); }}
-                              style={{
-                                width: 28, height: 28, borderRadius: 8, flexShrink: 0,
-                                border: isDone ? 'none' : `2px solid ${BORDER}`,
-                                background: isDone ? GREEN : 'transparent',
-                                color: isDone ? WHITE : 'transparent',
-                                cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.15s',
-                              }}
-                            >
-                              <IconCheck size={16} stroke={2} />
-                            </button>
                           )}
+                          <div style={{
+                            color: TEXT_DIM,
+                            transition: 'transform 0.25s ease',
+                            transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)',
+                            display: 'flex', flexShrink: 0,
+                          }}>
+                            <IconChevronDown size={18} stroke={1.5} />
+                          </div>
                         </div>
 
                         <AnimatePresence>
@@ -1019,33 +1014,15 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
                                 {tip.description && (
                                   <p style={{ fontSize: 13, color: TEXT, lineHeight: 1.6, marginBottom: 12, fontWeight: 400 }}>{tip.description}</p>
                                 )}
-                                {tip.actionLabel && tip.actionUrl && (
-                                  <a
-                                    href={tip.actionUrl}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    onClick={e => e.stopPropagation()}
-                                    style={{
-                                      display: 'inline-flex', alignItems: 'center', gap: 6,
-                                      background: DARK, color: WHITE,
-                                      borderRadius: 999, padding: '10px 18px',
-                                      fontSize: 13, fontWeight: 700, textDecoration: 'none',
-                                      marginBottom: 12,
-                                    }}
-                                  >
-                                    {tip.actionLabel}
-                                    <IconArrowRight size={14} stroke={2.5} />
-                                  </a>
-                                )}
-                                {!tip.actionLabel && tip.partner && (
+                                {tip.partner && !tip.actionUrl && (
                                   <p style={{ fontSize: 11, color: TEXT_MUTED, marginBottom: 12, fontWeight: 500 }}>
                                     Empfohlene Partner: {tip.partner}
                                   </p>
                                 )}
                                 {tip.partnerLinks && tip.partnerLinks.length > 0 && (
-                                  <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+                                  <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginBottom: 12 }}>
                                     {tip.partnerLinks.map(pl => (
-                                      <a key={pl.name} href={pl.url} target="_blank" rel="noopener noreferrer" style={{
+                                      <a key={pl.name} href={pl.url} target="_blank" rel="noopener noreferrer" onClick={e => e.stopPropagation()} style={{
                                         display: 'inline-flex', alignItems: 'center', gap: 6,
                                         background: WHITE, border: `1px solid ${BORDER}`, borderRadius: 10,
                                         padding: '6px 12px', textDecoration: 'none',
@@ -1053,6 +1030,42 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
                                         <img src={pl.logo} alt={pl.name} height={20} style={{ objectFit: 'contain' }} />
                                       </a>
                                     ))}
+                                  </div>
+                                )}
+
+                                {tip.id !== 'strom-wechsel' && (
+                                  <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: 4 }}>
+                                    <button
+                                      onClick={e => { e.stopPropagation(); toggleDone(tip.id); setExpanded(null); }}
+                                      style={{
+                                        flexShrink: 0,
+                                        background: isDone ? GREEN_LT : '#eef0f3',
+                                        color: isDone ? GREEN : TEXT,
+                                        border: 'none',
+                                        borderRadius: 999, padding: '10px 16px',
+                                        fontSize: 13, fontWeight: 700, cursor: 'pointer',
+                                        display: 'inline-flex', alignItems: 'center', gap: 6,
+                                        fontFamily: 'inherit',
+                                      }}
+                                    >
+                                      {isDone ? <><IconCheck size={14} stroke={2.5} /> Erledigt</> : 'Erledigt'}
+                                    </button>
+                                    <a
+                                      href={tip.actionUrl || tip.partnerLinks?.[0]?.url || '#'}
+                                      target={tip.actionUrl || tip.partnerLinks?.[0]?.url ? '_blank' : undefined}
+                                      rel="noopener noreferrer"
+                                      onClick={e => e.stopPropagation()}
+                                      style={{
+                                        marginLeft: 'auto',
+                                        display: 'inline-flex', alignItems: 'center', gap: 6,
+                                        background: DARK, color: WHITE,
+                                        borderRadius: 999, padding: '10px 18px',
+                                        fontSize: 13, fontWeight: 700, textDecoration: 'none',
+                                      }}
+                                    >
+                                      {tip.actionLabel || 'Tipp umsetzen'}
+                                      <IconArrowRight size={14} stroke={2.5} />
+                                    </a>
                                   </div>
                                 )}
                               </div>
