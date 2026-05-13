@@ -134,56 +134,90 @@ const BLIPS = [
 ];
 
 function RadarAnimation() {
-  const SIZE = 80;
-  const rings = [1, 0.67, 0.34];
+  const SIZE = 140;
   return (
-    <div style={{ position: 'relative', width: SIZE, height: SIZE, marginBottom: 36 }}>
-      {/* Rings */}
-      {rings.map((scale, i) => (
-        <div key={i} style={{
+    <div style={{ position: 'relative', width: SIZE, height: SIZE }}>
+      {/* Outer pulse rings */}
+      {[0, 1, 2].map(i => (
+        <motion.div
+          key={`pulse-${i}`}
+          initial={{ scale: 0.4, opacity: 0.6 }}
+          animate={{ scale: 1.05, opacity: 0 }}
+          transition={{
+            repeat: Infinity,
+            duration: 2.4,
+            delay: i * 0.8,
+            ease: 'easeOut',
+          }}
+          style={{
+            position: 'absolute', inset: 0, borderRadius: '50%',
+            border: `1.5px solid ${ACCENT}`,
+            pointerEvents: 'none',
+          }}
+        />
+      ))}
+
+      {/* Static faint inner rings */}
+      {[0.62, 0.38].map((scale, i) => (
+        <div key={`ring-${i}`} style={{
           position: 'absolute',
           top: `${((1 - scale) / 2) * 100}%`,
           left: `${((1 - scale) / 2) * 100}%`,
           width: `${scale * 100}%`,
           height: `${scale * 100}%`,
           borderRadius: '50%',
-          border: `1px solid rgba(42,111,166,${0.12 + i * 0.08})`,
+          border: `1px dashed rgba(42,111,166,0.18)`,
         }} />
       ))}
 
-      {/* Sweep */}
+      {/* Conic gradient sweep */}
       <motion.div
         animate={{ rotate: 360 }}
-        transition={{ repeat: Infinity, duration: 2.2, ease: 'linear' }}
+        transition={{ repeat: Infinity, duration: 2.6, ease: 'linear' }}
         style={{
           position: 'absolute', inset: 0, borderRadius: '50%',
-          background: 'conic-gradient(from 0deg, rgba(42,111,166,0.22) 0deg, transparent 70deg)',
+          background: `conic-gradient(from 0deg,
+            rgba(42,111,166,0.35) 0deg,
+            rgba(42,111,166,0.16) 30deg,
+            transparent 80deg,
+            transparent 360deg)`,
+          maskImage: 'radial-gradient(circle, black 30%, black 100%)',
+          WebkitMaskImage: 'radial-gradient(circle, black 30%, black 100%)',
         }}
       />
 
       {/* Blips */}
-      {BLIPS.map((b, i) => (
+      {[
+        { top: '24%', left: '64%', delay: 0.4 },
+        { top: '58%', left: '38%', delay: 1.2 },
+        { top: '42%', left: '24%', delay: 2.0 },
+      ].map((b, i) => (
         <motion.div
           key={i}
           initial={{ opacity: 0, scale: 0 }}
-          animate={{ opacity: [0, 1, 0], scale: [0, 1, 0] }}
-          transition={{ delay: b.delay, duration: 0.6, repeat: Infinity, repeatDelay: 2.2 - 0.6 }}
+          animate={{ opacity: [0, 1, 0], scale: [0, 1.3, 0] }}
+          transition={{ delay: b.delay, duration: 0.8, repeat: Infinity, repeatDelay: 1.8 }}
           style={{
             position: 'absolute', top: b.top, left: b.left,
-            width: 4, height: 4, borderRadius: 2,
+            width: 6, height: 6, borderRadius: 3,
             background: ACCENT,
-            boxShadow: `0 0 6px ${ACCENT}`,
+            boxShadow: `0 0 12px ${ACCENT}, 0 0 4px ${ACCENT}`,
           }}
         />
       ))}
 
-      {/* Center dot */}
-      <div style={{
-        position: 'absolute', top: '50%', left: '50%',
-        transform: 'translate(-50%,-50%)',
-        width: 4, height: 4, borderRadius: 2,
-        background: ACCENT, opacity: 0.7,
-      }} />
+      {/* Center disc with pulse */}
+      <motion.div
+        animate={{ scale: [1, 1.15, 1] }}
+        transition={{ repeat: Infinity, duration: 2, ease: 'easeInOut' }}
+        style={{
+          position: 'absolute', top: '50%', left: '50%',
+          transform: 'translate(-50%,-50%)',
+          width: 12, height: 12, borderRadius: 6,
+          background: ACCENT,
+          boxShadow: `0 0 16px rgba(42,111,166,0.55)`,
+        }}
+      />
     </div>
   );
 }
@@ -221,9 +255,11 @@ function LoadingScreen({ onDone }: { onDone: () => void }) {
 
   return (
     <div style={{
-      minHeight: '100dvh', background: BG,
+      minHeight: '100dvh',
+      background: `radial-gradient(ellipse at top, rgba(42,111,166,0.06) 0%, ${BG} 60%)`,
       display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
       padding: '40px 24px', fontFamily: "'Poppins', sans-serif",
+      position: 'relative', overflow: 'hidden',
     }}>
       <style>{`
         @keyframes wp-shimmer {
@@ -232,45 +268,108 @@ function LoadingScreen({ onDone }: { onDone: () => void }) {
         }
       `}</style>
 
-      {/* Radar */}
-      <RadarAnimation />
+      {/* Decorative grid background */}
+      <div style={{
+        position: 'absolute', inset: 0,
+        backgroundImage: `radial-gradient(circle, rgba(42,111,166,0.08) 1px, transparent 1px)`,
+        backgroundSize: '32px 32px',
+        opacity: 0.5,
+        maskImage: 'radial-gradient(ellipse at center, black 0%, transparent 70%)',
+        WebkitMaskImage: 'radial-gradient(ellipse at center, black 0%, transparent 70%)',
+        pointerEvents: 'none',
+      }} />
 
-      <AnimatePresence mode="wait">
-        <motion.p
-          key={idx}
-          initial={{ opacity: 0, y: 6 }}
+      <div style={{
+        position: 'relative', zIndex: 1,
+        display: 'flex', flexDirection: 'column', alignItems: 'center',
+        gap: 32, width: '100%', maxWidth: 420,
+      }}>
+        {/* Eyebrow */}
+        <motion.div
+          initial={{ opacity: 0, y: -4 }}
           animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -6 }}
-          transition={{ duration: 0.25 }}
+          transition={{ duration: 0.4 }}
           style={{
-            fontSize: TEXT_MD, fontWeight: FW_SEMIBOLD,
-            color: PRIMARY, marginBottom: 28, textAlign: 'center',
+            fontSize: 11, fontWeight: FW_BOLD, color: ACCENT,
+            letterSpacing: '0.16em',
           }}
         >
-          {LOADING_STEPS[idx]}
-        </motion.p>
-      </AnimatePresence>
+          IHR PERSÖNLICHER SPARPLAN
+        </motion.div>
 
-      {/* Progress bar with shimmer */}
-      <div style={{
-        width: '100%', maxWidth: 280, height: 5,
-        background: BORDER, borderRadius: 3, overflow: 'hidden',
-      }}>
+        {/* Radar */}
+        <RadarAnimation />
+
+        {/* Step text */}
+        <div style={{ minHeight: 56, textAlign: 'center', position: 'relative', width: '100%' }}>
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={idx}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+              style={{ width: '100%' }}
+            >
+              <div style={{
+                fontSize: 19, fontWeight: FW_BOLD,
+                color: PRIMARY, letterSpacing: '-0.01em', lineHeight: 1.3,
+                marginBottom: 6,
+              }}>
+                {LOADING_STEPS[idx].replace(/ …$/, '')}
+              </div>
+              <div style={{
+                fontSize: 12, fontWeight: FW_MEDIUM,
+                color: GREY_800, opacity: 0.7,
+              }}>
+                Schritt {idx + 1} von {LOADING_STEPS.length}
+              </div>
+            </motion.div>
+          </AnimatePresence>
+        </div>
+
+        {/* Step dots */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          {LOADING_STEPS.map((_, i) => {
+            const isActive = i === idx;
+            const isDone = i < idx;
+            return (
+              <motion.div
+                key={i}
+                animate={{
+                  width: isActive ? 28 : 8,
+                  background: isDone ? ACCENT : isActive ? ACCENT : 'rgba(42,111,166,0.18)',
+                }}
+                transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                style={{
+                  height: 6, borderRadius: 3,
+                }}
+              />
+            );
+          })}
+        </div>
+
+        {/* Progress bar with shimmer */}
         <div style={{
-          height: '100%',
-          background: `linear-gradient(90deg, ${ACCENT} 0%, #4b9fd4 100%)`,
-          borderRadius: 3,
-          width: `${barPct * 100}%`,
-          transition: 'width 0.05s linear',
-          position: 'relative', overflow: 'hidden',
-          boxShadow: `0 0 8px rgba(42,111,166,0.5)`,
+          width: '100%', maxWidth: 320, height: 4,
+          background: 'rgba(42,111,166,0.12)', borderRadius: 2, overflow: 'hidden',
         }}>
           <div style={{
-            position: 'absolute', top: 0, bottom: 0,
-            width: '30%',
-            background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.45), transparent)',
-            animation: 'wp-shimmer 1.4s infinite',
-          }} />
+            height: '100%',
+            background: `linear-gradient(90deg, ${ACCENT} 0%, #4b9fd4 100%)`,
+            borderRadius: 2,
+            width: `${barPct * 100}%`,
+            transition: 'width 0.05s linear',
+            position: 'relative', overflow: 'hidden',
+            boxShadow: `0 0 12px rgba(42,111,166,0.55)`,
+          }}>
+            <div style={{
+              position: 'absolute', top: 0, bottom: 0,
+              width: '30%',
+              background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.55), transparent)',
+              animation: 'wp-shimmer 1.4s infinite',
+            }} />
+          </div>
         </div>
       </div>
     </div>
