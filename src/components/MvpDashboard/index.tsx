@@ -39,6 +39,9 @@ import {
   IconTarget,
   IconHourglass,
   IconCoins,
+  IconShieldCheck,
+  IconHomeShield,
+  IconHeartHandshake,
 } from '@tabler/icons-react';
 import logoWp from '../../assets/logo-wp.png';
 
@@ -59,6 +62,9 @@ interface MvpProfile {
   girokonto?: boolean;
   mobilfunk?: boolean;
   internet?: boolean;
+  haftpflicht?: boolean;
+  hausrat?: boolean;
+  berufsunfaehigkeit?: boolean;
 }
 
 interface MvpTip {
@@ -156,6 +162,33 @@ const PROFILE_FIELDS = [
       { value: 'false', label: 'Nicht aktuell',  icon: IconX },
     ],
   },
+  {
+    key: 'haftpflicht' as const,
+    label: 'Privathaftpflicht',
+    icon: IconShieldCheck,
+    options: [
+      { value: 'true',  label: 'Vorhanden',         icon: IconCheck },
+      { value: 'false', label: 'Nicht vorhanden',   icon: IconX },
+    ],
+  },
+  {
+    key: 'hausrat' as const,
+    label: 'Hausratversicherung',
+    icon: IconHomeShield,
+    options: [
+      { value: 'true',  label: 'Vorhanden',         icon: IconCheck },
+      { value: 'false', label: 'Nicht vorhanden',   icon: IconX },
+    ],
+  },
+  {
+    key: 'berufsunfaehigkeit' as const,
+    label: 'Berufsunfähigkeit',
+    icon: IconHeartHandshake,
+    options: [
+      { value: 'true',  label: 'Vorhanden',         icon: IconCheck },
+      { value: 'false', label: 'Nicht vorhanden',   icon: IconX },
+    ],
+  },
 ];
 
 // ── Tips ─────────────────────────────────────────────────────────
@@ -244,12 +277,30 @@ const ALL_TIPS: MvpTip[] = [
     condition: (p) => (p.vehicles?.hybrid ?? 0) > 0 || (p.vehicles?.eauto ?? 0) > 0 || p.autoType === 'hybrid',
   },
   {
-    id: 'hausrat-haftpflicht',
-    title: 'Hausrat-/Haftpflicht',
-    description: 'Veraltete Versicherungstarife kosten unnötig Geld. Ein Vergleich zeigt schnell, ob Sie bei gleicher Leistung günstigere Anbieter finden.',
-    partner: 'Clark',
-    priority: 2, category: 'versicherung', icon: IconShield,
-    savingsHg2: 160, savingsHg3: 160,
+    id: 'haftpflicht-versicherung',
+    title: 'Privathaftpflicht abschließen',
+    description: 'Die Privathaftpflicht schützt vor existenzbedrohenden Schadensersatzforderungen — bereits ab wenigen Euro pro Monat. Praktisch unverzichtbar für jeden Haushalt.',
+    partner: 'Clark, Check24',
+    priority: 3, category: 'versicherung', icon: IconShieldCheck,
+    savingsHg2: 80, savingsHg3: 80,
+    condition: () => true,
+  },
+  {
+    id: 'hausrat-versicherung',
+    title: 'Hausratversicherung optimieren',
+    description: 'Veraltete Hausrat-Tarife kosten unnötig Geld. Ein Vergleich zeigt schnell, ob Sie bei gleicher Leistung günstigere Anbieter finden.',
+    partner: 'Clark, Check24',
+    priority: 2, category: 'versicherung', icon: IconHomeShield,
+    savingsHg2: 120, savingsHg3: 120,
+    condition: () => true,
+  },
+  {
+    id: 'berufsunfaehigkeit-versicherung',
+    title: 'Berufsunfähigkeitsversicherung',
+    description: 'Eine BU-Versicherung sichert Ihr Einkommen ab, falls Sie durch Krankheit oder Unfall nicht mehr arbeiten können — eine der wichtigsten Absicherungen überhaupt.',
+    partner: 'Clark, MLP',
+    priority: 2, category: 'versicherung', icon: IconHeartHandshake,
+    savingsHg2: 0, savingsHg3: 0,
     condition: () => true,
   },
   {
@@ -671,6 +722,9 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
       if (t.id === 'kostenloses-girokonto' && profile.girokonto) return false;
       if (t.id === 'internet-wechsel' && profile.internet) return false;
       if (t.id === 'mobilfunk-wechsel' && profile.mobilfunk) return false;
+      if (t.id === 'haftpflicht-versicherung' && profile.haftpflicht) return false;
+      if (t.id === 'hausrat-versicherung' && profile.hausrat) return false;
+      if (t.id === 'berufsunfaehigkeit-versicherung' && profile.berufsunfaehigkeit) return false;
       return true;
     });
 

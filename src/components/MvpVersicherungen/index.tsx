@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import {
-  IconDeviceMobile,
-  IconWifi,
+  IconShieldCheck,
+  IconHomeShield,
+  IconHeartHandshake,
 } from '@tabler/icons-react';
 import {
   ACCENT, PRIMARY, BG, WHITE, BORDER, GREY_200, GREY_800,
@@ -14,19 +15,21 @@ import {
 import WpHeader from '../_WpHeader';
 import WpBottomNav from '../_WpBottomNav';
 
-export interface KommunikationData {
-  mobilfunk: boolean;
-  internet:  boolean;
+export interface VersicherungenData {
+  haftpflicht: boolean;
+  hausrat: boolean;
+  berufsunfaehigkeit: boolean;
 }
 
 interface Props {
-  onDone: (data: KommunikationData) => void;
+  onDone: (data: VersicherungenData) => void;
   onBack: () => void;
 }
 
-const QUESTIONS: { key: keyof KommunikationData; label: string; sub: string; Icon: React.ComponentType<{ size?: number; stroke?: number; color?: string }> }[] = [
-  { key: 'internet',  label: 'Internet-Vertrag aktuell',   sub: 'Anbieterwechsel spart Ø 240 € / Jahr',      Icon: IconWifi },
-  { key: 'mobilfunk', label: 'Mobilfunk-Vertrag aktuell', sub: 'Tarif neu verhandeln spart Ø 180 € / Jahr', Icon: IconDeviceMobile },
+const QUESTIONS: { key: keyof VersicherungenData; label: string; sub: string; Icon: React.ComponentType<{ size?: number; stroke?: number; color?: string }> }[] = [
+  { key: 'haftpflicht',        label: 'Privathaftpflichtversicherung', sub: 'Schützt vor teuren Schadensersatzforderungen — Pflicht für jeden Haushalt', Icon: IconShieldCheck },
+  { key: 'hausrat',            label: 'Hausratversicherung',           sub: 'Deckt Einbruch, Feuer & Wasser — Anbieterwechsel spart Ø 120 € / Jahr',     Icon: IconHomeShield },
+  { key: 'berufsunfaehigkeit', label: 'Berufsunfähigkeitsversicherung', sub: 'Sichert Ihr Einkommen bei Krankheit oder Unfall',                          Icon: IconHeartHandshake },
 ];
 
 // ── iOS-style Toggle ─────────────────────────────────────────────
@@ -103,9 +106,9 @@ function ToggleRow({
   );
 }
 
-export default function MvpKommunikation({ onDone, onBack }: Props) {
-  const [data, setData] = useState<KommunikationData>({
-    mobilfunk: false, internet: false,
+export default function MvpVersicherungen({ onDone, onBack }: Props) {
+  const [data, setData] = useState<VersicherungenData>({
+    haftpflicht: false, hausrat: false, berufsunfaehigkeit: false,
   });
 
   return (
@@ -113,10 +116,10 @@ export default function MvpKommunikation({ onDone, onBack }: Props) {
       minHeight: '100dvh', background: BG, display: 'flex', flexDirection: 'column',
       fontFamily: "'Poppins', sans-serif",
     }}>
-      <WpHeader showProgress progressPct={88} />
+      <WpHeader showProgress progressPct={95} />
 
-      <div className="wp-page-kom" style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '24px 16px 120px' }}>
-        <style>{`@media(min-width:640px){.wp-page-kom{padding:32px 24px 120px !important;}}`}</style>
+      <div className="wp-page-vers" style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '24px 16px 120px' }}>
+        <style>{`@media(min-width:640px){.wp-page-vers{padding:32px 24px 120px !important;}}`}</style>
         <div style={{ width: '100%', maxWidth: 820 }}>
 
           <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
@@ -127,7 +130,7 @@ export default function MvpKommunikation({ onDone, onBack }: Props) {
                 color: PRIMARY, lineHeight: 1.25, marginBottom: 8,
                 letterSpacing: '-0.01em',
               }}>
-                Basics: <span style={{ color: ACCENT }}>Kommunikation</span>
+                Basics: <span style={{ color: ACCENT }}>Versicherungen</span>
               </h1>
               <p style={{ fontSize: TEXT_SM, color: GREY_800, lineHeight: 1.55, fontWeight: FW_REGULAR }}>
                 Aktivieren Sie, was bereits optimiert ist — alles andere zeigen wir Ihnen als Spartipp.

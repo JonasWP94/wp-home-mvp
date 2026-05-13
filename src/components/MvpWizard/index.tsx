@@ -38,6 +38,7 @@ import MvpThankYou from '../MvpThankYou';
 import MvpHomeLanding from '../MvpHomeLanding';
 import MvpEssentials, { EssentialsData } from '../MvpEssentials';
 import MvpKommunikation, { KommunikationData } from '../MvpKommunikation';
+import MvpVersicherungen, { VersicherungenData } from '../MvpVersicherungen';
 
 // ── Types ────────────────────────────────────────────────────────
 interface MvpProfile {
@@ -54,6 +55,9 @@ interface MvpProfile {
   girokonto: boolean | null;
   mobilfunk: boolean | null;
   internet: boolean | null;
+  haftpflicht: boolean | null;
+  hausrat: boolean | null;
+  berufsunfaehigkeit: boolean | null;
 }
 
 const INITIAL: MvpProfile = {
@@ -62,6 +66,7 @@ const INITIAL: MvpProfile = {
   investitionen: '', sparziel: '', zeitaufwand: '',
   steuererklaerung: null, girokonto: null,
   mobilfunk: null, internet: null,
+  haftpflicht: null, hausrat: null, berufsunfaehigkeit: null,
 };
 
 // ── Step Definitions ─────────────────────────────────────────────
@@ -112,51 +117,11 @@ const STEPS = [
       { value: 'keins',      label: 'Kein Auto',  icon: IconBike },
     ],
   },
-  {
-    key: 'steuererklaerung' as const,
-    icon: IconReceipt,
-    title: 'Haben Sie Ihre Steuererklärung schon erledigt?',
-    sub: '',
-    options: [
-      { value: 'true',  label: 'Ja, erledigt',  icon: IconCheck },
-      { value: 'false', label: 'Noch nicht',    icon: IconX },
-    ],
-  },
-  {
-    key: 'girokonto' as const,
-    icon: IconCreditCard,
-    title: 'Haben Sie ein kostenloses Girokonto?',
-    sub: '',
-    options: [
-      { value: 'true',  label: 'Ja, vorhanden',  icon: IconCheck },
-      { value: 'false', label: 'Noch nicht',     icon: IconX },
-    ],
-  },
-  {
-    key: 'internet' as const,
-    icon: IconWifi,
-    title: 'Ist Ihr Internet-Vertrag aktuell?',
-    sub: '',
-    options: [
-      { value: 'true',  label: 'Ja, aktuell',   icon: IconCheck },
-      { value: 'false', label: 'Eher nicht',    icon: IconX },
-    ],
-  },
-  {
-    key: 'mobilfunk' as const,
-    icon: IconDeviceMobile,
-    title: 'Ist Ihr Mobilfunk-Vertrag aktuell?',
-    sub: '',
-    options: [
-      { value: 'true',  label: 'Ja, aktuell',   icon: IconCheck },
-      { value: 'false', label: 'Eher nicht',    icon: IconX },
-    ],
-  },
 ];
 
 const TOTAL = STEPS.length;
 
-type View = 'intro' | 'landing' | 'essentials' | 'kommunikation' | 'quiz' | 'loading' | 'results';
+type View = 'intro' | 'landing' | 'essentials' | 'kommunikation' | 'versicherungen' | 'quiz' | 'loading' | 'results';
 
 // ── Radar Animation ───────────────────────────────────────────────
 const BLIPS = [
@@ -358,10 +323,8 @@ export default function MvpWizard() {
   }
 
   function quizDone(fp: MvpProfile) {
-    localStorage.setItem('wpilot_mvp_profile', JSON.stringify(fp));
     setProfile(fp);
-    setFinalProfile(fp);
-    setView('loading');
+    setView('essentials');
   }
 
   function goNext() {
@@ -412,13 +375,27 @@ export default function MvpWizard() {
   if (view === 'kommunikation') return (
     <MvpKommunikation
       onDone={(data: KommunikationData) => {
-        const fp = { ...profile, mobilfunk: data.mobilfunk, internet: data.internet };
+        setProfile(p => ({ ...p, mobilfunk: data.mobilfunk, internet: data.internet }));
+        setView('versicherungen');
+      }}
+      onBack={() => setView('essentials')}
+    />
+  );
+  if (view === 'versicherungen') return (
+    <MvpVersicherungen
+      onDone={(data: VersicherungenData) => {
+        const fp = {
+          ...profile,
+          haftpflicht: data.haftpflicht,
+          hausrat: data.hausrat,
+          berufsunfaehigkeit: data.berufsunfaehigkeit,
+        };
         localStorage.setItem('wpilot_mvp_profile', JSON.stringify(fp));
         setProfile(fp);
         setFinalProfile(fp);
         setView('loading');
       }}
-      onBack={() => setView('essentials')}
+      onBack={() => setView('kommunikation')}
     />
   );
   if (view === 'loading') return <LoadingScreen onDone={() => setView('results')} />;
