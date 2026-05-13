@@ -606,6 +606,159 @@ function ProfileEditView({
     setOpenField(null);
   }
 
+  // Section grouping
+  const SECTIONS: { key: string; title: string; icon: React.ComponentType<{ size?: number; stroke?: number; color?: string }>; fieldKeys: string[] }[] = [
+    { key: 'wohnen',        title: 'Wohnsituation',  icon: IconHome,          fieldKeys: ['propertyType', 'tenure', 'heatingType'] },
+    { key: 'mobilitaet',    title: 'Mobilität',      icon: IconCar,           fieldKeys: ['autoType'] },
+    { key: 'finanzen',      title: 'Finanzen',       icon: IconReceipt,       fieldKeys: ['steuererklaerung', 'girokonto'] },
+    { key: 'kommunikation', title: 'Kommunikation',  icon: IconWifi,          fieldKeys: ['internet', 'mobilfunk'] },
+    { key: 'versicherung',  title: 'Versicherungen', icon: IconShieldCheck,   fieldKeys: ['haftpflicht', 'hausrat', 'berufsunfaehigkeit', 'gebaeude', 'kfzVersicherung'] },
+  ];
+
+  // Profile summary for hero
+  const propertyLabel = local.propertyType === 'haus' ? 'Haus' : local.propertyType === 'wohnung' ? 'Wohnung' : null;
+  const tenureLabel = local.tenure === 'eigentum' ? 'Eigentum' : local.tenure === 'miete' ? 'Miete' : null;
+  const vehicleTotal = (local.vehicles?.verbrenner ?? 0) + (local.vehicles?.eauto ?? 0) + (local.vehicles?.hybrid ?? 0);
+  const summaryParts: string[] = [];
+  if (propertyLabel && tenureLabel) summaryParts.push(`${propertyLabel} · ${tenureLabel}`);
+  else if (propertyLabel) summaryParts.push(propertyLabel);
+  else if (tenureLabel) summaryParts.push(tenureLabel);
+  if (vehicleTotal > 0) summaryParts.push(`${vehicleTotal} Fahrzeug${vehicleTotal > 1 ? 'e' : ''}`);
+  else if (local.autoType === 'keins') summaryParts.push('Kein Auto');
+
+  function renderRow(field: typeof PROFILE_FIELDS[0]) {
+    const isOpen = openField === field.key;
+    const FieldIcon = field.icon;
+    const strVal = getStrVal(field);
+    const currentOpt = field.options.find(o => o.value === strVal);
+    const CurrentIcon = currentOpt?.icon ?? IconCircle;
+
+    return (
+      <div
+        key={field.key}
+        style={{
+          background: WHITE,
+          border: isOpen ? `2px solid ${BLUE}` : `1px solid ${BORDER}`,
+          borderRadius: 14,
+          overflow: 'hidden',
+          transition: 'border-color 0.2s',
+        }}
+      >
+        <div
+          style={{
+            padding: '12px 14px',
+            display: 'flex', alignItems: 'center', gap: 12,
+            userSelect: 'none',
+          }}
+        >
+          <div style={{
+            width: 36, height: 36, borderRadius: 10, flexShrink: 0,
+            background: BLUE_LT,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+          }}>
+            <FieldIcon size={19} stroke={1.5} color={BLUE} />
+          </div>
+          <div style={{
+            flex: 1, minWidth: 0,
+            fontSize: 13, fontWeight: 600, color: TEXT,
+          }}>
+            {field.label}
+          </div>
+          <button
+            onClick={() => setOpenField(isOpen ? null : field.key)}
+            style={{
+              display: 'inline-flex', alignItems: 'center', gap: 6,
+              background: isOpen ? BLUE : BLUE_LT,
+              color: isOpen ? WHITE : BLUE_DK,
+              border: 'none',
+              borderRadius: 999,
+              padding: '7px 12px',
+              fontSize: 13, fontWeight: 700,
+              cursor: 'pointer',
+              fontFamily: 'inherit',
+              transition: 'all 0.15s',
+              flexShrink: 0,
+              maxWidth: '60%',
+            }}
+          >
+            <CurrentIcon size={14} stroke={1.8} color={isOpen ? WHITE : BLUE} />
+            <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+              {currentOpt?.label ?? '– wählen'}
+            </span>
+            <IconChevronDown
+              size={15} stroke={2}
+              style={{
+                transition: 'transform 0.25s ease',
+                transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)',
+              }}
+            />
+          </button>
+        </div>
+
+        <AnimatePresence initial={false}>
+          {isOpen && (
+            <motion.div
+              key="options"
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.22, ease: 'easeInOut' }}
+              style={{ overflow: 'hidden' }}
+            >
+              <div style={{
+                padding: '12px',
+                borderTop: `1px solid ${BORDER}`,
+                display: 'flex', flexDirection: 'column', gap: 7,
+              }}>
+                {field.options.map(opt => {
+                  const isSelected = strVal === opt.value;
+                  const OptIcon = opt.icon;
+                  return (
+                    <motion.button
+                      key={opt.value}
+                      whileTap={{ scale: 0.97 }}
+                      onClick={() => selectOption(field.key, opt.value)}
+                      style={{
+                        width: '100%',
+                        background: isSelected ? BLUE_LT : '#f9fafb',
+                        border: isSelected ? `2px solid ${BLUE}` : `1.5px solid ${BORDER}`,
+                        borderRadius: 10, padding: '11px 14px',
+                        display: 'flex', alignItems: 'center', gap: 12,
+                        cursor: 'pointer', transition: 'all 0.12s',
+                        textAlign: 'left' as const,
+                      }}
+                    >
+                      <div style={{
+                        width: 34, height: 34, borderRadius: 8, flexShrink: 0,
+                        background: isSelected ? BLUE : WHITE,
+                        border: isSelected ? 'none' : `1px solid ${BORDER}`,
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        transition: 'all 0.12s',
+                      }}>
+                        <OptIcon size={18} stroke={1.5} color={isSelected ? WHITE : TEXT_MUTED} />
+                      </div>
+                      <span style={{ fontSize: 14, fontWeight: 600, color: isSelected ? BLUE_DK : TEXT, flex: 1 }}>
+                        {opt.label}
+                      </span>
+                      {isSelected && (
+                        <div style={{
+                          width: 22, height: 22, borderRadius: 11, background: BLUE, flexShrink: 0,
+                          display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        }}>
+                          <IconCheck size={14} stroke={2.5} color={WHITE} />
+                        </div>
+                      )}
+                    </motion.button>
+                  );
+                })}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    );
+  }
+
   return (
     <div style={{ minHeight: '100dvh', background: BG, display: 'flex', flexDirection: 'column' }}>
       {/* Header */}
@@ -633,153 +786,98 @@ function ProfileEditView({
         <style>{`
           @media(min-width:900px){
             .mvp-profile-container{max-width:980px !important;padding:24px 24px 40px !important;}
-            .mvp-profile-grid{display:grid !important;grid-template-columns:repeat(2, 1fr) !important;gap:10px 14px !important;}
+            .mvp-profile-section-grid{display:grid !important;grid-template-columns:repeat(2, 1fr) !important;gap:10px 14px !important;}
           }
         `}</style>
-        <p style={{ fontSize: 13, color: TEXT_MUTED, marginBottom: 20, lineHeight: 1.5 }}>
-          Tippen Sie auf ein Feld, um Ihre Angabe direkt zu ändern. Die Empfehlungen werden sofort aktualisiert.
+
+        {/* Profile Hero */}
+        <motion.div
+          initial={{ opacity: 0, y: 14 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+          style={{
+            background: 'linear-gradient(135deg, #243c47 0%, #3D5A80 100%)',
+            color: WHITE, borderRadius: 18, padding: '22px 22px',
+            display: 'flex', alignItems: 'center', gap: 18,
+            marginBottom: 22,
+            position: 'relative', overflow: 'hidden',
+            boxShadow: '0 6px 20px rgba(36,60,71,0.18)',
+          }}
+        >
+          <div style={{
+            position: 'absolute', top: -40, right: -40,
+            width: 140, height: 140, borderRadius: 70,
+            background: 'rgba(255,255,255,0.07)',
+          }} />
+          <div style={{
+            width: 64, height: 64, borderRadius: 16,
+            background: 'rgba(255,255,255,0.16)',
+            border: '1px solid rgba(255,255,255,0.2)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            flexShrink: 0, zIndex: 1,
+          }}>
+            <IconUser size={30} stroke={1.5} color={WHITE} />
+          </div>
+          <div style={{ flex: 1, minWidth: 0, zIndex: 1 }}>
+            <div style={{
+              fontSize: 10, fontWeight: 700, letterSpacing: '0.12em',
+              opacity: 0.7, marginBottom: 4,
+            }}>
+              IHR PROFIL
+            </div>
+            <h2 style={{ fontSize: 20, fontWeight: 700, lineHeight: 1.25, margin: '0 0 6px' }}>
+              {summaryParts.length > 0 ? summaryParts[0] : 'Ihre Angaben'}
+            </h2>
+            {summaryParts.length > 1 && (
+              <p style={{ fontSize: 12, opacity: 0.8, margin: 0, lineHeight: 1.4 }}>
+                {summaryParts.slice(1).join(' · ')}
+              </p>
+            )}
+          </div>
+        </motion.div>
+
+        <p style={{ fontSize: 13, color: TEXT_MUTED, marginBottom: 18, lineHeight: 1.5 }}>
+          Tippen Sie auf einen Wert, um Ihre Angabe zu ändern. Die Empfehlungen aktualisieren sich automatisch.
         </p>
 
-        <div className="mvp-profile-grid" style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-          {PROFILE_FIELDS.map(field => {
-            const isOpen = openField === field.key;
-            const FieldIcon = field.icon;
-            const strVal = getStrVal(field);
-            const currentOpt = field.options.find(o => o.value === strVal);
-            const CurrentIcon = currentOpt?.icon ?? IconCircle;
-
+        {/* Sections */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 22 }}>
+          {SECTIONS.map(section => {
+            const sectionFields = section.fieldKeys
+              .map(k => PROFILE_FIELDS.find(f => f.key === k))
+              .filter(Boolean) as typeof PROFILE_FIELDS;
+            if (sectionFields.length === 0) return null;
+            const SectionIcon = section.icon;
             return (
-              // plain div — no motion.div/layout so border-radius stays smooth
-              <div
-                key={field.key}
-                style={{
-                  background: WHITE,
-                  border: isOpen ? `2px solid ${BLUE}` : `1.5px solid ${BORDER}`,
-                  borderRadius: 14,
-                  overflow: 'hidden',
-                  transition: 'border-color 0.2s',
-                }}
-              >
-                {/* Row: static label left, interactive dropdown right */}
-                <div
-                  style={{
-                    padding: '12px 14px',
-                    display: 'flex', alignItems: 'center', gap: 12,
-                    userSelect: 'none',
-                  }}
-                >
+              <div key={section.key}>
+                <div style={{
+                  display: 'flex', alignItems: 'center', gap: 10,
+                  marginBottom: 10,
+                }}>
                   <div style={{
-                    width: 36, height: 36, borderRadius: 10, flexShrink: 0,
+                    width: 28, height: 28, borderRadius: 8, flexShrink: 0,
                     background: BLUE_LT,
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                   }}>
-                    <FieldIcon size={19} stroke={1.5} color={BLUE} />
+                    <SectionIcon size={16} stroke={1.5} color={BLUE} />
                   </div>
-                  <div style={{
-                    flex: 1, minWidth: 0,
-                    fontSize: 13, fontWeight: 600, color: TEXT,
+                  <span style={{
+                    fontSize: 13, fontWeight: 700, color: TEXT,
                     letterSpacing: '0.01em',
                   }}>
-                    {field.label}
-                  </div>
-                  <button
-                    onClick={() => setOpenField(isOpen ? null : field.key)}
-                    style={{
-                      display: 'inline-flex', alignItems: 'center', gap: 6,
-                      background: isOpen ? BLUE : BLUE_LT,
-                      color: isOpen ? WHITE : BLUE_DK,
-                      border: 'none',
-                      borderRadius: 999,
-                      padding: '7px 12px 7px 12px',
-                      fontSize: 13, fontWeight: 700,
-                      cursor: 'pointer',
-                      fontFamily: 'inherit',
-                      transition: 'all 0.15s',
-                      flexShrink: 0,
-                      maxWidth: '60%',
-                    }}
-                  >
-                    <CurrentIcon size={14} stroke={1.8} color={isOpen ? WHITE : BLUE} />
-                    <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                      {currentOpt?.label ?? '– wählen'}
-                    </span>
-                    <IconChevronDown
-                      size={15} stroke={2}
-                      style={{
-                        transition: 'transform 0.25s ease',
-                        transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)',
-                      }}
-                    />
-                  </button>
+                    {section.title}
+                  </span>
+                  <div style={{ flex: 1, height: 1, background: BORDER }} />
                 </div>
-
-                {/* Options — AnimatePresence on the wrapper only, no layout */}
-                <AnimatePresence initial={false}>
-                  {isOpen && (
-                    <motion.div
-                      key="options"
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: 'auto', opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.22, ease: 'easeInOut' }}
-                      style={{ overflow: 'hidden' }}
-                    >
-                      <div style={{
-                        padding: '12px 12px 12px',
-                        borderTop: `1px solid ${BORDER}`,
-                        display: 'flex', flexDirection: 'column', gap: 7,
-                      }}>
-                        {field.options.map(opt => {
-                          const isSelected = strVal === opt.value;
-                          const OptIcon = opt.icon;
-                          return (
-                            <motion.button
-                              key={opt.value}
-                              whileTap={{ scale: 0.97 }}
-                              onClick={() => selectOption(field.key, opt.value)}
-                              style={{
-                                width: '100%',
-                                background: isSelected ? BLUE_LT : '#f9fafb',
-                                border: isSelected ? `2px solid ${BLUE}` : `1.5px solid ${BORDER}`,
-                                borderRadius: 10, padding: '11px 14px',
-                                display: 'flex', alignItems: 'center', gap: 12,
-                                cursor: 'pointer', transition: 'all 0.12s',
-                                textAlign: 'left' as const,
-                              }}
-                            >
-                              <div style={{
-                                width: 34, height: 34, borderRadius: 8, flexShrink: 0,
-                                background: isSelected ? BLUE : WHITE,
-                                border: isSelected ? 'none' : `1px solid ${BORDER}`,
-                                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                transition: 'all 0.12s',
-                              }}>
-                                <OptIcon size={18} stroke={1.5} color={isSelected ? WHITE : TEXT_MUTED} />
-                              </div>
-                              <span style={{ fontSize: 14, fontWeight: 600, color: isSelected ? BLUE_DK : TEXT, flex: 1 }}>
-                                {opt.label}
-                              </span>
-                              {isSelected && (
-                                <div style={{
-                                  width: 22, height: 22, borderRadius: 11, background: BLUE, flexShrink: 0,
-                                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                }}>
-                                  <IconCheck size={14} stroke={2.5} color={WHITE} />
-                                </div>
-                              )}
-                            </motion.button>
-                          );
-                        })}
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                <div className="mvp-profile-section-grid" style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                  {sectionFields.map(field => renderRow(field))}
+                </div>
               </div>
             );
           })}
         </div>
 
-        <div style={{ marginTop: 24, textAlign: 'center' }}>
+        <div style={{ marginTop: 28, textAlign: 'center' }}>
           <button onClick={onBack} style={{
             background: BLUE, border: 'none', borderRadius: 12,
             padding: '12px 28px', fontSize: 14, fontWeight: 600,
