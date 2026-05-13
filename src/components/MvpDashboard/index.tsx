@@ -1288,8 +1288,8 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
         <style>{`
           @media(min-width:900px){
             .mvp-dash-container{max-width:980px !important;padding:24px 24px 40px !important;}
-            .mvp-clusters{display:block !important;column-count:2 !important;column-gap:28px !important;}
-            .mvp-clusters > div{break-inside:avoid;-webkit-column-break-inside:avoid;page-break-inside:avoid;margin-bottom:20px !important;}
+            .mvp-cluster-tips{display:grid !important;grid-template-columns:repeat(2, 1fr) !important;gap:8px 12px !important;}
+            .mvp-cluster-tip-wrap{align-self:start;}
           }
         `}</style>
 
@@ -1442,14 +1442,14 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
                 </span>
               </div>
 
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+              <div className="mvp-cluster-tips" style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                 {cluster.tips.map((tip, i) => {
                   const isDone = done.has(tip.id);
                   const isExpanded = expanded === tip.id;
                   const TipIcon = tip.icon;
                   const savings = getSavings(tip);
                   return (
-                    <div key={tip.id} style={{ position: 'relative' }}>
+                    <div key={tip.id} className="mvp-cluster-tip-wrap" style={{ position: 'relative' }}>
                       <motion.div
                         initial={{ opacity: 0, y: 8 }}
                         animate={{ opacity: 1, y: 0 }}
