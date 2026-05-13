@@ -896,6 +896,11 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
   const total     = useMemo(() => tips.reduce((s, t) => s + getSavings(t), 0), [tips, hg]);
   const doneCount = useMemo(() => tips.filter(t => done.has(t.id)).length, [tips, done]);
   const doneTotal = useMemo(() => tips.filter(t => done.has(t.id)).reduce((s, t) => s + getSavings(t), 0), [tips, done, hg]);
+  const nextBestTip = useMemo(() => {
+    const open = tips.filter(t => !done.has(t.id));
+    if (open.length === 0) return null;
+    return open.slice().sort((a, b) => getSavings(b) - getSavings(a))[0];
+  }, [tips, done, hg]);
 
   if (!profile) {
     return (
@@ -1012,6 +1017,57 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
                 <div style={{ fontSize: 10, opacity: 0.8 }}>Tipps erledigt</div>
               </div>
             </div>
+
+            {/* Next best step — white card inside hero */}
+            {nextBestTip && (() => {
+              const NextIcon = nextBestTip.icon;
+              const nextSavings = getSavings(nextBestTip);
+              return (
+                <button
+                  onClick={() => setOverlayTipId(nextBestTip.id)}
+                  style={{
+                    marginTop: 14,
+                    width: '100%',
+                    background: WHITE,
+                    border: 'none',
+                    borderRadius: 14,
+                    padding: '14px 16px',
+                    display: 'flex', alignItems: 'center', gap: 14,
+                    cursor: 'pointer',
+                    fontFamily: 'inherit',
+                    textAlign: 'left' as const,
+                    boxShadow: '0 4px 16px rgba(0,0,0,0.12)',
+                    transition: 'transform 0.15s, box-shadow 0.15s',
+                  }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(-1px)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 6px 20px rgba(0,0,0,0.18)'; }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(0)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 4px 16px rgba(0,0,0,0.12)'; }}
+                >
+                  <div style={{
+                    width: 40, height: 40, borderRadius: 12,
+                    background: BLUE_LT,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    flexShrink: 0,
+                  }}>
+                    <NextIcon size={22} stroke={1.5} color={BLUE} />
+                  </div>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{
+                      fontSize: 10, fontWeight: 700, color: BLUE,
+                      letterSpacing: '0.1em', marginBottom: 2,
+                    }}>
+                      EMPFOHLENER NÄCHSTER SCHRITT
+                    </div>
+                    <div style={{ fontSize: 14, fontWeight: 700, color: TEXT, lineHeight: 1.3 }}>
+                      {nextBestTip.title}
+                    </div>
+                    <div style={{ fontSize: 11, color: TEXT_MUTED, marginTop: 2 }}>
+                      bis zu {fmt(nextSavings)} € / Jahr
+                    </div>
+                  </div>
+                  <IconArrowRight size={18} stroke={2.2} color={DARK} style={{ flexShrink: 0 }} />
+                </button>
+              );
+            })()}
           </div>
         </motion.div>
 
