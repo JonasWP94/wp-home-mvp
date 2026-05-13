@@ -91,6 +91,7 @@ const STEPS = [
     icon: IconFlame,
     title: 'Wie heizen Sie aktuell?',
     sub: 'Wir prüfen, ob Sie beim Heizen sparen oder von einem günstigeren System profitieren können.',
+    skipIf: (p: any) => p.tenure === 'miete',
     options: [
       { value: 'gas',          label: 'Gas',            icon: IconFlame },
       { value: 'oel',          label: 'Öl',             icon: IconDroplet },
@@ -323,7 +324,21 @@ export default function MvpWizard() {
   const canNext = isVehicleStep
     ? (profile.autoType === 'keins' || vehicleTotal > 0)
     : (currentValue !== '' && currentValue !== null && currentValue !== undefined);
-  const isLast = step === TOTAL - 1;
+
+  // Compute effective step list & navigation considering skipIf
+  function isStepActive(s: any, p: MvpProfile) {
+    return !(s as any).skipIf || !(s as any).skipIf(p);
+  }
+  function findNextStep(from: number, p: MvpProfile) {
+    for (let i = from + 1; i < STEPS.length; i++) if (isStepActive(STEPS[i], p)) return i;
+    return -1;
+  }
+  function findPrevStep(from: number, p: MvpProfile) {
+    for (let i = from - 1; i >= 0; i--) if (isStepActive(STEPS[i], p)) return i;
+    return -1;
+  }
+  const nextIdx = findNextStep(step, profile);
+  const isLast = nextIdx === -1;
   const StepIcon = current.icon;
 
   function setVehicleCount(type: 'verbrenner' | 'eauto' | 'hybrid', delta: number) {
@@ -353,19 +368,20 @@ export default function MvpWizard() {
     if (!canNext) return;
     if (isLast) { quizDone(profile); return; }
     setDir(1);
-    setStep(s => s + 1);
+    setStep(nextIdx);
   }
 
   function skip() {
     if (isLast) { quizDone(profile); return; }
     setDir(1);
-    setStep(s => s + 1);
+    setStep(nextIdx);
   }
 
   function goBack() {
-    if (step === 0) { setView('landing'); return; }
+    const prev = findPrevStep(step, profile);
+    if (prev === -1) { setView('landing'); return; }
     setDir(-1);
-    setStep(s => s - 1);
+    setStep(prev);
   }
 
   React.useEffect(() => {
@@ -414,7 +430,12 @@ export default function MvpWizard() {
     exit:   (d: number) => ({ x: d > 0 ? -80 :  80, opacity: 0 }),
   };
 
-  const progressPct = 25 + ((step + 1) / TOTAL) * 50;
+  // Effective step counts skipping inactive (e.g. heating for Mieter)
+  const activeSteps = STEPS.filter(s => isStepActive(s, profile));
+  const activeIdx = activeSteps.findIndex(s => s.key === current.key);
+  const effectiveTotal = activeSteps.length;
+  const effectiveStep = activeIdx >= 0 ? activeIdx + 1 : step + 1;
+  const progressPct = 10 + (effectiveStep / effectiveTotal) * 85;
 
   return (
     <div style={{
@@ -449,7 +470,7 @@ export default function MvpWizard() {
                 fontSize: 11, fontWeight: FW_BOLD, color: ACCENT,
                 letterSpacing: '0.1em', marginBottom: 8,
               }}>
-                FRAGE {step + 1} VON {TOTAL}
+                FRAGE {effectiveStep} VON {effectiveTotal}
               </div>
               <h1 style={{
                 fontSize: TEXT_LG + 4, fontWeight: FW_SEMIBOLD,
@@ -480,11 +501,13 @@ export default function MvpWizard() {
                       const val = opt.value === 'true' ? true : opt.value === 'false' ? false : opt.value;
                       select(val);
                       setTimeout(() => {
-                        if (isLast) {
-                          quizDone({ ...profile, [current.key]: val });
+                        const updatedProfile = { ...profile, [current.key]: val };
+                        const nIdx = findNextStep(step, updatedProfile);
+                        if (nIdx === -1) {
+                          quizDone(updatedProfile);
                         } else {
                           setDir(1);
-                          setStep(s => s + 1);
+                          setStep(nIdx);
                         }
                       }, 250);
                     }}
@@ -549,7 +572,7 @@ export default function MvpWizard() {
         nextLabel={isLast ? 'Ergebnis anzeigen' : 'Weiter'}
         middle={
           <div style={{ fontSize: 12, color: GREY_800, fontWeight: FW_MEDIUM }}>
-            {step + 1} / {TOTAL}
+            {effectiveStep} / {effectiveTotal}
           </div>
         }
       />
