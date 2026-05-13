@@ -65,6 +65,8 @@ interface MvpProfile {
   haftpflicht?: boolean;
   hausrat?: boolean;
   berufsunfaehigkeit?: boolean;
+  gebaeude?: boolean;
+  kfzVersicherung?: boolean;
 }
 
 interface MvpTip {
@@ -189,6 +191,24 @@ const PROFILE_FIELDS = [
       { value: 'false', label: 'Nicht vorhanden',   icon: IconX },
     ],
   },
+  {
+    key: 'gebaeude' as const,
+    label: 'Wohngebäudeversicherung',
+    icon: IconBuilding,
+    options: [
+      { value: 'true',  label: 'Vorhanden',         icon: IconCheck },
+      { value: 'false', label: 'Nicht vorhanden',   icon: IconX },
+    ],
+  },
+  {
+    key: 'kfzVersicherung' as const,
+    label: 'KFZ-Versicherung',
+    icon: IconCar,
+    options: [
+      { value: 'true',  label: 'Aktuell',           icon: IconCheck },
+      { value: 'false', label: 'Nicht aktuell',     icon: IconX },
+    ],
+  },
 ];
 
 // ── Tips ─────────────────────────────────────────────────────────
@@ -302,6 +322,15 @@ const ALL_TIPS: MvpTip[] = [
     priority: 2, category: 'versicherung', icon: IconHeartHandshake,
     savingsHg2: 0, savingsHg3: 0,
     condition: () => true,
+  },
+  {
+    id: 'gebaeude-versicherung',
+    title: 'Wohngebäudeversicherung optimieren',
+    description: 'Eine Wohngebäudeversicherung ist für Hauseigentümer Pflicht. Ein Tarifvergleich spart oft mehrere hundert Euro pro Jahr — bei gleicher Absicherung.',
+    partner: 'Clark, Check24',
+    priority: 2, category: 'versicherung', icon: IconBuilding,
+    savingsHg2: 280, savingsHg3: 280,
+    condition: (p) => p.propertyType === 'haus' && p.tenure === 'eigentum',
   },
   {
     id: 'internet-wechsel',
@@ -725,6 +754,8 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
       if (t.id === 'haftpflicht-versicherung' && profile.haftpflicht) return false;
       if (t.id === 'hausrat-versicherung' && profile.hausrat) return false;
       if (t.id === 'berufsunfaehigkeit-versicherung' && profile.berufsunfaehigkeit) return false;
+      if (t.id === 'gebaeude-versicherung' && profile.gebaeude) return false;
+      if (t.id === 'kfz-versicherung' && profile.kfzVersicherung) return false;
       return true;
     });
 

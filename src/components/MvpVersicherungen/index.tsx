@@ -4,6 +4,8 @@ import {
   IconShieldCheck,
   IconHomeShield,
   IconHeartHandshake,
+  IconBuilding,
+  IconCar,
 } from '@tabler/icons-react';
 import {
   ACCENT, PRIMARY, BG, WHITE, BORDER, GREY_200, GREY_800,
@@ -19,17 +21,25 @@ export interface VersicherungenData {
   haftpflicht: boolean;
   hausrat: boolean;
   berufsunfaehigkeit: boolean;
+  gebaeude?: boolean;
+  kfzVersicherung?: boolean;
 }
 
 interface Props {
   onDone: (data: VersicherungenData) => void;
   onBack: () => void;
+  showGebaeude?: boolean;
+  showKfz?: boolean;
 }
 
-const QUESTIONS: { key: keyof VersicherungenData; label: string; sub: string; Icon: React.ComponentType<{ size?: number; stroke?: number; color?: string }> }[] = [
-  { key: 'haftpflicht',        label: 'Privathaftpflichtversicherung', sub: 'Schützt vor teuren Schadensersatzforderungen — Pflicht für jeden Haushalt', Icon: IconShieldCheck },
-  { key: 'hausrat',            label: 'Hausratversicherung',           sub: 'Deckt Einbruch, Feuer & Wasser — Anbieterwechsel spart Ø 120 € / Jahr',     Icon: IconHomeShield },
-  { key: 'berufsunfaehigkeit', label: 'Berufsunfähigkeitsversicherung', sub: 'Sichert Ihr Einkommen bei Krankheit oder Unfall',                          Icon: IconHeartHandshake },
+type QuestionDef = { key: keyof VersicherungenData; label: string; sub: string; Icon: React.ComponentType<{ size?: number; stroke?: number; color?: string }> };
+
+const ALL_QUESTIONS: QuestionDef[] = [
+  { key: 'haftpflicht',        label: 'Privathaftpflichtversicherung',  sub: 'Schützt vor teuren Schadensersatzforderungen — Pflicht für jeden Haushalt', Icon: IconShieldCheck },
+  { key: 'hausrat',            label: 'Hausratversicherung',            sub: 'Deckt Einbruch, Feuer & Wasser — Anbieterwechsel spart Ø 120 € / Jahr',     Icon: IconHomeShield },
+  { key: 'gebaeude',           label: 'Wohngebäudeversicherung',        sub: 'Pflicht für Hauseigentümer — Tarifvergleich spart oft mehrere hundert Euro', Icon: IconBuilding },
+  { key: 'kfzVersicherung',    label: 'KFZ-Versicherung aktuell',       sub: 'Anbieterwechsel spart Ø 300 € pro Fahrzeug / Jahr',                          Icon: IconCar },
+  { key: 'berufsunfaehigkeit', label: 'Berufsunfähigkeitsversicherung', sub: 'Sichert Ihr Einkommen bei Krankheit oder Unfall',                            Icon: IconHeartHandshake },
 ];
 
 // ── iOS-style Toggle ─────────────────────────────────────────────
@@ -106,9 +116,16 @@ function ToggleRow({
   );
 }
 
-export default function MvpVersicherungen({ onDone, onBack }: Props) {
+export default function MvpVersicherungen({ onDone, onBack, showGebaeude, showKfz }: Props) {
   const [data, setData] = useState<VersicherungenData>({
     haftpflicht: false, hausrat: false, berufsunfaehigkeit: false,
+    gebaeude: false, kfzVersicherung: false,
+  });
+
+  const QUESTIONS = ALL_QUESTIONS.filter(q => {
+    if (q.key === 'gebaeude' && !showGebaeude) return false;
+    if (q.key === 'kfzVersicherung' && !showKfz) return false;
+    return true;
   });
 
   return (
@@ -144,7 +161,7 @@ export default function MvpVersicherungen({ onDone, onBack }: Props) {
                   icon={q.Icon}
                   label={q.label}
                   sub={q.sub}
-                  value={data[q.key]}
+                  value={Boolean(data[q.key])}
                   onChange={v => setData(d => ({ ...d, [q.key]: v }))}
                 />
               ))}

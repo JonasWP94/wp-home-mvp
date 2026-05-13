@@ -58,6 +58,8 @@ interface MvpProfile {
   haftpflicht: boolean | null;
   hausrat: boolean | null;
   berufsunfaehigkeit: boolean | null;
+  gebaeude: boolean | null;
+  kfzVersicherung: boolean | null;
 }
 
 const INITIAL: MvpProfile = {
@@ -67,6 +69,7 @@ const INITIAL: MvpProfile = {
   steuererklaerung: null, girokonto: null,
   mobilfunk: null, internet: null,
   haftpflicht: null, hausrat: null, berufsunfaehigkeit: null,
+  gebaeude: null, kfzVersicherung: null,
 };
 
 // ── Step Definitions ─────────────────────────────────────────────
@@ -381,23 +384,33 @@ export default function MvpWizard() {
       onBack={() => setView('essentials')}
     />
   );
-  if (view === 'versicherungen') return (
-    <MvpVersicherungen
-      onDone={(data: VersicherungenData) => {
-        const fp = {
-          ...profile,
-          haftpflicht: data.haftpflicht,
-          hausrat: data.hausrat,
-          berufsunfaehigkeit: data.berufsunfaehigkeit,
-        };
-        localStorage.setItem('wpilot_mvp_profile', JSON.stringify(fp));
-        setProfile(fp);
-        setFinalProfile(fp);
-        setView('loading');
-      }}
-      onBack={() => setView('kommunikation')}
-    />
-  );
+  if (view === 'versicherungen') {
+    const hasVehicle = profile.autoType !== 'keins' && (
+      profile.vehicles.verbrenner + profile.vehicles.eauto + profile.vehicles.hybrid > 0
+      || (profile.autoType !== '' && profile.autoType !== 'keins')
+    );
+    return (
+      <MvpVersicherungen
+        showGebaeude={profile.propertyType === 'haus' && profile.tenure === 'eigentum'}
+        showKfz={hasVehicle}
+        onDone={(data: VersicherungenData) => {
+          const fp = {
+            ...profile,
+            haftpflicht: data.haftpflicht,
+            hausrat: data.hausrat,
+            berufsunfaehigkeit: data.berufsunfaehigkeit,
+            gebaeude: data.gebaeude ?? null,
+            kfzVersicherung: data.kfzVersicherung ?? null,
+          };
+          localStorage.setItem('wpilot_mvp_profile', JSON.stringify(fp));
+          setProfile(fp);
+          setFinalProfile(fp);
+          setView('loading');
+        }}
+        onBack={() => setView('kommunikation')}
+      />
+    );
+  }
   if (view === 'loading') return <LoadingScreen onDone={() => setView('results')} />;
   if (view === 'results' && finalProfile) return <MvpDashboard initialProfile={finalProfile} />;
 
