@@ -51,11 +51,14 @@ interface MvpTip {
   id: string;
   title: string;
   description?: string;
+  why?: string;                // NEW — explains *why* you save with this
   partner: string;
   partnerLinks?: { name: string; url: string; logo: string }[];
   actionLabel?: string;
   actionUrl?: string;
   howTo?: string[];
+  effort?: string;             // NEW — estimated time investment
+  difficulty?: 'Einfach' | 'Mittel' | 'Aufwändig';  // NEW
   priority: 3 | 2 | 1;
   category: string;
   icon: React.ComponentType<{ size?: number; stroke?: number; color?: string }>;
@@ -196,11 +199,15 @@ const ALL_TIPS: MvpTip[] = [
     id: 'strom-wechsel',
     title: 'Stromtarif wechseln',
     description: 'Mit Wechselpilot übernehmen wir den Wechsel komplett für Sie — automatisch zum besten Tarif, Jahr für Jahr. Sie zahlen nichts, profitieren aber dauerhaft von der günstigsten Stromrechnung.',
+    why: 'Bei 3.500 kWh Jahresverbrauch zahlt eine Familie im Grundversorgungstarif schnell 400–600 € mehr als bei einem Wechseltarif mit Bonus. Stromtarife unterscheiden sich oft um 8–15 ct/kWh — und Wechselboni geben 50–250 € extra im ersten Jahr.',
     howTo: [
-      'Im Wechselpilot-Konto Ihren Stromzähler mit aktueller Zählernummer und Jahresverbrauch (kWh) hinterlegen.',
-      'Wechselpilot vergleicht ab sofort jährlich alle Tarife in Ihrer Postleitzahl.',
-      'Beim Fund eines besseren Tarifs übernimmt Wechselpilot Kündigung, Wechsel und Übergangsfristen automatisch.',
+      'Stromzähler im Wechselpilot-Konto mit Zählernummer und Jahresverbrauch (steht auf der letzten Jahresabrechnung) hinterlegen.',
+      'Wechselpilot prüft ab sofort jährlich alle Tarife in Ihrer Postleitzahl auf Top-Preis + Wechselbonus.',
+      'Beim Fund eines besseren Tarifs übernimmt Wechselpilot Kündigung, Wechsel und Übergabe-Fristen — Strom fließt durchgängig weiter.',
+      'Sie bleiben in der Grundversorgung versichert: Falls der neue Anbieter nicht liefert, springt automatisch der Grundversorger ein.',
     ],
+    effort: '5 Min einmalig',
+    difficulty: 'Einfach',
     partner: 'Octopus, Tibber, Lichtblick',
     priority: 3, category: 'energie', icon: IconBolt,
     savingsHg2: 475, savingsHg3: 475,
@@ -210,13 +217,17 @@ const ALL_TIPS: MvpTip[] = [
     id: 'gas-wechsel',
     title: 'Gastarif wechseln',
     description: 'Wechselpilot prüft Ihren Gastarif automatisch jedes Jahr und wechselt für Sie zum günstigsten Anbieter — ohne dass Sie selbst aktiv werden müssen. Komplett kostenlos und ohne Aufwand.',
+    why: 'Gaspreise sind 2024–2026 sehr volatil. Ein Haushalt mit 15.000 kWh Jahresverbrauch zahlt in der Grundversorgung oft 300–500 € mehr als bei einem optimierten Tarif. Mit Wechselbonus kommt im ersten Jahr nochmal eine Einmalzahlung dazu.',
     actionLabel: 'Jetzt Zähler anlegen',
     actionUrl: 'https://konto.wechselpilot.com/neuer-zähler',
     howTo: [
       'Auf "Jetzt Zähler anlegen" klicken und im Wechselpilot-Konto den Gas-Zähler hinzufügen.',
       'Zählernummer und Jahresverbrauch (kWh) aus der letzten Jahresabrechnung übernehmen.',
       'Wechselpilot übernimmt ab sofort den jährlichen Tarifvergleich und Wechsel — kein weiteres Zutun nötig.',
+      'Sicherheitsnetz: Bei Anbieter-Insolvenz übernimmt automatisch der Grundversorger, Sie haben nie ohne Gas dazustehen.',
     ],
+    effort: '5 Min einmalig',
+    difficulty: 'Einfach',
     partner: 'Vattenfall, E.ON, EnBW',
     priority: 3, category: 'energie', icon: IconFlame,
     savingsHg2: 361, savingsHg3: 361,
@@ -225,149 +236,195 @@ const ALL_TIPS: MvpTip[] = [
   {
     id: 'thermostate',
     title: 'Smarte Thermostate',
-    description: 'Smarte Thermostate heizen automatisch nur, wenn Sie zuhause sind. Das reduziert Ihre Heizkosten um bis zu 30 % — ohne dass Sie an Komfort verlieren.',
+    description: 'Smarte Thermostate heizen automatisch nur, wenn Sie zuhause sind. Studien des Fraunhofer-Instituts zeigen 8–15 % Heizkostenreduktion — bei einer Heizrechnung von 2.000 €/Jahr sind das 160–300 €.',
+    why: 'Klassische Thermostate heizen "stumpf" auf eine eingestellte Temperatur. Smarte erkennen offene Fenster, regeln raumweise abhängig von Ihrer Anwesenheit und senken nachts automatisch ab. Förderung über BAFA ist bei Einzelmaßnahmen möglich.',
     howTo: [
-      'Starter-Set für ca. 100–150 € bestellen (Bridge + Thermostate je nach Heizkörperzahl).',
-      'Alte Thermostat-Köpfe abschrauben und die neuen werkzeuglos aufsetzen (ca. 5 Min pro Heizkörper).',
-      'In der App Heiz-Zeitpläne anlegen oder Geofencing aktivieren — Heizung läuft nur, wenn Sie zuhause sind.',
-      'Räume gezielt absenken (Bad warm, Schlafzimmer kühl) — Heizkosten sinken um 20–30 %.',
+      'Heizkörperzahl im Haushalt zählen — pro Heizkörper benötigen Sie ein Thermostat (ca. 35–60 € je Stück).',
+      'Starter-Set inkl. Bridge bestellen (Komplettpaket für 4 Heizkörper: ca. 200–300 €).',
+      'Alte Thermostat-Köpfe abschrauben (links drehen, lösen) und die neuen werkzeuglos aufsetzen — ca. 3 Min pro Heizkörper.',
+      'App installieren, Bridge mit WLAN verbinden, alle Thermostate per Bluetooth pairen — geführt in ca. 15 Min.',
+      'Heiz-Zeitpläne anlegen oder Geofencing aktivieren: Heizung springt automatisch an, wenn Sie nach Hause kommen.',
+      'Optional: BAFA-Antrag für Einzelmaßnahme stellen — bis zu 15 % der Kosten werden bezuschusst.',
     ],
+    effort: '1 Stunde + 200–300 € Investition',
+    difficulty: 'Einfach',
     partner: 'tado°, Homematic IP',
     priority: 3, category: 'heizung', icon: IconTemperature,
-    savingsHg2: 180, savingsHg3: 220,
+    savingsHg2: 220, savingsHg3: 280,
     condition: () => true,
   },
   {
     id: 'waermepumpe',
     title: 'Wärmepumpe',
-    description: 'Eine Wärmepumpe nutzt Umweltwärme statt Gas oder Öl und ist langfristig deutlich günstiger. Bis zu 70 % Förderung vom Staat machen die Umstellung attraktiv.',
+    description: 'Eine Wärmepumpe nutzt Umweltwärme statt Gas oder Öl und ist im Betrieb 50–70 % günstiger. Bei einem Einfamilienhaus mit ca. 20.000 kWh Heizbedarf sind das 800–1.500 € weniger pro Jahr — und zusätzlich bis zu 70 % Förderung beim Einbau.',
+    why: 'Wärmepumpen arbeiten mit Strom + Umgebungswärme und erreichen einen "Wirkungsgrad" von 300–400 % (1 kWh Strom → 3–4 kWh Wärme). Bei aktuellen Strompreisen unschlagbar. Ab 2024 sind 65 % erneuerbare Heizenergie gesetzlich vorgeschrieben — Gas-/Ölheizung wird langfristig teurer (CO₂-Preis steigt).',
     howTo: [
-      'Vor-Ort-Beratung buchen — die Dimensionierung der Wärmepumpe hängt von Wärmebedarf und Heizflächen ab.',
-      'BEG-Förderung über BAFA prüfen: bis zu 70 % Zuschuss (Einkommens-Bonus + Effizienz-Bonus addiert).',
-      'Zwei bis drei Festpreis-Angebote einholen — Preisspanne 18.000–35.000 € inkl. Einbau und Förderung.',
-      'Auftrag erteilen — Einbau dauert meist 2–5 Werktage. Alte Heizung wird gleich mit ausgebaut.',
+      'Energieberatung buchen: BAFA bezuschusst die Beratung mit 80 % (max. 1.300 €). Berater berechnet Heizlast und empfiehlt Wärmepumpen-Typ.',
+      'Heizflächen prüfen: Fußbodenheizung optimal, große Heizkörper auch geeignet. Bei alten kleinen Heizkörpern ggf. Austausch nötig.',
+      'BEG-Förderung beantragen: 30 % Grundförderung + 5 % Klima-Bonus (Austausch funktionstüchtiger Gas-/Ölheizung) + 30 % Einkommens-Bonus (bei < 40.000 € Jahreseinkommen) = bis 70 %.',
+      'Drei Festpreis-Angebote einholen: Luft-Wasser-Wärmepumpe 18.000–28.000 €, Sole-Wasser 25.000–40.000 € (inkl. Einbau, vor Förderung).',
+      'Auftrag erteilen — Lieferzeit 3–6 Monate, Einbau 2–5 Werktage. Alte Heizung wird gleich entsorgt.',
+      'Sofortwirkung: Nach Inbetriebnahme können Sie auf Wärmepumpen-Stromtarife wechseln (ca. 25 % günstiger).',
     ],
+    effort: '3–6 Monate Projekt',
+    difficulty: 'Aufwändig',
     partner: 'Thermondo, 1KOMMA5°',
     priority: 2, category: 'heizung', icon: IconLeaf,
-    savingsHg2: 700, savingsHg3: 700,
+    savingsHg2: 1200, savingsHg3: 1200,
     condition: (p) => p.tenure === 'eigentum' && p.propertyType === 'haus' && p.heatingType !== 'waermepumpe',
   },
   {
     id: 'solaranlage',
     title: 'Solaranlage',
-    description: 'Eigener Solarstrom vom Dach senkt die Stromrechnung dauerhaft. Mit Speicher decken Sie bis zu 80 % Ihres Bedarfs selbst — und produzieren wetterunabhängig den günstigsten Strom.',
+    description: 'Eine 10-kWp-Anlage mit Speicher produziert ca. 9.500 kWh/Jahr. Durch Eigenverbrauch (60–80 %) und Einspeisevergütung sparen Hausbesitzer typischerweise 1.000–1.500 € pro Jahr — bei einer Lebensdauer von 25+ Jahren.',
+    why: 'Strom vom eigenen Dach kostet ca. 8–12 ct/kWh über die Lebensdauer — der Netzstrom 35–45 ct/kWh. Mit Batteriespeicher decken Sie tagsüber 30–50 % und mit Speicher bis 80 % Ihres Eigenbedarfs. Eigenverbrauch und Einspeisevergütung (8,03 ct/kWh, 20 Jahre garantiert) machen die Anlage zur sichersten Geldanlage.',
     howTo: [
-      'Dach-Eignung prüfen: Ausrichtung Süd/Ost-West, Neigung 20–60°, möglichst keine Verschattung.',
-      'Anlagengröße kalkulieren: ca. 1 kWp pro 1.000 kWh Jahresverbrauch + 50 % Reserve für E-Auto/Wärmepumpe.',
-      'Drei Festpreis-Angebote vergleichen (Kauf, Finanzierung oder Pacht) — auf 25 Jahre Modul-Garantie achten.',
-      'Auftrag erteilen — Installation 1–2 Tage, Anmeldung bei Netzbetreiber und Marktstammdatenregister läuft mit.',
+      'Dach-Check: Ausrichtung Süd/Ost-West optimal, Neigung 20–60°, möglichst keine Verschattung durch Bäume oder Nachbarhäuser.',
+      'Anlagengröße kalkulieren: Faustregel 1 kWp pro 1.000 kWh Jahresverbrauch + 30–50 % Reserve für künftiges E-Auto oder Wärmepumpe.',
+      'Drei Festpreis-Angebote einholen — typische Preise 2025: 1.200–1.800 €/kWp inkl. Einbau. Speicher: 700–1.100 €/kWh Kapazität.',
+      'Finanzierungsoptionen vergleichen: KfW-Kredit (270/271) ab 4 %, klassischer Bankkredit, Cash-Kauf oder Pacht-Modell (kein Eigenkapital nötig).',
+      'Auftrag erteilen, Wartezeit 1–3 Monate. Installation: 1–2 Tage. Anbieter übernimmt Anmeldung beim Netzbetreiber + Marktstammdatenregister + Steuer.',
+      'Nach Installation: Eigenverbrauch über App tracken, E-Auto/Wärmepumpe direkt mit PV-Strom betreiben.',
     ],
+    effort: '2–4 Monate Projekt',
+    difficulty: 'Aufwändig',
     partner: 'Enpal, Zolar',
     priority: 2, category: 'solar', icon: IconSun,
-    savingsHg2: 300, savingsHg3: 300,
+    savingsHg2: 1100, savingsHg3: 1300,
     condition: (p) => p.tenure === 'eigentum' && p.propertyType === 'haus',
   },
   {
     id: 'balkonkraftwerk',
     title: 'Balkonkraftwerk',
-    description: 'Eine Mini-Solaranlage am Balkon kostet wenig, ist einfach zu installieren und produziert kostenlosen Strom für Ihren Haushalt — auch in Mietwohnungen erlaubt.',
+    description: 'Ein 800-Watt-Set produziert in Deutschland ca. 600–800 kWh/Jahr. Bei einem Strompreis von 35 ct/kWh sind das 200–280 € Ersparnis jährlich — bei einer Investition von 400–700 €.',
+    why: 'Seit 2024 vom "Solarpaket I" stark vereinfacht: Bis 800 W Wechselrichter genehmigungsfrei, normaler Schuko-Stecker erlaubt, einfache Anmeldung. Auch Mieter dürfen installieren (Beschluss BGH 2024). Steuerfrei (0 % MwSt. auf Privatanlagen).',
     howTo: [
-      'Mieter: kurze Info an Vermieter — seit 2024 in der Regel nicht mehr genehmigungspflichtig.',
-      '800-Watt-Komplettset (2 Module + Wechselrichter) bestellen — Preis ca. 400–700 €.',
-      'Montage: Module am Balkongeländer befestigen, Wechselrichter anschließen, Schuko-Stecker in die Steckdose.',
-      'Im Marktstammdatenregister online anmelden — dauert 5 Minuten, ist Pflicht.',
-      'Amortisation: 4–6 Jahre, danach 15+ Jahre kostenloser Strom.',
+      'Mieter: Vermieter formlos informieren — seit 2024 Anspruch auf Zustimmung außer bei optischer/baulicher Beeinträchtigung.',
+      '800-Watt-Komplettset bestellen: 2 Module (je ~400 W), Wechselrichter, Halterung, ggf. Schuko-Kabel. Preis 2025: 350–700 €.',
+      'Montage selbst: Module am Balkongeländer befestigen (Haltesystem mit dabei), Wechselrichter anstecken, Schuko-Stecker in normale Steckdose.',
+      'Im Marktstammdatenregister online anmelden — 5 Min, Pflicht. Netzbetreiber-Anmeldung entfällt seit 2024.',
+      'Optional: Smart Plug für Echtzeit-Anzeige der Stromerzeugung in der App.',
+      'Amortisation: 3–5 Jahre, danach 15+ Jahre kostenloser Strom.',
     ],
+    effort: '1–2 Stunden Aufbau',
+    difficulty: 'Einfach',
     partner: 'Yuma, Priwatt',
     priority: 2, category: 'solar', icon: IconSun,
-    savingsHg2: 180, savingsHg3: 200,
+    savingsHg2: 220, savingsHg3: 240,
     condition: (p) => !(p.tenure === 'eigentum' && p.propertyType === 'haus'),
   },
   {
     id: 'kfz-versicherung',
     title: 'KFZ-Versicherung wechseln',
-    description: 'KFZ-Tarife unterscheiden sich oft um mehrere hundert Euro. Ein Vergleich dauert nur Minuten und der Wechsel zum 1. Januar ist unkompliziert.',
+    description: 'KFZ-Tarife unterscheiden sich bei gleicher Leistung oft um 200–500 € pro Jahr. Eine durchschnittliche Vollkaskoversicherung kostet 800–1.200 € — Wechsler sparen typischerweise 25–40 %.',
+    why: 'Versicherer locken Neukunden mit Rabatten und subventionieren diese mit höheren Beiträgen bei Bestandskunden — der sog. Treue-Strafe. Ein jährlicher Vergleich nutzt diese Logik aus. Schadenfreiheitsklasse, Bonus-Schutz und Werkstattbindung bleiben beim Wechsel erhalten.',
     howTo: [
-      'Aktuelle Jahresprämie und Vertragsende prüfen (steht auf der Rechnung) — Standard-Kündigungsfrist ist 30. November.',
-      'Online-Tarifvergleich in ca. 5 Minuten durchführen — Fahrzeugschein und Schadenfreiheitsklasse bereithalten.',
-      'Bei besserem Angebot: aktuelle Versicherung schriftlich kündigen und neuen Vertrag zum 1. Januar abschließen.',
-      'Schadenfreiheitsklasse wird automatisch vom alten Versicherer übertragen.',
+      'Vertragsdetails sammeln: aktuelle Jahresprämie, Vertragsende, Schadenfreiheitsklasse (SFR), gefahrene Jahres-km (steht auf der Rechnung). Standard-Vertragsende: 31. Dezember, Kündigungsfrist: 1 Monat (bis 30. November).',
+      'Online-Vergleich starten: Check24, Verivox, HUK24 — Eingabe dauert 5–10 Min. Fahrzeugschein bereithalten.',
+      'Tarif-Stellschrauben prüfen: Werkstattbindung (5–15 % günstiger), Selbstbeteiligung erhöhen (z.B. von 300 auf 500 €), Garage statt Straße angeben.',
+      'Bei besserem Angebot: Aktuelle Versicherung schriftlich kündigen (Mustertext im Portal). Neuen Vertrag zum 1. Januar abschließen.',
+      'SFR-Übertragung: läuft automatisch zwischen den Versicherern. Versicherungsschein kommt per Post oder PDF.',
+      'Sonderkündigungsrecht: Bei Beitragserhöhung oder Schadenfall haben Sie 1 Monat zum Wechsel — auch außerhalb des Standard-Termins.',
     ],
+    effort: '20 Min einmal jährlich',
+    difficulty: 'Einfach',
     partner: 'Clark, Tarifcheck, HUK24',
     priority: 3, category: 'mobilitaet', icon: IconCar,
-    savingsHg2: 800, savingsHg3: 800,
+    savingsHg2: 350, savingsHg3: 350,
     condition: (p) => p.autoType !== 'keins' && p.autoType !== '',
   },
   {
     id: 'thg-praemie',
     title: 'THG-Prämie',
-    description: 'Als E-Auto-Fahrer haben Sie Anspruch auf die staatliche THG-Prämie — einfach online beantragen und das Geld jährlich kassieren.',
+    description: 'Als E-Auto-Fahrer haben Sie Anspruch auf die staatliche THG-Quote. Die Auszahlungen sind 2024–2026 stark gefallen — aktuell 70–110 € pro E-Auto und Jahr. Trotzdem geschenktes Geld für 5 Min Aufwand.',
+    why: 'CO₂-Pflicht-Unternehmen (Mineralölkonzerne) müssen Quoten erfüllen. Ihr E-Auto spart CO₂ → Sie können die Quote verkaufen. Vermittler bündeln viele Halter und reichen die Quote beim Umweltbundesamt ein.',
     howTo: [
-      'THG-Quoten-Vermittler mit Festpreis-Garantie wählen — Auszahlung 2025 liegt bei ca. 70–110 € je E-Auto.',
-      'Fahrzeugschein-Foto (Vorder- und Rückseite) und IBAN online hochladen — dauert ca. 2 Minuten.',
-      'Vermittler reicht die Quote beim Umweltbundesamt ein. Auszahlung erfolgt nach 6–10 Wochen aufs Konto.',
-      'Antrag jedes Kalenderjahr erneut stellen — viele Vermittler erinnern automatisch.',
+      'Vermittler vergleichen: Festpreis-Anbieter sind sicher (Auszahlung garantiert), Flexpreis-Anbieter zahlen bei guten Marktpreisen mehr. 2025 typisch: 80–120 €.',
+      'Fahrzeugschein-Fotos (Vorder- und Rückseite, hochauflösend) und IBAN online hochladen — dauert 3–5 Min.',
+      'Vermittler reicht Quote beim Umweltbundesamt ein (Prüfung 6–10 Wochen), zahlt dann auf Ihr Konto aus.',
+      'Antrag jährlich erneut: Frist ist immer 28. Februar des Folgejahres. Viele Vermittler erinnern automatisch per Mail.',
+      'Tipp: Jährlich Vermittler vergleichen — Preise ändern sich stark zwischen den Anbietern.',
     ],
+    effort: '5 Min einmal jährlich',
+    difficulty: 'Einfach',
     partner: 'Geld für eAuto',
     priority: 1, category: 'mobilitaet', icon: IconBatteryCharging,
-    savingsHg2: 630, savingsHg3: 630,
+    savingsHg2: 95, savingsHg3: 95,
     condition: (p) => (p.vehicles?.eauto ?? 0) > 0 || p.autoType === 'eauto',
   },
   {
     id: 'wallbox',
     title: 'Wallbox / Laden zuhause',
-    description: 'Mit einer Wallbox laden Sie zuhause deutlich günstiger und schneller als an öffentlichen Säulen. In Kombination mit Solarstrom maximieren Sie die Ersparnis.',
+    description: 'Heimladen mit Wallbox kostet ca. 35 ct/kWh (Hausstrom) vs. 55–80 ct/kWh an öffentlichen Schnellladern. Bei 15.000 km/Jahr und 18 kWh/100km sparen Sie 400–800 €. Mit eigener PV-Anlage Eigenverbrauch zu ~12 ct/kWh: bis zu 1.000 € Ersparnis.',
+    why: 'Öffentliche Ladesäulen verlangen happige Aufschläge (DC-Schnelllader oft 70+ ct/kWh). Eine 11-kW-Wallbox lädt das Auto über Nacht voll und nutzt günstige Heimstrom-Tarife oder bei PV den eigenen Solarstrom. Spezielle Autostrom-Tarife (Wechselpilot-Empfehlung!) liegen oft bei 25–28 ct/kWh.',
     howTo: [
-      '11 kW Wallbox auswählen — genehmigungsfrei beim Netzbetreiber, ab 22 kW genehmigungspflichtig.',
-      'Elektriker für Anschluss buchen (eigene Leitung mit FI Typ B notwendig) — Materialpreis ca. 600–1.000 €.',
-      'Wallbox anmelden beim Netzbetreiber (Pflicht, online in ca. 5 Min möglich).',
-      'Mit PV-Anlage koppeln: Überschussladen aktivieren — lädt nur, wenn Solarstrom übrig ist.',
+      'Wallbox-Modell wählen: 11 kW Standard (genehmigungsfrei beim Netzbetreiber, Anmeldung reicht), ab 22 kW genehmigungspflichtig. Smart-Wallbox mit App ab 800 €.',
+      'Elektriker-Angebot einholen: Anschluss inkl. eigener Leitung + FI Typ B + Verteiler-Anpassung kostet typisch 600–1.500 €.',
+      'Wallbox beim Netzbetreiber online anmelden — 5 Min Formular, kostenlos. Erfolgt vor Installation.',
+      'Installation: halber Tag vom Elektriker. Direkt einsatzbereit nach Inbetriebnahme.',
+      'Optional bei PV: Überschussladen aktivieren — lädt nur, wenn Solar-Überschuss vorhanden ist. Spart weitere 50–100 % auf den Ladestrom.',
+      'Autostrom-Tarif abschließen (separater Zähler nötig) — spart 7–12 ct/kWh gegenüber Haushaltsstrom.',
     ],
+    effort: '1–2 Wochen Projekt',
+    difficulty: 'Mittel',
     partner: 'Enpal, charge.cloud',
     priority: 1, category: 'mobilitaet', icon: IconBatteryCharging,
-    savingsHg2: 280, savingsHg3: 280,
+    savingsHg2: 400, savingsHg3: 500,
     condition: (p) => (p.vehicles?.hybrid ?? 0) > 0 || (p.vehicles?.eauto ?? 0) > 0 || p.autoType === 'hybrid',
   },
   {
     id: 'haftpflicht-versicherung',
     title: 'Privathaftpflicht abschließen',
-    description: 'Die Privathaftpflicht schützt vor existenzbedrohenden Schadensersatzforderungen — bereits ab wenigen Euro pro Monat. Praktisch unverzichtbar für jeden Haushalt.',
+    description: 'Eine moderne Privathaftpflicht mit 10 Mio. € Deckung kostet 50–80 €/Jahr — wer einen alten Tarif hat, zahlt oft 120–200 €. Wer noch keine hat, riskiert im Schadensfall die finanzielle Existenz.',
+    why: 'Im Alltag passiert schnell ein teurer Fehler: Glas auf dem Hardwood-Boden des Freundes, beschädigtes Mietfahrzeug, Sturz eines Passanten. Privathaftpflicht zahlt — ohne Versicherung haften Sie privat (BGH: lebenslang).',
     howTo: [
-      'Deckungssumme von mindestens 10 Mio. € wählen — höher kostet kaum mehr und sichert auch Großschäden ab.',
-      'Familientarif wählen, falls Partner oder Kinder mit abgesichert werden sollen.',
-      'Auf Forderungsausfalldeckung und mindestens 6 Monate rückwirkenden Schutz für unverschuldete Schäden achten.',
-      'Online-Abschluss in ca. 5 Min — Versicherungsschutz beginnt am selben Tag.',
+      'Bedarf prüfen: Solo-Tarif ca. 50–70 €/Jahr, Paartarif 70–100 €/Jahr, Familientarif (mit minderjährigen Kindern) 80–120 €/Jahr.',
+      'Online vergleichen (Check24, Verivox) — direkt nach Preis filtern.',
+      'Auf Stiftung-Warentest-Empfehlung und folgende Punkte achten: Deckungssumme ≥ 10 Mio. €, Forderungsausfalldeckung (zahlt auch wenn Schädiger nicht zahlt), Best-Leistungs-Garantie.',
+      'Bei alter Police: Kündigungsschreiben aus dem Portal als Vorlage. Neue Police gilt sofort beim Abschluss.',
+      'Schäden direkt online melden — bei modernen Anbietern 24/7-Hotline + App.',
     ],
+    effort: '15 Min einmalig',
+    difficulty: 'Einfach',
     partner: 'Clark, Check24',
     priority: 3, category: 'versicherung', icon: IconShieldCheck,
-    savingsHg2: 80, savingsHg3: 80,
+    savingsHg2: 60, savingsHg3: 80,
     condition: () => true,
   },
   {
     id: 'hausrat-versicherung',
     title: 'Hausratversicherung optimieren',
-    description: 'Veraltete Hausrat-Tarife kosten unnötig Geld. Ein Vergleich zeigt schnell, ob Sie bei gleicher Leistung günstigere Anbieter finden.',
+    description: 'Eine durchschnittliche Hausratversicherung für eine 80-qm-Wohnung kostet 80–150 €/Jahr. Alte Verträge ohne Elementarschäden-Deckung sind 2024 angesichts häufiger Starkregen-Ereignisse riskant — und oft 50–100 € teurer als moderne Tarife.',
+    why: 'Hausrat zahlt bei Einbruch, Feuer, Wasser, Sturm und (mit Zusatz) Elementarschäden. Faustregel: Versicherungssumme ≥ 650 €/qm Wohnfläche. Häufiger Fehler: zu hohe Summe → zu hohe Prämie. Neue Tarife haben smartere Konditionen (Fahrraddiebstahl inklusive, Außenversicherung weltweit).',
     howTo: [
-      'Versicherungssumme berechnen: Faustregel ca. 650 € pro qm Wohnfläche (Standard-Ausstattung) bzw. höher bei wertvollerer Einrichtung.',
-      'Tarifvergleich online starten — auf Elementarschäden (Hochwasser, Starkregen) und Fahrraddiebstahl-Klausel achten.',
-      'Mindestens 5 Mio. € Deckung bei Hausrat + Glasversicherung wählen, falls relevant.',
-      'Kündigung erfolgt zum nächsten Ablaufdatum (3 Monate Frist) oder per Sonderkündigung nach Beitragserhöhung.',
+      'Wohnfläche × 650 € = realistische Versicherungssumme (z.B. 80 qm → 52.000 €). Wertvolle Einrichtung extra erfassen.',
+      'Tarifvergleich starten — wichtige Klauseln: Elementarschäden (Hochwasser, Erdrutsch, Starkregen), Fahrraddiebstahl, Glasbruch, grobe Fahrlässigkeit.',
+      'Selbstbeteiligung von 150–250 € senkt die Prämie um 15–25 %.',
+      'Kündigungsfrist: 3 Monate zum Ablauf. Bei Beitragserhöhung Sonderkündigungsrecht (1 Monat).',
+      'Beim Wechsel: Neuer Anbieter übernimmt oft Kündigung. Versicherung gilt nahtlos weiter.',
     ],
+    effort: '20 Min einmalig',
+    difficulty: 'Einfach',
     partner: 'Clark, Check24',
     priority: 2, category: 'versicherung', icon: IconHomeShield,
-    savingsHg2: 120, savingsHg3: 120,
+    savingsHg2: 100, savingsHg3: 120,
     condition: () => true,
   },
   {
     id: 'berufsunfaehigkeit-versicherung',
     title: 'Berufsunfähigkeitsversicherung',
-    description: 'Eine BU-Versicherung sichert Ihr Einkommen ab, falls Sie durch Krankheit oder Unfall nicht mehr arbeiten können — eine der wichtigsten Absicherungen überhaupt.',
+    description: 'Jeder vierte Deutsche wird berufsunfähig — Hauptursache: psychische Erkrankungen, Rückenleiden, Krebs. Die staatliche Erwerbsminderungsrente reicht selten zum Leben (Ø 1.000 €/Monat). Eine BU sichert Ihr Einkommen mit ca. 30–70 €/Monat ab.',
+    why: 'Bei Berufsunfähigkeit zahlt die BU eine vereinbarte Monatsrente bis zum Renteneintritt. Ohne BU müssen Sie auf private Ersparnisse, Familie oder die geringe staatliche Rente zurückgreifen. Je jünger und gesünder beim Abschluss, desto günstiger — Beitrag bleibt für die gesamte Vertragslaufzeit gleich.',
     howTo: [
-      'Beratungstermin mit einem unabhängigen Makler vereinbaren — BU ist beratungsintensiv, falsche Angaben führen zur Leistungsverweigerung.',
-      'Gesundheitsfragen ehrlich und vollständig beantworten — Behandlungen, Diagnosen, Therapien der letzten 5–10 Jahre.',
-      'Vertrag mit Verzicht auf abstrakte Verweisung und mindestens 60–70 % des Nettoeinkommens als BU-Rente wählen.',
-      'Je jünger und gesünder, desto günstiger — Abschluss vor 30 spart oft 30–50 % Beitrag.',
+      'Bedarf berechnen: 70–80 % des Nettoeinkommens als monatliche BU-Rente (z.B. 2.500 € Netto → 1.800 € BU).',
+      'Unabhängige Beratung holen — kein Versicherer-Vertreter, da diese provisionsabhängig empfehlen. Beratung kostet 300–800 € (Honorar), spart aber oft Jahresbeiträge ein.',
+      'Gesundheitsfragen vorbereiten: alle Diagnosen, Behandlungen, Therapien, Klinikaufenthalte der letzten 5–10 Jahre. Falsche Angaben → Leistungsverweigerung im Schadensfall.',
+      'Auf Top-Klauseln achten: Verzicht auf abstrakte Verweisung, Nachversicherungsgarantie (Anpassung bei Heirat/Kind), Beitragsdynamik 2–3 %/Jahr.',
+      'Anonyme Risikovoranfrage über Makler stellen — verhindert dass eine Ablehnung in der Wagnisdatei landet.',
+      'Bei Vertragsschluss: Lebenslange Beitrags-Garantie wählen, nicht nur die "Bruttoprämie".',
     ],
+    effort: '4–6 Wochen Projekt',
+    difficulty: 'Aufwändig',
     partner: 'Clark, MLP',
     priority: 2, category: 'versicherung', icon: IconHeartHandshake,
     savingsHg2: 0, savingsHg3: 0,
@@ -376,28 +433,37 @@ const ALL_TIPS: MvpTip[] = [
   {
     id: 'gebaeude-versicherung',
     title: 'Wohngebäudeversicherung optimieren',
-    description: 'Eine Wohngebäudeversicherung ist für Hauseigentümer Pflicht. Ein Tarifvergleich spart oft mehrere hundert Euro pro Jahr — bei gleicher Absicherung.',
+    description: 'Eine Wohngebäudeversicherung für ein typisches Einfamilienhaus kostet 400–800 €/Jahr. Alte Verträge ohne Elementarschäden-Deckung sind 2024–2026 angesichts häufiger Unwetter ein hohes Risiko. Wechsel spart typisch 150–300 €/Jahr.',
+    why: 'Gebäudeversicherung deckt das Haus selbst (Mauern, Dach, Heizung, fest verbaute Einrichtung) gegen Feuer, Sturm, Hagel, Leitungswasser, optional Elementarschäden. Wer bei Hochwasser/Starkregen nicht versichert ist, riskiert Schäden in 6-stelliger Höhe.',
     howTo: [
-      'Wert 1914 ermitteln — aus alter Police oder Bauunterlagen (Wohnfläche × ca. 800 ist als grobe Schätzung möglich).',
-      'Tarifvergleich starten — auf Einschluss von Elementarschäden (Hochwasser, Erdrutsch, Starkregen) achten.',
-      'Selbstbeteiligung von 250–500 € senkt die Prämie spürbar — empfehlenswert bei eigener Rücklage.',
-      'Wechsel: zum Ablaufdatum (3 Monate Frist) oder per Sonderkündigung nach Beitragserhöhung.',
+      'Wert 1914 ermitteln (steht auf der aktuellen Police) — alternativ Schätzung über Vergleichsrechner mit Baujahr, Wohnfläche, Ausstattung.',
+      'Aktuelle Police prüfen: Sind Elementarschäden (Hochwasser, Erdrutsch, Starkregen, Schneedruck) eingeschlossen? Wenn nicht → dringend ergänzen oder wechseln.',
+      'Tarifvergleich starten (Check24, Verivox) — Eingabe der Hausdaten dauert 10 Min.',
+      'Selbstbeteiligung 250–500 € senkt Prämie um 15–25 %, lohnt sich bei eigener Rücklage.',
+      'Kündigungsfristen beachten: 3 Monate zum Ablauf, Sonderkündigungsrecht bei Beitragserhöhung (1 Monat).',
+      'Beim Wechsel: Neue Versicherung übernimmt Kündigung. Nahtloser Übergang sicherstellen — sonst Versicherungslücke.',
     ],
+    effort: '30 Min einmalig',
+    difficulty: 'Mittel',
     partner: 'Clark, Check24',
     priority: 2, category: 'versicherung', icon: IconBuilding,
-    savingsHg2: 280, savingsHg3: 280,
+    savingsHg2: 250, savingsHg3: 280,
     condition: (p) => p.propertyType === 'haus' && p.tenure === 'eigentum',
   },
   {
     id: 'internet-wechsel',
     title: 'Internet-Anbieter wechseln',
-    description: 'Stammkunden zahlen oft deutlich mehr als Neukunden. Mit einem Anbieterwechsel oder einem Anruf beim aktuellen Anbieter senken Sie monatlich Ihre Internetkosten.',
+    description: 'Stammkunden zahlen für 100-Mbit-DSL durchschnittlich 35–45 €/Monat, Neukunden bekommen denselben Tarif oft für 20–25 €/Monat im ersten Jahr. Das sind 180–300 € Ersparnis im Jahr — und der Wechsel ist meist 1 Klick.',
+    why: 'Internet-Anbieter subventionieren Neukunden mit Rabatten und kompensieren das durch höhere Bestandskunden-Preise. Wechselbonus, Hardware-Aktionen und 12 Monate Neukunden-Rabatt machen jährliche Wechsel-Strategie lukrativ.',
     howTo: [
-      'Vertragsende und Kündigungsfrist prüfen — meist 3 Monate vor Ablauf der Mindestlaufzeit.',
-      'Tarifvergleich nach Postleitzahl starten — Bandbreite, Mindestlaufzeit und Neukunden-Rabatt vergleichen.',
-      'Wechselservice nutzen: der neue Anbieter übernimmt Kündigung und Anschlussschaltung automatisch.',
-      'Alternative ohne Wechsel: bei aktuellem Anbieter Bestandskunden-Hotline anrufen und Neukunden-Tarif verhandeln — spart oft 30–40 %.',
+      'Vertragsende und Mindestlaufzeit prüfen — steht auf der monatlichen Rechnung. Standard-Kündigungsfrist: 1 Monat (Gesetzesänderung 2022).',
+      'Verfügbarkeit + Tarifvergleich nach Postleitzahl starten (Verivox, Check24) — Bandbreite, Mindestlaufzeit, Neukunden-Bonus, Hardware vergleichen.',
+      'Wechselservice nutzen: Neuer Anbieter übernimmt Kündigung beim Alten + Anschlussschaltung. Kein Internet-Ausfall.',
+      'Alternative ohne Wechsel: Bestandskunden-/Kündigungshotline anrufen, „Mein Vertrag läuft aus, ich überlege zu wechseln." → bekommen Sie meist Neukunden-Tarif. Spart 30–40 % in 10 Min.',
+      'Bei Glasfaser-Verfügbarkeit: Wechsel besonders lukrativ — gleicher Preis, deutlich schneller. Ggf. Hausanschluss kostenfrei.',
     ],
+    effort: '15 Min einmal jährlich',
+    difficulty: 'Einfach',
     partner: 'Verivox, Check24',
     priority: 2, category: 'kommunikation', icon: IconWifi,
     savingsHg2: 240, savingsHg3: 240,
@@ -406,13 +472,18 @@ const ALL_TIPS: MvpTip[] = [
   {
     id: 'mobilfunk-wechsel',
     title: 'Mobilfunk-Tarif optimieren',
-    description: 'Mobilfunkanbieter bieten Neukunden meist deutlich günstigere Konditionen. Tarifvergleich oder Nachverhandeln reduziert Ihre Handykosten spürbar.',
+    description: 'Viele Nutzer zahlen 30–50 €/Monat für 10 GB im D-Netz, obwohl gleiche Leistung als Neukunde für 12–20 €/Monat zu haben ist. Bei jährlichem Wechsel: 200–400 € Ersparnis. Bei Smartphones im Vertrag: auf Sim-Only-Tarif + separates Handy umstellen.',
+    why: 'Mobilfunk-Anbieter haben hohe Margen bei Bestandskunden. Neukunden-Aktionen sind dauerhaft verfügbar. Mit Rufnummer-Mitnahme behalten Sie Ihre Nummer und können fast risikofrei jährlich wechseln.',
     howTo: [
-      'Tatsächlichen Datenverbrauch der letzten 3 Monate in der App prüfen — meist deutlich unter dem gebuchten Volumen.',
-      'Tarifvergleich starten — passendes Datenvolumen + benötigte Features (5G, EU-Roaming, ggf. Allnet-Flat).',
-      'Rufnummer-Mitnahme im neuen Vertrag aktivieren — alter Vertrag wird automatisch zum Vertragsende gekündigt.',
-      'Alternative: bei Bestandsanbieter Kündigungs-Hotline anrufen und Rabatt fordern — spart oft 30–50 % ohne Wechsel.',
+      'Datenverbrauch der letzten 3 Monate in der App prüfen — meist deutlich unter dem gebuchten Volumen. Mehrheit braucht < 10 GB/Monat.',
+      'Anforderungen festlegen: Datenvolumen, gewünschtes Netz (D1 = Telekom, D2 = Vodafone, O2), 5G ja/nein, EU-Roaming ja/nein.',
+      'Tarif-Vergleich starten — Sim-Only-Tarife im D-Netz mit 10 GB gibt es 2025 ab 9,99 €/Monat (z.B. Aldi Talk, Lidl Connect, Tarifhaus).',
+      'Rufnummer-Mitnahme im Bestellprozess aktivieren — neuer Anbieter kümmert sich, dauert 1–2 Tage Übergang.',
+      'Alternative ohne Wechsel: Bei aktuellem Anbieter Kündigungs-Hotline anrufen, Verlängerungsangebot abwarten — oft 30–50 % günstiger als Bestandstarif.',
+      'Bei Handyvertrag: Auf Sim-Only umstellen, separates Handy kaufen oder gebraucht — über 24 Monate gerechnet meist 200–400 € günstiger.',
     ],
+    effort: '20 Min einmal jährlich',
+    difficulty: 'Einfach',
     partner: 'Check24, Verivox',
     priority: 2, category: 'kommunikation', icon: IconDeviceMobile,
     savingsHg2: 180, savingsHg3: 180,
@@ -421,12 +492,15 @@ const ALL_TIPS: MvpTip[] = [
   {
     id: 'steuererklaerung',
     title: 'Steuererklärung einreichen',
-    description: 'Mit einer Steuer-App geht es ganz einfach — auch ohne Steuerwissen. Antworten auf Fragen geben, fertig. Durchschnittliche Rückerstattung: über 1.000 €.',
+    description: 'Laut Statistischem Bundesamt erhalten Steuerzahler in Deutschland durchschnittlich 1.095 € zurück. Mit modernen Steuer-Apps ist die Erklärung in 30–60 Minuten erledigt — ohne Steuerwissen, ohne ELSTER-Formulare.',
+    why: 'Werbungskosten (Fahrtkosten, Homeoffice-Pauschale 6 €/Tag, Arbeitsmittel, Fortbildung), Versicherungsbeiträge, Spenden, Handwerker- und haushaltsnahe Dienstleistungen werden vom zu versteuernden Einkommen abgezogen → mehr Steuern zurück. Frist: 31. Juli des Folgejahres (bei Steuer-App-Nutzung: 30. April Folge-Folgejahr).',
     howTo: [
-      'Unterlagen sammeln: Lohnsteuerbescheinigung, Krankenversicherungs-Beitrag, Quittungen für Werbungskosten, Spendenbelege.',
-      'Steuer-App öffnen — Fragen Schritt für Schritt beantworten, ca. 30–60 Minuten.',
-      'Vorberechnete Rückerstattung in der App ansehen — falls positiv, einreichen (digitale ELSTER-Signatur läuft automatisch).',
-      'Bescheid kommt in 4–10 Wochen — Rückerstattung wird auf das Konto überwiesen.',
+      'Unterlagen sammeln (10 Min): Lohnsteuerbescheinigung (vom Arbeitgeber), Bescheid Krankenkasse, Quittungen Werbungskosten, Spendenbelege, Handwerker-/Pflegekosten-Rechnungen.',
+      'Steuer-App wählen: Taxfix (App-only, ab 50 € pauschal), WISO Steuer (35–45 €, mit Excel-Export), Zasta (Steuerberater-Variante 99 €), kostenlos: ELSTER.',
+      'Fragen Schritt für Schritt beantworten — geführter Fragebogen, ca. 30–60 Min. Voraus-Berechnung der Rückerstattung läuft live.',
+      'Steuererklärung digital einreichen (ELSTER-Signatur automatisch). Keine Unterlagen mehr ans Finanzamt schicken — werden auf Anforderung nachgereicht.',
+      'Bescheid kommt in 4–10 Wochen, Rückerstattung direkt aufs Konto.',
+      'Tipp: 4 Jahre rückwirkend möglich (2021 bis 31.12.2025 noch einreichbar)! Bei Studierenden + alten Werbungskosten oft mehrere tausend Euro Rückerstattung.',
     ],
     partner: 'Taxfix, WISO, Zasta',
     partnerLinks: [
@@ -434,6 +508,8 @@ const ALL_TIPS: MvpTip[] = [
       { name: 'WISO',   url: 'https://www.wiso-steuer.de',  logo: '/apps/wpilot-home/assets/partners/wiso.png' },
       { name: 'Zasta',  url: 'https://www.zasta.de',        logo: '/apps/wpilot-home/assets/partners/zasta.png' },
     ],
+    effort: '30–60 Min einmal jährlich',
+    difficulty: 'Einfach',
     priority: 3, category: 'finanzen', icon: IconReceipt,
     savingsHg2: 1095, savingsHg3: 1095,
     condition: () => true,
@@ -441,16 +517,20 @@ const ALL_TIPS: MvpTip[] = [
   {
     id: 'kostenloses-girokonto',
     title: 'Kostenloses Girokonto',
-    description: 'Viele Banken berechnen 5–10 € Kontoführungsgebühren pro Monat. Ein kostenloses Girokonto bei einer Direktbank spart diese Gebühren komplett — bei gleicher Funktionalität.',
+    description: 'Klassische Filialbanken kassieren oft 4–10 €/Monat Kontoführungsgebühr, plus Girocard-Gebühr, plus Auslands-Aufschläge. Direktbanken bieten ein vollwertiges Konto mit Karte komplett kostenlos. Ersparnis: 60–120 €/Jahr.',
+    why: 'Direktbanken (ING, DKB, Comdirect, C24 Bank) finanzieren sich über andere Einnahmequellen und können das Girokonto kostenlos anbieten — bei voller Funktionalität (Überweisung, Girocard, Apple/Google Pay, kostenfreies Geldabheben an vielen Automaten). Bonus: oft 50–100 € Wechselbonus.',
     howTo: [
-      'Auf wirklich kostenlose Konditionen achten: keine Kontoführungsgebühr, kein Mindestgeldeingang, kostenlose Girocard.',
-      'Online-Eröffnung per Video-Ident — Ausweis bereithalten, Dauer ca. 15 Minuten.',
-      'Kontoumzugs-Service nutzen — alle Lastschriften und Daueraufträge werden automatisch übertragen.',
-      'Altes Konto erst kündigen, wenn alle Zahlungen 1–2 Monate sauber auf dem neuen Konto laufen.',
+      'Vergleich starten: Kontoführungsgebühr 0 €, kein Mindestgeldeingang, Girocard inkl., kostenloses Bargeld an > 5 Automaten-Netzwerken. Empfehlungen: ING, DKB, Comdirect, C24 Bank.',
+      'Online eröffnen: Video-Ident per Smartphone, Ausweis bereit halten, dauert 15–20 Min.',
+      'Kontoumzugs-Service nutzen: Neue Bank überträgt Daueraufträge + Lastschriften automatisch + informiert Arbeitgeber und Vertragspartner über neue IBAN.',
+      'Altes Konto **erst** kündigen, wenn alle Zahlungen 1–2 Monate sauber auf dem neuen laufen — sonst Lastschrift-Rückgaben.',
+      'Wechselbonus mitnehmen: Viele Banken zahlen 50–150 € Prämie bei Gehaltseingang + Bonus für Mastercard/Kreditkarte-Nutzung.',
     ],
+    effort: '30 Min einmalig',
+    difficulty: 'Einfach',
     partner: 'ING, DKB',
     priority: 1, category: 'finanzen', icon: IconPig,
-    savingsHg2: 120, savingsHg3: 120,
+    savingsHg2: 90, savingsHg3: 90,
     condition: () => true,
   },
 ];
@@ -1744,8 +1824,8 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
                 }}
                 onClick={e => e.stopPropagation()}
                 style={{
-                  background: WHITE, borderRadius: 20,
-                  maxWidth: 760, width: '100%', maxHeight: '92vh', overflowY: 'auto',
+                  background: WHITE, borderRadius: 22,
+                  maxWidth: 920, width: '100%', maxHeight: '92vh', overflowY: 'auto',
                   boxShadow: '0 30px 70px rgba(0,0,0,0.28), 0 8px 24px rgba(0,0,0,0.12)',
                   position: 'relative',
                   willChange: 'transform, opacity',
@@ -1766,45 +1846,100 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
                   <IconX size={18} stroke={2} />
                 </button>
 
-                <div style={{ padding: '36px 36px 32px' }}>
+                <div style={{ padding: '40px 44px 36px' }}>
                   {/* Title + icon */}
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 18, paddingRight: 36 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 16, paddingRight: 40 }}>
                     <div style={{
-                      width: 52, height: 52, borderRadius: 14,
-                      background: BLUE_LT,
+                      width: 56, height: 56, borderRadius: 14,
+                      background: DARK,
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
                       flexShrink: 0,
                     }}>
-                      <TipIcon size={28} stroke={1.5} color={BLUE} />
+                      <TipIcon size={28} stroke={1.6} color={WHITE} />
                     </div>
-                    <h2 style={{ fontSize: 22, fontWeight: 700, color: TEXT, lineHeight: 1.25, margin: 0 }}>
-                      {tip.title}
-                    </h2>
+                    <div style={{ minWidth: 0 }}>
+                      <h2 style={{ fontSize: 24, fontWeight: 700, color: TEXT, lineHeight: 1.2, margin: 0 }}>
+                        {tip.title}
+                      </h2>
+                      <div style={{ fontSize: 14, color: GREEN, fontWeight: 700, marginTop: 4 }}>
+                        bis zu {fmt(hg === 3 ? tip.savingsHg3 : tip.savingsHg2)} € / Jahr
+                      </div>
+                    </div>
                   </div>
 
+                  {/* Meta badges (effort + difficulty) */}
+                  {(tip.effort || tip.difficulty) && (
+                    <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 18 }}>
+                      {tip.effort && (
+                        <span style={{
+                          display: 'inline-flex', alignItems: 'center', gap: 6,
+                          background: BLUE_LT, color: BLUE_DK,
+                          padding: '6px 12px', borderRadius: 999,
+                          fontSize: 12, fontWeight: 700,
+                        }}>
+                          <IconClock size={13} stroke={2} /> {tip.effort}
+                        </span>
+                      )}
+                      {tip.difficulty && (
+                        <span style={{
+                          display: 'inline-flex', alignItems: 'center',
+                          background: tip.difficulty === 'Einfach' ? GREEN_LT
+                            : tip.difficulty === 'Mittel' ? ORANGE_LT : '#fce7e7',
+                          color: tip.difficulty === 'Einfach' ? GREEN
+                            : tip.difficulty === 'Mittel' ? '#92400e' : '#c52828',
+                          padding: '6px 12px', borderRadius: 999,
+                          fontSize: 12, fontWeight: 700,
+                        }}>
+                          {tip.difficulty}
+                        </span>
+                      )}
+                    </div>
+                  )}
+
                   {tip.description && (
-                    <p style={{ fontSize: 14, color: TEXT_MUTED, lineHeight: 1.6, marginBottom: 24 }}>
+                    <p style={{ fontSize: 15, color: TEXT, lineHeight: 1.65, marginBottom: 18, fontWeight: 400 }}>
                       {tip.description}
                     </p>
                   )}
 
+                  {/* Why */}
+                  {tip.why && (
+                    <div style={{
+                      background: '#f9fafb',
+                      borderLeft: `3px solid ${BLUE}`,
+                      borderRadius: 8,
+                      padding: '14px 18px',
+                      marginBottom: 24,
+                    }}>
+                      <div style={{
+                        fontSize: 11, fontWeight: 700, color: BLUE,
+                        letterSpacing: '0.1em', marginBottom: 6,
+                      }}>
+                        WARUM DAS SPART
+                      </div>
+                      <p style={{ fontSize: 14, color: TEXT, lineHeight: 1.6, margin: 0 }}>
+                        {tip.why}
+                      </p>
+                    </div>
+                  )}
+
                   {/* How-to steps */}
                   {tip.howTo && tip.howTo.length > 0 && (
-                    <div style={{ marginBottom: 24 }}>
+                    <div style={{ marginBottom: 28 }}>
                       <h3 style={{
                         fontSize: 12, fontWeight: 700, color: BLUE,
-                        letterSpacing: '0.1em', margin: '0 0 14px',
+                        letterSpacing: '0.1em', margin: '0 0 16px',
                       }}>
                         SO SETZEN SIE DEN TIPP UM
                       </h3>
                       <ol style={{ paddingLeft: 0, margin: 0, listStyle: 'none' }}>
                         {tip.howTo.map((step, i) => (
                           <li key={i} style={{
-                            display: 'flex', gap: 14, marginBottom: 14, alignItems: 'flex-start',
+                            display: 'flex', gap: 16, marginBottom: 14, alignItems: 'flex-start',
                           }}>
                             <span style={{
                               flexShrink: 0,
-                              width: 26, height: 26, borderRadius: 13,
+                              width: 28, height: 28, borderRadius: 14,
                               background: BLUE, color: WHITE,
                               fontSize: 13, fontWeight: 700,
                               display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -1812,7 +1947,7 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
                             }}>
                               {i + 1}
                             </span>
-                            <span style={{ fontSize: 14, color: TEXT, lineHeight: 1.6 }}>
+                            <span style={{ fontSize: 14, color: TEXT, lineHeight: 1.65 }}>
                               {step}
                             </span>
                           </li>
