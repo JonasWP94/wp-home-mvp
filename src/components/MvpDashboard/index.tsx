@@ -900,7 +900,12 @@ function ProfilePillIcon({ type, value }: { type: string; value: string }) {
     case 'tenure':   return <IconHome {...p} />;
     case 'property': return value === 'haus' ? <IconHome {...p} /> : <IconBuilding {...p} />;
     case 'heating':  return <IconFlame {...p} />;
-    case 'auto':     return value === 'eauto' ? <IconBatteryCharging {...p} /> : value === 'hybrid' ? <IconPlug {...p} /> : value === 'verbrenner' ? <IconCar {...p} /> : <IconBike {...p} />;
+    case 'auto':
+      if (value === 'keins') return <IconBike {...p} />;
+      if (value === 'eauto') return <IconBatteryCharging {...p} />;
+      if (value === 'hybrid') return <IconPlug {...p} />;
+      // verbrenner, has-vehicles, mixed → car icon
+      return <IconCar {...p} />;
     case 'children': return value === 'mit' ? <IconUsers {...p} /> : <IconUser {...p} />;
     default:         return <IconCircle {...p} />;
   }
