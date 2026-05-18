@@ -4,7 +4,7 @@ import {
   IconReceipt, IconCreditCard,
   IconWifi, IconDeviceMobile,
   IconShieldCheck, IconHomeShield, IconHeartHandshake, IconBuilding, IconCar,
-  IconCoin, IconShield,
+  IconCoin, IconShield, IconArrowRight,
 } from '@tabler/icons-react';
 import {
   ACCENT, PRIMARY, BG, WHITE, BORDER, GREY_200, GREY_700, GREY_800,
@@ -263,6 +263,33 @@ export default function MvpBasics({ initial, showGebaeude, showKfz, onDone, onBa
                   onChange={v => setData(d => ({ ...d, [q.key]: v }))}
                 />
               ))}
+
+              {/* Inline Weiter button per tab */}
+              <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 10 }}>
+                {(() => {
+                  const idx = TABS.findIndex(t => t.key === active.key);
+                  const isLastTab = idx === TABS.length - 1;
+                  return (
+                    <button
+                      onClick={() => {
+                        if (isLastTab) onDone(data);
+                        else setActiveKey(TABS[idx + 1].key);
+                      }}
+                      style={{
+                        display: 'inline-flex', alignItems: 'center', gap: 6,
+                        background: PRIMARY, color: WHITE, border: 'none',
+                        borderRadius: 999, padding: '11px 22px',
+                        fontSize: 13, fontWeight: FW_BOLD,
+                        cursor: 'pointer', fontFamily: 'inherit',
+                        boxShadow: '0 2px 8px rgba(36,60,71,0.25)',
+                      }}
+                    >
+                      {isLastTab ? 'Ergebnis anzeigen' : 'Weiter'}
+                      <IconArrowRight size={14} stroke={2.5} />
+                    </button>
+                  );
+                })()}
+              </div>
             </motion.div>
           </AnimatePresence>
 
