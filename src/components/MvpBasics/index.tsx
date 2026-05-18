@@ -4,6 +4,7 @@ import {
   IconReceipt, IconCreditCard,
   IconWifi, IconDeviceMobile,
   IconShieldCheck, IconHomeShield, IconHeartHandshake, IconBuilding, IconCar,
+  IconCoin, IconShield,
 } from '@tabler/icons-react';
 import {
   ACCENT, PRIMARY, BG, WHITE, BORDER, GREY_200, GREY_700, GREY_800,
@@ -42,9 +43,10 @@ type QuestionDef = {
   Icon: React.ComponentType<{ size?: number; stroke?: number; color?: string }>;
 };
 
-type StepDef = {
+type TabDef = {
   key: string;
-  accent: string;
+  label: string;
+  TabIcon: React.ComponentType<{ size?: number; stroke?: number; color?: string }>;
   questions: QuestionDef[];
 };
 
@@ -141,137 +143,126 @@ export default function MvpBasics({ initial, showGebaeude, showKfz, onDone, onBa
     { key: 'berufsunfaehigkeit', label: 'Berufsunfähigkeitsversicherung', sub: 'Sichert Ihr Einkommen bei Krankheit oder Unfall', Icon: IconHeartHandshake },
   ];
 
-  const STEPS: StepDef[] = [
-    { key: 'finanzen',       accent: 'Finanzen',       questions: FIN_Q },
-    { key: 'kommunikation',  accent: 'Kommunikation',  questions: KOM_Q },
-    { key: 'versicherungen', accent: 'Versicherungen', questions: VERS_Q },
+  const TABS: TabDef[] = [
+    { key: 'finanzen',       label: 'Finanzen',       TabIcon: IconCoin,         questions: FIN_Q },
+    { key: 'kommunikation',  label: 'Kommunikation',  TabIcon: IconWifi,         questions: KOM_Q },
+    { key: 'versicherungen', label: 'Versicherungen', TabIcon: IconShield,       questions: VERS_Q },
   ];
 
-  const [stepIdx, setStepIdx] = useState(0);
-  const [dir, setDir] = useState(1);
-  const current = STEPS[stepIdx];
-  const isLast = stepIdx === STEPS.length - 1;
-  const total = STEPS.length;
+  const [activeKey, setActiveKey] = useState<string>(TABS[0].key);
+  const active = TABS.find(t => t.key === activeKey) ?? TABS[0];
 
-  function goNext() {
-    if (isLast) { onDone(data); return; }
-    setDir(1);
-    setStepIdx(i => i + 1);
+  function countActiveInTab(tab: TabDef) {
+    return tab.questions.filter(q => data[q.key]).length;
   }
-  function skip() {
-    goNext();
-  }
-  function goBack() {
-    if (stepIdx === 0) { onBack(); return; }
-    setDir(-1);
-    setStepIdx(i => i - 1);
-  }
-  function skipAll() {
-    onDone(data);
-  }
-
-  const progressPct = 60 + ((stepIdx + 1) / total) * 30;
 
   return (
     <div style={{
       minHeight: '100dvh', background: BG, display: 'flex', flexDirection: 'column',
       fontFamily: "'Poppins', sans-serif",
     }}>
-      <WpHeader showProgress progressPct={progressPct} />
+      <WpHeader showProgress progressPct={85} />
 
       <div className="wp-page-basics" style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '24px 16px 120px' }}>
         <style>{`@media(min-width:640px){.wp-page-basics{padding:32px 24px 120px !important;}}`}</style>
-        <div style={{ width: '100%', maxWidth: 720 }}>
+        <div style={{ width: '100%', maxWidth: 760 }}>
 
-          {/* Step dots */}
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, marginBottom: 20 }}>
-            {STEPS.map((_, i) => {
-              const isActive = i === stepIdx;
-              const isDoneStep = i < stepIdx;
+          {/* Headline */}
+          <div style={{ textAlign: 'center', marginBottom: 22 }}>
+            <h1 style={{
+              fontSize: TEXT_LG + 4, fontWeight: FW_SEMIBOLD,
+              color: PRIMARY, lineHeight: 1.25, marginBottom: 8,
+              letterSpacing: '-0.01em',
+            }}>
+              Basics: <span style={{ color: ACCENT }}>Spar-Potenziale</span>
+            </h1>
+            <p style={{ fontSize: TEXT_SM, color: GREY_800, lineHeight: 1.55, fontWeight: FW_REGULAR }}>
+              Aktivieren Sie, was bereits optimiert ist — alles andere zeigen wir Ihnen als Spartipp.
+            </p>
+          </div>
+
+          {/* Tab menu */}
+          <div
+            role="tablist"
+            style={{
+              display: 'grid',
+              gridTemplateColumns: `repeat(${TABS.length}, 1fr)`,
+              gap: 6,
+              background: '#eef0f3',
+              borderRadius: 999,
+              padding: 4,
+              marginBottom: 18,
+            }}
+          >
+            {TABS.map(tab => {
+              const isActive = tab.key === activeKey;
+              const TabIcon = tab.TabIcon;
+              const activeCount = countActiveInTab(tab);
               return (
-                <motion.div
-                  key={i}
-                  animate={{
-                    width: isActive ? 28 : 8,
-                    background: isDoneStep ? ACCENT : isActive ? ACCENT : 'rgba(42,111,166,0.18)',
+                <button
+                  key={tab.key}
+                  role="tab"
+                  aria-selected={isActive}
+                  onClick={() => setActiveKey(tab.key)}
+                  style={{
+                    display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+                    background: isActive ? ACCENT : 'transparent',
+                    color: isActive ? WHITE : GREY_800,
+                    border: 'none',
+                    borderRadius: 999,
+                    padding: '9px 12px',
+                    fontSize: 13, fontWeight: FW_BOLD,
+                    cursor: 'pointer',
+                    fontFamily: 'inherit',
+                    transition: 'background 0.2s ease, color 0.2s ease',
+                    position: 'relative',
                   }}
-                  transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-                  style={{ height: 6, borderRadius: 3 }}
-                />
+                >
+                  <TabIcon size={15} stroke={1.8} color={isActive ? WHITE : GREY_800} />
+                  <span className="wp-tab-label" style={{ whiteSpace: 'nowrap' }}>{tab.label}</span>
+                  {activeCount > 0 && (
+                    <span style={{
+                      display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                      minWidth: 16, height: 16, borderRadius: 8,
+                      background: isActive ? 'rgba(255,255,255,0.25)' : GREEN,
+                      color: WHITE,
+                      fontSize: 10, fontWeight: FW_BOLD,
+                      padding: '0 5px',
+                      marginLeft: 2,
+                    }}>
+                      {activeCount}
+                    </span>
+                  )}
+                </button>
               );
             })}
           </div>
+          <style>{`
+            @media(max-width:520px){
+              .wp-tab-label{display:none;}
+            }
+          `}</style>
 
-          <AnimatePresence mode="wait" custom={dir}>
+          {/* Tab content */}
+          <AnimatePresence mode="wait">
             <motion.div
-              key={current.key}
-              initial={{ opacity: 0, x: dir * 40 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: dir * -40 }}
-              transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+              key={active.key}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -4 }}
+              transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+              style={{ display: 'flex', flexDirection: 'column', gap: 10 }}
             >
-              <div style={{ textAlign: 'center', marginBottom: 28 }}>
-                <div style={{
-                  fontSize: 11, fontWeight: FW_BOLD, color: ACCENT,
-                  letterSpacing: '0.1em', marginBottom: 8,
-                }}>
-                  SCHRITT {stepIdx + 1} VON {total}
-                </div>
-                <h1 style={{
-                  fontSize: TEXT_LG + 4, fontWeight: FW_SEMIBOLD,
-                  color: PRIMARY, lineHeight: 1.25, marginBottom: 8,
-                  letterSpacing: '-0.01em',
-                }}>
-                  Basics: <span style={{ color: ACCENT }}>{current.accent}</span>
-                </h1>
-                <p style={{ fontSize: TEXT_SM, color: GREY_800, lineHeight: 1.55, fontWeight: FW_REGULAR }}>
-                  Aktivieren Sie, was bereits optimiert ist — alles andere zeigen wir Ihnen als Spartipp.
-                </p>
-              </div>
-
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                {current.questions.map(q => (
-                  <ToggleRow
-                    key={q.key}
-                    icon={q.Icon}
-                    label={q.label}
-                    sub={q.sub}
-                    value={Boolean(data[q.key])}
-                    onChange={v => setData(d => ({ ...d, [q.key]: v }))}
-                  />
-                ))}
-              </div>
-
-              {/* Skip current step */}
-              <div style={{ textAlign: 'center', marginTop: 14 }}>
-                <button
-                  onClick={skip}
-                  style={{
-                    background: 'transparent', border: 'none', cursor: 'pointer',
-                    fontSize: 13, color: GREY_700, fontWeight: FW_MEDIUM,
-                    padding: '6px 8px', fontFamily: 'inherit',
-                  }}
-                >
-                  Diesen Schritt überspringen
-                </button>
-              </div>
-
-              {/* Skip everything */}
-              {stepIdx === 0 && (
-                <div style={{ textAlign: 'center', marginTop: 4 }}>
-                  <button
-                    onClick={skipAll}
-                    style={{
-                      background: 'none', border: 'none',
-                      fontSize: 12, color: GREY_800, fontWeight: FW_MEDIUM,
-                      cursor: 'pointer', padding: '4px 8px',
-                      textDecoration: 'underline', fontFamily: 'inherit',
-                    }}
-                  >
-                    Alle Basics überspringen
-                  </button>
-                </div>
-              )}
+              {active.questions.map(q => (
+                <ToggleRow
+                  key={q.key}
+                  icon={q.Icon}
+                  label={q.label}
+                  sub={q.sub}
+                  value={Boolean(data[q.key])}
+                  onChange={v => setData(d => ({ ...d, [q.key]: v }))}
+                />
+              ))}
             </motion.div>
           </AnimatePresence>
 
@@ -279,14 +270,9 @@ export default function MvpBasics({ initial, showGebaeude, showKfz, onDone, onBa
       </div>
 
       <WpBottomNav
-        onBack={goBack}
-        onNext={goNext}
-        nextLabel={isLast ? 'Ergebnis anzeigen' : 'Weiter'}
-        middle={
-          <div style={{ fontSize: 12, color: GREY_800, fontWeight: FW_SEMIBOLD }}>
-            {stepIdx + 1} / {total}
-          </div>
-        }
+        onBack={onBack}
+        onNext={() => onDone(data)}
+        nextLabel="Ergebnis anzeigen"
       />
     </div>
   );
