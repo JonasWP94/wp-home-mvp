@@ -138,7 +138,7 @@ export default function MvpBasics({ initial, showGebaeude, showKfz, onDone, onBa
   const VERS_Q: QuestionDef[] = [
     { key: 'haftpflicht', label: 'Privathaftpflichtversicherung', sub: 'Schützt vor teuren Schadensersatzforderungen — Pflicht für jeden Haushalt', Icon: IconShieldCheck },
     { key: 'hausrat',     label: 'Hausratversicherung',           sub: 'Deckt Einbruch, Feuer & Wasser — Anbieterwechsel spart Ø 120 € / Jahr',     Icon: IconHomeShield },
-    ...(showGebaeude ? [{ key: 'gebaeude' as keyof BasicsData, label: 'Wohngebäudeversicherung', sub: 'Pflicht für Hauseigentümer — Tarifvergleich spart oft mehrere hundert Euro', Icon: IconBuilding }] : []),
+    { key: 'gebaeude',    label: 'Wohngebäudeversicherung',       sub: 'Für Hauseigentümer Pflicht — Tarifvergleich spart oft mehrere hundert Euro', Icon: IconBuilding },
     ...(showKfz      ? [{ key: 'kfzVersicherung' as keyof BasicsData, label: 'KFZ-Versicherung aktuell', sub: 'Anbieterwechsel spart Ø 350 € pro Fahrzeug / Jahr', Icon: IconCar }] : []),
     { key: 'berufsunfaehigkeit', label: 'Berufsunfähigkeitsversicherung', sub: 'Sichert Ihr Einkommen bei Krankheit oder Unfall', Icon: IconHeartHandshake },
   ];
