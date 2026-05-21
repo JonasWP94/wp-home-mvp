@@ -668,24 +668,24 @@ function buildClusters(profile: MvpProfile, tips: MvpTip[]): { title: string; ti
     .filter(c => c.tips.length > 0);
 }
 
-// ── Design Tokens ────────────────────────────────────────────────
-const BLUE      = '#5782B0';
+// ── Design Tokens (Wechselpilot Brand) ───────────────────────────
+const BLUE      = '#5782B0';   // brand.blueLight (Gas-Claim Blau)
 const BLUE_LT   = '#EDF2F9';
-const BLUE_DK   = '#3D5A80';
-const GREEN     = '#0C663B';
-const GREEN_LT  = '#E8F5EF';
-const ORANGE    = '#F9AA00';
-const ORANGE_LT = '#FEF3C7';
-const DARK      = '#2C3E50';
-const BG        = '#F4F6FA';
+const BLUE_DK   = '#3D5261';   // brand.primary
+const GREEN     = '#558D6D';   // brand.green
+const GREEN_LT  = '#E2EEE7';   // sehr heller Tint
+const ORANGE    = '#F9AA00';   // brand.accent — gelb/orange
+const ORANGE_LT = '#FEEECC';
+const DARK      = '#3D5261';   // brand.primary
+const BG        = '#F4F4F4';   // brand.background
 const WHITE     = '#FFFFFF';
-const BORDER    = '#E2E8F0';
-const TEXT      = DARK;
-const TEXT_MUTED  = '#7A8C9A';
-const TEXT_DIM    = '#A0AEBB';
+const BORDER    = '#C2C7CB';   // semantic.border / muted
+const TEXT      = '#44607F';   // brand.text
+const TEXT_MUTED  = '#7E8990';
+const TEXT_DIM    = '#A8AEB3';
 const PRIMARY     = DARK;
-const GREEN_DARK  = GREEN;
-const GREY_800    = DARK;
+const GREEN_DARK  = '#436F56'; // brand.greenDark
+const GREY_800    = TEXT;
 
 const PRIORITY_COLORS: Record<number, { bg: string; text: string; label: string }> = {
   3: { bg: GREEN_LT,  text: GREEN,      label: 'Top' },
@@ -1617,7 +1617,15 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
         {/* Hero — two separate boxes */}
         <style>{`
           .mvp-hero-row{display:flex;flex-direction:column;gap:12px;margin-bottom:12px;}
-          @media(min-width:700px){.mvp-hero-row{flex-direction:row;align-items:stretch;}}
+          @media(min-width:700px){
+            /* Split-Position richtet sich nach Mitte der 3. Modul-Kachel (4-Spalten-Grid):
+               2.5 von 4 Spalten = 62.5 % → 5fr : 3fr */
+            .mvp-hero-row{
+              display:grid !important;
+              grid-template-columns:5fr 3fr !important;
+              align-items:stretch;
+            }
+          }
         `}</style>
         <motion.div
           className="mvp-hero-row"
@@ -1631,7 +1639,21 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
             position: 'relative', overflow: 'hidden',
             display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: 12,
           }}>
-            <div style={{ position: 'absolute', top: -30, right: -30, width: 120, height: 120, borderRadius: 60, background: 'rgba(255,255,255,0.06)' }} />
+            {/* Wechselpilot Brand-Schräge — diagonale Fläche (statt Kreis) */}
+            <div style={{
+              position: 'absolute', top: 0, right: 0, bottom: 0,
+              width: '55%',
+              background: 'rgba(255,255,255,0.07)',
+              clipPath: 'polygon(28% 0, 100% 0, 100% 100%, 0 100%)',
+              pointerEvents: 'none',
+            }} />
+            <div style={{
+              position: 'absolute', top: 0, right: 0, bottom: 0,
+              width: '38%',
+              background: 'rgba(255,255,255,0.05)',
+              clipPath: 'polygon(40% 0, 100% 0, 100% 100%, 0 100%)',
+              pointerEvents: 'none',
+            }} />
             <div style={{ position: 'relative', zIndex: 1 }}>
               <div style={{ fontSize: 11, fontWeight: 600, opacity: 0.85, marginBottom: 4, letterSpacing: '0.05em' }}>Ihr Sparpotenzial pro Jahr</div>
               <div style={{ display: 'flex', alignItems: 'baseline', gap: 6, marginBottom: 4 }}>
@@ -2234,15 +2256,6 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
           </div>
         )}
 
-        {/* Footer */}
-        <div style={{ textAlign: 'center', marginTop: 32, paddingTop: 16, borderTop: `1px solid ${BORDER}` }}>
-          <p style={{ fontSize: 12, color: TEXT_MUTED }}>
-            {tips.length} Empfehlungen · {fmt(total)} € Potenzial ·{' '}
-            <button onClick={() => setView('profile')} style={{ background: 'none', border: 'none', color: BLUE, fontSize: 12, fontWeight: 500, cursor: 'pointer', padding: 0 }}>
-              Angaben ändern
-            </button>
-          </p>
-        </div>
       </div>
 
       {/* Unified Overlay — single shell, content morphs between top-tips, module list, and tip detail */}
@@ -2325,10 +2338,14 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
                   WebkitBackdropFilter: 'blur(4px)',
                 }}
               />
-              <div style={{
+              <style>{`
+                .mvp-ov-wrap{padding:5px;}
+                @media(min-width:640px){.mvp-ov-wrap{padding:20px;}}
+              `}</style>
+              <div className="mvp-ov-wrap" style={{
                 position: 'fixed', inset: 0, zIndex: 1001,
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                padding: 20, pointerEvents: 'none',
+                pointerEvents: 'none',
                 fontFamily: "'Poppins', sans-serif",
               }}>
                 <motion.div
@@ -2344,7 +2361,8 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
                   onClick={e => e.stopPropagation()}
                   className="mvp-ov-shell"
                   style={{
-                    width: 'min(960px, 100%)', maxHeight: '90vh',
+                    width: 'min(960px, 100%)', maxHeight: '90vh', minHeight: 0,
+                    /* Mobile: fülle den verfügbaren Raum (Wrapper-Padding 5px = max nutzbare 100dvh - 10px) */
                     background: WHITE, border: `1px solid ${BORDER}`,
                     borderRadius: 6,
                     overflow: 'hidden', pointerEvents: 'auto',
@@ -2359,6 +2377,8 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
                     .mvp-ov-right{position:relative;display:flex;flex-direction:column;flex:1;min-height:0;overflow:hidden;}
                     .mvp-ov-right-scroll{flex:1;overflow-y:auto;padding:18px 20px 12px;}
                     .mvp-ov-footer{position:sticky;bottom:0;background:#fff;border-top:1px solid ${BORDER};padding:10px 20px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+                    /* Mobile: Overlay füllt den verfügbaren Raum (Wrapper hat 5px Padding) */
+                    .mvp-ov-shell{height:calc(100dvh - 10px) !important;max-height:calc(100dvh - 10px) !important;width:100% !important;}
                     /* Mobile: kompakte Höhe für linke dunkle Hero-Spalte */
                     .mvp-ov-left .mvp-ov-eyebrow{font-size:9px !important;margin-bottom:6px !important;}
                     .mvp-ov-left .mvp-ov-title{font-size:16px !important;margin-bottom:8px !important;line-height:1.25 !important;}
@@ -2366,6 +2386,9 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
                     .mvp-ov-left .mvp-ov-meta{font-size:11px !important;}
                     .mvp-ov-left .mvp-ov-persona{display:none !important;}
                     .mvp-ov-left .mvp-ov-back{margin-bottom:8px !important;}
+                    @media(min-width:640px){
+                      .mvp-ov-shell{height:auto !important;max-height:90vh !important;width:min(960px, 100%) !important;}
+                    }
                     @media(min-width:760px){
                       .mvp-ov-shell{min-height:540px !important;}
                       .mvp-ov-grid{flex-direction:row;}
@@ -2440,7 +2463,7 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
                               {title}
                             </h2>
                             <div className="mvp-ov-amount" style={{ fontWeight: 800, color: ORANGE, lineHeight: 1 }}>
-                              {fmt(amount)}€
+                              {fmt(amount)} €
                             </div>
                             <div className="mvp-ov-meta" style={{ opacity: 0.75 }}>{meta}</div>
                           </div>
@@ -2682,37 +2705,71 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
                                     </button>
                                   </>
                                 ) : !showOffers ? (
-                                  // Commercial tip, detail view → "Jetzt sparen" opens offers
-                                  <button
-                                    onClick={() => setShowOffers(true)}
-                                    style={{
-                                      background: DARK, color: WHITE, border: 'none',
-                                      borderRadius: 999, padding: '11px 20px',
-                                      fontSize: 13, fontWeight: 700, cursor: 'pointer',
-                                      fontFamily: 'inherit',
-                                      display: 'inline-flex', alignItems: 'center', gap: 6,
-                                      boxShadow: '0 4px 12px rgba(36,60,71,0.20)',
-                                    }}
-                                  >
-                                    Jetzt sparen <IconArrowRight size={14} stroke={2.5} />
-                                  </button>
+                                  // Commercial tip, detail view → Ignorieren + "Jetzt sparen"
+                                  <>
+                                    <button
+                                      onClick={() => { removeTip(tip!.id); closeAll(); }}
+                                      style={{
+                                        background: 'transparent', color: TEXT_MUTED,
+                                        border: 'none',
+                                        padding: '8px 12px',
+                                        fontSize: 12, fontWeight: 600,
+                                        cursor: 'pointer', fontFamily: 'inherit',
+                                        display: 'inline-flex', alignItems: 'center', gap: 4,
+                                      }}
+                                      onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = '#c52828'; }}
+                                      onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = TEXT_MUTED; }}
+                                    >
+                                      <IconX size={13} stroke={2.4} /> Ignorieren
+                                    </button>
+                                    <button
+                                      onClick={() => setShowOffers(true)}
+                                      style={{
+                                        background: DARK, color: WHITE, border: 'none',
+                                        borderRadius: 999, padding: '11px 20px',
+                                        fontSize: 13, fontWeight: 700, cursor: 'pointer',
+                                        fontFamily: 'inherit',
+                                        display: 'inline-flex', alignItems: 'center', gap: 6,
+                                        boxShadow: '0 4px 12px rgba(36,60,71,0.20)',
+                                      }}
+                                    >
+                                      Jetzt sparen <IconArrowRight size={14} stroke={2.5} />
+                                    </button>
+                                  </>
                                 ) : (
-                                  // Commercial tip, offers view → mark as done
-                                  <button
-                                    onClick={() => { toggleDone(tip!.id); closeAll(); }}
-                                    style={{
-                                      background: isTipDone ? GREEN_LT : GREEN_DARK,
-                                      color: isTipDone ? GREEN_DARK : WHITE,
-                                      border: 'none',
-                                      borderRadius: 999, padding: '11px 20px',
-                                      fontSize: 13, fontWeight: 700, cursor: 'pointer',
-                                      fontFamily: 'inherit',
-                                      display: 'inline-flex', alignItems: 'center', gap: 6,
-                                      boxShadow: '0 4px 12px rgba(22,122,82,0.20)',
-                                    }}
-                                  >
-                                    <IconCheck size={14} stroke={2.5} /> {isTipDone ? 'Rückgängig' : 'Als erledigt markieren'}
-                                  </button>
+                                  // Commercial tip, offers view → Ignorieren + Erledigt
+                                  <>
+                                    <button
+                                      onClick={() => { removeTip(tip!.id); closeAll(); }}
+                                      style={{
+                                        background: 'transparent', color: TEXT_MUTED,
+                                        border: 'none',
+                                        padding: '8px 12px',
+                                        fontSize: 12, fontWeight: 600,
+                                        cursor: 'pointer', fontFamily: 'inherit',
+                                        display: 'inline-flex', alignItems: 'center', gap: 4,
+                                      }}
+                                      onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = '#c52828'; }}
+                                      onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = TEXT_MUTED; }}
+                                    >
+                                      <IconX size={13} stroke={2.4} /> Ignorieren
+                                    </button>
+                                    <button
+                                      onClick={() => { toggleDone(tip!.id); closeAll(); }}
+                                      style={{
+                                        background: isTipDone ? GREEN_LT : GREEN_DARK,
+                                        color: isTipDone ? GREEN_DARK : WHITE,
+                                        border: 'none',
+                                        borderRadius: 999, padding: '11px 20px',
+                                        fontSize: 13, fontWeight: 700, cursor: 'pointer',
+                                        fontFamily: 'inherit',
+                                        display: 'inline-flex', alignItems: 'center', gap: 6,
+                                        boxShadow: '0 4px 12px rgba(22,122,82,0.20)',
+                                      }}
+                                    >
+                                      <IconCheck size={14} stroke={2.5} /> {isTipDone ? 'Rückgängig' : 'Als erledigt markieren'}
+                                    </button>
+                                  </>
                                 )}
                               </div>
                             </>

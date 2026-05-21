@@ -26,7 +26,7 @@ import {
   IconDeviceMobile,
 } from '@tabler/icons-react';
 import {
-  ACCENT, BLUE_VERY_BRIGHT, BLUE_DARK,
+  BLUE, BLUE_VERY_BRIGHT, BLUE_DARK,
   PRIMARY, BG, WHITE, BORDER, GREY_200, GREY_700, GREY_800,
   RADIUS_MD, RADIUS_SM, RADIUS_LG,
   TEXT_XS, TEXT_SM, TEXT_MD, TEXT_LG,
@@ -123,7 +123,7 @@ function RadarAnimation() {
           }}
           style={{
             position: 'absolute', inset: 0, borderRadius: '50%',
-            border: `1.5px solid ${ACCENT}`,
+            border: `1.5px solid ${BLUE}`,
             pointerEvents: 'none',
           }}
         />
@@ -172,8 +172,8 @@ function RadarAnimation() {
           style={{
             position: 'absolute', top: b.top, left: b.left,
             width: 6, height: 6, borderRadius: 3,
-            background: ACCENT,
-            boxShadow: `0 0 12px ${ACCENT}, 0 0 4px ${ACCENT}`,
+            background: BLUE,
+            boxShadow: `0 0 12px ${BLUE}, 0 0 4px ${BLUE}`,
           }}
         />
       ))}
@@ -186,7 +186,7 @@ function RadarAnimation() {
           position: 'absolute', top: '50%', left: '50%',
           marginTop: -6, marginLeft: -6,
           width: 12, height: 12, borderRadius: 6,
-          background: ACCENT,
+          background: BLUE,
           boxShadow: `0 0 16px rgba(42,111,166,0.55)`,
         }}
       />
@@ -268,7 +268,7 @@ function LoadingScreen({ onDone }: { onDone: () => void }) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4 }}
           style={{
-            fontSize: 11, fontWeight: FW_BOLD, color: ACCENT,
+            fontSize: 11, fontWeight: FW_BOLD, color: BLUE,
             letterSpacing: '0.16em',
           }}
         >
@@ -327,7 +327,7 @@ function LoadingScreen({ onDone }: { onDone: () => void }) {
                 <div style={{
                   position: 'absolute', top: 0, bottom: 0, left: 0,
                   width: `${segPct * 100}%`,
-                  background: ACCENT,
+                  background: BLUE,
                   borderRadius: 3,
                   transition: 'width 0.05s linear',
                   overflow: 'hidden',
@@ -584,10 +584,10 @@ export default function MvpWizard() {
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 margin: '0 auto 16px',
               }}>
-                <StepIcon size={30} stroke={1.6} color={ACCENT} />
+                <StepIcon size={30} stroke={1.6} color={BLUE} />
               </div>
               <div style={{
-                fontSize: 11, fontWeight: FW_BOLD, color: ACCENT,
+                fontSize: 11, fontWeight: FW_BOLD, color: BLUE,
                 letterSpacing: '0.1em', marginBottom: 8,
               }}>
                 FRAGE {effectiveStep} VON {effectiveTotal}
@@ -641,7 +641,7 @@ export default function MvpWizard() {
                       width: '100%',
                       gridColumn: opt.value === 'weiss_nicht' ? '1 / -1' : undefined,
                       background: isSelected ? BLUE_VERY_BRIGHT : WHITE,
-                      border: `1.5px solid ${isSelected ? ACCENT : BORDER}`,
+                      border: `1.5px solid ${isSelected ? BLUE : BORDER}`,
                       borderRadius: RADIUS_MD, padding: '14px 16px',
                       display: 'flex', alignItems: 'center', gap: 14,
                       cursor: 'pointer', transition: 'all 0.15s',
@@ -651,7 +651,7 @@ export default function MvpWizard() {
                   >
                     <div style={{
                       width: 38, height: 38, borderRadius: RADIUS_SM,
-                      background: isSelected ? ACCENT : GREY_200,
+                      background: isSelected ? BLUE : GREY_200,
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
                       flexShrink: 0, transition: 'all 0.15s',
                     }}>
@@ -667,7 +667,7 @@ export default function MvpWizard() {
                       <div style={{
                         marginLeft: 'auto', flexShrink: 0,
                         width: 22, height: 22, borderRadius: 11,
-                        background: ACCENT, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        background: BLUE, display: 'flex', alignItems: 'center', justifyContent: 'center',
                       }}>
                         <IconCheck size={14} stroke={2.5} color={WHITE} />
                       </div>
@@ -792,7 +792,7 @@ function VehicleSelector({
             style={{
               width: '100%',
               background: isSelected ? BLUE_VERY_BRIGHT : WHITE,
-              border: `1.5px solid ${isSelected ? ACCENT : BORDER}`,
+              border: `1.5px solid ${isSelected ? BLUE : BORDER}`,
               borderRadius: RADIUS_MD, padding: '12px 16px',
               display: 'flex', alignItems: 'center', gap: 14,
               cursor: isSelected ? 'default' : 'pointer', transition: 'all 0.15s',
@@ -802,7 +802,7 @@ function VehicleSelector({
           >
             <div style={{
               width: 38, height: 38, borderRadius: RADIUS_SM,
-              background: isSelected ? ACCENT : GREY_200,
+              background: isSelected ? BLUE : GREY_200,
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               flexShrink: 0, transition: 'all 0.15s',
             }}>
@@ -821,7 +821,7 @@ function VehicleSelector({
                 style={{
                   display: 'inline-flex', alignItems: 'center', gap: 4,
                   background: WHITE, borderRadius: 999, padding: '4px',
-                  border: `1px solid ${ACCENT}`,
+                  border: `1px solid ${BLUE}`,
                 }}
               >
                 <button
@@ -830,7 +830,7 @@ function VehicleSelector({
                     width: 28, height: 28, borderRadius: 14, border: 'none',
                     background: 'transparent', cursor: 'pointer',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    color: ACCENT,
+                    color: BLUE,
                   }}
                 >
                   <IconMinus size={16} stroke={2.5} />
@@ -845,7 +845,7 @@ function VehicleSelector({
                   onClick={() => onIncrement(opt.type)}
                   style={{
                     width: 28, height: 28, borderRadius: 14, border: 'none',
-                    background: ACCENT, cursor: 'pointer',
+                    background: BLUE, cursor: 'pointer',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                     color: WHITE,
                   }}
@@ -868,7 +868,7 @@ function VehicleSelector({
         style={{
           width: '100%',
           background: noVehicle ? BLUE_VERY_BRIGHT : WHITE,
-          border: `1.5px solid ${noVehicle ? ACCENT : BORDER}`,
+          border: `1.5px solid ${noVehicle ? BLUE : BORDER}`,
           borderRadius: RADIUS_MD, padding: '14px 16px',
           display: 'flex', alignItems: 'center', gap: 14,
           cursor: 'pointer', transition: 'all 0.15s',
@@ -877,7 +877,7 @@ function VehicleSelector({
       >
         <div style={{
           width: 38, height: 38, borderRadius: RADIUS_SM,
-          background: noVehicle ? ACCENT : GREY_200,
+          background: noVehicle ? BLUE : GREY_200,
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           flexShrink: 0,
         }}>
@@ -894,7 +894,7 @@ function VehicleSelector({
           <div style={{
             flexShrink: 0,
             width: 22, height: 22, borderRadius: 11,
-            background: ACCENT, display: 'flex', alignItems: 'center', justifyContent: 'center',
+            background: BLUE, display: 'flex', alignItems: 'center', justifyContent: 'center',
           }}>
             <IconCheck size={14} stroke={2.5} color={WHITE} />
           </div>

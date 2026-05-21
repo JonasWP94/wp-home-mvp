@@ -6,7 +6,7 @@ import {
   IconCoin, IconArrowRight, IconArrowLeft,
 } from '@tabler/icons-react';
 import {
-  ACCENT, PRIMARY, BG, WHITE, BORDER, GREY_200, GREY_800,
+  BLUE, PRIMARY, BG, WHITE, BORDER, GREY_200, GREY_800,
   GREEN,
   RADIUS_MD, RADIUS_SM,
   TEXT_XS, TEXT_SM, TEXT_LG,
@@ -152,7 +152,7 @@ export default function MvpBasics({ initial, onDone, onBack }: Props) {
               color: PRIMARY, lineHeight: 1.25, marginBottom: 8,
               letterSpacing: '-0.01em',
             }}>
-              Basics: <span style={{ color: ACCENT }}>Spar-Potenziale</span>
+              Basics: <span style={{ color: BLUE }}>Spar-Potenziale</span>
             </h1>
             <p style={{ fontSize: TEXT_SM, color: GREY_800, lineHeight: 1.55, fontWeight: FW_REGULAR }}>
               Aktivieren Sie, was bereits optimiert ist — alles andere zeigen wir Ihnen als Spartipp.
@@ -184,7 +184,7 @@ export default function MvpBasics({ initial, onDone, onBack }: Props) {
                   onClick={() => setActiveKey(tab.key)}
                   style={{
                     display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 6,
-                    background: isActive ? ACCENT : 'transparent',
+                    background: isActive ? BLUE : 'transparent',
                     color: isActive ? WHITE : GREY_800,
                     border: 'none',
                     borderRadius: 999,
@@ -241,40 +241,37 @@ export default function MvpBasics({ initial, onDone, onBack }: Props) {
                   onChange={v => setData(d => ({ ...d, [q.key]: v }))}
                 />
               ))}
-
             </motion.div>
           </AnimatePresence>
 
-        </div>
-      </div>
-
-      {/* Navigation — inline on desktop, sticky bottom bar on mobile */}
-      <style>{`
-        .wp-basics-nav{
-          position:fixed;left:0;right:0;bottom:0;z-index:50;
-          background:rgba(244,246,250,0.96);
-          backdrop-filter:blur(10px);
-          -webkit-backdrop-filter:blur(10px);
-          border-top:1px solid ${BORDER};
-          padding:10px 16px calc(10px + env(safe-area-inset-bottom));
-          display:flex;align-items:center;gap:10px;
-        }
-        @media(min-width:640px){
-          .wp-basics-nav{
-            position:static;left:auto;right:auto;bottom:auto;
-            background:transparent;backdrop-filter:none;-webkit-backdrop-filter:none;
-            border-top:none;
-            padding:0 16px 32px;
-            max-width:760px;margin:-12px auto 0;
-          }
-        }
-      `}</style>
-      {(() => {
-        const idx = TABS.findIndex(t => t.key === active.key);
-        const isLastTab = idx === TABS.length - 1;
-        const isFirstTab = idx === 0;
-        return (
-          <div className="wp-basics-nav">
+          {/* Navigation — inline directly under options on desktop, sticky bottom bar on mobile */}
+          <style>{`
+            .wp-basics-nav{
+              position:fixed;left:0;right:0;bottom:0;z-index:50;
+              background:rgba(244,246,250,0.96);
+              backdrop-filter:blur(10px);
+              -webkit-backdrop-filter:blur(10px);
+              border-top:1px solid ${BORDER};
+              padding:10px 16px calc(10px + env(safe-area-inset-bottom));
+              display:flex;align-items:center;gap:10px;
+              margin-top:0;
+            }
+            @media(min-width:640px){
+              .wp-basics-nav{
+                position:static;left:auto;right:auto;bottom:auto;
+                background:transparent;backdrop-filter:none;-webkit-backdrop-filter:none;
+                border-top:none;
+                padding:0;
+                margin-top:16px;
+              }
+            }
+          `}</style>
+          {(() => {
+            const idx = TABS.findIndex(t => t.key === active.key);
+            const isLastTab = idx === TABS.length - 1;
+            const isFirstTab = idx === 0;
+            return (
+              <div className="wp-basics-nav">
             <button
               onClick={() => {
                 if (isFirstTab) onBack();
@@ -313,8 +310,11 @@ export default function MvpBasics({ initial, onDone, onBack }: Props) {
               <IconArrowRight size={14} stroke={2.5} />
             </button>
           </div>
-        );
-      })()}
+            );
+          })()}
+
+        </div>
+      </div>
     </div>
   );
 }
