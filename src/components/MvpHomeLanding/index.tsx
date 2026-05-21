@@ -27,14 +27,10 @@ export default function MvpHomeLanding({ onStart, onBack }: Props) {
       <div className="wp-landing" style={{
         flex: 1, display: 'flex', flexDirection: 'column',
         alignItems: 'center', justifyContent: 'center',
-        padding: '32px 20px 140px', textAlign: 'center',
+        padding: '32px 20px 40px', textAlign: 'center',
       }}>
-        <style>{`@media(min-width:640px){.wp-landing{padding:40px 24px 140px !important;}}`}</style>
+        <style>{`@media(min-width:640px){.wp-landing{padding:40px 24px 56px !important;}}`}</style>
         <style>{`
-          @media(min-width:640px){
-            .wp-cta-inline{display:inline-flex !important;}
-            .wp-cta-sticky{display:none !important;}
-          }
           @media(min-width:640px){
             .wp-headline{font-size:40px !important;}
           }
@@ -100,13 +96,12 @@ export default function MvpHomeLanding({ onStart, onBack }: Props) {
             Optimieren Sie Ihre Haushaltsausgaben — passend zu Ihrem Verbrauch und Ihren Interessen.
           </motion.p>
 
-          {/* Desktop CTA */}
+          {/* CTA — always inline, no sticky */}
           <motion.div
-            className="wp-cta-inline"
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3, duration: 0.35 }}
-            style={{ display: 'none', justifyContent: 'center', marginBottom: 16 }}
+            style={{ display: 'flex', justifyContent: 'center', marginBottom: 16 }}
           >
             <WpButton onClick={onStart} size="lg">
               Ersparnis berechnen
@@ -155,18 +150,6 @@ export default function MvpHomeLanding({ onStart, onBack }: Props) {
         </div>
       </div>
 
-      {/* Sticky CTA (mobile only) */}
-      <div className="wp-cta-sticky" style={{
-        position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 100,
-        background: 'rgba(255,255,255,0.97)', backdropFilter: 'blur(12px)',
-        borderTop: `1px solid ${BORDER}`,
-        padding: '14px 20px',
-        display: 'flex', justifyContent: 'center',
-      }}>
-        <WpButton onClick={onStart} size="lg" fullWidth>
-          Ersparnis berechnen
-        </WpButton>
-      </div>
     </div>
   );
 }

@@ -1625,7 +1625,7 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
         >
           {/* Left: Savings summary */}
           <div style={{
-            flex: '1 1 0',
+            flex: '1 1 auto',
             background: 'linear-gradient(135deg, #0f4c3a 0%, #1a6b52 40%, #24a47d 100%)',
             borderRadius: 6, padding: '18px 20px', color: WHITE,
             position: 'relative', overflow: 'hidden',
@@ -2342,8 +2342,9 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
                     default: { duration: 0.26, ease: [0.22, 1, 0.36, 1] },
                   }}
                   onClick={e => e.stopPropagation()}
+                  className="mvp-ov-shell"
                   style={{
-                    width: 'min(960px, 100%)', maxHeight: '90vh', minHeight: 'min(540px, 80vh)',
+                    width: 'min(960px, 100%)', maxHeight: '90vh',
                     background: WHITE, border: `1px solid ${BORDER}`,
                     borderRadius: 6,
                     overflow: 'hidden', pointerEvents: 'auto',
@@ -2354,15 +2355,29 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
                 >
                   <style>{`
                     .mvp-ov-grid{display:flex;flex-direction:column;flex:1;min-height:0;}
-                    .mvp-ov-left{padding:24px;position:relative;flex-shrink:0;}
+                    .mvp-ov-left{padding:16px 20px;position:relative;flex-shrink:0;}
                     .mvp-ov-right{position:relative;display:flex;flex-direction:column;flex:1;min-height:0;overflow:hidden;}
-                    .mvp-ov-right-scroll{flex:1;overflow-y:auto;padding:22px 24px 14px;}
-                    .mvp-ov-footer{position:sticky;bottom:0;background:#fff;border-top:1px solid ${BORDER};padding:12px 24px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+                    .mvp-ov-right-scroll{flex:1;overflow-y:auto;padding:18px 20px 12px;}
+                    .mvp-ov-footer{position:sticky;bottom:0;background:#fff;border-top:1px solid ${BORDER};padding:10px 20px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+                    /* Mobile: kompakte Höhe für linke dunkle Hero-Spalte */
+                    .mvp-ov-left .mvp-ov-eyebrow{font-size:9px !important;margin-bottom:6px !important;}
+                    .mvp-ov-left .mvp-ov-title{font-size:16px !important;margin-bottom:8px !important;line-height:1.25 !important;}
+                    .mvp-ov-left .mvp-ov-amount{font-size:26px !important;margin-bottom:2px !important;letter-spacing:-1px !important;}
+                    .mvp-ov-left .mvp-ov-meta{font-size:11px !important;}
+                    .mvp-ov-left .mvp-ov-persona{display:none !important;}
+                    .mvp-ov-left .mvp-ov-back{margin-bottom:8px !important;}
                     @media(min-width:760px){
+                      .mvp-ov-shell{min-height:540px !important;}
                       .mvp-ov-grid{flex-direction:row;}
                       .mvp-ov-left{flex:0 0 320px;padding:32px 28px;}
                       .mvp-ov-right-scroll{padding:32px 32px 16px;}
                       .mvp-ov-footer{padding:14px 32px;}
+                      .mvp-ov-left .mvp-ov-eyebrow{font-size:10px !important;margin-bottom:12px !important;}
+                      .mvp-ov-left .mvp-ov-title{font-size:22px !important;margin-bottom:18px !important;line-height:1.2 !important;}
+                      .mvp-ov-left .mvp-ov-amount{font-size:40px !important;margin-bottom:6px !important;letter-spacing:-1.5px !important;}
+                      .mvp-ov-left .mvp-ov-meta{font-size:12px !important;}
+                      .mvp-ov-left .mvp-ov-persona{display:block !important;}
+                      .mvp-ov-left .mvp-ov-back{margin-bottom:16px !important;}
                     }
                   `}</style>
 
@@ -2403,11 +2418,12 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
                           {isDetail && openModuleKey && (
                             <button
                               onClick={backToList}
+                              className="mvp-ov-back"
                               style={{
                                 alignSelf: 'flex-start',
                                 background: 'rgba(255,255,255,0.12)', color: WHITE,
                                 border: 'none', borderRadius: 999,
-                                padding: '5px 10px', marginBottom: 16,
+                                padding: '5px 10px',
                                 fontSize: 11, fontWeight: 700, cursor: 'pointer',
                                 fontFamily: 'inherit',
                                 display: 'inline-flex', alignItems: 'center', gap: 4,
@@ -2417,21 +2433,21 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
                             </button>
                           )}
                           <div>
-                            <div style={{ fontSize: 10, fontWeight: 700, color: ORANGE, letterSpacing: '0.14em', marginBottom: 12 }}>
+                            <div className="mvp-ov-eyebrow" style={{ fontWeight: 700, color: ORANGE, letterSpacing: '0.14em' }}>
                               {eyebrow}
                             </div>
-                            <h2 style={{ fontSize: 22, fontWeight: 800, lineHeight: 1.2, margin: 0, marginBottom: 18, letterSpacing: '-0.01em' }}>
+                            <h2 className="mvp-ov-title" style={{ fontWeight: 800, margin: 0, letterSpacing: '-0.01em' }}>
                               {title}
                             </h2>
-                            <div style={{ fontSize: 40, fontWeight: 800, color: ORANGE, lineHeight: 1, letterSpacing: '-1.5px', marginBottom: 6 }}>
+                            <div className="mvp-ov-amount" style={{ fontWeight: 800, color: ORANGE, lineHeight: 1 }}>
                               {fmt(amount)}€
                             </div>
-                            <div style={{ fontSize: 12, opacity: 0.75 }}>{meta}</div>
+                            <div className="mvp-ov-meta" style={{ opacity: 0.75 }}>{meta}</div>
                           </div>
 
                           <div style={{ flex: 1, minHeight: 20 }} />
 
-                          <div>
+                          <div className="mvp-ov-persona">
                             <div style={{ fontSize: 11, fontWeight: 700, color: ORANGE, marginBottom: 3 }}>Persönlich für Sie:</div>
                             <div style={{ fontSize: 12, opacity: 0.8, lineHeight: 1.5 }}>{ctx}</div>
                           </div>

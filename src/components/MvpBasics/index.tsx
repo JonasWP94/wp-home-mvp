@@ -141,8 +141,8 @@ export default function MvpBasics({ initial, onDone, onBack }: Props) {
     }}>
       <WpHeader showProgress progressPct={85} />
 
-      <div className="wp-page-basics" style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '24px 16px 48px' }}>
-        <style>{`@media(min-width:640px){.wp-page-basics{padding:32px 24px 56px !important;}}`}</style>
+      <div className="wp-page-basics" style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '24px 16px 96px' }}>
+        <style>{`@media(min-width:640px){.wp-page-basics{padding:32px 24px 0 !important;}}`}</style>
         <div style={{ width: '100%', maxWidth: 760 }}>
 
           {/* Headline */}
@@ -242,65 +242,79 @@ export default function MvpBasics({ initial, onDone, onBack }: Props) {
                 />
               ))}
 
-              {/* Inline Back + Weiter navigation per tab */}
-              {(() => {
-                const idx = TABS.findIndex(t => t.key === active.key);
-                const isLastTab = idx === TABS.length - 1;
-                const isFirstTab = idx === 0;
-                return (
-                  <div style={{
-                    display: 'flex', alignItems: 'center', gap: 10,
-                    marginTop: 14,
-                  }}>
-                    <button
-                      onClick={() => {
-                        if (isFirstTab) onBack();
-                        else setActiveKey(TABS[idx - 1].key);
-                      }}
-                      style={{
-                        flex: '0 0 auto',
-                        background: WHITE, color: PRIMARY,
-                        border: `1.5px solid ${BORDER}`,
-                        borderRadius: 999, padding: '11px 18px',
-                        fontSize: 13, fontWeight: FW_BOLD,
-                        cursor: 'pointer', fontFamily: 'inherit',
-                        display: 'inline-flex', alignItems: 'center', gap: 6,
-                      }}
-                    >
-                      <IconArrowLeft size={14} stroke={2.4} /> Zurück
-                    </button>
-                    <div style={{
-                      flex: 1, textAlign: 'center',
-                      fontSize: 12, color: GREY_800, fontWeight: 500,
-                    }}>
-                      {idx + 1} / {TABS.length}
-                    </div>
-                    <button
-                      onClick={() => {
-                        if (isLastTab) onDone(data);
-                        else setActiveKey(TABS[idx + 1].key);
-                      }}
-                      style={{
-                        flex: '0 0 auto',
-                        background: PRIMARY, color: WHITE, border: 'none',
-                        borderRadius: 999, padding: '11px 22px',
-                        fontSize: 13, fontWeight: FW_BOLD,
-                        cursor: 'pointer', fontFamily: 'inherit',
-                        display: 'inline-flex', alignItems: 'center', gap: 6,
-                        boxShadow: '0 2px 8px rgba(36,60,71,0.25)',
-                      }}
-                    >
-                      {isLastTab ? 'Ergebnis anzeigen' : 'Weiter'}
-                      <IconArrowRight size={14} stroke={2.5} />
-                    </button>
-                  </div>
-                );
-              })()}
             </motion.div>
           </AnimatePresence>
 
         </div>
       </div>
+
+      {/* Navigation — inline on desktop, sticky bottom bar on mobile */}
+      <style>{`
+        .wp-basics-nav{
+          position:fixed;left:0;right:0;bottom:0;z-index:50;
+          background:rgba(244,246,250,0.96);
+          backdrop-filter:blur(10px);
+          -webkit-backdrop-filter:blur(10px);
+          border-top:1px solid ${BORDER};
+          padding:10px 16px calc(10px + env(safe-area-inset-bottom));
+          display:flex;align-items:center;gap:10px;
+        }
+        @media(min-width:640px){
+          .wp-basics-nav{
+            position:static;left:auto;right:auto;bottom:auto;
+            background:transparent;backdrop-filter:none;-webkit-backdrop-filter:none;
+            border-top:none;
+            padding:0 16px 32px;
+            max-width:760px;margin:-12px auto 0;
+          }
+        }
+      `}</style>
+      {(() => {
+        const idx = TABS.findIndex(t => t.key === active.key);
+        const isLastTab = idx === TABS.length - 1;
+        const isFirstTab = idx === 0;
+        return (
+          <div className="wp-basics-nav">
+            <button
+              onClick={() => {
+                if (isFirstTab) onBack();
+                else setActiveKey(TABS[idx - 1].key);
+              }}
+              aria-label="Zurück"
+              style={{
+                flex: '0 0 auto',
+                width: 44, height: 44,
+                background: WHITE, color: PRIMARY,
+                border: `1.5px solid ${BORDER}`,
+                borderRadius: 999,
+                cursor: 'pointer', fontFamily: 'inherit',
+                display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+              }}
+            >
+              <IconArrowLeft size={16} stroke={2.4} />
+            </button>
+            <div style={{ flex: 1 }} />
+            <button
+              onClick={() => {
+                if (isLastTab) onDone(data);
+                else setActiveKey(TABS[idx + 1].key);
+              }}
+              style={{
+                flex: '0 0 auto',
+                background: PRIMARY, color: WHITE, border: 'none',
+                borderRadius: 999, padding: '11px 22px',
+                fontSize: 13, fontWeight: FW_BOLD,
+                cursor: 'pointer', fontFamily: 'inherit',
+                display: 'inline-flex', alignItems: 'center', gap: 6,
+                boxShadow: '0 2px 8px rgba(36,60,71,0.25)',
+              }}
+            >
+              {isLastTab ? 'Ergebnis anzeigen' : 'Weiter'}
+              <IconArrowRight size={14} stroke={2.5} />
+            </button>
+          </div>
+        );
+      })()}
     </div>
   );
 }

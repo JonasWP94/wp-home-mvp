@@ -564,7 +564,7 @@ export default function MvpWizard() {
     }}>
       <WpHeader showProgress progressPct={progressPct} />
 
-      <div className="wp-page-quiz" style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '24px 16px 48px' }}>
+      <div className="wp-page-quiz" style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '24px 16px 96px' }}>
         <style>{`@media(min-width:640px){.wp-page-quiz{padding:32px 24px 56px !important;}}`}</style>
         <AnimatePresence mode="wait" custom={dir}>
           <motion.div
@@ -677,24 +677,45 @@ export default function MvpWizard() {
               })}
                 </div>
               )}
-              {/* Inline navigation row (replaces sticky WpBottomNav) */}
-              <div style={{
+              {/* Navigation row — inline on desktop, sticky bottom bar on mobile */}
+              <style>{`
+                .wp-quiz-nav{
+                  position:fixed;left:0;right:0;bottom:0;z-index:50;
+                  background:rgba(244,246,250,0.96);
+                  backdrop-filter:blur(10px);
+                  -webkit-backdrop-filter:blur(10px);
+                  border-top:1px solid ${BORDER};
+                  padding:10px 16px calc(10px + env(safe-area-inset-bottom));
+                  margin-top:0 !important;
+                }
+                @media(min-width:640px){
+                  .wp-quiz-nav{
+                    position:static;left:auto;right:auto;bottom:auto;
+                    background:transparent;backdrop-filter:none;-webkit-backdrop-filter:none;
+                    border-top:none;
+                    padding:0;
+                    margin-top:14px !important;
+                  }
+                }
+              `}</style>
+              <div className="wp-quiz-nav" style={{
                 display: 'flex', alignItems: 'center', gap: 10,
                 marginTop: 14,
               }}>
                 <button
                   onClick={goBack}
+                  aria-label="Zurück"
                   style={{
                     flex: '0 0 auto',
+                    width: 44, height: 44,
                     background: WHITE, color: PRIMARY,
                     border: `1.5px solid ${BORDER}`,
-                    borderRadius: 999, padding: '11px 18px',
-                    fontSize: 13, fontWeight: FW_BOLD,
+                    borderRadius: 999,
                     cursor: 'pointer', fontFamily: 'inherit',
-                    display: 'inline-flex', alignItems: 'center', gap: 6,
+                    display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
                   }}
                 >
-                  <IconArrowLeft size={14} stroke={2.4} /> Zurück
+                  <IconArrowLeft size={16} stroke={2.4} />
                 </button>
                 <div style={{ flex: 1 }} />
                 <button
