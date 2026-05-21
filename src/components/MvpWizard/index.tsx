@@ -8,6 +8,7 @@ import {
   IconUsers,
   IconUser,
   IconArrowRight,
+  IconArrowLeft,
   IconCheck,
   IconBolt,
   IconKey,
@@ -37,6 +38,7 @@ import MvpDashboard from '../MvpDashboard';
 import MvpThankYou from '../MvpThankYou';
 import MvpHomeLanding from '../MvpHomeLanding';
 import MvpBasics, { BasicsData } from '../MvpBasics';
+import MvpFriendInvite from '../MvpFriendInvite';
 import { useReducedMotion } from '../_useReducedMotion';
 import type { MvpProfile } from '../_types';
 import { INITIAL_PROFILE as INITIAL } from '../_types';
@@ -68,7 +70,7 @@ const STEPS = [
     icon: IconFlame,
     title: 'Wie heizen Sie aktuell?',
     sub: 'Wir prüfen, ob Sie beim Heizen sparen oder von einem günstigeren System profitieren können.',
-    skipIf: (p: any) => p.tenure === 'miete',
+
     options: [
       { value: 'gas',          label: 'Gas',            icon: IconFlame },
       { value: 'oel',          label: 'Öl',             icon: IconDroplet },
@@ -93,7 +95,7 @@ const STEPS = [
 
 const TOTAL = STEPS.length;
 
-type View = 'intro' | 'landing' | 'basics' | 'quiz' | 'loading' | 'results';
+type View = 'intro' | 'landing' | 'basics' | 'quiz' | 'loading' | 'results' | 'invite';
 
 // ── Radar Animation ───────────────────────────────────────────────
 const BLIPS = [
@@ -182,7 +184,7 @@ function RadarAnimation() {
         transition={{ repeat: Infinity, duration: 2, ease: 'easeInOut' }}
         style={{
           position: 'absolute', top: '50%', left: '50%',
-          transform: 'translate(-50%,-50%)',
+          marginTop: -6, marginLeft: -6,
           width: 12, height: 12, borderRadius: 6,
           background: ACCENT,
           boxShadow: `0 0 16px rgba(42,111,166,0.55)`,
@@ -202,9 +204,10 @@ const LOADING_STEPS = [
 function LoadingScreen({ onDone }: { onDone: () => void }) {
   const [idx, setIdx] = React.useState(0);
   const [barPct, setBarPct] = React.useState(0);
+  const [exiting, setExiting] = React.useState(false);
 
   React.useEffect(() => {
-    const duration = 4000;
+    const duration = 2800;
     const start = performance.now();
     let rafId: number;
 
@@ -216,7 +219,9 @@ function LoadingScreen({ onDone }: { onDone: () => void }) {
       if (pct < 1) {
         rafId = requestAnimationFrame(tick);
       } else {
-        setTimeout(onDone, 120);
+        // Brief hold, then fade out, then unmount
+        setTimeout(() => setExiting(true), 150);
+        setTimeout(onDone, 460);
       }
     }
     rafId = requestAnimationFrame(tick);
@@ -224,7 +229,10 @@ function LoadingScreen({ onDone }: { onDone: () => void }) {
   }, []);
 
   return (
-    <div style={{
+    <motion.div
+      animate={{ opacity: exiting ? 0 : 1 }}
+      transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+      style={{
       minHeight: '100dvh',
       background: `radial-gradient(ellipse at top, rgba(42,111,166,0.06) 0%, ${BG} 60%)`,
       display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
@@ -298,49 +306,116 @@ function LoadingScreen({ onDone }: { onDone: () => void }) {
           </AnimatePresence>
         </div>
 
-        {/* Step dots */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        {/* Segmented progress bar — each segment fills progressively during its step */}
+        <div style={{ width: '100%', maxWidth: 320, display: 'flex', gap: 6 }}>
           {LOADING_STEPS.map((_, i) => {
+            // Each segment's fill (0..1) — based on overall barPct sliced into N parts
+            const segPct = Math.max(0, Math.min(1, barPct * LOADING_STEPS.length - i));
             const isActive = i === idx;
-            const isDone = i < idx;
             return (
-              <motion.div
+              <div
                 key={i}
-                animate={{
-                  width: isActive ? 28 : 8,
-                  background: isDone ? ACCENT : isActive ? ACCENT : 'rgba(42,111,166,0.18)',
-                }}
-                transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
                 style={{
-                  height: 6, borderRadius: 3,
+                  flex: 1, height: 6, borderRadius: 3,
+                  background: 'rgba(42,111,166,0.18)',
+                  overflow: 'hidden', position: 'relative',
+                  boxShadow: isActive && segPct < 1 ? '0 0 12px rgba(42,111,166,0.55)' : 'none',
+                  transition: 'box-shadow 0.3s',
                 }}
-              />
+              >
+                {/* Filling part */}
+                <div style={{
+                  position: 'absolute', top: 0, bottom: 0, left: 0,
+                  width: `${segPct * 100}%`,
+                  background: ACCENT,
+                  borderRadius: 3,
+                  transition: 'width 0.05s linear',
+                  overflow: 'hidden',
+                }}>
+                  {isActive && segPct < 1 && (
+                    <div style={{
+                      position: 'absolute', top: 0, bottom: 0,
+                      width: '50%', right: '-10%',
+                      background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.7), transparent)',
+                      animation: 'wp-shimmer 1.2s infinite',
+                    }} />
+                  )}
+                </div>
+              </div>
             );
           })}
         </div>
+      </div>
+    </motion.div>
+  );
+}
 
-        {/* Progress bar with shimmer */}
-        <div style={{
-          width: '100%', maxWidth: 320, height: 4,
-          background: 'rgba(42,111,166,0.12)', borderRadius: 2, overflow: 'hidden',
-        }}>
-          <div style={{
-            height: '100%',
-            background: `linear-gradient(90deg, ${ACCENT} 0%, #4b9fd4 100%)`,
-            borderRadius: 2,
-            width: `${barPct * 100}%`,
-            transition: 'width 0.05s linear',
-            position: 'relative', overflow: 'hidden',
-            boxShadow: `0 0 12px rgba(42,111,166,0.55)`,
-          }}>
-            <div style={{
-              position: 'absolute', top: 0, bottom: 0,
-              width: '30%',
-              background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.55), transparent)',
-              animation: 'wp-shimmer 1.4s infinite',
-            }} />
-          </div>
-        </div>
+// ── Dev Navigation Bar (DEV only) ────────────────────────────────
+const DEV_VIEWS = [
+  { label: 'ThankYou',  view: 'intro'    as View, step: -1 },
+  { label: 'Invite',    view: 'invite'   as View, step: -1 },
+  { label: 'Landing',   view: 'landing'  as View, step: -1 },
+  { label: 'Q1 Haus?',  view: 'quiz'     as View, step: 0  },
+  { label: 'Q2 Miete?', view: 'quiz'     as View, step: 1  },
+  { label: 'Q3 Heizung',view: 'quiz'     as View, step: 2  },
+  { label: 'Q4 Auto',   view: 'quiz'     as View, step: 3  },
+  { label: 'Basics',    view: 'basics'   as View, step: -1 },
+  { label: 'Loading',   view: 'loading'  as View, step: -1 },
+  { label: 'Results',   view: 'results'  as View, step: -1 },
+];
+
+function DevNav({
+  currentView, currentStep, jump,
+}: {
+  currentView: View;
+  currentStep: number;
+  jump: (v: View, s: number) => void;
+}) {
+  const [open, setOpen] = React.useState(true);
+  if (!import.meta.env.DEV) return null;
+  return (
+    <div style={{
+      position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 9999,
+      fontFamily: 'monospace',
+    }}>
+      <div style={{
+        background: '#111827',
+        display: 'flex', alignItems: 'center',
+        padding: '0 8px', gap: 4,
+        height: open ? 34 : 22,
+        transition: 'height 0.15s',
+        overflow: 'hidden',
+      }}>
+        <button
+          onClick={() => setOpen(o => !o)}
+          style={{
+            background: '#374151', border: 'none', color: '#9ca3af',
+            borderRadius: 4, padding: '2px 7px', fontSize: 10,
+            cursor: 'pointer', fontFamily: 'monospace', flexShrink: 0,
+            lineHeight: 1.6,
+          }}
+        >
+          {open ? '▲ DEV' : '▼ DEV'}
+        </button>
+        {open && DEV_VIEWS.map(({ label, view, step }) => {
+          const isActive = currentView === view && (view !== 'quiz' || currentStep === step);
+          return (
+            <button
+              key={`${view}-${step}`}
+              onClick={() => jump(view, step)}
+              style={{
+                background: isActive ? '#2563eb' : '#1f2937',
+                border: `1px solid ${isActive ? '#3b82f6' : '#374151'}`,
+                color: isActive ? '#fff' : '#9ca3af',
+                borderRadius: 4, padding: '2px 8px', fontSize: 11,
+                cursor: 'pointer', fontFamily: 'monospace',
+                whiteSpace: 'nowrap', lineHeight: 1.6,
+              }}
+            >
+              {label}
+            </button>
+          );
+        })}
       </div>
     </div>
   );
@@ -353,6 +428,13 @@ export default function MvpWizard() {
   const [profile, setProfile] = useState<MvpProfile>(INITIAL);
   const [dir, setDir] = useState(1);
   const [finalProfile, setFinalProfile] = useState<MvpProfile | null>(null);
+
+  function devJump(v: View, s: number) {
+    if (v === 'results') setFinalProfile(profile);
+    if (s >= 0) setStep(s);
+    setView(v);
+  }
+  const devNav = <DevNav currentView={view} currentStep={step} jump={devJump} />;
 
   const current = STEPS[step];
   const currentValue = profile[current.key];
@@ -429,38 +511,25 @@ export default function MvpWizard() {
     return () => window.removeEventListener('keydown', onKey);
   }, [canNext, step, view]);
 
-  if (view === 'intro') return <MvpThankYou onStart={() => setView('landing')} />;
-  if (view === 'landing') return <MvpHomeLanding onStart={() => setView('quiz')} onBack={() => setView('intro')} />;
+  if (view === 'intro') return <>{devNav}<MvpThankYou onStart={() => setView('landing')} onInviteFriends={() => setView('invite')} /></>;
+  if (view === 'invite') return <>{devNav}<MvpFriendInvite onBack={() => setView('intro')} /></>;
+  if (view === 'landing') return <>{devNav}<MvpHomeLanding onStart={() => setView('quiz')} onBack={() => setView('intro')} /></>;
   if (view === 'basics') {
-    const totalVehicles = profile.vehicles.verbrenner + profile.vehicles.eauto + profile.vehicles.hybrid;
-    const hasVehicle = totalVehicles > 0;
     return (
-      <MvpBasics
+      <>{devNav}<MvpBasics
         initial={{
-          steuererklaerung: profile.steuererklaerung,
-          girokonto: profile.girokonto,
-          internet: profile.internet,
-          mobilfunk: profile.mobilfunk,
-          haftpflicht: profile.haftpflicht,
-          hausrat: profile.hausrat,
-          berufsunfaehigkeit: profile.berufsunfaehigkeit,
-          gebaeude: profile.gebaeude,
-          kfzVersicherung: profile.kfzVersicherung,
+          steuererklaerung: profile.steuererklaerung ?? false,
+          girokonto:        profile.girokonto        ?? false,
+          internet:         profile.internet         ?? false,
+          mobilfunk:        profile.mobilfunk        ?? false,
         }}
-        showGebaeude={profile.propertyType === 'haus' && profile.tenure === 'eigentum'}
-        showKfz={hasVehicle}
         onDone={(data: BasicsData) => {
           const fp = {
             ...profile,
             steuererklaerung: data.steuererklaerung,
-            girokonto: data.girokonto,
-            internet: data.internet,
-            mobilfunk: data.mobilfunk,
-            haftpflicht: data.haftpflicht,
-            hausrat: data.hausrat,
-            berufsunfaehigkeit: data.berufsunfaehigkeit,
-            gebaeude: data.gebaeude,
-            kfzVersicherung: data.kfzVersicherung,
+            girokonto:        data.girokonto,
+            internet:         data.internet,
+            mobilfunk:        data.mobilfunk,
           };
           localStorage.setItem('wpilot_mvp_profile', JSON.stringify(fp));
           setProfile(fp);
@@ -468,11 +537,11 @@ export default function MvpWizard() {
           setView('loading');
         }}
         onBack={() => setView('quiz')}
-      />
+      /></>
     );
   }
-  if (view === 'loading') return <LoadingScreen onDone={() => setView('results')} />;
-  if (view === 'results' && finalProfile) return <MvpDashboard initialProfile={finalProfile} />;
+  if (view === 'loading') return <>{devNav}<LoadingScreen onDone={() => setView('results')} /></>;
+  if (view === 'results' && finalProfile) return <>{devNav}<MvpDashboard initialProfile={finalProfile} /></>;
 
   const slideVariants = {
     enter:  (d: number) => ({ x: d > 0 ?  80 : -80, opacity: 0 }),
@@ -488,14 +557,15 @@ export default function MvpWizard() {
   const progressPct = 10 + (effectiveStep / effectiveTotal) * 85;
 
   return (
+    <>{devNav}
     <div style={{
       minHeight: '100dvh', background: BG, display: 'flex', flexDirection: 'column',
       fontFamily: "'Poppins', sans-serif",
     }}>
       <WpHeader showProgress progressPct={progressPct} />
 
-      <div className="wp-page-quiz" style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '24px 16px 120px' }}>
-        <style>{`@media(min-width:640px){.wp-page-quiz{padding:32px 24px 120px !important;}}`}</style>
+      <div className="wp-page-quiz" style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '24px 16px 48px' }}>
+        <style>{`@media(min-width:640px){.wp-page-quiz{padding:32px 24px 56px !important;}}`}</style>
         <AnimatePresence mode="wait" custom={dir}>
           <motion.div
             key={step}
@@ -540,7 +610,13 @@ export default function MvpWizard() {
                   onDecrement={(t) => setVehicleCount(t, -1)}
                   onNoVehicle={setNoVehicle}
                 />
-              ) : current.options.map(opt => {
+              ) : (
+                <div
+                  className={current.key === 'heatingType' ? 'wp-opts-grid' : undefined}
+                  style={{ display: 'flex', flexDirection: 'column', gap: 8 }}
+                >
+                  <style>{`@media(min-width:520px){.wp-opts-grid{display:grid !important;grid-template-columns:repeat(2,1fr) !important;gap:8px !important;}}`}</style>
+                  {current.options.map(opt => {
                 const isSelected = String(currentValue) === String(opt.value);
                 const OptIcon = opt.icon;
                 return (
@@ -563,6 +639,7 @@ export default function MvpWizard() {
                     }}
                     style={{
                       width: '100%',
+                      gridColumn: opt.value === 'weiss_nicht' ? '1 / -1' : undefined,
                       background: isSelected ? BLUE_VERY_BRIGHT : WHITE,
                       border: `1.5px solid ${isSelected ? ACCENT : BORDER}`,
                       borderRadius: RADIUS_MD, padding: '14px 16px',
@@ -598,35 +675,68 @@ export default function MvpWizard() {
                   </motion.button>
                 );
               })}
-              <button
-                onClick={skip}
-                style={{
-                  background: 'none', border: 'none', cursor: 'pointer',
-                  fontSize: TEXT_XS + 1, color: GREY_700, fontWeight: FW_MEDIUM,
-                  padding: '12px 0 4px', textAlign: 'center' as const,
-                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4,
-                  width: '100%', fontFamily: "'Poppins', sans-serif",
-                }}
-              >
-                Überspringen <IconArrowRight size={13} stroke={1.5} />
-              </button>
+                </div>
+              )}
+              {/* Inline navigation row (replaces sticky WpBottomNav) */}
+              <div style={{
+                display: 'flex', alignItems: 'center', gap: 10,
+                marginTop: 14,
+              }}>
+                <button
+                  onClick={goBack}
+                  style={{
+                    flex: '0 0 auto',
+                    background: WHITE, color: PRIMARY,
+                    border: `1.5px solid ${BORDER}`,
+                    borderRadius: 999, padding: '11px 18px',
+                    fontSize: 13, fontWeight: FW_BOLD,
+                    cursor: 'pointer', fontFamily: 'inherit',
+                    display: 'inline-flex', alignItems: 'center', gap: 6,
+                  }}
+                >
+                  <IconArrowLeft size={14} stroke={2.4} /> Zurück
+                </button>
+                <div style={{ flex: 1 }} />
+                <button
+                  onClick={skip}
+                  style={{
+                    flex: '0 0 auto',
+                    background: 'transparent', color: GREY_700,
+                    border: 'none',
+                    borderRadius: 999, padding: '11px 14px',
+                    fontSize: 13, fontWeight: FW_MEDIUM,
+                    cursor: 'pointer', fontFamily: 'inherit',
+                    display: 'inline-flex', alignItems: 'center', gap: 4,
+                  }}
+                >
+                  Überspringen <IconArrowRight size={13} stroke={1.8} />
+                </button>
+                <button
+                  onClick={goNext}
+                  disabled={!canNext}
+                  style={{
+                    flex: '0 0 auto',
+                    background: canNext ? PRIMARY : GREY_200,
+                    color: canNext ? WHITE : GREY_700,
+                    border: 'none',
+                    borderRadius: 999, padding: '11px 22px',
+                    fontSize: 13, fontWeight: FW_BOLD,
+                    cursor: canNext ? 'pointer' : 'not-allowed',
+                    fontFamily: 'inherit',
+                    display: 'inline-flex', alignItems: 'center', gap: 6,
+                    boxShadow: canNext ? '0 2px 8px rgba(36,60,71,0.25)' : 'none',
+                    transition: 'background 0.15s',
+                  }}
+                >
+                  Weiter <IconArrowRight size={14} stroke={2.5} />
+                </button>
+              </div>
             </div>
           </motion.div>
         </AnimatePresence>
       </div>
-
-      <WpBottomNav
-        onBack={goBack}
-        onNext={goNext}
-        nextDisabled={!canNext}
-        nextLabel="Weiter"
-        middle={
-          <div style={{ fontSize: 12, color: GREY_800, fontWeight: FW_MEDIUM }}>
-            {effectiveStep} / {effectiveTotal}
-          </div>
-        }
-      />
     </div>
+    </>
   );
 }
 

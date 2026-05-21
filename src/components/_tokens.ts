@@ -57,10 +57,10 @@ export const BG         = '#F4F6FA';
 
 // Radii
 export const RADIUS_XS   = 4;
-export const RADIUS_SM   = 8;
-export const RADIUS_MD   = 12;
-export const RADIUS_LG   = 16;
-export const RADIUS_XL   = 24;
+export const RADIUS_SM   = 6;
+export const RADIUS_MD   = 6;
+export const RADIUS_LG   = 6;
+export const RADIUS_XL   = 6;
 export const RADIUS_FULL = 200;
 
 // Typography (px)

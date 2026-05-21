@@ -39,17 +39,16 @@ import {
   IconTarget,
   IconHourglass,
   IconCoins,
-  IconShieldCheck,
-  IconHomeShield,
-  IconHeartHandshake,
   IconPlus,
 } from '@tabler/icons-react';
 import logoWp from '../../assets/logo-wp.png';
-import type { MvpProfile } from '../_types';
+import thermostatImg from '../../assets/thermostat.png';
+import type { MvpProfile, Residents } from '../_types';
 
 interface MvpTip {
   id: string;
   title: string;
+  tagline?: string;
   description?: string;
   why?: string;                // NEW — explains *why* you save with this
   partner: string;
@@ -147,48 +146,59 @@ const PROFILE_FIELDS = [
     ],
   },
   {
-    key: 'haftpflicht' as const,
-    label: 'Privathaftpflicht',
-    icon: IconShieldCheck,
-    options: [
-      { value: 'true',  label: 'Vorhanden',         icon: IconCheck },
-      { value: 'false', label: 'Nicht vorhanden',   icon: IconX },
-    ],
-  },
-  {
-    key: 'hausrat' as const,
-    label: 'Hausratversicherung',
-    icon: IconHomeShield,
-    options: [
-      { value: 'true',  label: 'Vorhanden',         icon: IconCheck },
-      { value: 'false', label: 'Nicht vorhanden',   icon: IconX },
-    ],
-  },
-  {
-    key: 'berufsunfaehigkeit' as const,
-    label: 'Berufsunfähigkeit',
-    icon: IconHeartHandshake,
-    options: [
-      { value: 'true',  label: 'Vorhanden',         icon: IconCheck },
-      { value: 'false', label: 'Nicht vorhanden',   icon: IconX },
-    ],
-  },
-  {
-    key: 'gebaeude' as const,
-    label: 'Wohngebäudeversicherung',
-    icon: IconBuilding,
-    options: [
-      { value: 'true',  label: 'Vorhanden',         icon: IconCheck },
-      { value: 'false', label: 'Nicht vorhanden',   icon: IconX },
-    ],
-  },
-  {
     key: 'kfzVersicherung' as const,
     label: 'KFZ-Versicherung',
     icon: IconCar,
     options: [
       { value: 'true',  label: 'Aktuell',           icon: IconCheck },
       { value: 'false', label: 'Nicht aktuell',     icon: IconX },
+    ],
+  },
+  // ── Ausstattung (Wohnsituation Detail) ─────────────────────────
+  {
+    key: 'balkon' as const,
+    label: 'Balkon / Loggia',
+    icon: IconLeaf,
+    options: [
+      { value: 'true',  label: 'Vorhanden',       icon: IconCheck },
+      { value: 'false', label: 'Nicht vorhanden', icon: IconX },
+    ],
+  },
+  {
+    key: 'sunHours' as const,
+    label: 'Sonnenstunden Balkon',
+    icon: IconSun,
+    options: [
+      { value: 'wenig',  label: 'Wenig (< 3 h)',    icon: IconSun },
+      { value: 'mittel', label: 'Mittel (3–6 h)',   icon: IconSun },
+      { value: 'viel',   label: 'Viel (6+ h)',      icon: IconSun },
+    ],
+  },
+  {
+    key: 'garten' as const,
+    label: 'Garten',
+    icon: IconLeaf,
+    options: [
+      { value: 'true',  label: 'Vorhanden',       icon: IconCheck },
+      { value: 'false', label: 'Nicht vorhanden', icon: IconX },
+    ],
+  },
+  {
+    key: 'garage' as const,
+    label: 'Garage',
+    icon: IconHome,
+    options: [
+      { value: 'true',  label: 'Vorhanden',       icon: IconCheck },
+      { value: 'false', label: 'Nicht vorhanden', icon: IconX },
+    ],
+  },
+  {
+    key: 'carport' as const,
+    label: 'Carport',
+    icon: IconHome,
+    options: [
+      { value: 'true',  label: 'Vorhanden',       icon: IconCheck },
+      { value: 'false', label: 'Nicht vorhanden', icon: IconX },
     ],
   },
 ];
@@ -198,6 +208,7 @@ const ALL_TIPS: MvpTip[] = [
   {
     id: 'strom-wechsel',
     title: 'Stromtarif wechseln',
+    tagline: 'Bis zu 40 % weniger Stromkosten durch Anbieterwechsel.',
     description: 'Mit Wechselpilot übernehmen wir den Wechsel komplett für Sie — automatisch zum besten Tarif, Jahr für Jahr. Sie zahlen nichts, profitieren aber dauerhaft von der günstigsten Stromrechnung.',
     why: 'Bei 3.500 kWh Jahresverbrauch zahlt eine Familie im Grundversorgungstarif schnell 400–600 € mehr als bei einem Wechseltarif mit Bonus. Stromtarife unterscheiden sich oft um 8–15 ct/kWh — und Wechselboni geben 50–250 € extra im ersten Jahr.',
     howTo: [
@@ -210,12 +221,13 @@ const ALL_TIPS: MvpTip[] = [
     difficulty: 'Einfach',
     partner: 'Octopus, Tibber, Lichtblick',
     priority: 3, category: 'energie', icon: IconBolt,
-    savingsHg2: 475, savingsHg3: 475,
+    savingsHg2: 300, savingsHg3: 450,
     condition: () => true,
   },
   {
     id: 'gas-wechsel',
     title: 'Gastarif wechseln',
+    tagline: 'Neuer Gastarif spart oft mehrere hundert Euro pro Jahr.',
     description: 'Wechselpilot prüft Ihren Gastarif automatisch jedes Jahr und wechselt für Sie zum günstigsten Anbieter — ohne dass Sie selbst aktiv werden müssen. Komplett kostenlos und ohne Aufwand.',
     why: 'Gaspreise sind 2024–2026 sehr volatil. Ein Haushalt mit 15.000 kWh Jahresverbrauch zahlt in der Grundversorgung oft 300–500 € mehr als bei einem optimierten Tarif. Mit Wechselbonus kommt im ersten Jahr nochmal eine Einmalzahlung dazu.',
     actionLabel: 'Jetzt Zähler anlegen',
@@ -230,12 +242,13 @@ const ALL_TIPS: MvpTip[] = [
     difficulty: 'Einfach',
     partner: 'Vattenfall, E.ON, EnBW',
     priority: 3, category: 'energie', icon: IconFlame,
-    savingsHg2: 361, savingsHg3: 361,
+    savingsHg2: 350, savingsHg3: 550,
     condition: () => true,
   },
   {
     id: 'thermostate',
     title: 'Smarte Thermostate',
+    tagline: 'Heizen automatisch nur, wenn Sie zuhause sind.',
     description: 'Smarte Thermostate heizen automatisch nur, wenn Sie zuhause sind. Studien des Fraunhofer-Instituts zeigen 8–15 % Heizkostenreduktion — bei einer Heizrechnung von 2.000 €/Jahr sind das 160–300 €.',
     why: 'Klassische Thermostate heizen "stumpf" auf eine eingestellte Temperatur. Smarte erkennen offene Fenster, regeln raumweise abhängig von Ihrer Anwesenheit und senken nachts automatisch ab. Förderung über BAFA ist bei Einzelmaßnahmen möglich.',
     howTo: [
@@ -250,12 +263,13 @@ const ALL_TIPS: MvpTip[] = [
     difficulty: 'Einfach',
     partner: 'tado°, Homematic IP',
     priority: 3, category: 'heizung', icon: IconTemperature,
-    savingsHg2: 220, savingsHg3: 280,
+    savingsHg2: 160, savingsHg3: 260,
     condition: () => true,
   },
   {
     id: 'waermepumpe',
     title: 'Wärmepumpe',
+    tagline: 'Bis zu 70 % Förderung und halbierte Heizkosten.',
     description: 'Eine Wärmepumpe nutzt Umweltwärme statt Gas oder Öl und ist im Betrieb 50–70 % günstiger. Bei einem Einfamilienhaus mit ca. 20.000 kWh Heizbedarf sind das 800–1.500 € weniger pro Jahr — und zusätzlich bis zu 70 % Förderung beim Einbau.',
     why: 'Wärmepumpen arbeiten mit Strom + Umgebungswärme und erreichen einen "Wirkungsgrad" von 300–400 % (1 kWh Strom → 3–4 kWh Wärme). Bei aktuellen Strompreisen unschlagbar. Ab 2024 sind 65 % erneuerbare Heizenergie gesetzlich vorgeschrieben — Gas-/Ölheizung wird langfristig teurer (CO₂-Preis steigt).',
     howTo: [
@@ -270,12 +284,13 @@ const ALL_TIPS: MvpTip[] = [
     difficulty: 'Aufwändig',
     partner: 'Thermondo, 1KOMMA5°',
     priority: 2, category: 'heizung', icon: IconLeaf,
-    savingsHg2: 1200, savingsHg3: 1200,
+    savingsHg2: 800, savingsHg3: 1500,
     condition: (p) => p.tenure === 'eigentum' && p.propertyType === 'haus' && p.heatingType !== 'waermepumpe',
   },
   {
     id: 'solaranlage',
     title: 'Solaranlage',
+    tagline: 'Eigener Sonnenstrom statt 40 ct/kWh aus dem Netz.',
     description: 'Eine 10-kWp-Anlage mit Speicher produziert ca. 9.500 kWh/Jahr. Durch Eigenverbrauch (60–80 %) und Einspeisevergütung sparen Hausbesitzer typischerweise 1.000–1.500 € pro Jahr — bei einer Lebensdauer von 25+ Jahren.',
     why: 'Strom vom eigenen Dach kostet ca. 8–12 ct/kWh über die Lebensdauer — der Netzstrom 35–45 ct/kWh. Mit Batteriespeicher decken Sie tagsüber 30–50 % und mit Speicher bis 80 % Ihres Eigenbedarfs. Eigenverbrauch und Einspeisevergütung (8,03 ct/kWh, 20 Jahre garantiert) machen die Anlage zur sichersten Geldanlage.',
     howTo: [
@@ -290,12 +305,13 @@ const ALL_TIPS: MvpTip[] = [
     difficulty: 'Aufwändig',
     partner: 'Enpal, Zolar',
     priority: 2, category: 'solar', icon: IconSun,
-    savingsHg2: 1100, savingsHg3: 1300,
+    savingsHg2: 900, savingsHg3: 1400,
     condition: (p) => p.tenure === 'eigentum' && p.propertyType === 'haus',
   },
   {
     id: 'balkonkraftwerk',
     title: 'Balkonkraftwerk',
+    tagline: 'Eigener Solarstrom vom Balkon — auch für Mieter.',
     description: 'Ein 800-Watt-Set produziert in Deutschland ca. 600–800 kWh/Jahr. Bei einem Strompreis von 35 ct/kWh sind das 200–280 € Ersparnis jährlich — bei einer Investition von 400–700 €.',
     why: 'Seit 2024 vom "Solarpaket I" stark vereinfacht: Bis 800 W Wechselrichter genehmigungsfrei, normaler Schuko-Stecker erlaubt, einfache Anmeldung. Auch Mieter dürfen installieren (Beschluss BGH 2024). Steuerfrei (0 % MwSt. auf Privatanlagen).',
     howTo: [
@@ -310,12 +326,13 @@ const ALL_TIPS: MvpTip[] = [
     difficulty: 'Einfach',
     partner: 'Yuma, Priwatt',
     priority: 2, category: 'solar', icon: IconSun,
-    savingsHg2: 220, savingsHg3: 240,
-    condition: (p) => !(p.tenure === 'eigentum' && p.propertyType === 'haus'),
+    savingsHg2: 180, savingsHg3: 240,
+    condition: (p) => !(p.tenure === 'eigentum' && p.propertyType === 'haus') && p.equipment?.balkon !== false,
   },
   {
     id: 'kfz-versicherung',
     title: 'KFZ-Versicherung wechseln',
+    tagline: 'Gleicher Schutz, oft 200–500 € günstiger pro Jahr.',
     description: 'KFZ-Tarife unterscheiden sich bei gleicher Leistung oft um 200–500 € pro Jahr. Eine durchschnittliche Vollkaskoversicherung kostet 800–1.200 € — Wechsler sparen typischerweise 25–40 %.',
     why: 'Versicherer locken Neukunden mit Rabatten und subventionieren diese mit höheren Beiträgen bei Bestandskunden — der sog. Treue-Strafe. Ein jährlicher Vergleich nutzt diese Logik aus. Schadenfreiheitsklasse, Bonus-Schutz und Werkstattbindung bleiben beim Wechsel erhalten.',
     howTo: [
@@ -330,12 +347,13 @@ const ALL_TIPS: MvpTip[] = [
     difficulty: 'Einfach',
     partner: 'Clark, Tarifcheck, HUK24',
     priority: 3, category: 'mobilitaet', icon: IconCar,
-    savingsHg2: 350, savingsHg3: 350,
+    savingsHg2: 200, savingsHg3: 300,
     condition: (p) => p.autoType !== 'keins' && p.autoType !== '',
   },
   {
     id: 'thg-praemie',
     title: 'THG-Prämie',
+    tagline: 'Geschenkte Prämie fürs E-Auto in nur 5 Minuten.',
     description: 'Als E-Auto-Fahrer haben Sie Anspruch auf die staatliche THG-Quote. Die Auszahlungen sind 2024–2026 stark gefallen — aktuell 70–110 € pro E-Auto und Jahr. Trotzdem geschenktes Geld für 5 Min Aufwand.',
     why: 'CO₂-Pflicht-Unternehmen (Mineralölkonzerne) müssen Quoten erfüllen. Ihr E-Auto spart CO₂ → Sie können die Quote verkaufen. Vermittler bündeln viele Halter und reichen die Quote beim Umweltbundesamt ein.',
     howTo: [
@@ -349,12 +367,13 @@ const ALL_TIPS: MvpTip[] = [
     difficulty: 'Einfach',
     partner: 'Geld für eAuto',
     priority: 1, category: 'mobilitaet', icon: IconBatteryCharging,
-    savingsHg2: 95, savingsHg3: 95,
+    savingsHg2: 250, savingsHg3: 280,
     condition: (p) => (p.vehicles?.eauto ?? 0) > 0 || p.autoType === 'eauto',
   },
   {
     id: 'wallbox',
     title: 'Wallbox / Laden zuhause',
+    tagline: 'Zuhause laden zum halben Preis öffentlicher Säulen.',
     description: 'Heimladen mit Wallbox kostet ca. 35 ct/kWh (Hausstrom) vs. 55–80 ct/kWh an öffentlichen Schnellladern. Bei 15.000 km/Jahr und 18 kWh/100km sparen Sie 400–800 €. Mit eigener PV-Anlage Eigenverbrauch zu ~12 ct/kWh: bis zu 1.000 € Ersparnis.',
     why: 'Öffentliche Ladesäulen verlangen happige Aufschläge (DC-Schnelllader oft 70+ ct/kWh). Eine 11-kW-Wallbox lädt das Auto über Nacht voll und nutzt günstige Heimstrom-Tarife oder bei PV den eigenen Solarstrom. Spezielle Autostrom-Tarife (Wechselpilot-Empfehlung!) liegen oft bei 25–28 ct/kWh.',
     howTo: [
@@ -369,90 +388,18 @@ const ALL_TIPS: MvpTip[] = [
     difficulty: 'Mittel',
     partner: 'Enpal, charge.cloud',
     priority: 1, category: 'mobilitaet', icon: IconBatteryCharging,
-    savingsHg2: 400, savingsHg3: 500,
-    condition: (p) => (p.vehicles?.hybrid ?? 0) > 0 || (p.vehicles?.eauto ?? 0) > 0 || p.autoType === 'hybrid',
-  },
-  {
-    id: 'haftpflicht-versicherung',
-    title: 'Privathaftpflicht abschließen',
-    description: 'Eine moderne Privathaftpflicht mit 10 Mio. € Deckung kostet 50–80 €/Jahr — wer einen alten Tarif hat, zahlt oft 120–200 €. Wer noch keine hat, riskiert im Schadensfall die finanzielle Existenz.',
-    why: 'Im Alltag passiert schnell ein teurer Fehler: Glas auf dem Hardwood-Boden des Freundes, beschädigtes Mietfahrzeug, Sturz eines Passanten. Privathaftpflicht zahlt — ohne Versicherung haften Sie privat (BGH: lebenslang).',
-    howTo: [
-      'Bedarf prüfen: Solo-Tarif ca. 50–70 €/Jahr, Paartarif 70–100 €/Jahr, Familientarif (mit minderjährigen Kindern) 80–120 €/Jahr.',
-      'Online vergleichen (Check24, Verivox) — direkt nach Preis filtern.',
-      'Auf Stiftung-Warentest-Empfehlung und folgende Punkte achten: Deckungssumme ≥ 10 Mio. €, Forderungsausfalldeckung (zahlt auch wenn Schädiger nicht zahlt), Best-Leistungs-Garantie.',
-      'Bei alter Police: Kündigungsschreiben aus dem Portal als Vorlage. Neue Police gilt sofort beim Abschluss.',
-      'Schäden direkt online melden — bei modernen Anbietern 24/7-Hotline + App.',
-    ],
-    effort: '15 Min einmalig',
-    difficulty: 'Einfach',
-    partner: 'Clark, Check24',
-    priority: 3, category: 'versicherung', icon: IconShieldCheck,
-    savingsHg2: 60, savingsHg3: 80,
-    condition: () => true,
-  },
-  {
-    id: 'hausrat-versicherung',
-    title: 'Hausratversicherung optimieren',
-    description: 'Eine durchschnittliche Hausratversicherung für eine 80-qm-Wohnung kostet 80–150 €/Jahr. Alte Verträge ohne Elementarschäden-Deckung sind 2024 angesichts häufiger Starkregen-Ereignisse riskant — und oft 50–100 € teurer als moderne Tarife.',
-    why: 'Hausrat zahlt bei Einbruch, Feuer, Wasser, Sturm und (mit Zusatz) Elementarschäden. Faustregel: Versicherungssumme ≥ 650 €/qm Wohnfläche. Häufiger Fehler: zu hohe Summe → zu hohe Prämie. Neue Tarife haben smartere Konditionen (Fahrraddiebstahl inklusive, Außenversicherung weltweit).',
-    howTo: [
-      'Wohnfläche × 650 € = realistische Versicherungssumme (z.B. 80 qm → 52.000 €). Wertvolle Einrichtung extra erfassen.',
-      'Tarifvergleich starten — wichtige Klauseln: Elementarschäden (Hochwasser, Erdrutsch, Starkregen), Fahrraddiebstahl, Glasbruch, grobe Fahrlässigkeit.',
-      'Selbstbeteiligung von 150–250 € senkt die Prämie um 15–25 %.',
-      'Kündigungsfrist: 3 Monate zum Ablauf. Bei Beitragserhöhung Sonderkündigungsrecht (1 Monat).',
-      'Beim Wechsel: Neuer Anbieter übernimmt oft Kündigung. Versicherung gilt nahtlos weiter.',
-    ],
-    effort: '20 Min einmalig',
-    difficulty: 'Einfach',
-    partner: 'Clark, Check24',
-    priority: 2, category: 'versicherung', icon: IconHomeShield,
-    savingsHg2: 100, savingsHg3: 120,
-    condition: () => true,
-  },
-  {
-    id: 'berufsunfaehigkeit-versicherung',
-    title: 'Berufsunfähigkeitsversicherung',
-    description: 'Jeder vierte Deutsche wird berufsunfähig — Hauptursache: psychische Erkrankungen, Rückenleiden, Krebs. Die staatliche Erwerbsminderungsrente reicht selten zum Leben (Ø 1.000 €/Monat). Eine BU sichert Ihr Einkommen mit ca. 30–70 €/Monat ab.',
-    why: 'Bei Berufsunfähigkeit zahlt die BU eine vereinbarte Monatsrente bis zum Renteneintritt. Ohne BU müssen Sie auf private Ersparnisse, Familie oder die geringe staatliche Rente zurückgreifen. Je jünger und gesünder beim Abschluss, desto günstiger — Beitrag bleibt für die gesamte Vertragslaufzeit gleich.',
-    howTo: [
-      'Bedarf berechnen: 70–80 % des Nettoeinkommens als monatliche BU-Rente (z.B. 2.500 € Netto → 1.800 € BU).',
-      'Unabhängige Beratung holen — kein Versicherer-Vertreter, da diese provisionsabhängig empfehlen. Beratung kostet 300–800 € (Honorar), spart aber oft Jahresbeiträge ein.',
-      'Gesundheitsfragen vorbereiten: alle Diagnosen, Behandlungen, Therapien, Klinikaufenthalte der letzten 5–10 Jahre. Falsche Angaben → Leistungsverweigerung im Schadensfall.',
-      'Auf Top-Klauseln achten: Verzicht auf abstrakte Verweisung, Nachversicherungsgarantie (Anpassung bei Heirat/Kind), Beitragsdynamik 2–3 %/Jahr.',
-      'Anonyme Risikovoranfrage über Makler stellen — verhindert dass eine Ablehnung in der Wagnisdatei landet.',
-      'Bei Vertragsschluss: Lebenslange Beitrags-Garantie wählen, nicht nur die "Bruttoprämie".',
-    ],
-    effort: '4–6 Wochen Projekt',
-    difficulty: 'Aufwändig',
-    partner: 'Clark, MLP',
-    priority: 2, category: 'versicherung', icon: IconHeartHandshake,
-    savingsHg2: 0, savingsHg3: 0,
-    condition: () => true,
-  },
-  {
-    id: 'gebaeude-versicherung',
-    title: 'Wohngebäudeversicherung optimieren',
-    description: 'Eine Wohngebäudeversicherung für ein typisches Einfamilienhaus kostet 400–800 €/Jahr. Alte Verträge ohne Elementarschäden-Deckung sind 2024–2026 angesichts häufiger Unwetter ein hohes Risiko. Wechsel spart typisch 150–300 €/Jahr.',
-    why: 'Gebäudeversicherung deckt das Haus selbst (Mauern, Dach, Heizung, fest verbaute Einrichtung) gegen Feuer, Sturm, Hagel, Leitungswasser, optional Elementarschäden. Wer bei Hochwasser/Starkregen nicht versichert ist, riskiert Schäden in 6-stelliger Höhe.',
-    howTo: [
-      'Wert 1914 ermitteln (steht auf der aktuellen Police) — alternativ Schätzung über Vergleichsrechner mit Baujahr, Wohnfläche, Ausstattung.',
-      'Aktuelle Police prüfen: Sind Elementarschäden (Hochwasser, Erdrutsch, Starkregen, Schneedruck) eingeschlossen? Wenn nicht → dringend ergänzen oder wechseln.',
-      'Tarifvergleich starten (Check24, Verivox) — Eingabe der Hausdaten dauert 10 Min.',
-      'Selbstbeteiligung 250–500 € senkt Prämie um 15–25 %, lohnt sich bei eigener Rücklage.',
-      'Kündigungsfristen beachten: 3 Monate zum Ablauf, Sonderkündigungsrecht bei Beitragserhöhung (1 Monat).',
-      'Beim Wechsel: Neue Versicherung übernimmt Kündigung. Nahtloser Übergang sicherstellen — sonst Versicherungslücke.',
-    ],
-    effort: '30 Min einmalig',
-    difficulty: 'Mittel',
-    partner: 'Clark, Check24',
-    priority: 2, category: 'versicherung', icon: IconBuilding,
-    savingsHg2: 250, savingsHg3: 280,
-    condition: (p) => p.propertyType === 'haus' && p.tenure === 'eigentum',
+    savingsHg2: 350, savingsHg3: 600,
+    condition: (p) => {
+      const hasEV = (p.vehicles?.hybrid ?? 0) > 0 || (p.vehicles?.eauto ?? 0) > 0 || p.autoType === 'hybrid';
+      // Wenn Garage/Carport explizit "nicht vorhanden" → keine Wallbox-Empfehlung
+      const noParkSpace = p.equipment?.garage === false && p.equipment?.carport === false;
+      return hasEV && !noParkSpace;
+    },
   },
   {
     id: 'internet-wechsel',
     title: 'Internet-Anbieter wechseln',
+    tagline: 'Neukunden-Tarife sparen 15–25 € pro Monat.',
     description: 'Stammkunden zahlen für 100-Mbit-DSL durchschnittlich 35–45 €/Monat, Neukunden bekommen denselben Tarif oft für 20–25 €/Monat im ersten Jahr. Das sind 180–300 € Ersparnis im Jahr — und der Wechsel ist meist 1 Klick.',
     why: 'Internet-Anbieter subventionieren Neukunden mit Rabatten und kompensieren das durch höhere Bestandskunden-Preise. Wechselbonus, Hardware-Aktionen und 12 Monate Neukunden-Rabatt machen jährliche Wechsel-Strategie lukrativ.',
     howTo: [
@@ -466,12 +413,13 @@ const ALL_TIPS: MvpTip[] = [
     difficulty: 'Einfach',
     partner: 'Verivox, Check24',
     priority: 2, category: 'kommunikation', icon: IconWifi,
-    savingsHg2: 240, savingsHg3: 240,
+    savingsHg2: 180, savingsHg3: 240,
     condition: () => true,
   },
   {
     id: 'mobilfunk-wechsel',
     title: 'Mobilfunk-Tarif optimieren',
+    tagline: 'Gleiches Netz, gleiches GB — für die Hälfte der Kosten.',
     description: 'Viele Nutzer zahlen 30–50 €/Monat für 10 GB im D-Netz, obwohl gleiche Leistung als Neukunde für 12–20 €/Monat zu haben ist. Bei jährlichem Wechsel: 200–400 € Ersparnis. Bei Smartphones im Vertrag: auf Sim-Only-Tarif + separates Handy umstellen.',
     why: 'Mobilfunk-Anbieter haben hohe Margen bei Bestandskunden. Neukunden-Aktionen sind dauerhaft verfügbar. Mit Rufnummer-Mitnahme behalten Sie Ihre Nummer und können fast risikofrei jährlich wechseln.',
     howTo: [
@@ -486,12 +434,13 @@ const ALL_TIPS: MvpTip[] = [
     difficulty: 'Einfach',
     partner: 'Check24, Verivox',
     priority: 2, category: 'kommunikation', icon: IconDeviceMobile,
-    savingsHg2: 180, savingsHg3: 180,
+    savingsHg2: 150, savingsHg3: 250,
     condition: () => true,
   },
   {
     id: 'steuererklaerung',
     title: 'Steuererklärung einreichen',
+    tagline: 'Durchschnittlich 1.095 € Rückerstattung pro Jahr.',
     description: 'Laut Statistischem Bundesamt erhalten Steuerzahler in Deutschland durchschnittlich 1.095 € zurück. Mit modernen Steuer-Apps ist die Erklärung in 30–60 Minuten erledigt — ohne Steuerwissen, ohne ELSTER-Formulare.',
     why: 'Werbungskosten (Fahrtkosten, Homeoffice-Pauschale 6 €/Tag, Arbeitsmittel, Fortbildung), Versicherungsbeiträge, Spenden, Handwerker- und haushaltsnahe Dienstleistungen werden vom zu versteuernden Einkommen abgezogen → mehr Steuern zurück. Frist: 31. Juli des Folgejahres (bei Steuer-App-Nutzung: 30. April Folge-Folgejahr).',
     howTo: [
@@ -511,12 +460,13 @@ const ALL_TIPS: MvpTip[] = [
     effort: '30–60 Min einmal jährlich',
     difficulty: 'Einfach',
     priority: 3, category: 'finanzen', icon: IconReceipt,
-    savingsHg2: 1095, savingsHg3: 1095,
+    savingsHg2: 1095, savingsHg3: 1200,
     condition: () => true,
   },
   {
     id: 'kostenloses-girokonto',
     title: 'Kostenloses Girokonto',
+    tagline: 'Kontoführung 0 € — plus Wechselbonus geschenkt.',
     description: 'Klassische Filialbanken kassieren oft 4–10 €/Monat Kontoführungsgebühr, plus Girocard-Gebühr, plus Auslands-Aufschläge. Direktbanken bieten ein vollwertiges Konto mit Karte komplett kostenlos. Ersparnis: 60–120 €/Jahr.',
     why: 'Direktbanken (ING, DKB, Comdirect, C24 Bank) finanzieren sich über andere Einnahmequellen und können das Girokonto kostenlos anbieten — bei voller Funktionalität (Überweisung, Girocard, Apple/Google Pay, kostenfreies Geldabheben an vielen Automaten). Bonus: oft 50–100 € Wechselbonus.',
     howTo: [
@@ -530,7 +480,126 @@ const ALL_TIPS: MvpTip[] = [
     difficulty: 'Einfach',
     partner: 'ING, DKB',
     priority: 1, category: 'finanzen', icon: IconPig,
-    savingsHg2: 90, savingsHg3: 90,
+    savingsHg2: 80, savingsHg3: 100,
+    condition: () => true,
+  },
+
+  // ── Gratis / Verhaltens-Tipps ────────────────────────────────────
+  {
+    id: 'heizung-1-grad',
+    title: 'Heizung 1 °C kälter',
+    tagline: 'Jedes Grad weniger spart 6 % Heizenergie — kostenlos.',
+    description: 'Jedes Grad weniger Raumtemperatur spart laut Verbraucherzentrale rund 6 % Heizenergie. Bei einer Heizrechnung von 1.500 €/Jahr sind das 90 € — ohne einen Cent zu investieren.',
+    why: 'Die meisten Wohnungen werden auf 22–23 °C beheizt, empfohlen sind 19–21 °C im Wohnbereich und 17–18 °C im Schlafzimmer. Die gefühlte Wärme bleibt fast gleich — der Verbrauch sinkt deutlich.',
+    howTo: [
+      'Thermometer in jeden Raum stellen (Smartphone-App reicht).',
+      'Wohnzimmer: 20 °C statt 22 °C. Schlafzimmer: 17 °C. Küche/Flur: 18 °C.',
+      'Bei Abwesenheit > 6 h auf 16 °C absenken (nicht ganz aus — Auskühlen kostet mehr Energie beim Wiederaufheizen).',
+      'Türen zu kühleren Räumen geschlossen halten — sonst zieht Feuchtigkeit dorthin und es gibt Schimmelrisiko.',
+    ],
+    effort: 'Sofort',
+    difficulty: 'Einfach',
+    partner: '',
+    priority: 1, category: 'heizung', icon: IconTemperature,
+    savingsHg2: 90, savingsHg3: 150,
+    condition: () => true,
+  },
+  {
+    id: 'stosslueften',
+    title: 'Stoßlüften statt Kipplüften',
+    tagline: 'Frische Luft in 5 Minuten — ohne Wärme zu verlieren.',
+    description: '5 Minuten Stoßlüften 3× am Tag tauscht die Raumluft komplett aus — bei minimalem Wärmeverlust. Dauerhaft gekippte Fenster lassen Wände auskühlen und kosten 100–200 €/Jahr extra.',
+    why: 'Bei Kippstellung kühlen die Fensterlaibungen und Wände rund um das Fenster langsam aus — die Heizung läuft permanent dagegen an. Stoßlüften (Fenster ganz auf, kurz) tauscht die Luft aus, bevor Wände auskühlen können.',
+    howTo: [
+      'Morgens nach dem Aufstehen 5 Min Querlüften (gegenüberliegende Fenster auf).',
+      'Mittags und abends jeweils 5 Min wiederholen.',
+      'Während des Lüftens Thermostate runterdrehen.',
+      'Im Winter reichen 3–5 Min, im Sommer 10–15 Min.',
+    ],
+    effort: 'Sofort, täglich',
+    difficulty: 'Einfach',
+    partner: '',
+    priority: 2, category: 'heizung', icon: IconLeaf,
+    savingsHg2: 60, savingsHg3: 100,
+    condition: () => true,
+  },
+  {
+    id: 'heizkoerper-entlueften',
+    title: 'Heizkörper entlüften',
+    tagline: 'Volle Heizleistung mit einem 2-Euro-Schlüssel.',
+    description: 'Luft im Heizkörper reduziert die Heizleistung um bis zu 15 %. Einmal jährlich entlüften (vor der Heizsaison) bringt 30–80 € Ersparnis pro Jahr und sorgt für gleichmäßige Wärme.',
+    why: 'Wenn der Heizkörper oben kalt bleibt oder gluckert, ist Luft drin — das Wasser zirkuliert nicht mehr richtig, die Heizung läuft länger für die gleiche Wärme.',
+    howTo: [
+      'Heizung auf höchste Stufe drehen, 10 Min warten bis das System unter Druck steht.',
+      'Eimer und Lappen bereitstellen, Entlüftungsschlüssel (Baumarkt, ~2 €) ansetzen.',
+      'Ventil oben am Heizkörper langsam öffnen — Luft zischt heraus.',
+      'Sobald Wasser austritt: zudrehen. Fertig.',
+      'Heizungsdruck am Manometer prüfen (1,5–2 bar). Falls zu niedrig: Wasser nachfüllen lassen.',
+    ],
+    effort: '15 Min einmal jährlich',
+    difficulty: 'Einfach',
+    partner: '',
+    priority: 2, category: 'heizung', icon: IconTool,
+    savingsHg2: 40, savingsHg3: 70,
+    condition: () => true,
+  },
+  {
+    id: 'standby-aus',
+    title: 'Standby-Geräte ausschalten',
+    tagline: '100 € pro Jahr sparen mit einer 8-Euro-Steckerleiste.',
+    description: 'Ein durchschnittlicher Haushalt verschwendet 80–120 €/Jahr durch Geräte im Standby. TV, Konsolen, Drucker, Ladegeräte ziehen Strom — auch wenn sie aus zu sein scheinen.',
+    why: 'Studien des Umweltbundesamts zeigen: 10 % des Stromverbrauchs eines Haushalts entstehen durch Standby. Bei 1.000 €/Jahr Stromrechnung sind das 100 €. Schaltbare Steckdosenleisten kosten 8–15 € — Amortisation in wenigen Wochen.',
+    howTo: [
+      'Schaltbare Steckdosenleisten besorgen (ab 8 € im Baumarkt/Online).',
+      'TV + Soundbar + Konsole an eine Leiste — abends einmal ausschalten.',
+      'Drucker, Scanner an eine zweite Leiste — meist wochenlang nicht gebraucht.',
+      'Smart-Plugs (15–25 €) mit Zeitplan: schalten nachts automatisch ab.',
+      'Achtung: Router, Kühlschrank, Gefriertruhe NICHT abschalten.',
+    ],
+    effort: '20 Min einmalig',
+    difficulty: 'Einfach',
+    partner: '',
+    priority: 2, category: 'energie', icon: IconPlug,
+    savingsHg2: 70, savingsHg3: 110,
+    condition: () => true,
+  },
+  {
+    id: 'duschen-kuerzer',
+    title: 'Duschzeit auf 5 Min reduzieren',
+    tagline: 'Eine Minute weniger duschen spart 100 € pro Jahr.',
+    description: 'Eine Minute weniger duschen pro Person und Tag spart laut co2online 100–150 €/Jahr Warmwasser- und Stromkosten in einem 4-Personen-Haushalt. Ein Sparduschkopf bringt zusätzlich 50–80 € pro Jahr.',
+    why: 'Warmwasser ist nach Heizung der zweitgrößte Energieposten im Haushalt. Eine Person verbraucht beim Duschen ca. 60–80 Liter Wasser — 1 Minute weniger spart 12–15 L plus die Energie zum Aufheizen.',
+    howTo: [
+      'Timer (Smartphone oder analog) auf 5 Min stellen — funktioniert nach 2 Wochen automatisch.',
+      'Sparduschkopf installieren (ab 25 €): halbiert den Wasserdurchfluss ohne Komfortverlust.',
+      'Beim Einseifen Wasser ausstellen (gerade bei mehreren Personen wirksam).',
+      'Wassertemperatur eine Stufe runter: spart Energie zum Aufheizen.',
+    ],
+    effort: 'Sofort',
+    difficulty: 'Einfach',
+    partner: '',
+    priority: 2, category: 'energie', icon: IconDroplet,
+    savingsHg2: 80, savingsHg3: 160,
+    condition: () => true,
+  },
+  {
+    id: 'kuehlschrank-7-grad',
+    title: 'Kühlschrank auf 7 °C einstellen',
+    tagline: 'Gleich frisch, aber 15 % weniger Stromverbrauch.',
+    description: 'Viele Kühlschränke laufen unnötig kalt auf 4–5 °C. Empfohlen sind 7 °C — Lebensmittel bleiben gleich frisch, der Stromverbrauch sinkt um 10–15 % (25–40 €/Jahr).',
+    why: 'Jedes Grad kälter erhöht den Stromverbrauch um ~6 %. 7 °C ist die optimale Lagertemperatur laut BMEL für die meisten Lebensmittel. Gefrierfach: -18 °C reicht — kälter verbraucht nur mehr Strom.',
+    howTo: [
+      'Thermometer ins Kühlschrank-Mittelfach für 2 h legen.',
+      'Bei < 7 °C: Regler eine Stufe wärmer drehen, nochmal prüfen.',
+      'Türen geschlossen halten — jede Öffnung kostet 30 Sekunden Kompressorlaufzeit.',
+      'Rückseite alle 6 Monate abstauben — Staub verschlechtert Wärmeabgabe und kostet 10–15 % mehr Strom.',
+      'Dichtung prüfen: Papierblatt einklemmen, Tür schließen — wenn es leicht rausrutscht, Dichtung tauschen (15–25 €).',
+    ],
+    effort: '10 Min einmalig',
+    difficulty: 'Einfach',
+    partner: '',
+    priority: 3, category: 'energie', icon: IconLeaf,
+    savingsHg2: 15, savingsHg3: 25,
     condition: () => true,
   },
 ];
@@ -557,7 +626,7 @@ function buildClusters(profile: MvpProfile, tips: MvpTip[]): { title: string; ti
     },
     {
       key: 'versicherung',
-      title: profile.hasChildren ? 'Versicherung & Schutz für Ihre Familie' : 'Versicherung & Schutz',
+      title: 'KFZ-Versicherung',
     },
     {
       key: 'heizung',
@@ -614,6 +683,9 @@ const BORDER    = '#E2E8F0';
 const TEXT      = DARK;
 const TEXT_MUTED  = '#7A8C9A';
 const TEXT_DIM    = '#A0AEBB';
+const PRIMARY     = DARK;
+const GREEN_DARK  = GREEN;
+const GREY_800    = DARK;
 
 const PRIORITY_COLORS: Record<number, { bg: string; text: string; label: string }> = {
   3: { bg: GREEN_LT,  text: GREEN,      label: 'Top' },
@@ -662,19 +734,54 @@ function ProfileEditView({
 }) {
   const [local, setLocal] = useState<MvpProfile>(profile);
   const [openField, setOpenField] = useState<string | null>(null);
+  // Collapsed sections (default: first section expanded, rest collapsed)
+  const [collapsed, setCollapsed] = useState<Set<string>>(new Set(['bewohner', 'mobilitaet', 'finanzen', 'kommunikation', 'versicherung']));
+  function toggleSection(key: string) {
+    setCollapsed(prev => {
+      const n = new Set(prev);
+      if (n.has(key)) n.delete(key); else n.add(key);
+      return n;
+    });
+  }
+
+  const EQUIPMENT_KEYS = new Set(['balkon', 'sunHours', 'garten', 'garage', 'carport']);
 
   function getStrVal(field: typeof PROFILE_FIELDS[0]) {
-    const v = local[field.key];
+    let v: any;
+    if (EQUIPMENT_KEYS.has(field.key as string)) {
+      v = (local.equipment ?? ({} as any))[field.key];
+    } else {
+      v = (local as any)[field.key];
+    }
     return v === true ? 'true' : v === false ? 'false' : String(v ?? '');
   }
 
   function selectOption(fieldKey: string, value: string) {
     const coerced: any = value === 'true' ? true : value === 'false' ? false : value;
-    const updated = { ...local, [fieldKey]: coerced };
+    let updated: MvpProfile;
+    if (EQUIPMENT_KEYS.has(fieldKey)) {
+      const cur = local.equipment ?? { balkon: null, sunHours: null, garten: null, garage: null, carport: null };
+      const nextEq = { ...cur, [fieldKey]: coerced };
+      // If balkon was set to false → reset sunHours
+      if (fieldKey === 'balkon' && coerced !== true) nextEq.sunHours = null;
+      updated = { ...local, equipment: nextEq };
+    } else {
+      updated = { ...local, [fieldKey]: coerced };
+    }
     setLocal(updated);
     localStorage.setItem('wpilot_mvp_profile', JSON.stringify(updated));
     onSave(updated);
     setOpenField(null);
+  }
+
+  function setResidents(key: keyof Residents, delta: number) {
+    const cur = local.residents ?? { mitbewohner: 0, kinder: 0, untermieter: 0, haustiere: 0 };
+    const next = { ...cur, [key]: Math.max(0, cur[key] + delta) };
+    updateLocal({ residents: next });
+  }
+
+  function setWohnflaeche(qm: number | null) {
+    updateLocal({ wohnflaeche: qm });
   }
 
   function updateLocal(patch: Partial<MvpProfile>) {
@@ -718,11 +825,12 @@ function ProfileEditView({
 
   // Section grouping
   const SECTIONS: { key: string; title: string; icon: React.ComponentType<{ size?: number; stroke?: number; color?: string }>; fieldKeys: string[] }[] = [
-    { key: 'wohnen',        title: 'Wohnsituation',  icon: IconHome,          fieldKeys: ['propertyType', 'tenure', 'heatingType'] },
+    { key: 'wohnen',        title: 'Wohnsituation',  icon: IconHome,          fieldKeys: ['propertyType', 'tenure', 'heatingType', 'balkon', 'sunHours', 'garten', 'garage', 'carport'] },
+    { key: 'bewohner',      title: 'Bewohner',       icon: IconUsers,         fieldKeys: [] }, // custom rendering
     { key: 'mobilitaet',    title: 'Mobilität',      icon: IconCar,           fieldKeys: ['autoType'] },
     { key: 'finanzen',      title: 'Finanzen',       icon: IconReceipt,       fieldKeys: ['steuererklaerung', 'girokonto'] },
     { key: 'kommunikation', title: 'Kommunikation',  icon: IconWifi,          fieldKeys: ['internet', 'mobilfunk'] },
-    { key: 'versicherung',  title: 'Versicherungen', icon: IconShieldCheck,   fieldKeys: ['haftpflicht', 'hausrat', 'berufsunfaehigkeit', 'gebaeude', 'kfzVersicherung'] },
+    { key: 'versicherung',  title: 'KFZ-Versicherung', icon: IconCar,   fieldKeys: ['kfzVersicherung'] },
   ];
 
   // Profile summary for hero
@@ -737,7 +845,6 @@ function ProfileEditView({
   else if (local.autoType === 'keins') summaryParts.push('Kein Auto');
 
   function renderRow(field: typeof PROFILE_FIELDS[0]) {
-    const FieldIcon = field.icon;
     const strVal = getStrVal(field);
     const currentOpt = field.options.find(o => o.value === strVal);
     const useButtons = field.options.length <= 3;
@@ -747,25 +854,15 @@ function ProfileEditView({
       <div
         key={field.key}
         style={{
-          background: WHITE,
-          border: `1px solid ${BORDER}`,
-          borderRadius: 14,
-          padding: '12px 14px',
+          padding: '14px 0',
+          borderBottom: `1px solid ${BORDER}`,
           display: 'flex', alignItems: 'center', gap: 12,
           flexWrap: 'wrap',
         }}
       >
         <div style={{
-          width: 36, height: 36, borderRadius: 10, flexShrink: 0,
-          background: DARK,
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-        }}>
-          <FieldIcon size={19} stroke={1.6} color={WHITE} />
-        </div>
-
-        <div style={{
           flex: 1, minWidth: 100,
-          fontSize: 13, fontWeight: 600, color: TEXT,
+          fontSize: 14, fontWeight: 500, color: TEXT,
         }}>
           {field.label}
         </div>
@@ -849,7 +946,7 @@ function ProfileEditView({
                       minWidth: 240,
                       background: WHITE,
                       border: `1px solid ${BORDER}`,
-                      borderRadius: 14,
+                      borderRadius: 6,
                       boxShadow: '0 12px 32px rgba(0,0,0,0.12)',
                       padding: 6, zIndex: 50,
                       transformOrigin: 'top right',
@@ -867,7 +964,7 @@ function ProfileEditView({
                             display: 'flex', alignItems: 'center', gap: 10,
                             background: isSelected ? BLUE_LT : 'transparent',
                             border: 'none',
-                            borderRadius: 10,
+                            borderRadius: 6,
                             padding: '10px 12px',
                             fontSize: 14, fontWeight: 600,
                             color: isSelected ? BLUE_DK : TEXT,
@@ -903,7 +1000,7 @@ function ProfileEditView({
         display: 'flex', alignItems: 'center', gap: 12,
       }}>
         <button onClick={onBack} style={{
-          background: 'none', border: `1.5px solid ${BORDER}`, borderRadius: 10,
+          background: 'none', border: `1.5px solid ${BORDER}`, borderRadius: 6,
           padding: '7px 14px', cursor: 'pointer',
           display: 'flex', alignItems: 'center', gap: 6,
           fontSize: 13, fontWeight: 600, color: TEXT,
@@ -920,45 +1017,127 @@ function ProfileEditView({
         <style>{`
           @media(min-width:900px){
             .mvp-profile-container{max-width:980px !important;padding:24px 24px 40px !important;}
-            .mvp-profile-section-grid{display:grid !important;grid-template-columns:repeat(2, 1fr) !important;gap:10px 14px !important;}
+            /* Row list — single column with thin dividers (no grid on this section) */
           }
         `}</style>
 
-        <p style={{ fontSize: 13, color: TEXT_MUTED, marginBottom: 18, lineHeight: 1.5 }}>
-          Tippen Sie auf einen Wert, um Ihre Angabe zu ändern. Die Empfehlungen aktualisieren sich automatisch.
+        <p style={{ fontSize: 12, color: TEXT_MUTED, marginBottom: 20, lineHeight: 1.5 }}>
+          Empfehlungen aktualisieren sich automatisch.
         </p>
 
         {/* Sections */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 22 }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
           {SECTIONS.map(section => {
-            const sectionFields = section.fieldKeys
+            let sectionFields = section.fieldKeys
               .map(k => PROFILE_FIELDS.find(f => f.key === k))
               .filter(Boolean) as typeof PROFILE_FIELDS;
+            // Hide sunHours row when balkon is not (yet) confirmed Vorhanden
+            if (section.key === 'wohnen' && (local.equipment?.balkon !== true)) {
+              sectionFields = sectionFields.filter(f => f.key !== 'sunHours');
+            }
             const SectionIcon = section.icon;
             const isMobility = section.key === 'mobilitaet';
-            if (sectionFields.length === 0 && !isMobility) return null;
+            const isBewohner = section.key === 'bewohner';
+            const isWohnen = section.key === 'wohnen';
+            if (sectionFields.length === 0 && !isMobility && !isBewohner) return null;
+            const isCollapsed = collapsed.has(section.key);
             return (
               <div key={section.key}>
-                <div style={{
-                  display: 'flex', alignItems: 'center', gap: 10,
-                  marginBottom: 10,
-                }}>
-                  <div style={{
-                    width: 28, height: 28, borderRadius: 8, flexShrink: 0,
-                    background: DARK,
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  }}>
-                    <SectionIcon size={16} stroke={1.6} color={WHITE} />
-                  </div>
-                  <span style={{
-                    fontSize: 13, fontWeight: 700, color: TEXT,
-                    letterSpacing: '0.01em',
-                  }}>
-                    {section.title}
-                  </span>
-                  <div style={{ flex: 1, height: 1, background: BORDER }} />
-                </div>
-                {isMobility ? (() => {
+                <button
+                  onClick={() => toggleSection(section.key)}
+                  style={{
+                    width: '100%',
+                    background: 'transparent', border: 'none',
+                    fontSize: 11, fontWeight: 700, color: TEXT_MUTED,
+                    letterSpacing: '0.12em',
+                    paddingTop: 0, paddingBottom: 6, paddingLeft: 0, paddingRight: 0,
+                    borderBottom: `2px solid ${BORDER}`,
+                    marginBottom: 2,
+                    cursor: 'pointer', fontFamily: 'inherit',
+                    display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                    textAlign: 'left' as const,
+                  }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = TEXT; }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = TEXT_MUTED; }}
+                >
+                  <span>{section.title.toUpperCase()}</span>
+                  <IconChevronDown
+                    size={15} stroke={2.4}
+                    style={{
+                      transition: 'transform 0.2s ease',
+                      transform: isCollapsed ? 'rotate(-90deg)' : 'rotate(0deg)',
+                    }}
+                  />
+                </button>
+                <AnimatePresence initial={false}>
+                  {!isCollapsed && (
+                    <motion.div
+                      key="content"
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+                      style={{ overflow: 'hidden' }}
+                    >
+                {isBewohner ? (() => {
+                  const r = local.residents ?? { mitbewohner: 0, kinder: 0, untermieter: 0, haustiere: 0 };
+                  const rows: { key: keyof Residents; label: string; sub?: string }[] = [
+                    { key: 'mitbewohner', label: 'Mitbewohner',  sub: 'Partner/in, WG, Familie' },
+                    { key: 'kinder',      label: 'Kinder',       sub: 'unter 18 Jahre' },
+                    { key: 'untermieter', label: 'Untermieter',  sub: 'mietet Zimmer / Bereich' },
+                    { key: 'haustiere',   label: 'Haustiere',    sub: 'Hund, Katze, etc.' },
+                  ];
+                  return (
+                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                      {rows.map(row => (
+                        <div key={row.key} style={{
+                          padding: '14px 0',
+                          borderBottom: `1px solid ${BORDER}`,
+                          display: 'flex', alignItems: 'center', gap: 12,
+                        }}>
+                          <div style={{ flex: 1, minWidth: 0 }}>
+                            <div style={{ fontSize: 14, fontWeight: 500, color: TEXT, lineHeight: 1.25 }}>{row.label}</div>
+                            {row.sub && <div style={{ fontSize: 11, color: TEXT_MUTED, marginTop: 2 }}>{row.sub}</div>}
+                          </div>
+                          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+                            <button
+                              onClick={() => setResidents(row.key, -1)}
+                              disabled={r[row.key] === 0}
+                              aria-label="Weniger"
+                              style={{
+                                width: 28, height: 28, borderRadius: 14,
+                                border: `1px solid ${BORDER}`, background: WHITE,
+                                color: r[row.key] === 0 ? '#cfd3da' : TEXT,
+                                cursor: r[row.key] === 0 ? 'default' : 'pointer',
+                                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                fontFamily: 'inherit',
+                              }}
+                            >
+                              <IconMinus size={14} stroke={2} />
+                            </button>
+                            <span style={{ minWidth: 22, textAlign: 'center', fontSize: 14, fontWeight: 700, color: TEXT }}>
+                              {r[row.key]}
+                            </span>
+                            <button
+                              onClick={() => setResidents(row.key, +1)}
+                              aria-label="Mehr"
+                              style={{
+                                width: 28, height: 28, borderRadius: 14,
+                                border: `1px solid ${BORDER}`, background: WHITE,
+                                color: TEXT,
+                                cursor: 'pointer',
+                                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                fontFamily: 'inherit',
+                              }}
+                            >
+                              <IconPlus size={14} stroke={2} />
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  );
+                })() : isMobility ? (() => {
                   const v = local.vehicles ?? { verbrenner: 0, eauto: 0, hybrid: 0 };
                   const total = v.verbrenner + v.eauto + v.hybrid;
                   const isKeins = local.autoType === 'keins';
@@ -968,7 +1147,9 @@ function ProfileEditView({
                   });
                   return (
                     <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                      {/* Individual vehicle rows */}
+                      {/* Individual vehicle rows — 2-column grid on desktop */}
+                      <style>{`@media(min-width:640px){.mvp-vehicle-grid{display:grid !important;grid-template-columns:repeat(2,1fr) !important;gap:8px !important;}}`}</style>
+                      <div className="mvp-vehicle-grid" style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                       <AnimatePresence initial={false}>
                         {vehicleList.map(({ type, key }) => {
                           const meta = VEHICLE_META[type];
@@ -982,23 +1163,14 @@ function ProfileEditView({
                               exit={{ opacity: 0, height: 0, marginBottom: 0 }}
                               transition={{ duration: 0.18 }}
                               style={{
-                                background: WHITE,
-                                border: `1px solid ${BORDER}`,
-                                borderRadius: 14,
-                                padding: '12px 14px',
+                                padding: '14px 0',
+                                borderBottom: `1px solid ${BORDER}`,
                                 display: 'flex', alignItems: 'center', gap: 12,
                               }}
                             >
                               <div style={{
-                                width: 36, height: 36, borderRadius: 10, flexShrink: 0,
-                                background: DARK,
-                                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                              }}>
-                                <VIcon size={19} stroke={1.6} color={WHITE} />
-                              </div>
-                              <div style={{
                                 flex: 1, minWidth: 0,
-                                fontSize: 14, fontWeight: 600, color: TEXT,
+                                fontSize: 14, fontWeight: 500, color: TEXT,
                               }}>
                                 {meta.label}
                               </div>
@@ -1009,15 +1181,14 @@ function ProfileEditView({
                                   display: 'inline-flex', alignItems: 'center', gap: 4,
                                   background: 'transparent',
                                   color: TEXT_MUTED,
-                                  border: `1px solid ${BORDER}`,
-                                  borderRadius: 999,
-                                  padding: '6px 10px',
-                                  fontSize: 12, fontWeight: 600,
+                                  border: 'none',
+                                  padding: '4px 8px',
+                                  fontSize: 12, fontWeight: 500,
                                   cursor: 'pointer',
                                   fontFamily: 'inherit',
                                 }}
-                                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = '#dc2626'; (e.currentTarget as HTMLElement).style.borderColor = '#dc2626'; }}
-                                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = TEXT_MUTED; (e.currentTarget as HTMLElement).style.borderColor = BORDER; }}
+                                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = '#dc2626'; }}
+                                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = TEXT_MUTED; }}
                               >
                                 <IconX size={13} stroke={2} /> Entfernen
                               </button>
@@ -1025,26 +1196,16 @@ function ProfileEditView({
                           );
                         })}
                       </AnimatePresence>
+                      </div>
 
                       {/* Kein Auto status */}
                       {isKeins && total === 0 && (
                         <div style={{
-                          background: WHITE,
-                          border: `1px solid ${BORDER}`,
-                          borderRadius: 14,
-                          padding: '12px 14px',
-                          display: 'flex', alignItems: 'center', gap: 12,
+                          padding: '14px 0',
+                          borderBottom: `1px solid ${BORDER}`,
+                          fontSize: 14, fontWeight: 500, color: TEXT,
                         }}>
-                          <div style={{
-                            width: 36, height: 36, borderRadius: 10, flexShrink: 0,
-                            background: DARK,
-                            display: 'flex', alignItems: 'center', justifyContent: 'center',
-                          }}>
-                            <IconBike size={19} stroke={1.6} color={WHITE} />
-                          </div>
-                          <div style={{ flex: 1, fontSize: 14, fontWeight: 600, color: TEXT }}>
-                            Kein Auto
-                          </div>
+                          Kein Auto
                         </div>
                       )}
 
@@ -1116,10 +1277,75 @@ function ProfileEditView({
                     </div>
                   );
                 })() : (
-                  <div className="mvp-profile-section-grid" style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                  <div style={{ display: 'flex', flexDirection: 'column' }}>
                     {sectionFields.map(field => renderRow(field))}
+                    {isWohnen && (() => {
+                      const MIN = 20, MAX = 300, STEP = 5;
+                      const current = local.wohnflaeche ?? 70;  // sinnvoller Default-Slider-Wert
+                      const set = local.wohnflaeche != null;
+                      const pct = ((current - MIN) / (MAX - MIN)) * 100;
+                      return (
+                        <div style={{
+                          padding: '14px 0',
+                          borderBottom: `1px solid ${BORDER}`,
+                          display: 'flex', flexDirection: 'column', gap: 8,
+                        }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                            <div style={{ flex: 1, minWidth: 100, fontSize: 14, fontWeight: 500, color: TEXT }}>
+                              Wohnfläche
+                            </div>
+                            <span style={{
+                              fontSize: 14, fontWeight: 700, color: set ? TEXT : TEXT_MUTED,
+                              minWidth: 64, textAlign: 'right',
+                            }}>
+                              {set ? `${current} m²` : '— m²'}
+                            </span>
+                          </div>
+                          <style>{`
+                            .mvp-wf-slider{
+                              -webkit-appearance:none;appearance:none;
+                              width:100%;height:6px;border-radius:3px;
+                              background:linear-gradient(to right, ${BLUE} 0%, ${BLUE} ${pct}%, ${BORDER} ${pct}%, ${BORDER} 100%);
+                              outline:none;cursor:pointer;
+                            }
+                            .mvp-wf-slider::-webkit-slider-thumb{
+                              -webkit-appearance:none;appearance:none;
+                              width:20px;height:20px;border-radius:50%;
+                              background:${BLUE};
+                              border:2px solid #fff;
+                              box-shadow:0 1px 4px rgba(0,0,0,0.18);
+                              cursor:pointer;
+                            }
+                            .mvp-wf-slider::-moz-range-thumb{
+                              width:20px;height:20px;border-radius:50%;
+                              background:${BLUE};
+                              border:2px solid #fff;
+                              box-shadow:0 1px 4px rgba(0,0,0,0.18);
+                              cursor:pointer;
+                            }
+                          `}</style>
+                          <input
+                            type="range"
+                            className="mvp-wf-slider"
+                            min={MIN} max={MAX} step={STEP}
+                            value={current}
+                            onChange={e => setWohnflaeche(Number(e.target.value))}
+                          />
+                          <div style={{
+                            display: 'flex', justifyContent: 'space-between',
+                            fontSize: 10, color: TEXT_MUTED, fontWeight: 500,
+                          }}>
+                            <span>{MIN} m²</span>
+                            <span>{MAX} m²+</span>
+                          </div>
+                        </div>
+                      );
+                    })()}
                   </div>
                 )}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
             );
           })}
@@ -1127,7 +1353,7 @@ function ProfileEditView({
 
         <div style={{ marginTop: 28, textAlign: 'center' }}>
           <button onClick={onBack} style={{
-            background: BLUE, border: 'none', borderRadius: 12,
+            background: BLUE, border: 'none', borderRadius: 6,
             padding: '12px 28px', fontSize: 14, fontWeight: 600,
             color: WHITE, cursor: 'pointer',
             boxShadow: `0 2px 8px rgba(87,130,176,0.35)`,
@@ -1180,6 +1406,32 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
   });
   const [expanded, setExpanded] = useState<string | null>(null);
   const [overlayTipId, setOverlayTipId] = useState<string | null>(null);
+  const [showOffers, setShowOffers] = useState(false);
+  // Reset offers view when tip changes
+  useEffect(() => { setShowOffers(false); }, [overlayTipId]);
+  const [carouselIdx, setCarouselIdx] = useState(0);
+  const [carouselPaused, setCarouselPaused] = useState(false);
+  const [openModuleKey, setOpenModuleKey] = useState<string | null>(null);
+  // TEMP: always show overlay on every dashboard visit (dev/testing).
+  // Revert by restoring the localStorage check.
+  const [showTopTipsOverlay, setShowTopTipsOverlay] = useState(true);
+  function closeTopTipsOverlay() {
+    setShowTopTipsOverlay(false);
+  }
+  // Lock body scroll while top-tips overlay is open
+  useEffect(() => {
+    if (!showTopTipsOverlay) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => { document.body.style.overflow = prev; };
+  }, [showTopTipsOverlay]);
+
+  // Auto-advance carousel every 4s (pauses while overlay is open / on hover / on manual nav)
+  useEffect(() => {
+    if (carouselPaused || showTopTipsOverlay || openModuleKey || overlayTipId) return;
+    const id = setInterval(() => setCarouselIdx(i => i + 1), 4000);
+    return () => clearInterval(id);
+  }, [carouselPaused, showTopTipsOverlay, openModuleKey, overlayTipId]);
   const [showRemoved, setShowRemoved] = useState(false);
   const [savedAmounts, setSavedAmounts] = useState<Record<string, number>>(() => {
     try { return JSON.parse(localStorage.getItem('wpilot_mvp_saved_amounts') || '{}'); } catch { return {}; }
@@ -1199,7 +1451,11 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
   useEffect(() => { localStorage.setItem('wpilot_mvp_removed', JSON.stringify([...removed])); }, [removed]);
   useEffect(() => { localStorage.setItem('wpilot_mvp_saved_amounts', JSON.stringify(savedAmounts)); }, [savedAmounts]);
 
-  const hg = profile?.hasChildren ? 3 : 2;
+  // Haushaltsgröße: zählt Erwachsene + Kinder + ggf. Untermieter (Haustiere irrelevant für Energie)
+  const residentTotal = profile
+    ? 1 + (profile.residents?.mitbewohner ?? 0) + (profile.residents?.kinder ?? 0) + (profile.residents?.untermieter ?? 0)
+    : 2;
+  const hg = (residentTotal >= 3 || profile?.hasChildren) ? 3 : 2;
   const getSavings = (tip: MvpTip) => {
     if (done.has(tip.id) && savedAmounts[tip.id] !== undefined) return savedAmounts[tip.id];
     return hg === 3 ? tip.savingsHg3 : tip.savingsHg2;
@@ -1209,15 +1465,13 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
     if (!profile) return [];
     const base = ALL_TIPS.filter(t => {
       if (!t.condition(profile)) return false;
+      // Strom- und Gastarif werden separat behandelt — nicht im Dashboard anzeigen
+      if (t.id === 'strom-wechsel' || t.id === 'gas-wechsel') return false;
       // Hide tips that user already completed in Basics steps
       if (t.id === 'steuererklaerung' && profile.steuererklaerung) return false;
       if (t.id === 'kostenloses-girokonto' && profile.girokonto) return false;
       if (t.id === 'internet-wechsel' && profile.internet) return false;
       if (t.id === 'mobilfunk-wechsel' && profile.mobilfunk) return false;
-      if (t.id === 'haftpflicht-versicherung' && profile.haftpflicht) return false;
-      if (t.id === 'hausrat-versicherung' && profile.hausrat) return false;
-      if (t.id === 'berufsunfaehigkeit-versicherung' && profile.berufsunfaehigkeit) return false;
-      if (t.id === 'gebaeude-versicherung' && profile.gebaeude) return false;
       if (t.id === 'kfz-versicherung' && profile.kfzVersicherung) return false;
       return true;
     });
@@ -1274,7 +1528,7 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
         <div style={{ textAlign: 'center' }}>
           <p style={{ fontSize: 16, color: TEXT_MUTED, marginBottom: 16 }}>Kein Profil gefunden</p>
           <button onClick={() => window.location.href = '/apps/wpilot-home/mvp.html'} style={{
-            background: BLUE, color: WHITE, border: 'none', borderRadius: 12,
+            background: BLUE, color: WHITE, border: 'none', borderRadius: 6,
             padding: '12px 24px', fontSize: 15, fontWeight: 600, cursor: 'pointer',
             display: 'flex', alignItems: 'center', gap: 8, margin: '0 auto',
             boxShadow: `0 2px 8px rgba(87,130,176,0.35)`,
@@ -1326,7 +1580,12 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
   ];
 
   return (
-    <div style={{ minHeight: '100dvh', background: BG }}>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
+      style={{ minHeight: '100dvh', background: BG }}
+    >
       {/* Header */}
       <div style={{
         position: 'sticky', top: 0, zIndex: 100,
@@ -1355,39 +1614,25 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
           }
         `}</style>
 
-        {/* Hero */}
+        {/* Hero — two separate boxes */}
+        <style>{`
+          .mvp-hero-row{display:flex;flex-direction:column;gap:12px;margin-bottom:12px;}
+          @media(min-width:700px){.mvp-hero-row{flex-direction:row;align-items:stretch;}}
+        `}</style>
         <motion.div
+          className="mvp-hero-row"
           initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}
-          style={{
-            background: 'linear-gradient(135deg, #0f4c3a 0%, #1a6b52 40%, #24a47d 100%)',
-            borderRadius: 18, padding: '18px 20px', color: WHITE,
-            position: 'relative', overflow: 'hidden',
-            marginBottom: 14,
-          }}
         >
-          <div style={{ position: 'absolute', top: -30, right: -30, width: 120, height: 120, borderRadius: 60, background: 'rgba(255,255,255,0.06)' }} />
-
-          <style>{`
-            .mvp-hero-grid{display:flex;flex-direction:column;gap:10px;position:relative;z-index:1;}
-            .mvp-hero-headline{}
-            .mvp-hero-stats{display:flex;gap:8px;}
-            .mvp-hero-next{}
-            @media(min-width:760px){
-              .mvp-hero-grid{
-                display:grid;
-                grid-template-columns:1fr 280px;
-                grid-template-rows:auto auto;
-                gap:10px 16px;
-                align-items:stretch;
-              }
-              .mvp-hero-headline{grid-column:1;grid-row:1;}
-              .mvp-hero-stats{grid-column:1;grid-row:2;}
-              .mvp-hero-next{grid-column:2;grid-row:1 / 3;}
-            }
-          `}</style>
-
-          <div className="mvp-hero-grid">
-            <div className="mvp-hero-headline">
+          {/* Left: Savings summary */}
+          <div style={{
+            flex: '1 1 0',
+            background: 'linear-gradient(135deg, #0f4c3a 0%, #1a6b52 40%, #24a47d 100%)',
+            borderRadius: 6, padding: '18px 20px', color: WHITE,
+            position: 'relative', overflow: 'hidden',
+            display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: 12,
+          }}>
+            <div style={{ position: 'absolute', top: -30, right: -30, width: 120, height: 120, borderRadius: 60, background: 'rgba(255,255,255,0.06)' }} />
+            <div style={{ position: 'relative', zIndex: 1 }}>
               <div style={{ fontSize: 11, fontWeight: 600, opacity: 0.85, marginBottom: 4, letterSpacing: '0.05em' }}>Ihr Sparpotenzial pro Jahr</div>
               <div style={{ display: 'flex', alignItems: 'baseline', gap: 6, marginBottom: 4 }}>
                 <span style={{ fontSize: 38, fontWeight: 800, lineHeight: 1, letterSpacing: '-2px' }}><AnimatedCounter value={total} /></span>
@@ -1395,83 +1640,211 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
               </div>
               <div style={{ fontSize: 12, opacity: 0.7 }}>{tips.length} Empfehlungen basierend auf Ihren Antworten</div>
             </div>
-
-            <div className="mvp-hero-stats">
-              <div style={{ background: 'rgba(255,255,255,0.15)', borderRadius: 12, padding: '8px 12px', flex: '1 1 0' }}>
+            <div style={{ display: 'flex', gap: 8, position: 'relative', zIndex: 1 }}>
+              <div style={{ background: 'rgba(255,255,255,0.15)', borderRadius: 6, padding: '8px 12px', flex: '1 1 0' }}>
                 <div style={{ fontSize: 16, fontWeight: 700 }}><AnimatedCounter value={doneTotal} suffix=" €" /></div>
                 <div style={{ fontSize: 10, opacity: 0.8 }}>Erledigt</div>
               </div>
-              <div style={{ background: 'rgba(255,255,255,0.15)', borderRadius: 12, padding: '8px 12px', flex: '1 1 0' }}>
+              <div style={{ background: 'rgba(255,255,255,0.15)', borderRadius: 6, padding: '8px 12px', flex: '1 1 0' }}>
                 <div style={{ fontSize: 16, fontWeight: 700 }}>{doneCount}/{tips.length}</div>
                 <div style={{ fontSize: 10, opacity: 0.8 }}>Tipps erledigt</div>
               </div>
             </div>
-
-            {/* Next best step — vertical card spanning both rows on desktop */}
-            {nextBestTip && (() => {
-              const NextIcon = nextBestTip.icon;
-              const nextSavings = getSavings(nextBestTip);
-              return (
-                <button
-                  className="mvp-hero-next"
-                  onClick={() => setOverlayTipId(nextBestTip.id)}
-                  style={{
-                    background: 'rgba(255,255,255,0.15)',
-                    border: '1px solid rgba(255,255,255,0.22)',
-                    borderRadius: 14,
-                    padding: '12px 14px',
-                    display: 'flex', flexDirection: 'column', justifyContent: 'center',
-                    gap: 8, color: WHITE,
-                    cursor: 'pointer',
-                    fontFamily: 'inherit',
-                    textAlign: 'left' as const,
-                    transition: 'background 0.15s, border-color 0.15s',
-                    minHeight: '100%',
-                  }}
-                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.22)'; }}
-                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.15)'; }}
-                >
-                  <div style={{
-                    fontSize: 10, fontWeight: 700,
-                    letterSpacing: '0.1em', opacity: 0.85,
-                  }}>
-                    NÄCHSTER SCHRITT
-                  </div>
-
-                  <div style={{
-                    width: 40, height: 40, borderRadius: 10,
-                    background: 'rgba(255,255,255,0.22)',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  }}>
-                    <NextIcon size={20} stroke={1.5} color={WHITE} />
-                  </div>
-
-                  <div>
-                    <div style={{ fontSize: 15, fontWeight: 700, lineHeight: 1.3 }}>
-                      {nextBestTip.title}
-                    </div>
-                    <div style={{ fontSize: 12, opacity: 0.85, marginTop: 3 }}>
-                      bis zu {fmt(nextSavings)} € / Jahr
-                    </div>
-                  </div>
-
-                  <div style={{
-                    display: 'inline-flex', alignItems: 'center', gap: 5,
-                    fontSize: 12, fontWeight: 700, opacity: 0.95,
-                  }}>
-                    Tipp anschauen <IconArrowRight size={14} stroke={2.4} />
-                  </div>
-                </button>
-              );
-            })()}
           </div>
+
+          {/* Right: Top-3 tips carousel (or placeholder while overlay open) */}
+          {(() => {
+            const thermoTip = ALL_TIPS.find(t => t.id === 'thermostate');
+            const otherTips = tips.filter(t => t.id !== 'thermostate');
+            const topTips = (thermoTip ? [thermoTip, ...otherTips] : otherTips).slice(0, 3);
+            if (topTips.length === 0) return null;
+            const idx = ((carouselIdx % topTips.length) + topTips.length) % topTips.length;
+            const tip = topTips[idx];
+            const TipIcon = tip.icon;
+            const savings = getSavings(tip);
+
+            if (showTopTipsOverlay || openModuleKey || overlayTipId) {
+              // Hidden placeholder: reserves hero layout space; carousel re-mounts when overlays close.
+              // Keeps layoutId='top-tips-shell' free for the unified shell to morph from/to this slot.
+              return (
+                <div className="mvp-hero-carousel" style={{
+                  flex: '0 0 auto', width: '100%',
+                  visibility: 'hidden',
+                  padding: '16px 18px',
+                  display: 'flex', flexDirection: 'column', gap: 12,
+                  boxSizing: 'border-box' as const,
+                  height: 224,
+                }}>
+                  <style>{`@media(min-width:700px){.mvp-hero-carousel{width:auto !important;flex:1 1 0 !important;}}`}</style>
+                </div>
+              );
+            }
+
+            return (
+              <motion.div
+                layoutId="top-tips-shell"
+                className="mvp-hero-carousel"
+                onMouseEnter={() => setCarouselPaused(true)}
+                onMouseLeave={() => setCarouselPaused(false)}
+                style={{
+                  flex: '0 0 auto', width: '100%',
+                  background: WHITE, border: 'none',
+                  borderRadius: 6, padding: '16px 18px 64px',
+                  display: 'flex', flexDirection: 'column', gap: 12,
+                  boxSizing: 'border-box' as const,
+                  position: 'relative', overflow: 'hidden',
+                  height: 224,
+                }}
+              >
+                <style>{`@media(min-width:700px){.mvp-hero-carousel{width:auto !important;flex:1 1 0 !important;}}`}</style>
+
+                {/* Ticket notches — semicircular cutouts at vertical mid-height (left + right) */}
+                <div style={{
+                  position: 'absolute', top: '50%', left: -10,
+                  width: 20, height: 20, borderRadius: '50%',
+                  background: BG, transform: 'translateY(-50%)',
+                  pointerEvents: 'none', zIndex: 2,
+                }} />
+                <div style={{
+                  position: 'absolute', top: '50%', right: -10,
+                  width: 20, height: 20, borderRadius: '50%',
+                  background: BG, transform: 'translateY(-50%)',
+                  pointerEvents: 'none', zIndex: 2,
+                }} />
+
+                {/* Top row: TOP TIPP eyebrow (left) + savings chip (right) */}
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, position: 'relative', zIndex: 1 }}>
+                  <div style={{ fontSize: 10, fontWeight: 800, letterSpacing: '0.12em', color: GREEN_DARK }}>TOP TIPP</div>
+                  <div style={{
+                    display: 'inline-flex', alignItems: 'center', gap: 4,
+                    background: GREEN_LT, color: GREEN_DARK,
+                    fontSize: 12, fontWeight: 700,
+                    padding: '4px 10px', borderRadius: 999,
+                    whiteSpace: 'nowrap',
+                  }}>
+                    bis zu {fmt(savings)} € / Jahr
+                  </div>
+                </div>
+
+                {/* Middle: image + title */}
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={tip.id}
+                    initial={{ opacity: 0, x: 12 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -12 }}
+                    transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
+                    style={{
+                      display: 'flex', alignItems: 'center', gap: 14,
+                      position: 'relative', zIndex: 1,
+                    }}
+                  >
+                    {tip.id === 'thermostate' ? (
+                      <img src={thermostatImg} alt="Smartes Thermostat" style={{ width: 88, height: 88, objectFit: 'contain', flexShrink: 0 }} />
+                    ) : (
+                      <div style={{
+                        width: 64, height: 64, borderRadius: 6,
+                        background: GREEN_LT,
+                        display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+                      }}>
+                        <TipIcon size={32} stroke={1.6} color={GREEN_DARK} />
+                      </div>
+                    )}
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ fontSize: 17, fontWeight: 800, color: PRIMARY, lineHeight: 1.25, letterSpacing: '-0.01em', marginBottom: 4 }}>{tip.title}</div>
+                      {tip.tagline && (
+                        <div style={{ fontSize: 12, color: GREY_800, lineHeight: 1.4, fontWeight: 500 }}>
+                          {tip.tagline}
+                        </div>
+                      )}
+                    </div>
+                  </motion.div>
+                </AnimatePresence>
+
+                {/* Bottom row: arrows (left) + CTA (right) — pinned to card bottom */}
+                <div style={{
+                  display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10,
+                  position: 'absolute', left: 18, right: 18, bottom: 16,
+                  zIndex: 2,
+                }}>
+                  <div style={{ display: 'flex', gap: 6 }}>
+                    <button
+                      onClick={() => setCarouselIdx(i => (i - 1 + topTips.length) % topTips.length)}
+                      aria-label="Vorheriger Tipp"
+                      style={{
+                        width: 32, height: 32, borderRadius: 16, flexShrink: 0,
+                        border: `1px solid ${BORDER}`, background: WHITE,
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        cursor: 'pointer', color: PRIMARY,
+                        transition: 'border-color 0.15s',
+                      }}
+                      onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = PRIMARY; }}
+                      onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = BORDER; }}
+                    >
+                      <IconArrowLeft size={15} stroke={2} />
+                    </button>
+                    <button
+                      onClick={() => setCarouselIdx(i => (i + 1) % topTips.length)}
+                      aria-label="Nächster Tipp"
+                      style={{
+                        width: 32, height: 32, borderRadius: 16, flexShrink: 0,
+                        border: `1px solid ${BORDER}`, background: WHITE,
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        cursor: 'pointer', color: PRIMARY,
+                        transition: 'border-color 0.15s',
+                      }}
+                      onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = PRIMARY; }}
+                      onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = BORDER; }}
+                    >
+                      <IconArrowRight size={15} stroke={2} />
+                    </button>
+                  </div>
+
+                  <button
+                    onClick={() => setOverlayTipId(tip.id)}
+                    style={{
+                      display: 'inline-flex', alignItems: 'center', gap: 6,
+                      background: PRIMARY, color: WHITE, border: 'none',
+                      borderRadius: 999, padding: '10px 20px',
+                      fontSize: 13, fontWeight: 700,
+                      cursor: 'pointer', fontFamily: 'inherit',
+                      boxShadow: '0 4px 12px rgba(36,60,71,0.20)',
+                      transition: 'transform 0.15s',
+                    }}
+                    onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(-1px)'; }}
+                    onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(0)'; }}
+                  >
+                    Jetzt starten <IconArrowRight size={14} stroke={2.5} />
+                  </button>
+                </div>
+
+                {/* (Dots indicator removed — kept hidden block below empty to satisfy old JSX structure) */}
+                <div style={{ display: 'none' }}>
+                  {topTips.map((_, i) => (
+                    <button
+                      key={i}
+                      onClick={() => setCarouselIdx(i)}
+                      style={{
+                        width: i === idx ? 18 : 6, height: 6,
+                        borderRadius: 3, border: 'none',
+                        background: i === idx ? PRIMARY : BORDER,
+                        cursor: 'pointer', padding: 0,
+                        transition: 'width 0.2s, background 0.2s',
+                      }}
+                    />
+                  ))}
+                </div>
+              </motion.div>
+            );
+          })()}
         </motion.div>
+
 
         {/* Profile pills */}
         <div
           onClick={() => setView('profile')}
           style={{
-            background: WHITE, borderRadius: 14, padding: '12px 16px', marginBottom: 24,
+            background: WHITE, borderRadius: 6, padding: '12px 16px', marginBottom: 12,
             border: `1px solid ${BORDER}`, display: 'flex', gap: 8, flexWrap: 'wrap',
             cursor: 'pointer', alignItems: 'center',
           }}
@@ -1479,7 +1852,7 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
           {profilePills.map(p => (
             <span key={p.type} style={{
               display: 'inline-flex', alignItems: 'center', gap: 5,
-              background: BLUE_LT, borderRadius: 8, padding: '5px 10px',
+              background: BLUE_LT, borderRadius: 6, padding: '5px 10px',
               fontSize: 12, fontWeight: 500, color: BLUE_DK,
             }}>
               <ProfilePillIcon type={p.type} value={p.value} />
@@ -1491,8 +1864,90 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
           </span>
         </div>
 
-        {/* Clustered tips */}
-        <div className="mvp-clusters" style={{ display: 'flex', flexDirection: 'column', gap: 28 }}>
+        {/* Module cards grid */}
+        {(() => {
+          const moduleMeta: Record<string, { icon: React.ComponentType<any>; tint: string; bg: string }> = {
+            energie:       { icon: IconBolt,    tint: BLUE, bg: 'transparent' },
+            heizung:       { icon: IconFlame,   tint: BLUE, bg: 'transparent' },
+            finanzen:      { icon: IconReceipt, tint: BLUE, bg: 'transparent' },
+            kommunikation: { icon: IconWifi,    tint: BLUE, bg: 'transparent' },
+            mobilitaet:    { icon: IconCar,     tint: BLUE, bg: 'transparent' },
+            versicherung:  { icon: IconShield,  tint: BLUE, bg: 'transparent' },
+            solar:         { icon: IconSun,     tint: BLUE, bg: 'transparent' },
+          };
+          // Compute one module per cluster (already filtered/grouped by getClusters)
+          return (
+            <div
+              className="mvp-modules-grid"
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))',
+                gap: 12,
+              }}
+            >
+              {clusters.map(cluster => {
+                // find category key by matching the cluster title to its key — use original byCategory data instead
+                const tipsInCluster = cluster.tips;
+                const totalPotential = tipsInCluster.reduce((s, t) => s + getSavings(t), 0);
+                const doneInCluster = tipsInCluster.filter(t => done.has(t.id)).length;
+                const categoryKey = tipsInCluster[0]?.category || 'energie';
+                const meta = moduleMeta[categoryKey] || moduleMeta.energie;
+                const MIcon = meta.icon;
+                return (
+                  <motion.button
+                    key={cluster.title}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={() => setOpenModuleKey(categoryKey)}
+                    style={{
+                      background: WHITE, border: `1px solid ${BORDER}`,
+                      borderRadius: 6, padding: '16px',
+                      display: 'flex', flexDirection: 'column', gap: 12,
+                      cursor: 'pointer', fontFamily: 'inherit', textAlign: 'left' as const,
+                      transition: 'border-color 0.15s, transform 0.15s',
+                      minHeight: 140,
+                    }}
+                    onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = meta.tint; }}
+                    onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = BORDER; }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', width: 32, height: 32 }}>
+                        <MIcon size={26} stroke={1.7} color={meta.tint} />
+                      </div>
+                      {doneInCluster > 0 && (
+                        <span style={{
+                          display: 'inline-flex', alignItems: 'center', gap: 4,
+                          background: GREEN_LT, color: GREEN_DARK,
+                          fontSize: 11, fontWeight: 700,
+                          padding: '4px 8px', borderRadius: 999,
+                        }}>
+                          <IconCheck size={11} stroke={2.5} /> {doneInCluster}/{tipsInCluster.length}
+                        </span>
+                      )}
+                    </div>
+                    <div style={{ flex: 1 }}>
+                      <div style={{ fontSize: 16, fontWeight: 700, color: TEXT, lineHeight: 1.25, marginBottom: 4 }}>
+                        {cluster.title}
+                      </div>
+                      <div style={{ fontSize: 12, color: TEXT_MUTED }}>
+                        {tipsInCluster.length} {tipsInCluster.length === 1 ? 'Tipp' : 'Tipps'}
+                      </div>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 6 }}>
+                      <div>
+                        <div style={{ fontSize: 10, fontWeight: 600, color: TEXT_MUTED, letterSpacing: '0.05em', marginBottom: 2 }}>POTENZIAL</div>
+                        <div style={{ fontSize: 18, fontWeight: 800, color: GREEN_DARK, lineHeight: 1 }}>{fmt(totalPotential)} €</div>
+                      </div>
+                      <IconArrowRight size={18} stroke={2.2} color={TEXT_MUTED} />
+                    </div>
+                  </motion.button>
+                );
+              })}
+            </div>
+          );
+        })()}
+
+        {/* HIDDEN — old cluster listing (kept for reference, never rendered) */}
+        <div style={{ display: 'none' }}>
           {clusters.map((cluster, ci) => (
             <div key={cluster.title}>
               {/* Cluster heading */}
@@ -1517,7 +1972,7 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.2, delay: i * 0.04 }}
                         style={{
-                          background: WHITE, borderRadius: 14,
+                          background: WHITE, borderRadius: 6,
                           border: isDone ? `2px solid ${GREEN}` : `1px solid ${BORDER}`,
                           overflow: 'hidden', opacity: isDone ? 0.6 : 1, transition: 'opacity 0.15s',
                         }}
@@ -1526,7 +1981,7 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
                           onClick={() => setExpanded(isExpanded ? null : tip.id)}
                           style={{ padding: '16px 18px', display: 'flex', alignItems: 'center', gap: 14, cursor: 'pointer' }}
                         >
-                          <div style={{ width: 44, height: 44, borderRadius: 12, background: DARK, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                          <div style={{ width: 44, height: 44, borderRadius: 6, background: DARK, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                             <TipIcon size={22} stroke={1.6} color={WHITE} />
                           </div>
                           <div style={{ flex: 1, minWidth: 0 }}>
@@ -1610,7 +2065,7 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
                                             display: 'inline-flex', alignItems: 'center', gap: 4,
                                             background: WHITE,
                                             border: `1.5px solid ${BLUE}`,
-                                            borderRadius: 10, padding: '8px 12px',
+                                            borderRadius: 6, padding: '8px 12px',
                                             flex: 1, maxWidth: 220,
                                           }}>
                                             <input
@@ -1719,7 +2174,7 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
                         onClick={() => removeTip(tip.id)}
                         style={{
                           position: 'absolute', top: '50%', right: -34, transform: 'translateY(-50%)',
-                          width: 28, height: 28, borderRadius: 8, border: 'none',
+                          width: 28, height: 28, borderRadius: 6, border: 'none',
                           background: 'transparent', color: TEXT_MUTED, cursor: 'pointer',
                           display: 'flex', alignItems: 'center', justifyContent: 'center',
                           opacity: 0, transition: 'opacity 0.15s',
@@ -1758,8 +2213,8 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
                     const savings = getSavings(tip);
                     const pri = PRIORITY_COLORS[tip.priority];
                     return (
-                      <div key={tip.id} style={{ background: WHITE, borderRadius: 12, border: `1px dashed ${BORDER}`, padding: '10px 14px', display: 'flex', alignItems: 'center', gap: 10, opacity: 0.7 }}>
-                        <div style={{ width: 32, height: 32, borderRadius: 10, background: BLUE_LT, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                      <div key={tip.id} style={{ background: WHITE, borderRadius: 6, border: `1px dashed ${BORDER}`, padding: '10px 14px', display: 'flex', alignItems: 'center', gap: 10, opacity: 0.7 }}>
+                        <div style={{ width: 32, height: 32, borderRadius: 6, background: BLUE_LT, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                           <TipIcon size={18} stroke={1.5} color={BLUE} />
                         </div>
                         <div style={{ flex: 1, minWidth: 0 }}>
@@ -1767,7 +2222,7 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
                           <div style={{ fontSize: 11, color: TEXT_MUTED }}>{fmt(savings)} € / Jahr</div>
                         </div>
                         <span style={{ fontSize: 9, fontWeight: 700, padding: '3px 6px', borderRadius: 5, background: pri.bg, color: pri.text, flexShrink: 0 }}>{pri.label}</span>
-                        <button onClick={() => restoreTip(tip.id)} style={{ fontSize: 11, fontWeight: 600, padding: '4px 10px', borderRadius: 8, border: `1px solid ${GREEN}`, background: GREEN_LT, color: GREEN, cursor: 'pointer', whiteSpace: 'nowrap' }}>
+                        <button onClick={() => restoreTip(tip.id)} style={{ fontSize: 11, fontWeight: 600, padding: '4px 10px', borderRadius: 6, border: `1px solid ${GREEN}`, background: GREEN_LT, color: GREEN, cursor: 'pointer', whiteSpace: 'nowrap' }}>
                           ↩ Zurück
                         </button>
                       </div>
@@ -1790,278 +2245,649 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
         </div>
       </div>
 
-      {/* How-to Overlay */}
+      {/* Unified Overlay — single shell, content morphs between top-tips, module list, and tip detail */}
       <AnimatePresence>
-        {overlayTipId && (() => {
-          const tip = tips.find(t => t.id === overlayTipId) || ALL_TIPS.find(t => t.id === overlayTipId.replace(/-\d+$/, ''));
-          if (!tip) return null;
-          const TipIcon = tip.icon;
-          const ctaUrl = tip.actionUrl || tip.partnerLinks?.[0]?.url;
+        {(openModuleKey || overlayTipId || showTopTipsOverlay) && (() => {
+          // Top-tips data (used when showTopTipsOverlay is true AND no other mode is selected)
+          const thermoTip = ALL_TIPS.find(t => t.id === 'thermostate');
+          const otherTips = tips.filter(t => t.id !== 'thermostate');
+          const topTips = (thermoTip ? [thermoTip, ...otherTips] : otherTips).slice(0, 3);
+
+          // Mode priority: detail > list > topTips
+          const isDetail  = !!overlayTipId;
+          const isList    = !isDetail && !!openModuleKey;
+          const isTopTips = !isDetail && !isList && showTopTipsOverlay && topTips.length > 0;
+
+          const tip = isDetail
+            ? (tips.find(t => t.id === overlayTipId) || ALL_TIPS.find(t => t.id === overlayTipId!.replace(/-\d+$/, '')))
+            : undefined;
+          const cluster = isList
+            ? clusters.find(c => (c.tips[0]?.category || '') === openModuleKey)
+            : undefined;
+          if (isDetail && !tip) return null;
+          if (isList && !cluster) return null;
+          if (!isDetail && !isList && !isTopTips) return null;
+
+          const propLabel = profile.propertyType === 'haus' ? 'Haus' : 'Wohnung';
+          const tenLabel  = profile.tenure === 'eigentum' ? 'im Eigentum' : profile.tenure === 'miete' ? 'zur Miete' : '';
+          const ctx = profile.propertyType || profile.tenure
+            ? `Basierend auf Ihrer Situation: ${propLabel}${tenLabel ? ' ' + tenLabel : ''}.`
+            : 'Basierend auf Ihren persönlichen Angaben.';
+
+          let eyebrow = '';
+          let title = '';
+          let amount = 0;
+          let meta = '';
+
+          if (isDetail) {
+            eyebrow = 'IHR SPARTIPP';
+            title = tip!.title;
+            amount = hg === 3 ? tip!.savingsHg3 : tip!.savingsHg2;
+            meta = 'pro Jahr · konkret für Ihren Haushalt';
+          } else if (isList) {
+            const doneCnt = cluster!.tips.filter(t => done.has(t.id)).length;
+            eyebrow = 'IHR SPARMODUL';
+            title = cluster!.title;
+            amount = cluster!.tips.reduce((s, t) => s + getSavings(t), 0);
+            meta = `pro Jahr · ${cluster!.tips.length} ${cluster!.tips.length === 1 ? 'Tipp' : 'Tipps'}${doneCnt > 0 ? ` · ${doneCnt} erledigt` : ''}`;
+          } else {
+            eyebrow = 'IHRE TOP TIPPS';
+            title = `Diese ${topTips.length} Maßnahmen lohnen sich am meisten`;
+            amount = topTips.reduce((s, t) => s + getSavings(t), 0);
+            meta = `pro Jahr · ${topTips.length} Schritte`;
+          }
+
+          const contentKey = isDetail
+            ? `detail-${tip!.id}`
+            : isList
+            ? `list-${openModuleKey}`
+            : 'top-tips';
+          const ctaUrl = tip?.actionUrl || tip?.partnerLinks?.[0]?.url;
+
+          const closeAll = () => {
+            setOpenModuleKey(null);
+            setOverlayTipId(null);
+            if (showTopTipsOverlay) closeTopTipsOverlay();
+          };
+          const backToList = () => { setOverlayTipId(null); };
+
           return (
-            <motion.div
-              key="backdrop"
-              initial={{ opacity: 0, backdropFilter: 'blur(0px)' }}
-              animate={{ opacity: 1, backdropFilter: 'blur(8px)' }}
-              exit={{ opacity: 0, backdropFilter: 'blur(0px)' }}
-              transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
-              onClick={() => setOverlayTipId(null)}
-              style={{
-                position: 'fixed', inset: 0, zIndex: 200,
-                background: 'rgba(15,25,40,0.55)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                padding: 16, fontFamily: "'Poppins', sans-serif",
-                willChange: 'opacity, backdrop-filter',
-              }}
-            >
+            <>
               <motion.div
-                initial={{ opacity: 0, y: 28, scale: 0.94 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: 16, scale: 0.96 }}
-                transition={{
-                  opacity: { duration: 0.3, ease: [0.4, 0, 0.2, 1] },
-                  y:       { type: 'spring', stiffness: 260, damping: 26, mass: 0.9 },
-                  scale:   { type: 'spring', stiffness: 260, damping: 26, mass: 0.9 },
-                }}
-                onClick={e => e.stopPropagation()}
+                key="ov-backdrop"
+                initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                transition={{ duration: 0.22 }}
+                onClick={closeAll}
                 style={{
-                  background: WHITE, borderRadius: 22,
-                  maxWidth: 960, width: '100%', maxHeight: '92vh', overflow: 'hidden',
-                  boxShadow: '0 30px 70px rgba(0,0,0,0.28), 0 8px 24px rgba(0,0,0,0.12)',
-                  position: 'relative',
-                  willChange: 'transform, opacity',
-                  transformOrigin: 'center bottom',
+                  position: 'fixed', inset: 0, zIndex: 1000,
+                  background: 'rgba(30,32,38,0.55)',
+                  backdropFilter: 'blur(4px)',
+                  WebkitBackdropFilter: 'blur(4px)',
                 }}
-              >
-                <style>{`
-                  .mvp-overlay-grid{display:flex;flex-direction:column;}
-                  .mvp-overlay-left{padding:28px;}
-                  .mvp-overlay-right{position:relative;display:flex;flex-direction:column;max-height:60vh;}
-                  .mvp-overlay-right-scroll{flex:1;overflow-y:auto;padding:24px 24px 14px;}
-                  .mvp-overlay-footer{position:sticky;bottom:0;background:#fff;border-top:1px solid #E2E8F0;padding:14px 24px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
-                  @media(min-width:760px){
-                    .mvp-overlay-grid{flex-direction:row;height:auto;max-height:92vh;}
-                    .mvp-overlay-left{flex:0 0 340px;padding:36px 32px;}
-                    .mvp-overlay-right{flex:1;max-height:92vh;}
-                    .mvp-overlay-right-scroll{padding:36px 36px 16px;}
-                    .mvp-overlay-footer{padding:16px 36px;}
-                  }
-                `}</style>
-
-                <div className="mvp-overlay-grid">
-                  {/* LEFT — dark hero panel */}
-                  <div className="mvp-overlay-left" style={{
-                    background: 'linear-gradient(160deg, #243c47 0%, #1c2e3f 60%, #1c2e3f 100%)',
-                    color: WHITE,
-                    position: 'relative', overflow: 'hidden',
+              />
+              <div style={{
+                position: 'fixed', inset: 0, zIndex: 1001,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                padding: 20, pointerEvents: 'none',
+                fontFamily: "'Poppins', sans-serif",
+              }}>
+                <motion.div
+                  layoutId="top-tips-shell"
+                  key="ov-shell"
+                  initial={{ opacity: 0, y: 24, scale: 0.96 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: 16, scale: 0.96 }}
+                  transition={{
+                    layout:  { duration: 0.4, ease: [0.22, 1, 0.36, 1] },
+                    default: { duration: 0.26, ease: [0.22, 1, 0.36, 1] },
+                  }}
+                  onClick={e => e.stopPropagation()}
+                  style={{
+                    width: 'min(960px, 100%)', maxHeight: '90vh', minHeight: 'min(540px, 80vh)',
+                    background: WHITE, border: `1px solid ${BORDER}`,
+                    borderRadius: 6,
+                    overflow: 'hidden', pointerEvents: 'auto',
                     display: 'flex', flexDirection: 'column',
-                  }}>
-                    {/* Deco watermark */}
-                    <div style={{
-                      position: 'absolute', bottom: -40, right: -40,
-                      width: 200, height: 200,
-                      opacity: 0.05,
+                    boxShadow: '0 20px 60px rgba(0,0,0,0.25)',
+                    position: 'relative',
+                  }}
+                >
+                  <style>{`
+                    .mvp-ov-grid{display:flex;flex-direction:column;flex:1;min-height:0;}
+                    .mvp-ov-left{padding:24px;position:relative;flex-shrink:0;}
+                    .mvp-ov-right{position:relative;display:flex;flex-direction:column;flex:1;min-height:0;overflow:hidden;}
+                    .mvp-ov-right-scroll{flex:1;overflow-y:auto;padding:22px 24px 14px;}
+                    .mvp-ov-footer{position:sticky;bottom:0;background:#fff;border-top:1px solid ${BORDER};padding:12px 24px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+                    @media(min-width:760px){
+                      .mvp-ov-grid{flex-direction:row;}
+                      .mvp-ov-left{flex:0 0 320px;padding:32px 28px;}
+                      .mvp-ov-right-scroll{padding:32px 32px 16px;}
+                      .mvp-ov-footer{padding:14px 32px;}
+                    }
+                  `}</style>
+
+                  {/* Close button — top-right corner */}
+                  <button
+                    onClick={closeAll}
+                    aria-label="Schließen"
+                    style={{
+                      position: 'absolute', top: 8, right: 8, zIndex: 3,
+                      width: 28, height: 28, borderRadius: 14,
+                      border: 'none', background: 'transparent', color: TEXT_MUTED,
+                      cursor: 'pointer',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      transition: 'background 0.15s, color 0.15s',
+                    }}
+                    onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(0,0,0,0.06)'; (e.currentTarget as HTMLElement).style.color = TEXT; }}
+                    onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'transparent'; (e.currentTarget as HTMLElement).style.color = TEXT_MUTED; }}
+                  >
+                    <IconX size={16} stroke={2} />
+                  </button>
+
+                  <div className="mvp-ov-grid">
+                    {/* LEFT — dark hero with crossfading content */}
+                    <div className="mvp-ov-left" style={{
+                      background: 'linear-gradient(160deg, #243c47 0%, #1c2e3f 100%)',
+                      color: WHITE, display: 'flex', flexDirection: 'column',
                     }}>
-                      <TipIcon size={200} stroke={1} color={WHITE} />
-                    </div>
-
-                    <div style={{ position: 'relative', zIndex: 1 }}>
-                      <div style={{
-                        fontSize: 10, fontWeight: 700, color: ORANGE,
-                        letterSpacing: '0.16em', marginBottom: 16,
-                      }}>
-                        IHR SPARTIPP
-                      </div>
-                      <h2 style={{
-                        fontSize: 22, fontWeight: 800, lineHeight: 1.15,
-                        textTransform: 'uppercase', letterSpacing: '-0.005em',
-                        margin: 0, marginBottom: 24,
-                      }}>
-                        {tip.title}
-                      </h2>
-                      <div style={{
-                        fontSize: 60, fontWeight: 800, color: ORANGE, lineHeight: 1,
-                        letterSpacing: '-3px', marginBottom: 8,
-                      }}>
-                        {fmt(hg === 3 ? tip.savingsHg3 : tip.savingsHg2)}€
-                      </div>
-                      <div style={{ fontSize: 13, opacity: 0.85, fontWeight: 500 }}>
-                        pro Jahr · konkret für Ihren Haushalt
-                      </div>
-                    </div>
-
-                    <div style={{ flex: 1 }} />
-
-                    {/* Personalization footer */}
-                    {(() => {
-                      const propLabel = profile.propertyType === 'haus' ? 'Hauseigentum' : 'Wohnung';
-                      const tenLabel  = profile.tenure === 'eigentum' ? 'im Eigentum' : profile.tenure === 'miete' ? 'zur Miete' : '';
-                      const ctx = profile.propertyType || profile.tenure
-                        ? `Basierend auf Ihrer Situation: ${propLabel}${tenLabel ? ' ' + tenLabel : ''}.`
-                        : 'Basierend auf Ihren persönlichen Angaben.';
-                      return (
-                        <div style={{ position: 'relative', zIndex: 1, marginTop: 24 }}>
-                          <div style={{
-                            fontSize: 11, fontWeight: 700, color: ORANGE,
-                            marginBottom: 4,
-                          }}>
-                            Persönlich für Sie:
-                          </div>
-                          <div style={{ fontSize: 12, opacity: 0.85, lineHeight: 1.5 }}>
-                            {ctx}
-                          </div>
-                        </div>
-                      );
-                    })()}
-                  </div>
-
-                  {/* RIGHT — content */}
-                  <div className="mvp-overlay-right">
-                    {/* Close */}
-                    <button
-                      onClick={() => setOverlayTipId(null)}
-                      style={{
-                        position: 'absolute', top: 14, right: 14, zIndex: 3,
-                        width: 32, height: 32, borderRadius: 16,
-                        border: 'none', background: '#f3f4f6', color: TEXT_MUTED,
-                        cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      }}
-                      aria-label="Schließen"
-                    >
-                      <IconX size={18} stroke={2} />
-                    </button>
-
-                    <div className="mvp-overlay-right-scroll">
-                    {/* Badges row */}
-                    <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 16, paddingRight: 40 }}>
-                      {tip.effort && (
-                        <span style={{
-                          display: 'inline-flex', alignItems: 'center', gap: 6,
-                          background: '#f0f3f7', color: TEXT,
-                          padding: '7px 13px', borderRadius: 999,
-                          fontSize: 12, fontWeight: 600,
-                        }}>
-                          <IconClock size={13} stroke={2} color={TEXT_MUTED} /> {tip.effort}
-                        </span>
-                      )}
-                      {tip.difficulty && (
-                        <span style={{
-                          display: 'inline-flex', alignItems: 'center',
-                          background: tip.difficulty === 'Einfach' ? GREEN_LT
-                            : tip.difficulty === 'Mittel' ? ORANGE_LT : '#fce7e7',
-                          color: tip.difficulty === 'Einfach' ? GREEN
-                            : tip.difficulty === 'Mittel' ? '#92400e' : '#c52828',
-                          padding: '7px 13px', borderRadius: 999,
-                          fontSize: 12, fontWeight: 700,
-                          border: tip.difficulty === 'Einfach' ? `1px solid ${GREEN}` : `1px solid currentColor`,
-                        }}>
-                          {tip.difficulty}
-                        </span>
-                      )}
-                      {ctaUrl && (
-                        <span style={{
-                          display: 'inline-flex', alignItems: 'center',
-                          background: ORANGE_LT, color: '#92400e',
-                          padding: '7px 13px', borderRadius: 999,
-                          fontSize: 12, fontWeight: 700,
-                          border: `1px solid #f5c842`,
-                        }}>
-                          Wechselservice inklusive
-                        </span>
-                      )}
-                    </div>
-
-                    {/* Description */}
-                    {tip.description && (
-                      <p style={{ fontSize: 14, color: TEXT, lineHeight: 1.65, marginBottom: 18, fontWeight: 400 }}>
-                        {tip.description}
-                      </p>
-                    )}
-
-                    {/* Why */}
-                    {tip.why && (
-                      <div style={{
-                        background: '#f9fafb',
-                        borderLeft: `3px solid ${BLUE}`,
-                        borderRadius: 8,
-                        padding: '12px 16px',
-                        marginBottom: 22,
-                      }}>
-                        <div style={{
-                          fontSize: 10, fontWeight: 700, color: BLUE,
-                          letterSpacing: '0.12em', marginBottom: 6,
-                        }}>
-                          WARUM DAS SPART
-                        </div>
-                        <p style={{ fontSize: 13, color: TEXT, lineHeight: 1.6, margin: 0 }}>
-                          {tip.why}
-                        </p>
-                      </div>
-                    )}
-
-                    {/* How-to steps */}
-                    {tip.howTo && tip.howTo.length > 0 && (
-                      <div style={{ marginBottom: 22 }}>
-                        <h3 style={{
-                          fontSize: 11, fontWeight: 700, color: TEXT,
-                          letterSpacing: '0.12em', margin: '0 0 14px',
-                        }}>
-                          IN {tip.howTo.length} SCHRITT{tip.howTo.length === 1 ? '' : 'EN'} ERLEDIGT
-                        </h3>
-                        <ol style={{ paddingLeft: 0, margin: 0, listStyle: 'none' }}>
-                          {tip.howTo.map((step, i) => (
-                            <li key={i} style={{
-                              display: 'flex', gap: 12, marginBottom: 12, alignItems: 'flex-start',
-                            }}>
-                              <span style={{
-                                flexShrink: 0,
-                                width: 22, height: 22, borderRadius: 11,
-                                background: GREEN_LT, color: GREEN,
-                                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                marginTop: 2,
-                              }}>
-                                <IconCheck size={14} stroke={2.5} />
-                              </span>
-                              <span style={{ fontSize: 13.5, color: TEXT, lineHeight: 1.6 }}>
-                                {step}
-                              </span>
-                            </li>
-                          ))}
-                        </ol>
-                      </div>
-                    )}
-
-                    </div>
-                    {/* Sticky footer */}
-                    <div className="mvp-overlay-footer">
-                      <div style={{ fontSize: 10, color: TEXT_MUTED, flex: 1, minWidth: 0 }}>
-                        Werbung · Empfehlung kostenfrei
-                      </div>
-                      {ctaUrl && (
-                        <a
-                          href={ctaUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          style={{
-                            display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 6,
-                            background: ORANGE, color: '#243c47',
-                            borderRadius: 999, padding: '11px 22px',
-                            fontSize: 13, fontWeight: 800, textDecoration: 'none',
-                            textTransform: 'uppercase', letterSpacing: '0.04em',
-                            boxShadow: '0 4px 12px rgba(249,170,0,0.3)',
-                          }}
+                      <AnimatePresence mode="wait">
+                        <motion.div
+                          key={`left-${contentKey}`}
+                          initial={{ opacity: 0, y: 8 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -8 }}
+                          transition={{ duration: 0.18 }}
+                          style={{ display: 'flex', flexDirection: 'column', flex: 1 }}
                         >
-                          {tip.actionLabel || 'Jetzt sparen'}
-                          <IconArrowRight size={14} stroke={2.5} />
-                        </a>
-                      )}
+                          {/* Back button when in detail mode (only if we came from module list) */}
+                          {isDetail && openModuleKey && (
+                            <button
+                              onClick={backToList}
+                              style={{
+                                alignSelf: 'flex-start',
+                                background: 'rgba(255,255,255,0.12)', color: WHITE,
+                                border: 'none', borderRadius: 999,
+                                padding: '5px 10px', marginBottom: 16,
+                                fontSize: 11, fontWeight: 700, cursor: 'pointer',
+                                fontFamily: 'inherit',
+                                display: 'inline-flex', alignItems: 'center', gap: 4,
+                              }}
+                            >
+                              <IconArrowLeft size={12} stroke={2.4} /> Zurück zur Liste
+                            </button>
+                          )}
+                          <div>
+                            <div style={{ fontSize: 10, fontWeight: 700, color: ORANGE, letterSpacing: '0.14em', marginBottom: 12 }}>
+                              {eyebrow}
+                            </div>
+                            <h2 style={{ fontSize: 22, fontWeight: 800, lineHeight: 1.2, margin: 0, marginBottom: 18, letterSpacing: '-0.01em' }}>
+                              {title}
+                            </h2>
+                            <div style={{ fontSize: 40, fontWeight: 800, color: ORANGE, lineHeight: 1, letterSpacing: '-1.5px', marginBottom: 6 }}>
+                              {fmt(amount)}€
+                            </div>
+                            <div style={{ fontSize: 12, opacity: 0.75 }}>{meta}</div>
+                          </div>
+
+                          <div style={{ flex: 1, minHeight: 20 }} />
+
+                          <div>
+                            <div style={{ fontSize: 11, fontWeight: 700, color: ORANGE, marginBottom: 3 }}>Persönlich für Sie:</div>
+                            <div style={{ fontSize: 12, opacity: 0.8, lineHeight: 1.5 }}>{ctx}</div>
+                          </div>
+                        </motion.div>
+                      </AnimatePresence>
+                    </div>
+
+                    {/* RIGHT — switches between list and detail */}
+                    <div className="mvp-ov-right">
+                      <AnimatePresence mode="wait">
+                        <motion.div
+                          key={`right-${contentKey}`}
+                          initial={{ opacity: 0, x: 12 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          exit={{ opacity: 0, x: -12 }}
+                          transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+                          style={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0 }}
+                        >
+                          {isDetail ? (() => {
+                            // Behavioral tip = no partner/service behind it (kein Anbieter zum Wechseln).
+                            // Transactional tip = has partner → "Jetzt sparen" mit Anbieter-Empfehlungen.
+                            const isFreeTip = !tip!.partner || tip!.partner.trim() === '';
+                            const isTipDone = done.has(tip!.id);
+                            // Derive offers from partner field (split on ", ") or use generic fallback
+                            const partnerList = tip!.partner ? tip!.partner.split(/,\s*/).filter(Boolean) : [];
+                            const offers = partnerList.length > 0
+                              ? partnerList.slice(0, 4).map((p, i) => ({ name: p, savings: Math.round((hg === 3 ? tip!.savingsHg3 : tip!.savingsHg2) * (0.95 - i * 0.1)) }))
+                              : [
+                                  { name: 'Vergleichsportal Check24',   savings: Math.round((hg === 3 ? tip!.savingsHg3 : tip!.savingsHg2) * 0.95) },
+                                  { name: 'Vergleichsportal Verivox',   savings: Math.round((hg === 3 ? tip!.savingsHg3 : tip!.savingsHg2) * 0.88) },
+                                  { name: 'Direkt beim Anbieter',       savings: Math.round((hg === 3 ? tip!.savingsHg3 : tip!.savingsHg2) * 0.80) },
+                                ];
+
+                            return (
+                            <>
+                              <div className="mvp-ov-right-scroll">
+                                {!showOffers ? (
+                                  <>
+                                    {/* Meta chips */}
+                                    <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 16, paddingRight: 44 }}>
+                                      {tip!.effort && (
+                                        <span style={{
+                                          display: 'inline-flex', alignItems: 'center', gap: 5,
+                                          background: '#f1f5f9', color: TEXT,
+                                          padding: '5px 10px', borderRadius: 999,
+                                          fontSize: 12, fontWeight: 500,
+                                        }}>
+                                          <IconClock size={12} stroke={2} color={TEXT_MUTED} /> {tip!.effort}
+                                        </span>
+                                      )}
+                                      {tip!.difficulty && (
+                                        <span style={{
+                                          display: 'inline-flex', alignItems: 'center',
+                                          color: tip!.difficulty === 'Einfach' ? GREEN_DARK : tip!.difficulty === 'Mittel' ? '#92400e' : '#c52828',
+                                          padding: '5px 10px', borderRadius: 999,
+                                          fontSize: 12, fontWeight: 700,
+                                          border: `1px solid currentColor`,
+                                        }}>
+                                          {tip!.difficulty}
+                                        </span>
+                                      )}
+                                    </div>
+
+                                    {tip!.description && (
+                                      <p style={{ fontSize: 14, color: TEXT, lineHeight: 1.65, marginBottom: 18, fontWeight: 400 }}>
+                                        {tip!.description}
+                                      </p>
+                                    )}
+
+                                    {tip!.why && (
+                                      <div style={{
+                                        background: '#f9fafb',
+                                        borderLeft: `3px solid ${BLUE}`,
+                                        borderRadius: 6,
+                                        padding: '12px 14px',
+                                        marginBottom: 20,
+                                      }}>
+                                        <div style={{ fontSize: 10, fontWeight: 700, color: BLUE, letterSpacing: '0.12em', marginBottom: 6 }}>
+                                          WARUM DAS SPART
+                                        </div>
+                                        <p style={{ fontSize: 13, color: TEXT, lineHeight: 1.55, margin: 0 }}>{tip!.why}</p>
+                                      </div>
+                                    )}
+
+                                    {tip!.howTo && tip!.howTo.length > 0 && (
+                                      <div>
+                                        <h3 style={{ fontSize: 10, fontWeight: 700, color: TEXT_MUTED, letterSpacing: '0.12em', margin: '0 0 12px' }}>
+                                          IN {tip!.howTo.length} SCHRITT{tip!.howTo.length === 1 ? '' : 'EN'} ERLEDIGT
+                                        </h3>
+                                        <ol style={{ paddingLeft: 0, margin: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 10 }}>
+                                          {tip!.howTo.map((step, i) => (
+                                            <li key={i} style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
+                                              <span style={{
+                                                flexShrink: 0,
+                                                width: 22, height: 22, borderRadius: 11,
+                                                background: GREEN_LT, color: GREEN_DARK,
+                                                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                                marginTop: 1, fontSize: 12, fontWeight: 800,
+                                              }}>
+                                                {i + 1}
+                                              </span>
+                                              <span style={{ fontSize: 13.5, color: TEXT, lineHeight: 1.6 }}>{step}</span>
+                                            </li>
+                                          ))}
+                                        </ol>
+                                      </div>
+                                    )}
+                                  </>
+                                ) : (
+                                  // OFFERS SUB-VIEW (replaces detail content while keeping dark hero)
+                                  <motion.div
+                                    initial={{ opacity: 0, x: 16 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+                                    style={{ paddingRight: 44 }}
+                                  >
+                                    <button
+                                      onClick={() => setShowOffers(false)}
+                                      style={{
+                                        background: 'transparent', color: TEXT_MUTED,
+                                        border: 'none', padding: 0, marginBottom: 14,
+                                        fontSize: 12, fontWeight: 600, cursor: 'pointer',
+                                        fontFamily: 'inherit',
+                                        display: 'inline-flex', alignItems: 'center', gap: 4,
+                                      }}
+                                      onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = TEXT; }}
+                                      onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = TEXT_MUTED; }}
+                                    >
+                                      <IconArrowLeft size={13} stroke={2} /> Zurück zum Tipp
+                                    </button>
+                                    <h3 style={{ fontSize: 18, fontWeight: 800, color: TEXT, margin: 0, marginBottom: 4, letterSpacing: '-0.01em' }}>
+                                      Unsere Empfehlungen
+                                    </h3>
+                                    <p style={{ fontSize: 13, color: TEXT_MUTED, lineHeight: 1.55, margin: '0 0 18px' }}>
+                                      Wählen Sie eine Option und sparen Sie noch heute. Alle Empfehlungen sind für Sie kostenfrei.
+                                    </p>
+
+                                    <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                                      {offers.map((o, i) => (
+                                        <div
+                                          key={o.name}
+                                          style={{
+                                            border: `1px solid ${i === 0 ? GREEN : BORDER}`,
+                                            borderRadius: 6, padding: '14px 16px',
+                                            display: 'flex', alignItems: 'center', gap: 12,
+                                            position: 'relative',
+                                            background: i === 0 ? GREEN_LT : WHITE,
+                                          }}
+                                        >
+                                          {i === 0 && (
+                                            <span style={{
+                                              position: 'absolute', top: -8, left: 12,
+                                              background: GREEN_DARK, color: WHITE,
+                                              fontSize: 9, fontWeight: 800, letterSpacing: '0.06em',
+                                              padding: '3px 8px', borderRadius: 999,
+                                            }}>EMPFOHLEN</span>
+                                          )}
+                                          <div style={{ flex: 1, minWidth: 0 }}>
+                                            <div style={{ fontSize: 14, fontWeight: 700, color: TEXT, lineHeight: 1.3, marginBottom: 4 }}>
+                                              {o.name}
+                                            </div>
+                                            <div style={{ fontSize: 12, color: GREEN_DARK, fontWeight: 700 }}>
+                                              bis zu {fmt(o.savings)} € / Jahr sparen
+                                            </div>
+                                          </div>
+                                          <a
+                                            href={ctaUrl || '#'}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            style={{
+                                              display: 'inline-flex', alignItems: 'center', gap: 5,
+                                              background: i === 0 ? GREEN_DARK : DARK,
+                                              color: WHITE,
+                                              borderRadius: 999, padding: '8px 14px',
+                                              fontSize: 12, fontWeight: 700, textDecoration: 'none',
+                                              whiteSpace: 'nowrap',
+                                            }}
+                                          >
+                                            Zum Anbieter <IconArrowRight size={13} stroke={2.5} />
+                                          </a>
+                                        </div>
+                                      ))}
+                                    </div>
+
+                                    <p style={{ fontSize: 10, color: TEXT_MUTED, lineHeight: 1.5, marginTop: 18 }}>
+                                      Werbung · Wir verdienen ggf. eine Provision, für Sie ändert sich am Preis nichts.
+                                    </p>
+                                  </motion.div>
+                                )}
+                              </div>
+
+                              <div className="mvp-ov-footer">
+                                {!showOffers && (
+                                  <div style={{ fontSize: 10, color: TEXT_MUTED, flex: 1 }}>
+                                    {isFreeTip ? 'Selbstständig umsetzbar' : 'Werbung · Empfehlung kostenfrei'}
+                                  </div>
+                                )}
+                                {showOffers && <div style={{ flex: 1 }} />}
+
+                                {isFreeTip ? (
+                                  // FREE tip → Ignorieren + Erledigt buttons
+                                  <>
+                                    <button
+                                      onClick={() => { removeTip(tip!.id); closeAll(); }}
+                                      style={{
+                                        background: 'transparent', color: TEXT_MUTED,
+                                        border: `1px solid ${BORDER}`,
+                                        borderRadius: 999, padding: '10px 18px',
+                                        fontSize: 13, fontWeight: 700, cursor: 'pointer',
+                                        fontFamily: 'inherit',
+                                        display: 'inline-flex', alignItems: 'center', gap: 6,
+                                      }}
+                                      onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = '#c52828'; (e.currentTarget as HTMLElement).style.borderColor = '#c52828'; }}
+                                      onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = TEXT_MUTED; (e.currentTarget as HTMLElement).style.borderColor = BORDER; }}
+                                    >
+                                      <IconX size={14} stroke={2.4} /> Ignorieren
+                                    </button>
+                                    <button
+                                      onClick={() => { toggleDone(tip!.id); closeAll(); }}
+                                      style={{
+                                        background: isTipDone ? GREEN_LT : GREEN_DARK,
+                                        color: isTipDone ? GREEN_DARK : WHITE,
+                                        border: 'none',
+                                        borderRadius: 999, padding: '11px 20px',
+                                        fontSize: 13, fontWeight: 700, cursor: 'pointer',
+                                        fontFamily: 'inherit',
+                                        display: 'inline-flex', alignItems: 'center', gap: 6,
+                                        boxShadow: '0 4px 12px rgba(22,122,82,0.20)',
+                                      }}
+                                    >
+                                      <IconCheck size={14} stroke={2.5} /> {isTipDone ? 'Rückgängig' : 'Erledigt'}
+                                    </button>
+                                  </>
+                                ) : !showOffers ? (
+                                  // Commercial tip, detail view → "Jetzt sparen" opens offers
+                                  <button
+                                    onClick={() => setShowOffers(true)}
+                                    style={{
+                                      background: DARK, color: WHITE, border: 'none',
+                                      borderRadius: 999, padding: '11px 20px',
+                                      fontSize: 13, fontWeight: 700, cursor: 'pointer',
+                                      fontFamily: 'inherit',
+                                      display: 'inline-flex', alignItems: 'center', gap: 6,
+                                      boxShadow: '0 4px 12px rgba(36,60,71,0.20)',
+                                    }}
+                                  >
+                                    Jetzt sparen <IconArrowRight size={14} stroke={2.5} />
+                                  </button>
+                                ) : (
+                                  // Commercial tip, offers view → mark as done
+                                  <button
+                                    onClick={() => { toggleDone(tip!.id); closeAll(); }}
+                                    style={{
+                                      background: isTipDone ? GREEN_LT : GREEN_DARK,
+                                      color: isTipDone ? GREEN_DARK : WHITE,
+                                      border: 'none',
+                                      borderRadius: 999, padding: '11px 20px',
+                                      fontSize: 13, fontWeight: 700, cursor: 'pointer',
+                                      fontFamily: 'inherit',
+                                      display: 'inline-flex', alignItems: 'center', gap: 6,
+                                      boxShadow: '0 4px 12px rgba(22,122,82,0.20)',
+                                    }}
+                                  >
+                                    <IconCheck size={14} stroke={2.5} /> {isTipDone ? 'Rückgängig' : 'Als erledigt markieren'}
+                                  </button>
+                                )}
+                              </div>
+                            </>
+                            );
+                          })() : isList ? (
+                            <div className="mvp-ov-right-scroll" style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                              {cluster!.tips.map((t) => {
+                                const TIcon = t.icon;
+                                const sv = getSavings(t);
+                                const isDone = done.has(t.id);
+                                const isFree = t.savingsHg2 < 200 && (t.effort === 'Sofort' || t.effort?.startsWith('Sofort') || t.effort?.includes('einmal jährlich'));
+                                return (
+                                  <button
+                                    key={t.id}
+                                    onClick={() => setOverlayTipId(t.id)}
+                                    style={{
+                                      background: WHITE, border: `1px solid ${isDone ? GREEN : BORDER}`,
+                                      borderRadius: 6, padding: '12px 14px',
+                                      display: 'flex', alignItems: 'center', gap: 12,
+                                      cursor: 'pointer', fontFamily: 'inherit', textAlign: 'left' as const,
+                                      width: '100%', transition: 'border-color 0.15s',
+                                      opacity: isDone ? 0.65 : 1,
+                                    }}
+                                    onMouseEnter={e => { if (!isDone) (e.currentTarget as HTMLElement).style.borderColor = BLUE; }}
+                                    onMouseLeave={e => { if (!isDone) (e.currentTarget as HTMLElement).style.borderColor = BORDER; }}
+                                  >
+                                    <div style={{
+                                      width: 36, height: 36, flexShrink: 0,
+                                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                    }}>
+                                      {isDone
+                                        ? <IconCheck size={20} stroke={2.5} color={GREEN_DARK} />
+                                        : <TIcon size={22} stroke={1.7} color={BLUE} />}
+                                    </div>
+                                    <div style={{ flex: 1, minWidth: 0 }}>
+                                      <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap', marginBottom: 2 }}>
+                                        <span style={{
+                                          fontSize: 14, fontWeight: 700, color: TEXT, lineHeight: 1.3,
+                                          textDecoration: isDone ? 'line-through' : 'none',
+                                        }}>{t.title}</span>
+                                      </div>
+                                      <div style={{ fontSize: 12, color: TEXT_MUTED, display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                                        <span style={{ color: GREEN_DARK, fontWeight: 700 }}>{fmt(sv)} € / Jahr</span>
+                                        {t.effort && <span>· {t.effort}</span>}
+                                      </div>
+                                    </div>
+                                    <IconArrowRight size={16} stroke={2.2} color={TEXT_MUTED} style={{ flexShrink: 0 }} />
+                                  </button>
+                                );
+                              })}
+                            </div>
+                          ) : (
+                            <>
+                              <style>{`
+                                .mvp-tt-row{position:relative;}
+                                .mvp-tt-actions{
+                                  position:absolute;
+                                  bottom:0;
+                                  right:14px;
+                                  transform:translateY(40%);
+                                  background:#fff;
+                                  padding:0 6px;
+                                  display:inline-flex;
+                                  gap:8px;
+                                  opacity:0;
+                                  pointer-events:none;
+                                  transition:opacity 0.15s;
+                                  line-height:1;
+                                }
+                                .mvp-tt-row:hover .mvp-tt-actions{
+                                  opacity:1;
+                                  pointer-events:auto;
+                                }
+                              `}</style>
+                              <div className="mvp-ov-right-scroll" style={{ display: 'flex', flexDirection: 'column', gap: 8, paddingTop: 36 }}>
+                                {topTips.map((t, i) => {
+                                  const TIcon = t.icon;
+                                  const sv = getSavings(t);
+                                  const isDone = done.has(t.id);
+                                  return (
+                                    <div
+                                      key={t.id}
+                                      className="mvp-tt-row"
+                                      onClick={() => setOverlayTipId(t.id)}
+                                      style={{
+                                        background: WHITE, border: `1px solid ${isDone ? GREEN : BORDER}`,
+                                        borderRadius: 6, padding: '12px 14px',
+                                        display: 'flex', alignItems: 'center', gap: 12,
+                                        cursor: 'pointer', fontFamily: 'inherit', textAlign: 'left' as const,
+                                        width: '100%', transition: 'border-color 0.15s',
+                                        opacity: isDone ? 0.65 : 1,
+                                      }}
+                                      onMouseEnter={e => { if (!isDone) (e.currentTarget as HTMLElement).style.borderColor = BLUE; }}
+                                      onMouseLeave={e => { if (!isDone) (e.currentTarget as HTMLElement).style.borderColor = BORDER; }}
+                                    >
+                                      <div style={{
+                                        display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                                        width: 28, height: 28, borderRadius: 999,
+                                        background: isDone ? GREEN_DARK : DARK, color: WHITE,
+                                        fontSize: 13, fontWeight: 800, flexShrink: 0,
+                                      }}>
+                                        {isDone ? <IconCheck size={14} stroke={2.5} /> : (i + 1)}
+                                      </div>
+                                      <div style={{
+                                        width: 40, height: 40, flexShrink: 0,
+                                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                        overflow: 'hidden',
+                                      }}>
+                                        {t.id === 'thermostate'
+                                          ? <img src={thermostatImg} alt="Smartes Thermostat" style={{ width: 40, height: 40, objectFit: 'contain' }} />
+                                          : <TIcon size={22} stroke={1.7} color={BLUE} />}
+                                      </div>
+                                      <div style={{ flex: 1, minWidth: 0 }}>
+                                        <div style={{ fontSize: 14, fontWeight: 700, color: TEXT, lineHeight: 1.3, marginBottom: 2, textDecoration: isDone ? 'line-through' : 'none' }}>{t.title}</div>
+                                        <div style={{ fontSize: 12, color: TEXT_MUTED }}>
+                                          <span style={{ color: GREEN_DARK, fontWeight: 700 }}>{fmt(sv)} € / Jahr</span>
+                                          {t.effort && <span> · {t.effort}</span>}
+                                        </div>
+                                      </div>
+                                      {/* Arrow on right (default) */}
+                                      <span style={{ flexShrink: 0, display: 'inline-flex', alignItems: 'center' }}>
+                                        <IconArrowRight size={16} stroke={2.2} color={TEXT_MUTED} />
+                                      </span>
+                                      {/* Action buttons cut into the bottom border on hover */}
+                                      <span className="mvp-tt-actions">
+                                        <button
+                                          onClick={(e) => { e.stopPropagation(); removeTip(t.id); }}
+                                          style={{
+                                            background: 'transparent', color: '#c52828',
+                                            border: 'none',
+                                            padding: '2px 4px',
+                                            fontSize: 11, fontWeight: 700,
+                                            cursor: 'pointer', fontFamily: 'inherit',
+                                            display: 'inline-flex', alignItems: 'center', gap: 3,
+                                            lineHeight: 1,
+                                          }}
+                                          onMouseEnter={e => { (e.currentTarget as HTMLElement).style.textDecoration = 'underline'; }}
+                                          onMouseLeave={e => { (e.currentTarget as HTMLElement).style.textDecoration = 'none'; }}
+                                        >
+                                          <IconX size={12} stroke={2.4} /> Ignorieren
+                                        </button>
+                                        <button
+                                          onClick={(e) => { e.stopPropagation(); toggleDone(t.id); }}
+                                          style={{
+                                            background: 'transparent',
+                                            color: GREEN_DARK,
+                                            border: 'none',
+                                            padding: '2px 4px',
+                                            fontSize: 11, fontWeight: 700,
+                                            cursor: 'pointer', fontFamily: 'inherit',
+                                            display: 'inline-flex', alignItems: 'center', gap: 3,
+                                            lineHeight: 1,
+                                          }}
+                                          onMouseEnter={e => { (e.currentTarget as HTMLElement).style.textDecoration = 'underline'; }}
+                                          onMouseLeave={e => { (e.currentTarget as HTMLElement).style.textDecoration = 'none'; }}
+                                        >
+                                          <IconCheck size={12} stroke={2.5} /> {isDone ? 'Rückgängig' : 'Erledigt'}
+                                        </button>
+                                      </span>
+                                    </div>
+                                  );
+                                })}
+                              </div>
+                              <div className="mvp-ov-footer" style={{ justifyContent: 'flex-end' }}>
+                                <button
+                                  onClick={closeTopTipsOverlay}
+                                  style={{
+                                    background: DARK, color: WHITE, border: 'none',
+                                    borderRadius: 999, padding: '11px 22px',
+                                    fontSize: 13, fontWeight: 700, cursor: 'pointer',
+                                    fontFamily: 'inherit',
+                                    display: 'inline-flex', alignItems: 'center', gap: 6,
+                                    boxShadow: '0 4px 12px rgba(36,60,71,0.20)',
+                                  }}
+                                >
+                                  Weiter zum Dashboard <IconArrowRight size={14} stroke={2.5} />
+                                </button>
+                              </div>
+                            </>
+                          )}
+                        </motion.div>
+                      </AnimatePresence>
                     </div>
                   </div>
-                </div>
-              </motion.div>
-            </motion.div>
+                </motion.div>
+              </div>
+            </>
           );
         })()}
       </AnimatePresence>
-    </div>
+
+    </motion.div>
   );
 }

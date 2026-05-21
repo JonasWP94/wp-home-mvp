@@ -14,7 +14,7 @@ import {
 import {
   ACCENT, PRIMARY, BG, WHITE, BORDER, GREY_200, GREY_700, GREY_800,
   YELLOW,
-  GREEN_DARK,
+  GREEN_DARK, GREEN_BRIGHT,
   RADIUS_MD, RADIUS_LG, RADIUS_SM,
   TEXT_XS, TEXT_SM, TEXT_MD, TEXT_LG, TEXT_2XL,
   FW_REGULAR, FW_SEMIBOLD, FW_BOLD,
@@ -24,14 +24,28 @@ import WpHeader from '../_WpHeader';
 
 interface Props {
   onStart?: () => void;
+  onInviteFriends?: () => void;
 }
 
-export default function MvpThankYou({ onStart }: Props = {}) {
+// Module-level flag: true after the first mount in this page load.
+// Resets on full page reload (module re-evaluated), so a real reload replays the intro.
+let thankYouAnimatedThisLoad = false;
+
+export default function MvpThankYou({ onStart, onInviteFriends }: Props = {}) {
   const [rating, setRating] = useState<number>(() => {
     const v = typeof window !== 'undefined' ? localStorage.getItem('wpilot_thx_rating') : null;
     return v ? Number(v) : 0;
   });
   const [hoverStar, setHoverStar] = useState(0);
+
+  // Play intro animations on first mount in this page load; skip on later React-navigation
+  // (module-level flag resets on full page reload — so reload replays the animation)
+  const [animate] = useState<boolean>(() => {
+    if (thankYouAnimatedThisLoad) return false;
+    thankYouAnimatedThisLoad = true;
+    return true;
+  });
+  const fromInit = (v: any) => (animate ? v : false);
 
   function saveRating(n: number) {
     setRating(n);
@@ -77,7 +91,7 @@ export default function MvpThankYou({ onStart }: Props = {}) {
 
           {/* Glückwunsch + Headline */}
           <motion.div
-            initial={{ opacity: 0, y: 10 }}
+            initial={fromInit({ opacity: 0, y: 10 })}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1, duration: 0.35 }}
             style={{ textAlign: 'center', marginBottom: 28 }}
@@ -108,7 +122,7 @@ export default function MvpThankYou({ onStart }: Props = {}) {
 
           {/* Savings pill — same width as cards grid */}
           <div style={{ marginBottom: 14 }}>
-            <SavingsPill amount="475 €" />
+            <SavingsPill amount="475 €" animate={animate} />
           </div>
 
           {/* Action Cards — staggered entry */}
@@ -121,7 +135,7 @@ export default function MvpThankYou({ onStart }: Props = {}) {
             }}
           >
             <motion.div
-              initial={{ opacity: 0, y: 14 }}
+              initial={fromInit({ opacity: 0, y: 14 })}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1.85, duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
             >
@@ -137,18 +151,26 @@ export default function MvpThankYou({ onStart }: Props = {}) {
               />
             </motion.div>
             <motion.div
-              initial={{ opacity: 0, y: 14 }}
+              initial={fromInit({ opacity: 0, y: 14 })}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1.95, duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
             >
               <ActionCard
-                onClick={() => { window.location.href = 'https://konto.wechselpilot.com/freunde-werben'; }}
-                icon={<IconUsers size={26} stroke={2} color={YELLOW} />}
+                onClick={() => {
+                  if (onInviteFriends) onInviteFriends();
+                  else window.location.href = 'https://konto.wechselpilot.com/freunde-werben';
+                }}
+                icon={
+                  <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+                    <IconUsers size={26} stroke={2} color={YELLOW} />
+                    <span style={{ fontSize: 13, fontWeight: 700, color: GREEN_DARK, background: GREEN_BRIGHT, borderRadius: 6, padding: '3px 7px', lineHeight: 1.3 }}>20 € + 20 €</span>
+                  </div>
+                }
                 title="Freunde einladen"
               />
             </motion.div>
             <motion.div
-              initial={{ opacity: 0, y: 14 }}
+              initial={fromInit({ opacity: 0, y: 14 })}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 2.05, duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
             >
@@ -166,7 +188,7 @@ export default function MvpThankYou({ onStart }: Props = {}) {
 
           {/* Rating */}
           <motion.div
-            initial={{ opacity: 0, y: 10 }}
+            initial={fromInit({ opacity: 0, y: 10 })}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 2.3, duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
             style={{
@@ -230,12 +252,13 @@ export default function MvpThankYou({ onStart }: Props = {}) {
 }
 
 // ── Savings Pill ─────────────────────────────────────────────────
-function SavingsPill({ amount }: { amount: string }) {
+function SavingsPill({ amount, animate: doAnimate = true }: { amount: string; animate?: boolean }) {
+  const fi = (v: any) => (doAnimate ? v : false);
   return (
     <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
       <motion.div
-        initial={{ width: 64, borderRadius: 32 }}
-        animate={{ width: '100%', borderRadius: 14 }}
+        initial={fi({ width: 64, borderRadius: 32 })}
+        animate={{ width: '100%', borderRadius: 6 }}
         transition={{ delay: 0.65, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
         style={{
           height: 64,
@@ -248,7 +271,7 @@ function SavingsPill({ amount }: { amount: string }) {
       >
         {/* Check disc — centered initially, then sits on left as pill expands */}
         <motion.div
-          initial={{ scale: 0, rotate: -90 }}
+          initial={fi({ scale: 0, rotate: -90 })}
           animate={{ scale: 1, rotate: 0 }}
           transition={{ type: 'spring', stiffness: 320, damping: 18, delay: 0.25 }}
           style={{
@@ -262,7 +285,7 @@ function SavingsPill({ amount }: { amount: string }) {
 
         {/* Text block — width:0 initially so check disc stays centered in 64px circle */}
         <motion.div
-          initial={{ width: 0, opacity: 0 }}
+          initial={fi({ width: 0, opacity: 0 })}
           animate={{ width: 'auto', opacity: 1 }}
           transition={{
             width:   { delay: 1.1, duration: 0.3 },

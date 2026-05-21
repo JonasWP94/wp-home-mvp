@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { IconArrowLeft } from '@tabler/icons-react';
 import {
   PRIMARY, BG, BORDER, GREY_800,
   YELLOW, ACCENT, WHITE,
@@ -21,7 +22,7 @@ export default function MvpHomeLanding({ onStart, onBack }: Props) {
       minHeight: '100dvh', background: BG, display: 'flex', flexDirection: 'column',
       fontFamily: "'Poppins', sans-serif",
     }}>
-      <WpHeader onBack={onBack} hideHomeBadge />
+      <WpHeader hideHomeBadge />
 
       <div className="wp-landing" style={{
         flex: 1, display: 'flex', flexDirection: 'column',
@@ -105,12 +106,37 @@ export default function MvpHomeLanding({ onStart, onBack }: Props) {
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3, duration: 0.35 }}
-            style={{ display: 'none', justifyContent: 'center', marginBottom: 28 }}
+            style={{ display: 'none', justifyContent: 'center', marginBottom: 16 }}
           >
             <WpButton onClick={onStart} size="lg">
               Ersparnis berechnen
             </WpButton>
           </motion.div>
+
+          {/* Back link below CTA */}
+          {onBack && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.4, duration: 0.35 }}
+              style={{ display: 'flex', justifyContent: 'center', marginBottom: 20 }}
+            >
+              <button
+                onClick={onBack}
+                style={{
+                  background: 'transparent', border: 'none', cursor: 'pointer',
+                  color: GREY_800, fontSize: 13, fontWeight: FW_SEMIBOLD,
+                  display: 'inline-flex', alignItems: 'center', gap: 5,
+                  padding: '8px 12px', fontFamily: "'Poppins', sans-serif",
+                  transition: 'color 0.15s',
+                }}
+                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = PRIMARY; }}
+                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = GREY_800; }}
+              >
+                <IconArrowLeft size={14} stroke={2} /> Zurück
+              </button>
+            </motion.div>
+          )}
 
           {/* Optional hint */}
           <motion.p

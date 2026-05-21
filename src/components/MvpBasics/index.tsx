@@ -3,35 +3,27 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   IconReceipt, IconCreditCard,
   IconWifi, IconDeviceMobile,
-  IconShieldCheck, IconHomeShield, IconHeartHandshake, IconBuilding, IconCar,
-  IconCoin, IconShield, IconArrowRight,
+  IconCoin, IconArrowRight, IconArrowLeft,
 } from '@tabler/icons-react';
 import {
-  ACCENT, PRIMARY, BG, WHITE, BORDER, GREY_200, GREY_700, GREY_800,
+  ACCENT, PRIMARY, BG, WHITE, BORDER, GREY_200, GREY_800,
   GREEN,
   RADIUS_MD, RADIUS_SM,
   TEXT_XS, TEXT_SM, TEXT_LG,
-  FW_REGULAR, FW_MEDIUM, FW_SEMIBOLD, FW_BOLD,
+  FW_REGULAR, FW_SEMIBOLD, FW_BOLD,
 } from '../_tokens';
 import WpHeader from '../_WpHeader';
-import WpBottomNav from '../_WpBottomNav';
+
 
 export interface BasicsData {
-  steuererklaerung:    boolean;
-  girokonto:           boolean;
-  internet:            boolean;
-  mobilfunk:           boolean;
-  haftpflicht:         boolean;
-  hausrat:             boolean;
-  berufsunfaehigkeit:  boolean;
-  gebaeude:            boolean;
-  kfzVersicherung:     boolean;
+  steuererklaerung: boolean;
+  girokonto:        boolean;
+  internet:         boolean;
+  mobilfunk:        boolean;
 }
 
 interface Props {
   initial?: Partial<BasicsData>;
-  showGebaeude?: boolean;
-  showKfz?: boolean;
   onDone: (data: BasicsData) => void;
   onBack: () => void;
 }
@@ -56,8 +48,13 @@ const FIN_Q: QuestionDef[] = [
 ];
 
 const KOM_Q: QuestionDef[] = [
-  { key: 'internet',  label: 'Internet-Vertrag aktuell',  sub: 'Anbieterwechsel spart Ø 240 € / Jahr',      Icon: IconWifi },
-  { key: 'mobilfunk', label: 'Mobilfunk-Vertrag aktuell', sub: 'Tarif neu verhandeln spart Ø 180 € / Jahr', Icon: IconDeviceMobile },
+  { key: 'internet',  label: 'Internet-Vertrag aktuell (nicht älter als 24 Monate)',  sub: 'Anbieterwechsel spart Ø 240 € / Jahr',      Icon: IconWifi },
+  { key: 'mobilfunk', label: 'Mobilfunk-Vertrag aktuell (nicht älter als 24 Monate)', sub: 'Tarif neu verhandeln spart Ø 180 € / Jahr', Icon: IconDeviceMobile },
+];
+
+const TABS: TabDef[] = [
+  { key: 'finanzen',      label: 'Finanzen',      TabIcon: IconCoin, questions: FIN_Q },
+  { key: 'kommunikation', label: 'Kommunikation', TabIcon: IconWifi, questions: KOM_Q },
 ];
 
 // ── iOS-style Toggle ─────────────────────────────────────────────
@@ -99,19 +96,19 @@ function ToggleRow({ icon: Icon, label, sub, value, onChange }: {
       style={{
         background: WHITE,
         border: `1.5px solid ${value ? GREEN : BORDER}`,
-        borderRadius: RADIUS_MD, padding: '14px 16px',
+        borderRadius: 6, padding: '14px 16px',
         display: 'flex', alignItems: 'center', gap: 14,
         transition: 'border-color 0.2s ease',
         cursor: 'pointer', userSelect: 'none',
       }}
     >
       <div style={{
-        width: 40, height: 40, borderRadius: RADIUS_SM, flexShrink: 0,
+        width: 40, height: 40, borderRadius: 6, flexShrink: 0,
         background: value ? '#d3ede5' : GREY_200,
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         transition: 'all 0.2s ease',
       }}>
-        <Icon size={20} stroke={1.8} color={value ? GREEN : GREY_800} />
+        <Icon size={20} stroke={1.8} color={value ? GREEN : '#243c47'} />
       </div>
       <div style={{ flex: 1, minWidth: 0 }}>
         <div style={{ fontSize: TEXT_SM, fontWeight: FW_SEMIBOLD, color: PRIMARY, lineHeight: 1.25 }}>{label}</div>
@@ -122,32 +119,13 @@ function ToggleRow({ icon: Icon, label, sub, value, onChange }: {
   );
 }
 
-export default function MvpBasics({ initial, showGebaeude, showKfz, onDone, onBack }: Props) {
+export default function MvpBasics({ initial, onDone, onBack }: Props) {
   const [data, setData] = useState<BasicsData>({
-    steuererklaerung:    initial?.steuererklaerung    ?? false,
-    girokonto:           initial?.girokonto           ?? false,
-    internet:            initial?.internet            ?? false,
-    mobilfunk:           initial?.mobilfunk           ?? false,
-    haftpflicht:         initial?.haftpflicht         ?? false,
-    hausrat:             initial?.hausrat             ?? false,
-    berufsunfaehigkeit:  initial?.berufsunfaehigkeit  ?? false,
-    gebaeude:            initial?.gebaeude            ?? false,
-    kfzVersicherung:     initial?.kfzVersicherung     ?? false,
+    steuererklaerung: initial?.steuererklaerung ?? false,
+    girokonto:        initial?.girokonto        ?? false,
+    internet:         initial?.internet         ?? false,
+    mobilfunk:        initial?.mobilfunk        ?? false,
   });
-
-  const VERS_Q: QuestionDef[] = [
-    { key: 'haftpflicht', label: 'Privathaftpflichtversicherung', sub: 'Schützt vor teuren Schadensersatzforderungen — Pflicht für jeden Haushalt', Icon: IconShieldCheck },
-    { key: 'hausrat',     label: 'Hausratversicherung',           sub: 'Deckt Einbruch, Feuer & Wasser — Anbieterwechsel spart Ø 120 € / Jahr',     Icon: IconHomeShield },
-    { key: 'gebaeude',    label: 'Wohngebäudeversicherung',       sub: 'Für Hauseigentümer Pflicht — Tarifvergleich spart oft mehrere hundert Euro', Icon: IconBuilding },
-    ...(showKfz      ? [{ key: 'kfzVersicherung' as keyof BasicsData, label: 'KFZ-Versicherung aktuell', sub: 'Anbieterwechsel spart Ø 350 € pro Fahrzeug / Jahr', Icon: IconCar }] : []),
-    { key: 'berufsunfaehigkeit', label: 'Berufsunfähigkeitsversicherung', sub: 'Sichert Ihr Einkommen bei Krankheit oder Unfall', Icon: IconHeartHandshake },
-  ];
-
-  const TABS: TabDef[] = [
-    { key: 'finanzen',       label: 'Finanzen',       TabIcon: IconCoin,         questions: FIN_Q },
-    { key: 'kommunikation',  label: 'Kommunikation',  TabIcon: IconWifi,         questions: KOM_Q },
-    { key: 'versicherungen', label: 'Versicherungen', TabIcon: IconShield,       questions: VERS_Q },
-  ];
 
   const [activeKey, setActiveKey] = useState<string>(TABS[0].key);
   const active = TABS.find(t => t.key === activeKey) ?? TABS[0];
@@ -163,8 +141,8 @@ export default function MvpBasics({ initial, showGebaeude, showKfz, onDone, onBa
     }}>
       <WpHeader showProgress progressPct={85} />
 
-      <div className="wp-page-basics" style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '24px 16px 120px' }}>
-        <style>{`@media(min-width:640px){.wp-page-basics{padding:32px 24px 120px !important;}}`}</style>
+      <div className="wp-page-basics" style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '24px 16px 48px' }}>
+        <style>{`@media(min-width:640px){.wp-page-basics{padding:32px 24px 56px !important;}}`}</style>
         <div style={{ width: '100%', maxWidth: 760 }}>
 
           {/* Headline */}
@@ -264,43 +242,65 @@ export default function MvpBasics({ initial, showGebaeude, showKfz, onDone, onBa
                 />
               ))}
 
-              {/* Inline Weiter button per tab */}
-              <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 10 }}>
-                {(() => {
-                  const idx = TABS.findIndex(t => t.key === active.key);
-                  const isLastTab = idx === TABS.length - 1;
-                  return (
+              {/* Inline Back + Weiter navigation per tab */}
+              {(() => {
+                const idx = TABS.findIndex(t => t.key === active.key);
+                const isLastTab = idx === TABS.length - 1;
+                const isFirstTab = idx === 0;
+                return (
+                  <div style={{
+                    display: 'flex', alignItems: 'center', gap: 10,
+                    marginTop: 14,
+                  }}>
+                    <button
+                      onClick={() => {
+                        if (isFirstTab) onBack();
+                        else setActiveKey(TABS[idx - 1].key);
+                      }}
+                      style={{
+                        flex: '0 0 auto',
+                        background: WHITE, color: PRIMARY,
+                        border: `1.5px solid ${BORDER}`,
+                        borderRadius: 999, padding: '11px 18px',
+                        fontSize: 13, fontWeight: FW_BOLD,
+                        cursor: 'pointer', fontFamily: 'inherit',
+                        display: 'inline-flex', alignItems: 'center', gap: 6,
+                      }}
+                    >
+                      <IconArrowLeft size={14} stroke={2.4} /> Zurück
+                    </button>
+                    <div style={{
+                      flex: 1, textAlign: 'center',
+                      fontSize: 12, color: GREY_800, fontWeight: 500,
+                    }}>
+                      {idx + 1} / {TABS.length}
+                    </div>
                     <button
                       onClick={() => {
                         if (isLastTab) onDone(data);
                         else setActiveKey(TABS[idx + 1].key);
                       }}
                       style={{
-                        display: 'inline-flex', alignItems: 'center', gap: 6,
+                        flex: '0 0 auto',
                         background: PRIMARY, color: WHITE, border: 'none',
                         borderRadius: 999, padding: '11px 22px',
                         fontSize: 13, fontWeight: FW_BOLD,
                         cursor: 'pointer', fontFamily: 'inherit',
+                        display: 'inline-flex', alignItems: 'center', gap: 6,
                         boxShadow: '0 2px 8px rgba(36,60,71,0.25)',
                       }}
                     >
                       {isLastTab ? 'Ergebnis anzeigen' : 'Weiter'}
                       <IconArrowRight size={14} stroke={2.5} />
                     </button>
-                  );
-                })()}
-              </div>
+                  </div>
+                );
+              })()}
             </motion.div>
           </AnimatePresence>
 
         </div>
       </div>
-
-      <WpBottomNav
-        onBack={onBack}
-        onNext={() => onDone(data)}
-        nextLabel="Ergebnis anzeigen"
-      />
     </div>
   );
 }

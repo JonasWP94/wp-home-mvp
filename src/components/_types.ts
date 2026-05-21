@@ -6,11 +6,31 @@ export interface VehicleCounts {
   hybrid:     number;
 }
 
+export interface Equipment {
+  balkon:    boolean | null;
+  sunHours:  'wenig' | 'mittel' | 'viel' | null;  // nur relevant wenn balkon === true
+  garten:    boolean | null;
+  garage:    boolean | null;
+  carport:   boolean | null;
+}
+
+export interface Residents {
+  mitbewohner: number;
+  kinder:      number;
+  untermieter: number;
+  haustiere:   number;
+}
+
 export interface MvpProfile {
   // Wohn-Basics
   tenure:       'miete' | 'eigentum' | '';
   propertyType: 'wohnung' | 'haus' | '';
   heatingType:  'gas' | 'oel' | 'strom' | 'waermepumpe' | 'weiss_nicht' | '';
+  wohnflaeche:  number | null;  // m²
+  equipment:    Equipment;
+
+  // Bewohner (Profilseite — beeinflusst Tipps)
+  residents:    Residents;
 
   // Fahrzeuge (Quelle der Wahrheit ist `vehicles`; `autoType` ist Quick-Flag für legacy)
   autoType:     'verbrenner' | 'eauto' | 'hybrid' | 'keins' | 'has-vehicles' | '';
@@ -31,21 +51,19 @@ export interface MvpProfile {
   internet:    boolean | null;
   mobilfunk:   boolean | null;
 
-  // Basics: Versicherungen
-  haftpflicht:        boolean | null;
-  hausrat:            boolean | null;
-  berufsunfaehigkeit: boolean | null;
-  gebaeude:           boolean | null;
+  // Basics: KFZ
   kfzVersicherung:    boolean | null;
 }
 
 export const INITIAL_PROFILE: MvpProfile = {
   tenure: '', propertyType: '', heatingType: '',
+  wohnflaeche: null,
+  equipment: { balkon: null, sunHours: null, garten: null, garage: null, carport: null },
+  residents: { mitbewohner: 0, kinder: 0, untermieter: 0, haustiere: 0 },
   autoType: '', vehicles: { verbrenner: 0, eauto: 0, hybrid: 0 },
   hasChildren: null,
   sparziel: '', zeitaufwand: '', investitionen: '',
   steuererklaerung: null, girokonto: null,
   internet: null, mobilfunk: null,
-  haftpflicht: null, hausrat: null, berufsunfaehigkeit: null,
-  gebaeude: null, kfzVersicherung: null,
+  kfzVersicherung: null,
 };
