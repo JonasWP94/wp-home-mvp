@@ -7,11 +7,12 @@ export interface VehicleCounts {
 }
 
 export interface Equipment {
-  balkon:    boolean | null;
-  sunHours:  'wenig' | 'mittel' | 'viel' | null;  // nur relevant wenn balkon === true
-  garten:    boolean | null;
-  garage:    boolean | null;
-  carport:   boolean | null;
+  balkon:     boolean | null;
+  sunHours:   'wenig' | 'mittel' | 'viel' | null;       // nur relevant wenn balkon === true
+  balkonSize: 'klein' | 'mittel' | 'gross' | null;      // nur relevant wenn sunHours >= mittel
+  garten:     boolean | null;
+  garage:     boolean | null;
+  carport:    boolean | null;
 }
 
 export interface Residents {
@@ -22,10 +23,14 @@ export interface Residents {
 }
 
 export interface MvpProfile {
+  // Basisdaten
+  plz:          string;          // 5-stellige Postleitzahl
+
   // Wohn-Basics
   tenure:       'miete' | 'eigentum' | '';
   propertyType: 'wohnung' | 'haus' | '';
   heatingType:  'gas' | 'oel' | 'strom' | 'waermepumpe' | 'weiss_nicht' | '';
+  denkmalschutz: boolean | null; // Denkmalschutz / historisches Gebäude
   wohnflaeche:  number | null;  // m²
   equipment:    Equipment;
 
@@ -56,9 +61,11 @@ export interface MvpProfile {
 }
 
 export const INITIAL_PROFILE: MvpProfile = {
+  plz: '',
   tenure: '', propertyType: '', heatingType: '',
+  denkmalschutz: null,
   wohnflaeche: null,
-  equipment: { balkon: null, sunHours: null, garten: null, garage: null, carport: null },
+  equipment: { balkon: null, sunHours: null, balkonSize: null, garten: null, garage: null, carport: null },
   residents: { mitbewohner: 0, kinder: 0, untermieter: 0, haustiere: 0 },
   autoType: '', vehicles: { verbrenner: 0, eauto: 0, hybrid: 0 },
   hasChildren: null,

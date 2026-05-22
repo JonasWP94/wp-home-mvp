@@ -40,10 +40,13 @@ import {
   IconHourglass,
   IconCoins,
   IconPlus,
+  IconStar,
+  IconStarFilled,
 } from '@tabler/icons-react';
 import logoWp from '../../assets/logo-wp.png';
 import thermostatImg from '../../assets/thermostat.png';
 import type { MvpProfile, Residents } from '../_types';
+import { getDenkmalschutzInfo } from '../_bundesland';
 
 interface MvpTip {
   id: string;
@@ -64,6 +67,14 @@ interface MvpTip {
   savingsHg2: number;
   savingsHg3: number;
   condition: (p: MvpProfile) => boolean;
+  // Per-Tip Anbieter-Empfehlungen (überschreibt den partner-string-Fallback)
+  getOffers?: (p: MvpProfile) => Array<{
+    name: string;
+    description?: string;
+    url?: string;
+    savings?: number;
+    recommended?: boolean;
+  }>;
 }
 
 // ── Profile Field Definitions ────────────────────────────────────
@@ -84,6 +95,15 @@ const PROFILE_FIELDS = [
     options: [
       { value: 'miete',    label: 'Zur Miete',   icon: IconKey },
       { value: 'eigentum', label: 'Im Eigentum', icon: IconHome },
+    ],
+  },
+  {
+    key: 'denkmalschutz' as const,
+    label: 'Denkmalschutz',
+    icon: IconHome,
+    options: [
+      { value: 'true',  label: 'Ja',   icon: IconCheck },
+      { value: 'false', label: 'Nein', icon: IconX },
     ],
   },
   {
@@ -175,6 +195,16 @@ const PROFILE_FIELDS = [
     ],
   },
   {
+    key: 'balkonSize' as const,
+    label: 'Balkongröße',
+    icon: IconHome,
+    options: [
+      { value: 'klein',  label: 'Klein (bis 4 m²)', icon: IconHome },
+      { value: 'mittel', label: 'Mittel (4–8 m²)',  icon: IconHome },
+      { value: 'gross',  label: 'Groß (8+ m²)',     icon: IconHome },
+    ],
+  },
+  {
     key: 'garten' as const,
     label: 'Garten',
     icon: IconLeaf,
@@ -248,7 +278,7 @@ const ALL_TIPS: MvpTip[] = [
   {
     id: 'thermostate',
     title: 'Smarte Thermostate',
-    tagline: 'Heizen automatisch nur, wenn Sie zuhause sind.',
+    tagline: 'Nur dann automatisch Heizen, wenn Sie zu Hause sind.',
     description: 'Smarte Thermostate heizen automatisch nur, wenn Sie zuhause sind. Studien des Fraunhofer-Instituts zeigen 8–15 % Heizkostenreduktion — bei einer Heizrechnung von 2.000 €/Jahr sind das 160–300 €.',
     why: 'Klassische Thermostate heizen "stumpf" auf eine eingestellte Temperatur. Smarte erkennen offene Fenster, regeln raumweise abhängig von Ihrer Anwesenheit und senken nachts automatisch ab. Förderung über BAFA ist bei Einzelmaßnahmen möglich.',
     howTo: [
@@ -327,7 +357,78 @@ const ALL_TIPS: MvpTip[] = [
     partner: 'Yuma, Priwatt',
     priority: 2, category: 'solar', icon: IconSun,
     savingsHg2: 180, savingsHg3: 240,
-    condition: (p) => !(p.tenure === 'eigentum' && p.propertyType === 'haus') && p.equipment?.balkon !== false,
+    condition: (p) => {
+      if (p.tenure === 'eigentum' && p.propertyType === 'haus') return false;
+      if (p.equipment?.balkon === false) return false;
+      if (p.equipment?.sunHours === 'wenig') return false;
+      // Denkmalschutz + strenges Bundesland → BKW nicht empfehlen
+      if (p.denkmalschutz === true) {
+        const dz = getDenkmalschutzInfo(p.plz || '');
+        if (dz && dz.info.category === 'strict') return false;
+      }
+      return true;
+    },
+    getOffers: (p) => {
+      const size = p.equipment?.balkonSize;
+      const KK_XL = {
+        name: 'Kleines Kraftwerk — XL Duo',
+        description: '1000 Wp bifazial · ideal für kleine Balkone',
+        url: 'https://kleineskraftwerk.de/products/kleines-kraftwerk-xl-duo-komplettpaket-mit-optionaler-halterung-1000wp-bifazial?pub=wechselpilot',
+        savings: 200,
+      };
+      const KK_FLEX = {
+        name: 'Kleines Kraftwerk — Flex 4×/8×',
+        description: '900–1.800 Wp · für mittlere Balkone',
+        url: 'https://kleineskraftwerk.de/products/kleines-kraftwerk-flex-4x-8x-komplettpaket-900-wp-1800-wp-deal?pub=wechselpilot',
+        savings: 320,
+      };
+      const KK_QUATTRO = {
+        name: 'Kleines Kraftwerk — XL Quattro 2000 Wp + Solarbank',
+        description: '2000 Wp + Anker Solarbank 3 E2700 Pro · für große Balkone',
+        url: 'https://kleineskraftwerk.de/products/deal-kleines-kraftwerk-xl-2000wp-quattro-mit-optionaler-halterung-und-anker-solarbank-3-e2700-pro?pub=wechselpilot',
+        savings: 540,
+      };
+      // Balkonstrom — Produktvarianten je nach Balkongröße
+      const BS_KLEIN = {
+        name: 'Balkonstrom Klein',
+        description: 'Kompakt-Set ab 600 Wp · für kleine Balkone',
+        url: 'https://balkonstrom.de',
+        savings: 180,
+      };
+      const BS_FLEX = {
+        name: 'Balkonstrom Flexibel',
+        description: 'Modular ausbaubar 800–1.200 Wp · für mittlere Balkone',
+        url: 'https://balkonstrom.de',
+        savings: 240,
+      };
+      const BS_XL = {
+        name: 'Balkonstrom XL',
+        description: '1.600–2.000 Wp + optionaler Speicher · für große Balkone',
+        url: 'https://balkonstrom.de',
+        savings: 360,
+      };
+
+      const offers: Array<{ name: string; description?: string; url?: string; savings?: number; recommended?: boolean }> = [];
+      if (size === 'klein') {
+        offers.push({ ...KK_XL, recommended: true });
+        offers.push(BS_KLEIN);
+      } else if (size === 'mittel') {
+        offers.push({ ...KK_XL, recommended: true });
+        offers.push(KK_FLEX);
+        offers.push(BS_FLEX);
+      } else if (size === 'gross') {
+        offers.push({ ...KK_XL, recommended: true });
+        offers.push(KK_FLEX);
+        offers.push(KK_QUATTRO);
+        offers.push(BS_XL);
+      } else {
+        // Unbekannte Größe → Standard-Empfehlung
+        offers.push({ ...KK_XL, recommended: true });
+        offers.push(KK_FLEX);
+        offers.push(BS_FLEX);
+      }
+      return offers;
+    },
   },
   {
     id: 'kfz-versicherung',
@@ -734,7 +835,7 @@ function ProfileEditView({
 }) {
   const [local, setLocal] = useState<MvpProfile>(profile);
   const [openField, setOpenField] = useState<string | null>(null);
-  // Collapsed sections (default: first section expanded, rest collapsed)
+  // Collapsed sections (default: basisdaten + wohnen expanded, rest collapsed)
   const [collapsed, setCollapsed] = useState<Set<string>>(new Set(['bewohner', 'mobilitaet', 'finanzen', 'kommunikation', 'versicherung']));
   function toggleSection(key: string) {
     setCollapsed(prev => {
@@ -744,7 +845,7 @@ function ProfileEditView({
     });
   }
 
-  const EQUIPMENT_KEYS = new Set(['balkon', 'sunHours', 'garten', 'garage', 'carport']);
+  const EQUIPMENT_KEYS = new Set(['balkon', 'sunHours', 'balkonSize', 'garten', 'garage', 'carport']);
 
   function getStrVal(field: typeof PROFILE_FIELDS[0]) {
     let v: any;
@@ -825,7 +926,8 @@ function ProfileEditView({
 
   // Section grouping
   const SECTIONS: { key: string; title: string; icon: React.ComponentType<{ size?: number; stroke?: number; color?: string }>; fieldKeys: string[] }[] = [
-    { key: 'wohnen',        title: 'Wohnsituation',  icon: IconHome,          fieldKeys: ['propertyType', 'tenure', 'heatingType', 'balkon', 'sunHours', 'garten', 'garage', 'carport'] },
+    { key: 'basisdaten',    title: 'Basisdaten',     icon: IconHome,          fieldKeys: [] }, // custom rendering (PLZ)
+    { key: 'wohnen',        title: 'Wohnsituation',  icon: IconHome,          fieldKeys: ['propertyType', 'tenure', 'denkmalschutz', 'heatingType', 'balkon', 'sunHours', 'balkonSize', 'garten', 'garage', 'carport'] },
     { key: 'bewohner',      title: 'Bewohner',       icon: IconUsers,         fieldKeys: [] }, // custom rendering
     { key: 'mobilitaet',    title: 'Mobilität',      icon: IconCar,           fieldKeys: ['autoType'] },
     { key: 'finanzen',      title: 'Finanzen',       icon: IconReceipt,       fieldKeys: ['steuererklaerung', 'girokonto'] },
@@ -1031,15 +1133,20 @@ function ProfileEditView({
             let sectionFields = section.fieldKeys
               .map(k => PROFILE_FIELDS.find(f => f.key === k))
               .filter(Boolean) as typeof PROFILE_FIELDS;
-            // Hide sunHours row when balkon is not (yet) confirmed Vorhanden
+            // Hide sunHours + balkonSize rows when no balcony
             if (section.key === 'wohnen' && (local.equipment?.balkon !== true)) {
-              sectionFields = sectionFields.filter(f => f.key !== 'sunHours');
+              sectionFields = sectionFields.filter(f => f.key !== 'sunHours' && f.key !== 'balkonSize');
+            }
+            // Hide balkonSize unless sunHours is mittel/viel
+            if (section.key === 'wohnen' && local.equipment?.sunHours !== 'mittel' && local.equipment?.sunHours !== 'viel') {
+              sectionFields = sectionFields.filter(f => f.key !== 'balkonSize');
             }
             const SectionIcon = section.icon;
             const isMobility = section.key === 'mobilitaet';
             const isBewohner = section.key === 'bewohner';
             const isWohnen = section.key === 'wohnen';
-            if (sectionFields.length === 0 && !isMobility && !isBewohner) return null;
+            const isBasis = section.key === 'basisdaten';
+            if (sectionFields.length === 0 && !isMobility && !isBewohner && !isBasis) return null;
             const isCollapsed = collapsed.has(section.key);
             return (
               <div key={section.key}>
@@ -1079,7 +1186,79 @@ function ProfileEditView({
                       transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
                       style={{ overflow: 'hidden' }}
                     >
-                {isBewohner ? (() => {
+                {isBasis ? (() => {
+                  const dz = getDenkmalschutzInfo(local.plz || '');
+                  return (
+                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                      <div style={{
+                        padding: '14px 0',
+                        borderBottom: `1px solid ${BORDER}`,
+                        display: 'flex', alignItems: 'center', gap: 12,
+                      }}>
+                        <div style={{ flex: 1, minWidth: 100, fontSize: 14, fontWeight: 500, color: TEXT }}>
+                          Postleitzahl
+                        </div>
+                        <input
+                          type="text"
+                          inputMode="numeric"
+                          maxLength={5}
+                          placeholder="z.B. 10115"
+                          value={local.plz ?? ''}
+                          onChange={e => {
+                            const v = e.target.value.replace(/[^\d]/g, '').slice(0, 5);
+                            updateLocal({ plz: v });
+                          }}
+                          style={{
+                            width: 110, textAlign: 'right',
+                            padding: '7px 10px',
+                            border: `1px solid ${BORDER}`,
+                            borderRadius: 6,
+                            fontSize: 14, fontWeight: 600, color: TEXT,
+                            fontFamily: 'inherit',
+                            background: WHITE,
+                            outline: 'none',
+                            letterSpacing: '0.05em',
+                          }}
+                          onFocus={e => { e.currentTarget.style.borderColor = BLUE; }}
+                          onBlur={e => { e.currentTarget.style.borderColor = BORDER; }}
+                        />
+                      </div>
+                      {dz && (
+                        <div style={{ padding: '12px 0' }}>
+                          <div style={{ fontSize: 12, color: TEXT_MUTED, marginBottom: 6 }}>
+                            Erkanntes Bundesland: <strong style={{ color: TEXT }}>{dz.name}</strong>
+                          </div>
+                          {local.denkmalschutz === true && (() => {
+                            const c = dz.info.category;
+                            const palette = c === 'liberal'
+                              ? { bg: GREEN_LT, text: GREEN_DARK, border: GREEN_DARK, eyebrow: 'DENKMALSCHUTZ — GÜNSTIG' }
+                              : c === 'pragmatic'
+                              ? { bg: '#FEF3C7', text: '#92400E', border: '#92400E', eyebrow: 'DENKMALSCHUTZ — MIT AUFLAGEN' }
+                              : { bg: '#FEE2E2', text: '#9F1F1F', border: '#9F1F1F', eyebrow: 'DENKMALSCHUTZ — STRENG' };
+                            return (
+                              <div style={{
+                                background: palette.bg,
+                                borderLeft: `3px solid ${palette.border}`,
+                                borderRadius: 6,
+                                padding: '10px 12px',
+                              }}>
+                                <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.12em', color: palette.text, marginBottom: 4 }}>
+                                  {palette.eyebrow}
+                                </div>
+                                <div style={{ fontSize: 13, fontWeight: 700, color: palette.text, marginBottom: 4 }}>
+                                  {dz.info.short}
+                                </div>
+                                <div style={{ fontSize: 12, color: TEXT, lineHeight: 1.5 }}>
+                                  {dz.info.details}
+                                </div>
+                              </div>
+                            );
+                          })()}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })() : isBewohner ? (() => {
                   const r = local.residents ?? { mitbewohner: 0, kinder: 0, untermieter: 0, haustiere: 0 };
                   const rows: { key: keyof Residents; label: string; sub?: string }[] = [
                     { key: 'mitbewohner', label: 'Mitbewohner',  sub: 'Partner/in, WG, Familie' },
@@ -1406,12 +1585,33 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
   });
   const [expanded, setExpanded] = useState<string | null>(null);
   const [overlayTipId, setOverlayTipId] = useState<string | null>(null);
-  const [showOffers, setShowOffers] = useState(false);
-  // Reset offers view when tip changes
-  useEffect(() => { setShowOffers(false); }, [overlayTipId]);
+  // Detail-Sub-View: 'intro' (Description + Warum) | 'steps' (How-To) | 'offers' (Anbieter)
+  const [detailView, setDetailView] = useState<'intro' | 'steps' | 'offers'>('intro');
+  // Reset whenever a different tip is opened
+  useEffect(() => { setDetailView('intro'); }, [overlayTipId]);
+  const showOffers = detailView === 'offers';
   const [carouselIdx, setCarouselIdx] = useState(0);
   const [carouselPaused, setCarouselPaused] = useState(false);
   const [openModuleKey, setOpenModuleKey] = useState<string | null>(null);
+  const [showFeedback, setShowFeedback] = useState(false);
+  const modulesGridRef = React.useRef<HTMLDivElement>(null);
+  const [gridCols, setGridCols] = useState(4);
+  // Detect column count of the modules grid (responsive auto-fill)
+  useEffect(() => {
+    const el = modulesGridRef.current;
+    if (!el) return;
+    function compute() {
+      if (!el) return;
+      const W = el.clientWidth;
+      const MIN = 220, GAP = 12;
+      const cols = Math.max(1, Math.floor((W + GAP) / (MIN + GAP)));
+      setGridCols(cols);
+    }
+    compute();
+    const ro = new ResizeObserver(compute);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
   // TEMP: always show overlay on every dashboard visit (dev/testing).
   // Revert by restoring the localStorage check.
   const [showTopTipsOverlay, setShowTopTipsOverlay] = useState(true);
@@ -1900,6 +2100,7 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
           // Compute one module per cluster (already filtered/grouped by getClusters)
           return (
             <div
+              ref={modulesGridRef}
               className="mvp-modules-grid"
               style={{
                 display: 'grid',
@@ -1964,6 +2165,68 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
                   </motion.button>
                 );
               })}
+
+              {/* Dynamische Feedback-Box füllt die Lücke in der letzten Zeile */}
+              {(() => {
+                const n = clusters.length;
+                const cols = gridCols;
+                const remainder = n % cols;
+                const span = remainder === 0 ? cols : cols - remainder;
+                return (
+                  <motion.button
+                    whileTap={{ scale: 0.98 }}
+                    onClick={() => setShowFeedback(true)}
+                    style={{
+                      gridColumn: `span ${span}`,
+                      background: 'linear-gradient(135deg, #243C47 0%, #3D5261 100%)',
+                      border: 'none',
+                      borderRadius: 6, padding: '20px 22px',
+                      display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: 12,
+                      cursor: 'pointer', fontFamily: 'inherit', textAlign: 'left' as const,
+                      color: WHITE, minHeight: 140,
+                      position: 'relative', overflow: 'hidden',
+                      transition: 'transform 0.15s',
+                    }}
+                  >
+                    {/* Brand-Schräge */}
+                    <div style={{
+                      position: 'absolute', top: 0, right: 0, bottom: 0,
+                      width: '40%',
+                      background: 'rgba(249,170,0,0.08)',
+                      clipPath: 'polygon(40% 0, 100% 0, 100% 100%, 0 100%)',
+                      pointerEvents: 'none',
+                    }} />
+                    <div style={{ position: 'relative', zIndex: 1 }}>
+                      <div style={{
+                        display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                        width: 44, height: 44, borderRadius: 6,
+                        background: 'rgba(255,255,255,0.10)', marginBottom: 0,
+                      }}>
+                        <IconUsers size={22} stroke={1.8} color={ORANGE} />
+                      </div>
+                    </div>
+                    <div style={{ position: 'relative', zIndex: 1 }}>
+                      <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: '0.12em', color: ORANGE, marginBottom: 6 }}>
+                        IHRE MEINUNG ZÄHLT
+                      </div>
+                      <div style={{ fontSize: 16, fontWeight: 700, color: WHITE, lineHeight: 1.25, marginBottom: 4 }}>
+                        Wie gefällt Ihnen unser Spar-Lotse?
+                      </div>
+                      <div style={{ fontSize: 12, opacity: 0.85, lineHeight: 1.5 }}>
+                        Kurzes Feedback geben — oder ein persönliches Gespräch anfragen.
+                      </div>
+                    </div>
+                    <div style={{
+                      position: 'relative', zIndex: 1,
+                      display: 'inline-flex', alignItems: 'center', gap: 6,
+                      fontSize: 13, fontWeight: 700,
+                      color: WHITE,
+                    }}>
+                      Feedback geben <IconArrowRight size={14} stroke={2.4} />
+                    </div>
+                  </motion.button>
+                );
+              })()}
             </div>
           );
         })()}
@@ -2258,6 +2521,13 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
 
       </div>
 
+      {/* Feedback Overlay */}
+      <AnimatePresence>
+        {showFeedback && (
+          <FeedbackOverlay onClose={() => setShowFeedback(false)} />
+        )}
+      </AnimatePresence>
+
       {/* Unified Overlay — single shell, content morphs between top-tips, module list, and tip detail */}
       <AnimatePresence>
         {(openModuleKey || overlayTipId || showTopTipsOverlay) && (() => {
@@ -2494,20 +2764,32 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
                             // Transactional tip = has partner → "Jetzt sparen" mit Anbieter-Empfehlungen.
                             const isFreeTip = !tip!.partner || tip!.partner.trim() === '';
                             const isTipDone = done.has(tip!.id);
-                            // Derive offers from partner field (split on ", ") or use generic fallback
-                            const partnerList = tip!.partner ? tip!.partner.split(/,\s*/).filter(Boolean) : [];
-                            const offers = partnerList.length > 0
-                              ? partnerList.slice(0, 4).map((p, i) => ({ name: p, savings: Math.round((hg === 3 ? tip!.savingsHg3 : tip!.savingsHg2) * (0.95 - i * 0.1)) }))
-                              : [
-                                  { name: 'Vergleichsportal Check24',   savings: Math.round((hg === 3 ? tip!.savingsHg3 : tip!.savingsHg2) * 0.95) },
-                                  { name: 'Vergleichsportal Verivox',   savings: Math.round((hg === 3 ? tip!.savingsHg3 : tip!.savingsHg2) * 0.88) },
-                                  { name: 'Direkt beim Anbieter',       savings: Math.round((hg === 3 ? tip!.savingsHg3 : tip!.savingsHg2) * 0.80) },
-                                ];
+                            // Offers: 1) custom getOffers if defined  2) partner-string fallback  3) generic
+                            const customOffers = tip!.getOffers ? tip!.getOffers(profile) : null;
+                            const partnerList = !customOffers && tip!.partner ? tip!.partner.split(/,\s*/).filter(Boolean) : [];
+                            const offers: Array<{ name: string; description?: string; url?: string; savings?: number; recommended?: boolean }> =
+                              customOffers && customOffers.length > 0
+                                ? customOffers
+                                : partnerList.length > 0
+                                ? partnerList.slice(0, 4).map((p, i) => ({ name: p, savings: Math.round((hg === 3 ? tip!.savingsHg3 : tip!.savingsHg2) * (0.95 - i * 0.1)), recommended: i === 0 }))
+                                : [
+                                    { name: 'Vergleichsportal Check24',   savings: Math.round((hg === 3 ? tip!.savingsHg3 : tip!.savingsHg2) * 0.95), recommended: true },
+                                    { name: 'Vergleichsportal Verivox',   savings: Math.round((hg === 3 ? tip!.savingsHg3 : tip!.savingsHg2) * 0.88) },
+                                    { name: 'Direkt beim Anbieter',       savings: Math.round((hg === 3 ? tip!.savingsHg3 : tip!.savingsHg2) * 0.80) },
+                                  ];
 
                             return (
                             <>
                               <div className="mvp-ov-right-scroll">
-                                {!showOffers ? (
+                                <AnimatePresence mode="wait">
+                                  <motion.div
+                                    key={`detail-${detailView}`}
+                                    initial={{ opacity: 0, x: 12 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    exit={{ opacity: 0, x: -12 }}
+                                    transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+                                  >
+                                {detailView === 'intro' ? (
                                   <>
                                     {/* Meta chips */}
                                     <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 16, paddingRight: 44 }}>
@@ -2546,7 +2828,6 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
                                         borderLeft: `3px solid ${BLUE}`,
                                         borderRadius: 6,
                                         padding: '12px 14px',
-                                        marginBottom: 20,
                                       }}>
                                         <div style={{ fontSize: 10, fontWeight: 700, color: BLUE, letterSpacing: '0.12em', marginBottom: 6 }}>
                                           WARUM DAS SPART
@@ -2554,8 +2835,24 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
                                         <p style={{ fontSize: 13, color: TEXT, lineHeight: 1.55, margin: 0 }}>{tip!.why}</p>
                                       </div>
                                     )}
-
-                                    {tip!.howTo && tip!.howTo.length > 0 && (
+                                  </>
+                                ) : detailView === 'steps' ? (
+                                  <>
+                                    {/* Back to intro */}
+                                    <button
+                                      onClick={() => setDetailView('intro')}
+                                      style={{
+                                        background: 'transparent', color: TEXT_MUTED,
+                                        border: 'none', padding: 0, marginBottom: 14,
+                                        fontSize: 12, fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit',
+                                        display: 'inline-flex', alignItems: 'center', gap: 4,
+                                      }}
+                                      onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = TEXT; }}
+                                      onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = TEXT_MUTED; }}
+                                    >
+                                      <IconArrowLeft size={13} stroke={2} /> Zur Einleitung
+                                    </button>
+                                    {tip!.howTo && tip!.howTo.length > 0 ? (
                                       <div>
                                         <h3 style={{ fontSize: 10, fontWeight: 700, color: TEXT_MUTED, letterSpacing: '0.12em', margin: '0 0 12px' }}>
                                           IN {tip!.howTo.length} SCHRITT{tip!.howTo.length === 1 ? '' : 'EN'} ERLEDIGT
@@ -2577,6 +2874,10 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
                                           ))}
                                         </ol>
                                       </div>
+                                    ) : (
+                                      <p style={{ fontSize: 13, color: TEXT_MUTED, fontStyle: 'italic' }}>
+                                        Für diesen Tipp gibt es keine konkreten Schritte — direkt loslegen.
+                                      </p>
                                     )}
                                   </>
                                 ) : (
@@ -2588,7 +2889,7 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
                                     style={{ paddingRight: 44 }}
                                   >
                                     <button
-                                      onClick={() => setShowOffers(false)}
+                                      onClick={() => setDetailView('steps')}
                                       style={{
                                         background: 'transparent', color: TEXT_MUTED,
                                         border: 'none', padding: 0, marginBottom: 14,
@@ -2599,7 +2900,7 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
                                       onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = TEXT; }}
                                       onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = TEXT_MUTED; }}
                                     >
-                                      <IconArrowLeft size={13} stroke={2} /> Zurück zum Tipp
+                                      <IconArrowLeft size={13} stroke={2} /> Zurück zu den Schritten
                                     </button>
                                     <h3 style={{ fontSize: 18, fontWeight: 800, color: TEXT, margin: 0, marginBottom: 4, letterSpacing: '-0.01em' }}>
                                       Unsere Empfehlungen
@@ -2608,51 +2909,63 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
                                       Wählen Sie eine Option und sparen Sie noch heute. Alle Empfehlungen sind für Sie kostenfrei.
                                     </p>
 
-                                    <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                                      {offers.map((o, i) => (
-                                        <div
-                                          key={o.name}
-                                          style={{
-                                            border: `1px solid ${i === 0 ? GREEN : BORDER}`,
-                                            borderRadius: 6, padding: '14px 16px',
-                                            display: 'flex', alignItems: 'center', gap: 12,
-                                            position: 'relative',
-                                            background: i === 0 ? GREEN_LT : WHITE,
-                                          }}
-                                        >
-                                          {i === 0 && (
-                                            <span style={{
-                                              position: 'absolute', top: -8, left: 12,
-                                              background: GREEN_DARK, color: WHITE,
-                                              fontSize: 9, fontWeight: 800, letterSpacing: '0.06em',
-                                              padding: '3px 8px', borderRadius: 999,
-                                            }}>EMPFOHLEN</span>
-                                          )}
-                                          <div style={{ flex: 1, minWidth: 0 }}>
-                                            <div style={{ fontSize: 14, fontWeight: 700, color: TEXT, lineHeight: 1.3, marginBottom: 4 }}>
-                                              {o.name}
-                                            </div>
-                                            <div style={{ fontSize: 12, color: GREEN_DARK, fontWeight: 700 }}>
-                                              bis zu {fmt(o.savings)} € / Jahr sparen
-                                            </div>
-                                          </div>
-                                          <a
-                                            href={ctaUrl || '#'}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
+                                    <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                                      {offers.map((o, i) => {
+                                        const isRec = !!o.recommended;
+                                        const href = o.url || ctaUrl || '#';
+                                        return (
+                                          <div
+                                            key={o.name + i}
                                             style={{
-                                              display: 'inline-flex', alignItems: 'center', gap: 5,
-                                              background: i === 0 ? GREEN_DARK : DARK,
-                                              color: WHITE,
-                                              borderRadius: 999, padding: '8px 14px',
-                                              fontSize: 12, fontWeight: 700, textDecoration: 'none',
-                                              whiteSpace: 'nowrap',
+                                              border: `1px solid ${isRec ? GREEN : BORDER}`,
+                                              borderRadius: 6, padding: '14px 16px',
+                                              display: 'flex', alignItems: 'center', gap: 12,
+                                              position: 'relative',
+                                              background: isRec ? GREEN_LT : WHITE,
                                             }}
                                           >
-                                            Zum Anbieter <IconArrowRight size={13} stroke={2.5} />
-                                          </a>
-                                        </div>
-                                      ))}
+                                            {isRec && (
+                                              <span style={{
+                                                position: 'absolute', top: -8, left: 12,
+                                                background: GREEN_DARK, color: WHITE,
+                                                fontSize: 9, fontWeight: 800, letterSpacing: '0.06em',
+                                                padding: '3px 8px', borderRadius: 999,
+                                              }}>EMPFOHLEN</span>
+                                            )}
+                                            <div style={{ flex: 1, minWidth: 0 }}>
+                                              <div style={{ fontSize: 14, fontWeight: 700, color: TEXT, lineHeight: 1.3, marginBottom: o.description ? 3 : 4 }}>
+                                                {o.name}
+                                              </div>
+                                              {o.description && (
+                                                <div style={{ fontSize: 12, color: TEXT_MUTED, lineHeight: 1.4, marginBottom: 4 }}>
+                                                  {o.description}
+                                                </div>
+                                              )}
+                                              {o.savings != null && (
+                                                <div style={{ fontSize: 12, color: GREEN_DARK, fontWeight: 700 }}>
+                                                  bis zu {fmt(o.savings)} € / Jahr sparen
+                                                </div>
+                                              )}
+                                            </div>
+                                            <a
+                                              href={href}
+                                              target="_blank"
+                                              rel="noopener noreferrer"
+                                              style={{
+                                                display: 'inline-flex', alignItems: 'center', gap: 5,
+                                                background: isRec ? GREEN_DARK : DARK,
+                                                color: WHITE,
+                                                borderRadius: 999, padding: '8px 14px',
+                                                fontSize: 12, fontWeight: 700, textDecoration: 'none',
+                                                whiteSpace: 'nowrap',
+                                                flexShrink: 0,
+                                              }}
+                                            >
+                                              Zum Anbieter <IconArrowRight size={13} stroke={2.5} />
+                                            </a>
+                                          </div>
+                                        );
+                                      })}
                                     </div>
 
                                     <p style={{ fontSize: 10, color: TEXT_MUTED, lineHeight: 1.5, marginTop: 18 }}>
@@ -2660,34 +2973,53 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
                                     </p>
                                   </motion.div>
                                 )}
+                                  </motion.div>
+                                </AnimatePresence>
                               </div>
 
                               <div className="mvp-ov-footer">
-                                {!showOffers && (
+                                {detailView !== 'offers' && (
                                   <div style={{ fontSize: 10, color: TEXT_MUTED, flex: 1 }}>
                                     {isFreeTip ? 'Selbstständig umsetzbar' : 'Werbung · Empfehlung kostenfrei'}
                                   </div>
                                 )}
-                                {showOffers && <div style={{ flex: 1 }} />}
+                                {detailView === 'offers' && <div style={{ flex: 1 }} />}
 
-                                {isFreeTip ? (
-                                  // FREE tip → Ignorieren + Erledigt buttons
-                                  <>
-                                    <button
-                                      onClick={() => { removeTip(tip!.id); closeAll(); }}
-                                      style={{
-                                        background: 'transparent', color: TEXT_MUTED,
-                                        border: `1px solid ${BORDER}`,
-                                        borderRadius: 999, padding: '10px 18px',
-                                        fontSize: 13, fontWeight: 700, cursor: 'pointer',
-                                        fontFamily: 'inherit',
-                                        display: 'inline-flex', alignItems: 'center', gap: 6,
-                                      }}
-                                      onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = '#c52828'; (e.currentTarget as HTMLElement).style.borderColor = '#c52828'; }}
-                                      onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = TEXT_MUTED; (e.currentTarget as HTMLElement).style.borderColor = BORDER; }}
-                                    >
-                                      <IconX size={14} stroke={2.4} /> Ignorieren
-                                    </button>
+                                {/* Ignorieren — auf allen Sub-Views gleich */}
+                                <button
+                                  onClick={() => { removeTip(tip!.id); closeAll(); }}
+                                  style={{
+                                    background: 'transparent', color: TEXT_MUTED,
+                                    border: 'none',
+                                    padding: '8px 12px',
+                                    fontSize: 12, fontWeight: 600,
+                                    cursor: 'pointer', fontFamily: 'inherit',
+                                    display: 'inline-flex', alignItems: 'center', gap: 4,
+                                  }}
+                                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = '#c52828'; }}
+                                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = TEXT_MUTED; }}
+                                >
+                                  <IconX size={13} stroke={2.4} /> Ignorieren
+                                </button>
+
+                                {detailView === 'intro' ? (
+                                  // Seite 1 (Einleitung + Warum) → "Weiter" zur Steps-Seite
+                                  <button
+                                    onClick={() => setDetailView('steps')}
+                                    style={{
+                                      background: DARK, color: WHITE, border: 'none',
+                                      borderRadius: 999, padding: '11px 20px',
+                                      fontSize: 13, fontWeight: 700, cursor: 'pointer',
+                                      fontFamily: 'inherit',
+                                      display: 'inline-flex', alignItems: 'center', gap: 6,
+                                      boxShadow: '0 4px 12px rgba(36,60,71,0.20)',
+                                    }}
+                                  >
+                                    Weiter <IconArrowRight size={14} stroke={2.5} />
+                                  </button>
+                                ) : detailView === 'steps' ? (
+                                  // Seite 2 (Steps) → bei Gratis "Erledigt", sonst "Jetzt sparen"
+                                  isFreeTip ? (
                                     <button
                                       onClick={() => { toggleDone(tip!.id); closeAll(); }}
                                       style={{
@@ -2703,27 +3035,9 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
                                     >
                                       <IconCheck size={14} stroke={2.5} /> {isTipDone ? 'Rückgängig' : 'Erledigt'}
                                     </button>
-                                  </>
-                                ) : !showOffers ? (
-                                  // Commercial tip, detail view → Ignorieren + "Jetzt sparen"
-                                  <>
+                                  ) : (
                                     <button
-                                      onClick={() => { removeTip(tip!.id); closeAll(); }}
-                                      style={{
-                                        background: 'transparent', color: TEXT_MUTED,
-                                        border: 'none',
-                                        padding: '8px 12px',
-                                        fontSize: 12, fontWeight: 600,
-                                        cursor: 'pointer', fontFamily: 'inherit',
-                                        display: 'inline-flex', alignItems: 'center', gap: 4,
-                                      }}
-                                      onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = '#c52828'; }}
-                                      onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = TEXT_MUTED; }}
-                                    >
-                                      <IconX size={13} stroke={2.4} /> Ignorieren
-                                    </button>
-                                    <button
-                                      onClick={() => setShowOffers(true)}
+                                      onClick={() => setDetailView('offers')}
                                       style={{
                                         background: DARK, color: WHITE, border: 'none',
                                         borderRadius: 999, padding: '11px 20px',
@@ -2735,92 +3049,129 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
                                     >
                                       Jetzt sparen <IconArrowRight size={14} stroke={2.5} />
                                     </button>
-                                  </>
+                                  )
                                 ) : (
-                                  // Commercial tip, offers view → Ignorieren + Erledigt
-                                  <>
-                                    <button
-                                      onClick={() => { removeTip(tip!.id); closeAll(); }}
-                                      style={{
-                                        background: 'transparent', color: TEXT_MUTED,
-                                        border: 'none',
-                                        padding: '8px 12px',
-                                        fontSize: 12, fontWeight: 600,
-                                        cursor: 'pointer', fontFamily: 'inherit',
-                                        display: 'inline-flex', alignItems: 'center', gap: 4,
-                                      }}
-                                      onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = '#c52828'; }}
-                                      onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = TEXT_MUTED; }}
-                                    >
-                                      <IconX size={13} stroke={2.4} /> Ignorieren
-                                    </button>
-                                    <button
-                                      onClick={() => { toggleDone(tip!.id); closeAll(); }}
-                                      style={{
-                                        background: isTipDone ? GREEN_LT : GREEN_DARK,
-                                        color: isTipDone ? GREEN_DARK : WHITE,
-                                        border: 'none',
-                                        borderRadius: 999, padding: '11px 20px',
-                                        fontSize: 13, fontWeight: 700, cursor: 'pointer',
-                                        fontFamily: 'inherit',
-                                        display: 'inline-flex', alignItems: 'center', gap: 6,
-                                        boxShadow: '0 4px 12px rgba(22,122,82,0.20)',
-                                      }}
-                                    >
-                                      <IconCheck size={14} stroke={2.5} /> {isTipDone ? 'Rückgängig' : 'Als erledigt markieren'}
-                                    </button>
-                                  </>
+                                  // Seite 3 (Offers) → "Als erledigt markieren"
+                                  <button
+                                    onClick={() => { toggleDone(tip!.id); closeAll(); }}
+                                    style={{
+                                      background: isTipDone ? GREEN_LT : GREEN_DARK,
+                                      color: isTipDone ? GREEN_DARK : WHITE,
+                                      border: 'none',
+                                      borderRadius: 999, padding: '11px 20px',
+                                      fontSize: 13, fontWeight: 700, cursor: 'pointer',
+                                      fontFamily: 'inherit',
+                                      display: 'inline-flex', alignItems: 'center', gap: 6,
+                                      boxShadow: '0 4px 12px rgba(22,122,82,0.20)',
+                                    }}
+                                  >
+                                    <IconCheck size={14} stroke={2.5} /> {isTipDone ? 'Rückgängig' : 'Als erledigt markieren'}
+                                  </button>
                                 )}
                               </div>
                             </>
                             );
                           })() : isList ? (
-                            <div className="mvp-ov-right-scroll" style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                              {cluster!.tips.map((t) => {
-                                const TIcon = t.icon;
-                                const sv = getSavings(t);
-                                const isDone = done.has(t.id);
-                                const isFree = t.savingsHg2 < 200 && (t.effort === 'Sofort' || t.effort?.startsWith('Sofort') || t.effort?.includes('einmal jährlich'));
-                                return (
-                                  <button
-                                    key={t.id}
-                                    onClick={() => setOverlayTipId(t.id)}
-                                    style={{
-                                      background: WHITE, border: `1px solid ${isDone ? GREEN : BORDER}`,
-                                      borderRadius: 6, padding: '12px 14px',
-                                      display: 'flex', alignItems: 'center', gap: 12,
-                                      cursor: 'pointer', fontFamily: 'inherit', textAlign: 'left' as const,
-                                      width: '100%', transition: 'border-color 0.15s',
-                                      opacity: isDone ? 0.65 : 1,
-                                    }}
-                                    onMouseEnter={e => { if (!isDone) (e.currentTarget as HTMLElement).style.borderColor = BLUE; }}
-                                    onMouseLeave={e => { if (!isDone) (e.currentTarget as HTMLElement).style.borderColor = BORDER; }}
-                                  >
-                                    <div style={{
-                                      width: 36, height: 36, flexShrink: 0,
-                                      display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                    }}>
-                                      {isDone
-                                        ? <IconCheck size={20} stroke={2.5} color={GREEN_DARK} />
-                                        : <TIcon size={22} stroke={1.7} color={BLUE} />}
-                                    </div>
-                                    <div style={{ flex: 1, minWidth: 0 }}>
-                                      <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap', marginBottom: 2 }}>
-                                        <span style={{
-                                          fontSize: 14, fontWeight: 700, color: TEXT, lineHeight: 1.3,
-                                          textDecoration: isDone ? 'line-through' : 'none',
-                                        }}>{t.title}</span>
+                            <>
+                              <style>{`
+                                .mvp-list-row{position:relative;}
+                                .mvp-list-actions{
+                                  position:absolute;
+                                  bottom:0;
+                                  right:14px;
+                                  transform:translateY(40%);
+                                  background:#fff;
+                                  padding:0 6px;
+                                  display:inline-flex;
+                                  gap:8px;
+                                  opacity:0;
+                                  pointer-events:none;
+                                  transition:opacity 0.15s;
+                                  line-height:1;
+                                }
+                                .mvp-list-row:hover .mvp-list-actions{
+                                  opacity:1;
+                                  pointer-events:auto;
+                                }
+                              `}</style>
+                              <div className="mvp-ov-right-scroll" style={{ display: 'flex', flexDirection: 'column', gap: 12, paddingTop: 44 }}>
+                                {cluster!.tips.map((t) => {
+                                  const TIcon = t.icon;
+                                  const sv = getSavings(t);
+                                  const isDone = done.has(t.id);
+                                  return (
+                                    <div
+                                      key={t.id}
+                                      className="mvp-list-row"
+                                      onClick={() => setOverlayTipId(t.id)}
+                                      style={{
+                                        background: WHITE, border: `1px solid ${isDone ? GREEN : BORDER}`,
+                                        borderRadius: 6, padding: '12px 14px',
+                                        display: 'flex', alignItems: 'center', gap: 12,
+                                        cursor: 'pointer', fontFamily: 'inherit', textAlign: 'left' as const,
+                                        width: '100%', transition: 'border-color 0.15s',
+                                        opacity: isDone ? 0.65 : 1,
+                                      }}
+                                      onMouseEnter={e => { if (!isDone) (e.currentTarget as HTMLElement).style.borderColor = BLUE; }}
+                                      onMouseLeave={e => { if (!isDone) (e.currentTarget as HTMLElement).style.borderColor = BORDER; }}
+                                    >
+                                      <div style={{
+                                        width: 36, height: 36, flexShrink: 0,
+                                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                      }}>
+                                        {isDone
+                                          ? <IconCheck size={20} stroke={2.5} color={GREEN_DARK} />
+                                          : <TIcon size={22} stroke={1.7} color={BLUE} />}
                                       </div>
-                                      <div style={{ fontSize: 12, color: TEXT_MUTED, display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-                                        <span style={{ color: GREEN_DARK, fontWeight: 700 }}>{fmt(sv)} € / Jahr</span>
-                                        {t.effort && <span>· {t.effort}</span>}
+                                      <div style={{ flex: 1, minWidth: 0 }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap', marginBottom: 2 }}>
+                                          <span style={{
+                                            fontSize: 14, fontWeight: 700, color: TEXT, lineHeight: 1.3,
+                                            textDecoration: isDone ? 'line-through' : 'none',
+                                          }}>{t.title}</span>
+                                        </div>
+                                        <div style={{ fontSize: 12, color: TEXT_MUTED, display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                                          <span style={{ color: GREEN_DARK, fontWeight: 700 }}>{fmt(sv)} € / Jahr</span>
+                                          {t.effort && <span>· {t.effort}</span>}
+                                        </div>
                                       </div>
+                                      <IconArrowRight size={16} stroke={2.2} color={TEXT_MUTED} style={{ flexShrink: 0 }} />
+                                      {/* Hover-Actions: Ignorieren + Erledigt — cut into bottom border */}
+                                      <span className="mvp-list-actions">
+                                        <button
+                                          onClick={(e) => { e.stopPropagation(); removeTip(t.id); }}
+                                          style={{
+                                            background: 'transparent', color: '#c52828',
+                                            border: 'none', padding: '2px 4px',
+                                            fontSize: 11, fontWeight: 700,
+                                            cursor: 'pointer', fontFamily: 'inherit',
+                                            display: 'inline-flex', alignItems: 'center', gap: 3, lineHeight: 1,
+                                          }}
+                                          onMouseEnter={e => { (e.currentTarget as HTMLElement).style.textDecoration = 'underline'; }}
+                                          onMouseLeave={e => { (e.currentTarget as HTMLElement).style.textDecoration = 'none'; }}
+                                        >
+                                          <IconX size={12} stroke={2.4} /> Ignorieren
+                                        </button>
+                                        <button
+                                          onClick={(e) => { e.stopPropagation(); toggleDone(t.id); }}
+                                          style={{
+                                            background: 'transparent', color: GREEN_DARK,
+                                            border: 'none', padding: '2px 4px',
+                                            fontSize: 11, fontWeight: 700,
+                                            cursor: 'pointer', fontFamily: 'inherit',
+                                            display: 'inline-flex', alignItems: 'center', gap: 3, lineHeight: 1,
+                                          }}
+                                          onMouseEnter={e => { (e.currentTarget as HTMLElement).style.textDecoration = 'underline'; }}
+                                          onMouseLeave={e => { (e.currentTarget as HTMLElement).style.textDecoration = 'none'; }}
+                                        >
+                                          <IconCheck size={12} stroke={2.5} /> {isDone ? 'Rückgängig' : 'Erledigt'}
+                                        </button>
+                                      </span>
                                     </div>
-                                    <IconArrowRight size={16} stroke={2.2} color={TEXT_MUTED} style={{ flexShrink: 0 }} />
-                                  </button>
-                                );
-                              })}
-                            </div>
+                                  );
+                                })}
+                              </div>
+                            </>
                           ) : (
                             <>
                               <style>{`
@@ -2962,5 +3313,275 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
       </AnimatePresence>
 
     </motion.div>
+  );
+}
+
+// ── Feedback Overlay ─────────────────────────────────────────────
+function FeedbackOverlay({ onClose }: { onClose: () => void }) {
+  const [rating, setRating] = useState<number>(0);
+  const [hoverStar, setHoverStar] = useState(0);
+  const [wish, setWish] = useState('');
+  const [wantsCall, setWantsCall] = useState<boolean | null>(null);
+  const [contact, setContact] = useState('');
+  const [submitted, setSubmitted] = useState(false);
+
+  const TEXT_C  = '#44607F';
+  const MUTED_C = '#7E8990';
+  const BORDER_C = '#C2C7CB';
+  const BG_C = '#F4F4F4';
+  const PRIMARY_C = '#3D5261';
+  const ORANGE_C = '#F9AA00';
+  const GREEN_C = '#436F56';
+  const GREEN_BRIGHT_C = '#E2EEE7';
+
+  function submit() {
+    // Hier könnte ein POST an ein Backend / Form-Service gehen.
+    // Für jetzt: lokal abspeichern.
+    try {
+      const payload = { rating, wish, wantsCall, contact, ts: Date.now() };
+      const prev = JSON.parse(localStorage.getItem('wpilot_mvp_feedback') || '[]');
+      prev.push(payload);
+      localStorage.setItem('wpilot_mvp_feedback', JSON.stringify(prev));
+    } catch {}
+    setSubmitted(true);
+  }
+
+  const canSubmit = rating > 0 || wish.trim().length > 0 || wantsCall === true;
+
+  return (
+    <>
+      <motion.div
+        initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+        transition={{ duration: 0.25 }}
+        onClick={onClose}
+        style={{
+          position: 'fixed', inset: 0, zIndex: 1000,
+          background: 'rgba(30,32,38,0.55)',
+          backdropFilter: 'blur(4px)',
+          WebkitBackdropFilter: 'blur(4px)',
+        }}
+      />
+      <div style={{
+        position: 'fixed', inset: 0, zIndex: 1001,
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        padding: 20, pointerEvents: 'none',
+        fontFamily: "'Poppins', sans-serif",
+      }}>
+        <motion.div
+          initial={{ opacity: 0, y: 24, scale: 0.96 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, y: 16, scale: 0.96 }}
+          transition={{ duration: 0.26, ease: [0.22, 1, 0.36, 1] }}
+          onClick={e => e.stopPropagation()}
+          style={{
+            width: 'min(560px, 100%)', maxHeight: '90vh',
+            background: '#fff', border: `1px solid ${BORDER_C}`,
+            borderRadius: 6, overflow: 'auto',
+            boxShadow: '0 20px 60px rgba(0,0,0,0.25)',
+            pointerEvents: 'auto',
+            position: 'relative',
+          }}
+        >
+          <button
+            onClick={onClose}
+            aria-label="Schließen"
+            style={{
+              position: 'absolute', top: 8, right: 8, zIndex: 3,
+              width: 28, height: 28, borderRadius: 14,
+              border: 'none', background: 'transparent', color: MUTED_C,
+              cursor: 'pointer',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              transition: 'background 0.15s, color 0.15s',
+            }}
+            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(0,0,0,0.06)'; }}
+            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'transparent'; }}
+          >
+            <IconX size={16} stroke={2} />
+          </button>
+
+          {!submitted ? (
+            <div style={{ padding: '28px 26px 22px', display: 'flex', flexDirection: 'column', gap: 18 }}>
+              <div>
+                <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: '0.14em', color: ORANGE_C, marginBottom: 8 }}>
+                  IHRE MEINUNG
+                </div>
+                <h2 style={{ fontSize: 20, fontWeight: 800, color: PRIMARY_C, margin: 0, marginBottom: 6, lineHeight: 1.25, letterSpacing: '-0.01em' }}>
+                  Wie gefällt Ihnen der Spar-Lotse?
+                </h2>
+                <p style={{ fontSize: 13, color: MUTED_C, margin: 0, lineHeight: 1.5 }}>
+                  3 kurze Fragen — Ihr Feedback hilft uns, das Tool besser zu machen.
+                </p>
+              </div>
+
+              {/* Rating */}
+              <div>
+                <div style={{ fontSize: 12, fontWeight: 700, color: PRIMARY_C, marginBottom: 8 }}>
+                  Wie zufrieden sind Sie?
+                </div>
+                <div style={{ display: 'flex', gap: 6 }}>
+                  {[1, 2, 3, 4, 5].map(n => {
+                    const filled = n <= (hoverStar || rating);
+                    return (
+                      <motion.button
+                        key={n}
+                        whileHover={{ scale: 1.12 }}
+                        whileTap={{ scale: 0.92 }}
+                        onClick={() => setRating(n)}
+                        onMouseEnter={() => setHoverStar(n)}
+                        onMouseLeave={() => setHoverStar(0)}
+                        style={{
+                          background: 'none', border: 'none', cursor: 'pointer', padding: 2,
+                          display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        }}
+                      >
+                        {filled
+                          ? <IconStarFilled size={26} color={ORANGE_C} />
+                          : <IconStar size={26} stroke={1.6} color={BORDER_C} />}
+                      </motion.button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Wish */}
+              <div>
+                <label htmlFor="fb-wish" style={{ fontSize: 12, fontWeight: 700, color: PRIMARY_C, marginBottom: 8, display: 'block' }}>
+                  Was wünschen Sie sich noch?
+                </label>
+                <textarea
+                  id="fb-wish"
+                  value={wish}
+                  onChange={e => setWish(e.target.value)}
+                  rows={3}
+                  placeholder="z. B. mehr Spartipps für Gartenbesitzer, einen Vergleichsrechner für …"
+                  style={{
+                    width: '100%', resize: 'vertical' as const,
+                    padding: '10px 12px',
+                    border: `1px solid ${BORDER_C}`,
+                    borderRadius: 6,
+                    fontSize: 14, color: PRIMARY_C, fontFamily: 'inherit',
+                    background: '#fff', outline: 'none',
+                    boxSizing: 'border-box' as const,
+                    lineHeight: 1.5,
+                  }}
+                  onFocus={e => { e.currentTarget.style.borderColor = ORANGE_C; }}
+                  onBlur={e => { e.currentTarget.style.borderColor = BORDER_C; }}
+                />
+              </div>
+
+              {/* Want call */}
+              <div>
+                <div style={{ fontSize: 12, fontWeight: 700, color: PRIMARY_C, marginBottom: 8 }}>
+                  Hätten Sie Interesse an einem persönlichen Gespräch?
+                </div>
+                <div style={{ display: 'flex', gap: 6, marginBottom: 10 }}>
+                  {[
+                    { v: true,  label: 'Ja, gerne' },
+                    { v: false, label: 'Nein, danke' },
+                  ].map(opt => {
+                    const isOn = wantsCall === opt.v;
+                    return (
+                      <button
+                        key={String(opt.v)}
+                        onClick={() => setWantsCall(opt.v)}
+                        style={{
+                          flex: '1 1 0',
+                          background: isOn ? (opt.v ? GREEN_BRIGHT_C : BG_C) : '#fff',
+                          color: isOn ? (opt.v ? GREEN_C : PRIMARY_C) : MUTED_C,
+                          border: `1.5px solid ${isOn ? (opt.v ? GREEN_C : BORDER_C) : BORDER_C}`,
+                          borderRadius: 999, padding: '10px 14px',
+                          fontSize: 13, fontWeight: 700,
+                          cursor: 'pointer', fontFamily: 'inherit',
+                          display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+                        }}
+                      >
+                        {isOn && opt.v && <IconCheck size={14} stroke={2.5} />}
+                        {opt.label}
+                      </button>
+                    );
+                  })}
+                </div>
+                {wantsCall === true && (
+                  <input
+                    type="text"
+                    value={contact}
+                    onChange={e => setContact(e.target.value)}
+                    placeholder="E-Mail oder Telefonnummer"
+                    style={{
+                      width: '100%',
+                      padding: '10px 12px',
+                      border: `1px solid ${BORDER_C}`,
+                      borderRadius: 6,
+                      fontSize: 14, color: PRIMARY_C, fontFamily: 'inherit',
+                      background: '#fff', outline: 'none',
+                      boxSizing: 'border-box' as const,
+                    }}
+                    onFocus={e => { e.currentTarget.style.borderColor = ORANGE_C; }}
+                    onBlur={e => { e.currentTarget.style.borderColor = BORDER_C; }}
+                  />
+                )}
+              </div>
+
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 10, marginTop: 4 }}>
+                <button
+                  onClick={onClose}
+                  style={{
+                    background: 'transparent', color: MUTED_C, border: 'none',
+                    padding: '11px 18px', borderRadius: 999,
+                    fontSize: 13, fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit',
+                  }}
+                >
+                  Abbrechen
+                </button>
+                <button
+                  onClick={submit}
+                  disabled={!canSubmit}
+                  style={{
+                    background: canSubmit ? PRIMARY_C : '#E0E3E6',
+                    color: canSubmit ? '#fff' : MUTED_C,
+                    border: 'none', borderRadius: 999, padding: '11px 22px',
+                    fontSize: 13, fontWeight: 700,
+                    cursor: canSubmit ? 'pointer' : 'not-allowed',
+                    fontFamily: 'inherit',
+                    display: 'inline-flex', alignItems: 'center', gap: 6,
+                    boxShadow: canSubmit ? '0 4px 12px rgba(36,60,71,0.20)' : 'none',
+                    transition: 'background 0.15s',
+                  }}
+                >
+                  Feedback senden <IconArrowRight size={14} stroke={2.5} />
+                </button>
+              </div>
+            </div>
+          ) : (
+            <div style={{ padding: '40px 26px 36px', textAlign: 'center' as const }}>
+              <div style={{
+                display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                width: 64, height: 64, borderRadius: 32,
+                background: GREEN_BRIGHT_C, marginBottom: 18,
+              }}>
+                <IconCheck size={32} stroke={2.5} color={GREEN_C} />
+              </div>
+              <h2 style={{ fontSize: 20, fontWeight: 800, color: PRIMARY_C, margin: 0, marginBottom: 8 }}>
+                Vielen Dank!
+              </h2>
+              <p style={{ fontSize: 14, color: MUTED_C, lineHeight: 1.5, margin: 0, marginBottom: 22, maxWidth: 380, marginLeft: 'auto', marginRight: 'auto' }}>
+                Ihr Feedback ist angekommen. {wantsCall === true ? 'Wir melden uns in den nächsten Tagen bei Ihnen.' : ''}
+              </p>
+              <button
+                onClick={onClose}
+                style={{
+                  background: PRIMARY_C, color: '#fff', border: 'none',
+                  borderRadius: 999, padding: '11px 26px',
+                  fontSize: 13, fontWeight: 700,
+                  cursor: 'pointer', fontFamily: 'inherit',
+                }}
+              >
+                Schließen
+              </button>
+            </div>
+          )}
+        </motion.div>
+      </div>
+    </>
   );
 }

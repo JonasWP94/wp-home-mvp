@@ -95,7 +95,72 @@ const STEPS = [
 
 const TOTAL = STEPS.length;
 
-type View = 'intro' | 'landing' | 'basics' | 'quiz' | 'loading' | 'results' | 'invite';
+type View = 'intro' | 'landing' | 'basics' | 'quiz' | 'extendedPrompt' | 'extendedQuiz' | 'loading' | 'results' | 'invite';
+
+// ── Extended (optional) steps — Wohnfläche, Ausstattung, Bewohner ─────
+const EXT_STEPS = [
+  {
+    key: 'wohnflaeche' as const,
+    icon: IconHome,
+    title: 'Wie groß ist Ihre Wohnfläche?',
+    sub: 'Hilft uns, Heizkosten- und Strom-Spartipps konkret zu kalibrieren.',
+    kind: 'slider' as const,
+    min: 20, max: 300, step: 5, default: 70, suffix: 'm²',
+  },
+  {
+    key: 'equipment' as const,
+    icon: IconLeaf,
+    title: 'Was haben Sie zur Verfügung?',
+    sub: 'Mehrfachauswahl — beeinflusst Empfehlungen wie Balkonkraftwerk oder Wallbox.',
+    kind: 'multiCheck' as const,
+    options: [
+      { key: 'balkon',  label: 'Balkon / Loggia', icon: IconLeaf },
+      { key: 'garten',  label: 'Garten',          icon: IconLeaf },
+      { key: 'garage',  label: 'Garage',          icon: IconHome },
+      { key: 'carport', label: 'Carport',         icon: IconHome },
+    ],
+  },
+  {
+    key: 'sunHours' as const,
+    icon: IconBolt,
+    title: 'Details zum Balkon',
+    sub: 'Wie viele Sonnenstunden pro Tag erreicht Ihr Balkon im Schnitt?',
+    kind: 'options' as const,
+    skipIf: (p: any) => p.equipment?.balkon !== true,
+    options: [
+      { value: 'wenig',  label: 'Wenig (< 3 h)' },
+      { value: 'mittel', label: 'Mittel (3–6 h)' },
+      { value: 'viel',   label: 'Viel (6+ h)' },
+    ],
+  },
+  {
+    key: 'balkonSize' as const,
+    icon: IconHome,
+    title: 'Wie groß ist Ihr Balkon?',
+    sub: 'Wir empfehlen passende Modul-Sets je nach Stellfläche.',
+    kind: 'options' as const,
+    skipIf: (p: any) =>
+      p.equipment?.balkon !== true || (p.equipment?.sunHours !== 'mittel' && p.equipment?.sunHours !== 'viel'),
+    options: [
+      { value: 'klein',  label: 'Klein (bis ca. 4 m²)' },
+      { value: 'mittel', label: 'Mittel (4–8 m²)' },
+      { value: 'gross',  label: 'Groß (8+ m²)' },
+    ],
+  },
+  {
+    key: 'residents' as const,
+    icon: IconUsers,
+    title: 'Wer wohnt mit Ihnen?',
+    sub: 'Wir empfehlen passende Tipps für Ihren Haushalt.',
+    kind: 'counters' as const,
+    rows: [
+      { key: 'mitbewohner', label: 'Mitbewohner',  sub: 'Partner/in, WG, Familie' },
+      { key: 'kinder',      label: 'Kinder',       sub: 'unter 18 Jahre' },
+      { key: 'untermieter', label: 'Untermieter',  sub: 'Zimmer / Bereich vermietet' },
+      { key: 'haustiere',   label: 'Haustiere',    sub: 'Hund, Katze, etc.' },
+    ],
+  },
+];
 
 // ── Radar Animation ───────────────────────────────────────────────
 const BLIPS = [
@@ -359,6 +424,8 @@ const DEV_VIEWS = [
   { label: 'Q2 Miete?', view: 'quiz'     as View, step: 1  },
   { label: 'Q3 Heizung',view: 'quiz'     as View, step: 2  },
   { label: 'Q4 Auto',   view: 'quiz'     as View, step: 3  },
+  { label: 'Ext Prompt',view: 'extendedPrompt' as View, step: -1 },
+  { label: 'Ext Quiz',  view: 'extendedQuiz'   as View, step: -1 },
   { label: 'Basics',    view: 'basics'   as View, step: -1 },
   { label: 'Loading',   view: 'loading'  as View, step: -1 },
   { label: 'Results',   view: 'results'  as View, step: -1 },
@@ -428,6 +495,7 @@ export default function MvpWizard() {
   const [profile, setProfile] = useState<MvpProfile>(INITIAL);
   const [dir, setDir] = useState(1);
   const [finalProfile, setFinalProfile] = useState<MvpProfile | null>(null);
+  const [extStep, setExtStep] = useState(0);
 
   function devJump(v: View, s: number) {
     if (v === 'results') setFinalProfile(profile);
@@ -504,8 +572,8 @@ export default function MvpWizard() {
   React.useEffect(() => {
     if (view !== 'quiz') return;
     function onKey(e: KeyboardEvent) {
-      if (e.key === 'Enter' && canNext) goNext();
-      if (e.key === 'Backspace') goBack();
+      if ((e.key === 'Enter' || e.key === 'ArrowRight') && canNext) goNext();
+      if (e.key === 'Backspace' || e.key === 'ArrowLeft') goBack();
     }
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
@@ -514,6 +582,8 @@ export default function MvpWizard() {
   if (view === 'intro') return <>{devNav}<MvpThankYou onStart={() => setView('landing')} onInviteFriends={() => setView('invite')} /></>;
   if (view === 'invite') return <>{devNav}<MvpFriendInvite onBack={() => setView('intro')} /></>;
   if (view === 'landing') return <>{devNav}<MvpHomeLanding onStart={() => setView('quiz')} onBack={() => setView('intro')} /></>;
+  if (view === 'extendedPrompt') return <>{devNav}<ExtendedPrompt onContinue={() => { setExtStep(0); setView('extendedQuiz'); }} onSkip={() => setView('loading')} /></>;
+  if (view === 'extendedQuiz') return <>{devNav}<ExtendedQuiz profile={profile} setProfile={setProfile} step={extStep} setStep={setExtStep} onDone={() => setView('loading')} onBack={() => setView('extendedPrompt')} devNav={devNav} /></>;
   if (view === 'basics') {
     return (
       <>{devNav}<MvpBasics
@@ -534,7 +604,7 @@ export default function MvpWizard() {
           localStorage.setItem('wpilot_mvp_profile', JSON.stringify(fp));
           setProfile(fp);
           setFinalProfile(fp);
-          setView('loading');
+          setView('extendedPrompt');
         }}
         onBack={() => setView('quiz')}
       /></>
@@ -702,55 +772,52 @@ export default function MvpWizard() {
                 display: 'flex', alignItems: 'center', gap: 10,
                 marginTop: 14,
               }}>
-                <button
-                  onClick={goBack}
-                  aria-label="Zurück"
-                  style={{
-                    flex: '0 0 auto',
-                    width: 44, height: 44,
-                    background: WHITE, color: PRIMARY,
-                    border: `1.5px solid ${BORDER}`,
-                    borderRadius: 999,
-                    cursor: 'pointer', fontFamily: 'inherit',
-                    display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-                  }}
-                >
-                  <IconArrowLeft size={16} stroke={2.4} />
-                </button>
-                <div style={{ flex: 1 }} />
-                <button
-                  onClick={skip}
-                  style={{
-                    flex: '0 0 auto',
-                    background: 'transparent', color: GREY_700,
-                    border: 'none',
-                    borderRadius: 999, padding: '11px 14px',
-                    fontSize: 13, fontWeight: FW_MEDIUM,
-                    cursor: 'pointer', fontFamily: 'inherit',
-                    display: 'inline-flex', alignItems: 'center', gap: 4,
-                  }}
-                >
-                  Überspringen <IconArrowRight size={13} stroke={1.8} />
-                </button>
-                <button
-                  onClick={goNext}
-                  disabled={!canNext}
-                  style={{
-                    flex: '0 0 auto',
-                    background: canNext ? PRIMARY : GREY_200,
-                    color: canNext ? WHITE : GREY_700,
-                    border: 'none',
-                    borderRadius: 999, padding: '11px 22px',
-                    fontSize: 13, fontWeight: FW_BOLD,
-                    cursor: canNext ? 'pointer' : 'not-allowed',
-                    fontFamily: 'inherit',
-                    display: 'inline-flex', alignItems: 'center', gap: 6,
-                    boxShadow: canNext ? '0 2px 8px rgba(36,60,71,0.25)' : 'none',
-                    transition: 'background 0.15s',
-                  }}
-                >
-                  Weiter <IconArrowRight size={14} stroke={2.5} />
-                </button>
+                {(() => {
+                  const ArrowBtn = ({ onClick, dir, active, ariaLabel }: { onClick: () => void; dir: 'left' | 'right'; active: boolean; ariaLabel: string }) => (
+                    <button
+                      onClick={onClick}
+                      aria-label={ariaLabel}
+                      disabled={!active}
+                      style={{
+                        flex: '0 0 auto',
+                        width: 48, height: 48,
+                        background: active ? BLUE : WHITE,
+                        color: active ? WHITE : GREY_700,
+                        border: `1.5px solid ${active ? BLUE : BORDER}`,
+                        borderRadius: 999,
+                        cursor: active ? 'pointer' : 'not-allowed',
+                        fontFamily: 'inherit',
+                        display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                        boxShadow: active ? '0 2px 10px rgba(87,130,176,0.30)' : 'none',
+                        transition: 'background 0.15s, border-color 0.15s, color 0.15s, box-shadow 0.15s',
+                      }}
+                    >
+                      {dir === 'left' ? <IconArrowLeft size={18} stroke={2.4} /> : <IconArrowRight size={18} stroke={2.4} />}
+                    </button>
+                  );
+                  const canBack = step > 0 || true; // immer back-fähig (zurück führt notfalls zur Landing)
+                  return (
+                    <>
+                      <ArrowBtn onClick={goBack} dir="left" active={canBack} ariaLabel="Zurück" />
+                      <div style={{ flex: 1 }} />
+                      <button
+                        onClick={skip}
+                        style={{
+                          flex: '0 0 auto',
+                          background: 'transparent', color: GREY_700,
+                          border: 'none',
+                          borderRadius: 999, padding: '11px 14px',
+                          fontSize: 13, fontWeight: FW_MEDIUM,
+                          cursor: 'pointer', fontFamily: 'inherit',
+                          display: 'inline-flex', alignItems: 'center', gap: 4,
+                        }}
+                      >
+                        Überspringen <IconArrowRight size={13} stroke={1.8} />
+                      </button>
+                      <ArrowBtn onClick={goNext} dir="right" active={canNext} ariaLabel="Weiter" />
+                    </>
+                  );
+                })()}
               </div>
             </div>
           </motion.div>
@@ -900,6 +967,426 @@ function VehicleSelector({
           </div>
         )}
       </div>
+    </>
+  );
+}
+
+// ── Extended Prompt (After basic quiz) ───────────────────────────
+function ExtendedPrompt({ onContinue, onSkip }: { onContinue: () => void; onSkip: () => void }) {
+  return (
+    <div style={{
+      minHeight: '100dvh', background: BG, display: 'flex', flexDirection: 'column',
+      fontFamily: "'Poppins', sans-serif",
+    }}>
+      <WpHeader showProgress progressPct={90} />
+      <div style={{
+        flex: 1, display: 'flex', flexDirection: 'column',
+        alignItems: 'center', justifyContent: 'center',
+        padding: '32px 20px',
+      }}>
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.35 }}
+          style={{ width: '100%', maxWidth: 520, textAlign: 'center' }}
+        >
+          <div style={{
+            display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+            width: 64, height: 64, borderRadius: 32,
+            background: BLUE_VERY_BRIGHT,
+            marginBottom: 18,
+          }}>
+            <IconCheck size={32} stroke={2} color={BLUE} />
+          </div>
+          <h1 style={{
+            fontSize: TEXT_LG + 4, fontWeight: FW_BOLD,
+            color: PRIMARY, lineHeight: 1.2, marginBottom: 10,
+            letterSpacing: '-0.01em',
+          }}>
+            Für den Anfang haben wir genug.
+          </h1>
+          <p style={{
+            fontSize: TEXT_MD, color: GREY_800, lineHeight: 1.5,
+            marginBottom: 26, fontWeight: FW_REGULAR,
+            maxWidth: 440, marginLeft: 'auto', marginRight: 'auto',
+          }}>
+            Möchten Sie noch ein paar Details ergänzen?
+            Dann werden Ihre Tipps noch besser auf Sie zugeschnitten.
+          </p>
+          <div style={{
+            display: 'flex', flexDirection: 'column', gap: 10, alignItems: 'stretch',
+            maxWidth: 360, margin: '0 auto',
+          }}>
+            <button
+              onClick={onContinue}
+              style={{
+                background: PRIMARY, color: WHITE, border: 'none',
+                borderRadius: 999, padding: '14px 22px',
+                fontSize: 14, fontWeight: FW_BOLD,
+                cursor: 'pointer', fontFamily: 'inherit',
+                display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+                boxShadow: '0 4px 14px rgba(36,60,71,0.25)',
+              }}
+            >
+              Weiter machen <IconArrowRight size={15} stroke={2.5} />
+            </button>
+            <button
+              onClick={onSkip}
+              style={{
+                background: 'transparent', color: GREY_800,
+                border: `1.5px solid ${BORDER}`,
+                borderRadius: 999, padding: '12px 22px',
+                fontSize: 13, fontWeight: FW_SEMIBOLD,
+                cursor: 'pointer', fontFamily: 'inherit',
+              }}
+            >
+              Direkt zum Dashboard
+            </button>
+          </div>
+        </motion.div>
+      </div>
+    </div>
+  );
+}
+
+// ── Extended Quiz (Wohnfläche / Ausstattung / Sonnenstunden / Bewohner) ──
+function ExtendedQuiz({
+  profile, setProfile, step, setStep, onDone, onBack, devNav,
+}: {
+  profile: MvpProfile;
+  setProfile: React.Dispatch<React.SetStateAction<MvpProfile>>;
+  step: number;
+  setStep: React.Dispatch<React.SetStateAction<number>>;
+  onDone: () => void;
+  onBack: () => void;
+  devNav: React.ReactNode;
+}) {
+  function isActive(s: any) { return !s.skipIf || !s.skipIf(profile); }
+  const activeSteps = EXT_STEPS.filter(isActive);
+  // Map current step index → resolved step (skipping inactive)
+  const current = EXT_STEPS[step] && isActive(EXT_STEPS[step]) ? EXT_STEPS[step] : activeSteps[Math.min(step, activeSteps.length - 1)];
+  const currentIdx = EXT_STEPS.findIndex(s => s.key === current?.key);
+  const StepIcon = current?.icon;
+
+  const activePos = activeSteps.findIndex(s => s.key === current?.key);
+  const isLast = activePos === activeSteps.length - 1;
+  const progressPct = 90 + ((activePos + 1) / activeSteps.length) * 9;
+
+  function findNext(from: number) {
+    for (let i = from + 1; i < EXT_STEPS.length; i++) if (isActive(EXT_STEPS[i])) return i;
+    return -1;
+  }
+  function findPrev(from: number) {
+    for (let i = from - 1; i >= 0; i--) if (isActive(EXT_STEPS[i])) return i;
+    return -1;
+  }
+
+  function canNextFor(s: any): boolean {
+    if (!s) return false;
+    if (s.kind === 'slider')      return profile.wohnflaeche != null;
+    if (s.kind === 'multiCheck')  return (s as any).options.some((o: any) => (profile.equipment as any)?.[o.key] === true || (profile.equipment as any)?.[o.key] === false);
+    if (s.kind === 'options')     return (profile.equipment as any)?.[s.key] != null;
+    if (s.kind === 'counters')    return true; // any state OK
+    return true;
+  }
+
+  const next = findNext(currentIdx);
+  const canNext = canNextFor(current);
+
+  function goNext() {
+    if (next === -1) onDone();
+    else setStep(next);
+  }
+  function goBack() {
+    const prev = findPrev(currentIdx);
+    if (prev === -1) onBack();
+    else setStep(prev);
+  }
+
+  // Keyboard
+  React.useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      if ((e.key === 'Enter' || e.key === 'ArrowRight') && canNext) goNext();
+      if (e.key === 'Backspace' || e.key === 'ArrowLeft') goBack();
+    }
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [canNext, currentIdx]);
+
+  if (!current) { onDone(); return null; }
+
+  return (
+    <>{devNav}
+    <div style={{
+      minHeight: '100dvh', background: BG, display: 'flex', flexDirection: 'column',
+      fontFamily: "'Poppins', sans-serif",
+    }}>
+      <WpHeader showProgress progressPct={progressPct} />
+
+      <div className="wp-page-quiz" style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '24px 16px 96px' }}>
+        <style>{`@media(min-width:640px){.wp-page-quiz{padding:32px 24px 56px !important;}}`}</style>
+        <div style={{ width: '100%', maxWidth: 560 }}>
+          <div style={{ textAlign: 'center', marginBottom: 28 }}>
+            <div style={{
+              width: 60, height: 60, borderRadius: RADIUS_LG,
+              background: BLUE_VERY_BRIGHT,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              margin: '0 auto 16px',
+            }}>
+              {StepIcon && <StepIcon size={30} stroke={1.6} color={BLUE} />}
+            </div>
+            <div style={{ fontSize: 11, fontWeight: FW_BOLD, color: BLUE, letterSpacing: '0.1em', marginBottom: 8 }}>
+              FRAGE {activePos + 1} VON {activeSteps.length}
+            </div>
+            <h1 style={{
+              fontSize: TEXT_LG + 4, fontWeight: FW_SEMIBOLD,
+              color: PRIMARY, lineHeight: 1.25, marginBottom: 8,
+              letterSpacing: '-0.01em',
+            }}>
+              {current.title}
+            </h1>
+            {current.sub && (
+              <p style={{ fontSize: TEXT_SM, color: GREY_800, lineHeight: 1.5, fontWeight: FW_REGULAR, maxWidth: 460, margin: '0 auto' }}>
+                {current.sub}
+              </p>
+            )}
+          </div>
+
+          {/* Step Body */}
+          {current.kind === 'slider' && (() => {
+            const s = current as any;
+            const val = profile.wohnflaeche ?? s.default;
+            const set = profile.wohnflaeche != null;
+            const pct = ((val - s.min) / (s.max - s.min)) * 100;
+            return (
+              <div style={{ background: WHITE, border: `1px solid ${BORDER}`, borderRadius: RADIUS_MD, padding: '20px 22px' }}>
+                <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'center', gap: 6, marginBottom: 14 }}>
+                  <span style={{ fontSize: 40, fontWeight: 800, color: set ? PRIMARY : GREY_700, lineHeight: 1, letterSpacing: '-1.5px' }}>{set ? val : '—'}</span>
+                  <span style={{ fontSize: 18, fontWeight: 700, color: GREY_800 }}>{s.suffix}</span>
+                </div>
+                <style>{`
+                  .wp-ext-slider{
+                    -webkit-appearance:none;appearance:none;
+                    width:100%;height:8px;border-radius:4px;
+                    background:linear-gradient(to right, ${BLUE} 0%, ${BLUE} ${pct}%, ${BORDER} ${pct}%, ${BORDER} 100%);
+                    outline:none;cursor:pointer;
+                  }
+                  .wp-ext-slider::-webkit-slider-thumb{
+                    -webkit-appearance:none;appearance:none;
+                    width:24px;height:24px;border-radius:50%;
+                    background:${BLUE};border:3px solid #fff;
+                    box-shadow:0 2px 6px rgba(0,0,0,0.18);cursor:pointer;
+                  }
+                  .wp-ext-slider::-moz-range-thumb{
+                    width:24px;height:24px;border-radius:50%;
+                    background:${BLUE};border:3px solid #fff;
+                    box-shadow:0 2px 6px rgba(0,0,0,0.18);cursor:pointer;
+                  }
+                `}</style>
+                <input
+                  type="range"
+                  className="wp-ext-slider"
+                  min={s.min} max={s.max} step={s.step}
+                  value={val}
+                  onChange={e => setProfile(p => ({ ...p, wohnflaeche: Number(e.target.value) }))}
+                />
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, color: GREY_800, fontWeight: 500, marginTop: 6 }}>
+                  <span>{s.min} {s.suffix}</span>
+                  <span>{s.max} {s.suffix}+</span>
+                </div>
+              </div>
+            );
+          })()}
+
+          {current.kind === 'multiCheck' && (() => {
+            const s = current as any;
+            return (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                {s.options.map((o: any) => {
+                  const isOn = (profile.equipment as any)?.[o.key] === true;
+                  const OptIcon = o.icon;
+                  return (
+                    <button
+                      key={o.key}
+                      onClick={() => setProfile(p => ({
+                        ...p,
+                        equipment: { ...(p.equipment ?? {} as any), [o.key]: !isOn, ...(o.key === 'balkon' && isOn ? { sunHours: null } : {}) },
+                      }))}
+                      style={{
+                        background: isOn ? BLUE_VERY_BRIGHT : WHITE,
+                        border: `1.5px solid ${isOn ? BLUE : BORDER}`,
+                        borderRadius: RADIUS_MD, padding: '14px 16px',
+                        display: 'flex', alignItems: 'center', gap: 12,
+                        cursor: 'pointer', fontFamily: 'inherit', textAlign: 'left' as const,
+                        transition: 'all 0.15s',
+                      }}
+                    >
+                      <div style={{
+                        width: 38, height: 38, borderRadius: RADIUS_SM,
+                        background: isOn ? BLUE : GREY_200,
+                        display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+                      }}>
+                        <OptIcon size={20} stroke={1.8} color={isOn ? WHITE : GREY_800} />
+                      </div>
+                      <span style={{ flex: 1, fontSize: TEXT_MD - 1, fontWeight: FW_SEMIBOLD, color: PRIMARY }}>{o.label}</span>
+                      <div style={{
+                        width: 24, height: 24, borderRadius: 6,
+                        background: isOn ? BLUE : 'transparent',
+                        border: `1.5px solid ${isOn ? BLUE : BORDER}`,
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      }}>
+                        {isOn && <IconCheck size={14} stroke={2.6} color={WHITE} />}
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            );
+          })()}
+
+          {current.kind === 'options' && (() => {
+            const s = current as any;
+            const val = (profile.equipment as any)?.[s.key];
+            return (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                {s.options.map((opt: any) => {
+                  const isOn = val === opt.value;
+                  return (
+                    <button
+                      key={opt.value}
+                      onClick={() => setProfile(p => ({ ...p, equipment: { ...(p.equipment ?? {} as any), [s.key]: opt.value } }))}
+                      style={{
+                        background: isOn ? BLUE_VERY_BRIGHT : WHITE,
+                        border: `1.5px solid ${isOn ? BLUE : BORDER}`,
+                        borderRadius: RADIUS_MD, padding: '14px 16px',
+                        display: 'flex', alignItems: 'center', gap: 14,
+                        cursor: 'pointer', fontFamily: 'inherit', textAlign: 'left' as const,
+                      }}
+                    >
+                      <span style={{ flex: 1, fontSize: TEXT_MD - 1, fontWeight: FW_SEMIBOLD, color: isOn ? BLUE_DARK : PRIMARY }}>{opt.label}</span>
+                      {isOn && (
+                        <div style={{ width: 22, height: 22, borderRadius: 11, background: BLUE, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                          <IconCheck size={14} stroke={2.5} color={WHITE} />
+                        </div>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            );
+          })()}
+
+          {current.kind === 'counters' && (() => {
+            const s = current as any;
+            const r = profile.residents ?? { mitbewohner: 0, kinder: 0, untermieter: 0, haustiere: 0 };
+            return (
+              <div style={{ background: WHITE, border: `1px solid ${BORDER}`, borderRadius: RADIUS_MD, padding: '4px 18px' }}>
+                {s.rows.map((row: any) => (
+                  <div key={row.key} style={{
+                    padding: '14px 0', borderBottom: `1px solid ${BORDER}`,
+                    display: 'flex', alignItems: 'center', gap: 12,
+                  }}>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ fontSize: TEXT_SM, fontWeight: FW_SEMIBOLD, color: PRIMARY }}>{row.label}</div>
+                      {row.sub && <div style={{ fontSize: 11, color: GREY_800, marginTop: 2 }}>{row.sub}</div>}
+                    </div>
+                    <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+                      <button
+                        onClick={() => setProfile(p => ({ ...p, residents: { ...(p.residents ?? {} as any), [row.key]: Math.max(0, ((p.residents as any)?.[row.key] ?? 0) - 1) } }))}
+                        disabled={(r as any)[row.key] === 0}
+                        style={{
+                          width: 32, height: 32, borderRadius: 16,
+                          border: `1.5px solid ${BORDER}`, background: WHITE,
+                          color: (r as any)[row.key] === 0 ? '#cfd3da' : PRIMARY,
+                          cursor: (r as any)[row.key] === 0 ? 'default' : 'pointer',
+                          display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'inherit',
+                        }}
+                      >
+                        <IconMinus size={15} stroke={2.2} />
+                      </button>
+                      <span style={{ minWidth: 24, textAlign: 'center', fontSize: 15, fontWeight: 700, color: PRIMARY }}>{(r as any)[row.key]}</span>
+                      <button
+                        onClick={() => setProfile(p => ({ ...p, residents: { ...(p.residents ?? {} as any), [row.key]: ((p.residents as any)?.[row.key] ?? 0) + 1 } }))}
+                        style={{
+                          width: 32, height: 32, borderRadius: 16,
+                          border: `1.5px solid ${BORDER}`, background: WHITE, color: PRIMARY,
+                          cursor: 'pointer',
+                          display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'inherit',
+                        }}
+                      >
+                        <IconPlus size={15} stroke={2.2} />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            );
+          })()}
+
+          {/* Navigation (gleicher Stil wie Haupt-Quiz) */}
+          <style>{`
+            .wp-extq-nav{
+              position:fixed;left:0;right:0;bottom:0;z-index:50;
+              background:rgba(244,246,250,0.96);
+              backdrop-filter:blur(10px);
+              -webkit-backdrop-filter:blur(10px);
+              border-top:1px solid ${BORDER};
+              padding:10px 16px calc(10px + env(safe-area-inset-bottom));
+            }
+            @media(min-width:640px){
+              .wp-extq-nav{
+                position:static;left:auto;right:auto;bottom:auto;
+                background:transparent;backdrop-filter:none;-webkit-backdrop-filter:none;
+                border-top:none;padding:0;margin-top:14px !important;
+              }
+            }
+          `}</style>
+          <div className="wp-extq-nav" style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: 24 }}>
+            <button
+              onClick={goBack}
+              aria-label="Zurück"
+              style={{
+                width: 48, height: 48, background: WHITE, color: PRIMARY,
+                border: `1.5px solid ${BORDER}`, borderRadius: 999, cursor: 'pointer',
+                fontFamily: 'inherit', display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+              }}
+            >
+              <IconArrowLeft size={18} stroke={2.4} />
+            </button>
+            <div style={{ flex: 1 }} />
+            <button
+              onClick={() => { if (isLast) onDone(); else if (next !== -1) setStep(next); }}
+              style={{
+                background: 'transparent', color: GREY_700, border: 'none',
+                borderRadius: 999, padding: '11px 14px', fontSize: 13, fontWeight: FW_MEDIUM,
+                cursor: 'pointer', fontFamily: 'inherit',
+                display: 'inline-flex', alignItems: 'center', gap: 4,
+              }}
+            >
+              Überspringen <IconArrowRight size={13} stroke={1.8} />
+            </button>
+            <button
+              onClick={goNext}
+              disabled={!canNext}
+              aria-label={isLast ? 'Fertig' : 'Weiter'}
+              style={{
+                width: 48, height: 48,
+                background: canNext ? BLUE : WHITE,
+                color: canNext ? WHITE : GREY_700,
+                border: `1.5px solid ${canNext ? BLUE : BORDER}`,
+                borderRadius: 999,
+                cursor: canNext ? 'pointer' : 'not-allowed', fontFamily: 'inherit',
+                display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                boxShadow: canNext ? '0 2px 10px rgba(87,130,176,0.30)' : 'none',
+                transition: 'all 0.15s',
+              }}
+            >
+              <IconArrowRight size={18} stroke={2.4} />
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
     </>
   );
 }
