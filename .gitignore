@@ -1,6 +1,6 @@
 node_modules/
-dist/
 .env
 .env.*
 *.local
 .DS_Store
+# Hinweis: dist/ wird mit committet, weil der Deploy direkt auf statische Files zugreift.
