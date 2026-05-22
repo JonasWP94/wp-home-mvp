@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+# ────────────────────────────────────────────────────────────────
+# Auto-build + commit dist/ vor jedem Push
+# Aktivieren mit:  git config core.hooksPath .githooks
+# (auf neuem Rechner einmalig im Repo ausführen)
+# ────────────────────────────────────────────────────────────────
+set -e
+
+# Skip auf bestimmten Branches? (hier nicht — überall vor push bauen)
+echo "🔨 Pre-push: npm run build …"
+
+# Build im Hintergrund. Stoppt Push wenn Build fehlschlägt.
+if command -v npm.cmd >/dev/null 2>&1; then
+  NPM=npm.cmd
+else
+  NPM=npm
+fi
+
+if ! "$NPM" run build > /tmp/wpilot-prepush-build.log 2>&1; then
+  echo "❌ Build failed — Push abgebrochen. Log:"
+  tail -30 /tmp/wpilot-prepush-build.log
+  exit 1
+fi
+
+# Falls dist/ Änderungen hat (oder neue Dateien): committen
+if git diff --quiet -- dist/ && [ -z "$(git ls-files --others --exclude-standard -- dist/)" ]; then
+  echo "✓ dist/ unverändert — direkt pushen"
+  exit 0
+fi
+
+echo "📦 dist/ wurde aktualisiert — Auto-Commit …"
+git add dist/
+
+# Last commit ist schon ein "build:" commit? → amenden statt neu
+LAST_MSG=$(git log -1 --pretty=%s 2>/dev/null || echo "")
+if [[ "$LAST_MSG" == build:* ]]; then
+  echo "   ↳ amend des bestehenden build-Commits"
+  git commit --amend --no-edit --no-verify
+else
+  git commit --no-verify -m "build: auto-rebuild dist/
+
+Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>"
+fi
+
+echo "✓ Auto-Commit erstellt. Push läuft weiter."
+exit 0
