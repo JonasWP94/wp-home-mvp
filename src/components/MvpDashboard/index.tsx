@@ -1845,6 +1845,21 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
             position: 'relative', overflow: 'hidden',
             display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: 12,
           }}>
+            {/* Wechselpilot Brand-Schräge — diagonale Fläche (statt Kreis) */}
+            <div style={{
+              position: 'absolute', top: 0, right: 0, bottom: 0,
+              width: '55%',
+              background: 'rgba(255,255,255,0.07)',
+              clipPath: 'polygon(28% 0, 100% 0, 100% 100%, 0 100%)',
+              pointerEvents: 'none',
+            }} />
+            <div style={{
+              position: 'absolute', top: 0, right: 0, bottom: 0,
+              width: '38%',
+              background: 'rgba(255,255,255,0.05)',
+              clipPath: 'polygon(40% 0, 100% 0, 100% 100%, 0 100%)',
+              pointerEvents: 'none',
+            }} />
             <div style={{ position: 'relative', zIndex: 1 }}>
               <div style={{ fontSize: 11, fontWeight: 600, opacity: 0.85, marginBottom: 4, letterSpacing: '0.05em' }}>Ihr Sparpotenzial pro Jahr</div>
               <div style={{ display: 'flex', alignItems: 'baseline', gap: 6, marginBottom: 4 }}>
@@ -2181,6 +2196,14 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
                       transition: 'transform 0.15s',
                     }}
                   >
+                    {/* Brand-Schräge */}
+                    <div style={{
+                      position: 'absolute', top: 0, right: 0, bottom: 0,
+                      width: '40%',
+                      background: 'rgba(249,170,0,0.08)',
+                      clipPath: 'polygon(40% 0, 100% 0, 100% 100%, 0 100%)',
+                      pointerEvents: 'none',
+                    }} />
                     <div style={{ position: 'relative', zIndex: 1 }}>
                       <div style={{
                         display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
@@ -2589,9 +2612,7 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
                 onClick={closeAll}
                 style={{
                   position: 'fixed', inset: 0, zIndex: 1000,
-                  background: 'rgba(30,32,38,0.55)',
-                  backdropFilter: 'blur(4px)',
-                  WebkitBackdropFilter: 'blur(4px)',
+                  background: 'rgba(30,32,38,0.22)',
                 }}
               />
               <style>{`
@@ -3342,9 +3363,7 @@ function FeedbackOverlay({ onClose }: { onClose: () => void }) {
         onClick={onClose}
         style={{
           position: 'fixed', inset: 0, zIndex: 1000,
-          background: 'rgba(30,32,38,0.55)',
-          backdropFilter: 'blur(4px)',
-          WebkitBackdropFilter: 'blur(4px)',
+          background: 'rgba(30,32,38,0.22)',
         }}
       />
       <style>{`
@@ -3418,7 +3437,7 @@ function FeedbackOverlay({ onClose }: { onClose: () => void }) {
               {/* LEFT — dark hero */}
               <div className="mvp-fb-left" style={{
                 background: 'linear-gradient(160deg, #243c47 0%, #1c2e3f 100%)',
-                color: '#fff', display: 'flex', flexDirection: 'column', justifyContent: 'center',
+                color: '#fff', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start',
               }}>
                 <div className="mvp-fb-eyebrow" style={{ fontSize: 10, fontWeight: 800, letterSpacing: '0.14em', color: ORANGE_C }}>
                   IHRE MEINUNG
