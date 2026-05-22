@@ -1593,6 +1593,9 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
   const [carouselIdx, setCarouselIdx] = useState(0);
   const [carouselPaused, setCarouselPaused] = useState(false);
   const [openModuleKey, setOpenModuleKey] = useState<string | null>(null);
+  // Layout-ID of the element that opened the current overlay (for shared-element morph).
+  // null when no overlay open.
+  const [overlaySrcId, setOverlaySrcId] = useState<string | null>(null);
   const [showFeedback, setShowFeedback] = useState(false);
   const modulesGridRef = React.useRef<HTMLDivElement>(null);
   const [gridCols, setGridCols] = useState(4);
@@ -1602,15 +1605,18 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
     if (!el) return;
     function compute() {
       if (!el) return;
-      const W = el.clientWidth;
-      const MIN = 220, GAP = 12;
-      const cols = Math.max(1, Math.floor((W + GAP) / (MIN + GAP)));
-      setGridCols(cols);
+      // Tatsächlich gerenderte Spalten aus der vom Browser aufgelösten
+      // grid-template-columns ablesen — robuster als Container-Breite teilen.
+      const tpl = getComputedStyle(el).gridTemplateColumns;
+      const cols = tpl && tpl !== 'none' ? tpl.split(' ').filter(Boolean).length : 1;
+      setGridCols(Math.max(1, cols));
     }
     compute();
     const ro = new ResizeObserver(compute);
     ro.observe(el);
-    return () => ro.disconnect();
+    // Recompute after fonts/layout settle
+    const t = setTimeout(compute, 100);
+    return () => { ro.disconnect(); clearTimeout(t); };
   }, []);
   // TEMP: always show overlay on every dashboard visit (dev/testing).
   // Revert by restoring the localStorage check.
@@ -1839,21 +1845,6 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
             position: 'relative', overflow: 'hidden',
             display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: 12,
           }}>
-            {/* Wechselpilot Brand-Schräge — diagonale Fläche (statt Kreis) */}
-            <div style={{
-              position: 'absolute', top: 0, right: 0, bottom: 0,
-              width: '55%',
-              background: 'rgba(255,255,255,0.07)',
-              clipPath: 'polygon(28% 0, 100% 0, 100% 100%, 0 100%)',
-              pointerEvents: 'none',
-            }} />
-            <div style={{
-              position: 'absolute', top: 0, right: 0, bottom: 0,
-              width: '38%',
-              background: 'rgba(255,255,255,0.05)',
-              clipPath: 'polygon(40% 0, 100% 0, 100% 100%, 0 100%)',
-              pointerEvents: 'none',
-            }} />
             <div style={{ position: 'relative', zIndex: 1 }}>
               <div style={{ fontSize: 11, fontWeight: 600, opacity: 0.85, marginBottom: 4, letterSpacing: '0.05em' }}>Ihr Sparpotenzial pro Jahr</div>
               <div style={{ display: 'flex', alignItems: 'baseline', gap: 6, marginBottom: 4 }}>
@@ -2023,7 +2014,7 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
                   </div>
 
                   <button
-                    onClick={() => setOverlayTipId(tip.id)}
+                    onClick={() => { setOverlaySrcId('top-tips-shell'); setOverlayTipId(tip.id); }}
                     style={{
                       display: 'inline-flex', alignItems: 'center', gap: 6,
                       background: PRIMARY, color: WHITE, border: 'none',
@@ -2119,8 +2110,9 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
                 return (
                   <motion.button
                     key={cluster.title}
+                    layoutId={`module-card-${categoryKey}`}
                     whileTap={{ scale: 0.98 }}
-                    onClick={() => setOpenModuleKey(categoryKey)}
+                    onClick={() => { setOverlaySrcId(`module-card-${categoryKey}`); setOpenModuleKey(categoryKey); }}
                     style={{
                       background: WHITE, border: `1px solid ${BORDER}`,
                       borderRadius: 6, padding: '16px',
@@ -2128,6 +2120,7 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
                       cursor: 'pointer', fontFamily: 'inherit', textAlign: 'left' as const,
                       transition: 'border-color 0.15s, transform 0.15s',
                       minHeight: 140,
+                      visibility: overlaySrcId === `module-card-${categoryKey}` ? 'hidden' : 'visible',
                     }}
                     onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = meta.tint; }}
                     onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = BORDER; }}
@@ -2188,14 +2181,6 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
                       transition: 'transform 0.15s',
                     }}
                   >
-                    {/* Brand-Schräge */}
-                    <div style={{
-                      position: 'absolute', top: 0, right: 0, bottom: 0,
-                      width: '40%',
-                      background: 'rgba(249,170,0,0.08)',
-                      clipPath: 'polygon(40% 0, 100% 0, 100% 100%, 0 100%)',
-                      pointerEvents: 'none',
-                    }} />
                     <div style={{ position: 'relative', zIndex: 1 }}>
                       <div style={{
                         display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
@@ -2590,6 +2575,7 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
           const closeAll = () => {
             setOpenModuleKey(null);
             setOverlayTipId(null);
+            setOverlaySrcId(null);
             if (showTopTipsOverlay) closeTopTipsOverlay();
           };
           const backToList = () => { setOverlayTipId(null); };
@@ -2619,7 +2605,7 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
                 fontFamily: "'Poppins', sans-serif",
               }}>
                 <motion.div
-                  layoutId="top-tips-shell"
+                  layoutId={overlaySrcId || 'top-tips-shell'}
                   key="ov-shell"
                   initial={{ opacity: 0, y: 24, scale: 0.96 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -3352,7 +3338,7 @@ function FeedbackOverlay({ onClose }: { onClose: () => void }) {
     <>
       <motion.div
         initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-        transition={{ duration: 0.25 }}
+        transition={{ duration: 0.22 }}
         onClick={onClose}
         style={{
           position: 'fixed', inset: 0, zIndex: 1000,
@@ -3361,10 +3347,36 @@ function FeedbackOverlay({ onClose }: { onClose: () => void }) {
           WebkitBackdropFilter: 'blur(4px)',
         }}
       />
-      <div style={{
+      <style>{`
+        .mvp-fb-wrap{padding:5px;}
+        @media(min-width:640px){.mvp-fb-wrap{padding:20px;}}
+        .mvp-fb-grid{display:flex;flex-direction:column;flex:1;min-height:0;}
+        .mvp-fb-left{padding:16px 20px;position:relative;flex-shrink:0;}
+        .mvp-fb-right{position:relative;display:flex;flex-direction:column;flex:1;min-height:0;overflow:hidden;}
+        .mvp-fb-right-scroll{flex:1;overflow-y:auto;padding:18px 20px 12px;}
+        .mvp-fb-footer{position:sticky;bottom:0;background:#fff;border-top:1px solid ${BORDER_C};padding:10px 20px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end;}
+        .mvp-fb-shell{height:calc(100dvh - 10px) !important;max-height:calc(100dvh - 10px) !important;width:100% !important;}
+        .mvp-fb-left .mvp-fb-eyebrow{font-size:9px !important;margin-bottom:6px !important;}
+        .mvp-fb-left .mvp-fb-title{font-size:16px !important;margin-bottom:8px !important;line-height:1.25 !important;}
+        .mvp-fb-left .mvp-fb-sub{font-size:11px !important;}
+        @media(min-width:640px){
+          .mvp-fb-shell{height:auto !important;max-height:90vh !important;width:min(820px, 100%) !important;}
+        }
+        @media(min-width:760px){
+          .mvp-fb-shell{min-height:480px !important;}
+          .mvp-fb-grid{flex-direction:row;}
+          .mvp-fb-left{flex:0 0 300px;padding:32px 28px;}
+          .mvp-fb-right-scroll{padding:32px 32px 16px;}
+          .mvp-fb-footer{padding:14px 32px;}
+          .mvp-fb-left .mvp-fb-eyebrow{font-size:10px !important;margin-bottom:12px !important;}
+          .mvp-fb-left .mvp-fb-title{font-size:22px !important;margin-bottom:14px !important;line-height:1.2 !important;}
+          .mvp-fb-left .mvp-fb-sub{font-size:13px !important;}
+        }
+      `}</style>
+      <div className="mvp-fb-wrap" style={{
         position: 'fixed', inset: 0, zIndex: 1001,
         display: 'flex', alignItems: 'center', justifyContent: 'center',
-        padding: 20, pointerEvents: 'none',
+        pointerEvents: 'none',
         fontFamily: "'Poppins', sans-serif",
       }}>
         <motion.div
@@ -3373,13 +3385,15 @@ function FeedbackOverlay({ onClose }: { onClose: () => void }) {
           exit={{ opacity: 0, y: 16, scale: 0.96 }}
           transition={{ duration: 0.26, ease: [0.22, 1, 0.36, 1] }}
           onClick={e => e.stopPropagation()}
+          className="mvp-fb-shell"
           style={{
-            width: 'min(560px, 100%)', maxHeight: '90vh',
+            width: 'min(820px, 100%)', maxHeight: '90vh', minHeight: 0,
             background: '#fff', border: `1px solid ${BORDER_C}`,
-            borderRadius: 6, overflow: 'auto',
+            borderRadius: 6, overflow: 'hidden',
             boxShadow: '0 20px 60px rgba(0,0,0,0.25)',
             pointerEvents: 'auto',
             position: 'relative',
+            display: 'flex', flexDirection: 'column',
           }}
         >
           <button
@@ -3393,26 +3407,33 @@ function FeedbackOverlay({ onClose }: { onClose: () => void }) {
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               transition: 'background 0.15s, color 0.15s',
             }}
-            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(0,0,0,0.06)'; }}
-            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'transparent'; }}
+            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.12)'; (e.currentTarget as HTMLElement).style.color = '#fff'; }}
+            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'transparent'; (e.currentTarget as HTMLElement).style.color = MUTED_C; }}
           >
             <IconX size={16} stroke={2} />
           </button>
 
           {!submitted ? (
-            <div style={{ padding: '28px 26px 22px', display: 'flex', flexDirection: 'column', gap: 18 }}>
-              <div>
-                <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: '0.14em', color: ORANGE_C, marginBottom: 8 }}>
+            <div className="mvp-fb-grid">
+              {/* LEFT — dark hero */}
+              <div className="mvp-fb-left" style={{
+                background: 'linear-gradient(160deg, #243c47 0%, #1c2e3f 100%)',
+                color: '#fff', display: 'flex', flexDirection: 'column', justifyContent: 'center',
+              }}>
+                <div className="mvp-fb-eyebrow" style={{ fontSize: 10, fontWeight: 800, letterSpacing: '0.14em', color: ORANGE_C }}>
                   IHRE MEINUNG
                 </div>
-                <h2 style={{ fontSize: 20, fontWeight: 800, color: PRIMARY_C, margin: 0, marginBottom: 6, lineHeight: 1.25, letterSpacing: '-0.01em' }}>
+                <h2 className="mvp-fb-title" style={{ fontSize: 22, fontWeight: 800, color: '#fff', margin: 0, lineHeight: 1.2, letterSpacing: '-0.01em' }}>
                   Wie gefällt Ihnen der Spar-Lotse?
                 </h2>
-                <p style={{ fontSize: 13, color: MUTED_C, margin: 0, lineHeight: 1.5 }}>
+                <p className="mvp-fb-sub" style={{ fontSize: 13, color: 'rgba(255,255,255,0.78)', margin: 0, lineHeight: 1.5 }}>
                   3 kurze Fragen — Ihr Feedback hilft uns, das Tool besser zu machen.
                 </p>
               </div>
 
+              {/* RIGHT — form */}
+              <div className="mvp-fb-right">
+                <div className="mvp-fb-right-scroll" style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
               {/* Rating */}
               <div>
                 <div style={{ fontSize: 12, fontWeight: 700, color: PRIMARY_C, marginBottom: 8 }}>
@@ -3522,38 +3543,41 @@ function FeedbackOverlay({ onClose }: { onClose: () => void }) {
                 )}
               </div>
 
-              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 10, marginTop: 4 }}>
-                <button
-                  onClick={onClose}
-                  style={{
-                    background: 'transparent', color: MUTED_C, border: 'none',
-                    padding: '11px 18px', borderRadius: 999,
-                    fontSize: 13, fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit',
-                  }}
-                >
-                  Abbrechen
-                </button>
-                <button
-                  onClick={submit}
-                  disabled={!canSubmit}
-                  style={{
-                    background: canSubmit ? PRIMARY_C : '#E0E3E6',
-                    color: canSubmit ? '#fff' : MUTED_C,
-                    border: 'none', borderRadius: 999, padding: '11px 22px',
-                    fontSize: 13, fontWeight: 700,
-                    cursor: canSubmit ? 'pointer' : 'not-allowed',
-                    fontFamily: 'inherit',
-                    display: 'inline-flex', alignItems: 'center', gap: 6,
-                    boxShadow: canSubmit ? '0 4px 12px rgba(36,60,71,0.20)' : 'none',
-                    transition: 'background 0.15s',
-                  }}
-                >
-                  Feedback senden <IconArrowRight size={14} stroke={2.5} />
-                </button>
+                </div>
+                {/* Footer */}
+                <div className="mvp-fb-footer">
+                  <button
+                    onClick={onClose}
+                    style={{
+                      background: 'transparent', color: MUTED_C, border: 'none',
+                      padding: '11px 18px', borderRadius: 999,
+                      fontSize: 13, fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit',
+                    }}
+                  >
+                    Abbrechen
+                  </button>
+                  <button
+                    onClick={submit}
+                    disabled={!canSubmit}
+                    style={{
+                      background: canSubmit ? PRIMARY_C : '#E0E3E6',
+                      color: canSubmit ? '#fff' : MUTED_C,
+                      border: 'none', borderRadius: 999, padding: '11px 22px',
+                      fontSize: 13, fontWeight: 700,
+                      cursor: canSubmit ? 'pointer' : 'not-allowed',
+                      fontFamily: 'inherit',
+                      display: 'inline-flex', alignItems: 'center', gap: 6,
+                      boxShadow: canSubmit ? '0 4px 12px rgba(36,60,71,0.20)' : 'none',
+                      transition: 'background 0.15s',
+                    }}
+                  >
+                    Feedback senden <IconArrowRight size={14} stroke={2.5} />
+                  </button>
+                </div>
               </div>
             </div>
           ) : (
-            <div style={{ padding: '40px 26px 36px', textAlign: 'center' as const }}>
+            <div style={{ padding: '40px 26px 36px', textAlign: 'center' as const, flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
               <div style={{
                 display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
                 width: 64, height: 64, borderRadius: 32,

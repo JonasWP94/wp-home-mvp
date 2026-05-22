@@ -142,7 +142,7 @@ export default function MvpBasics({ initial, onDone, onBack }: Props) {
       <WpHeader showProgress progressPct={85} />
 
       <div className="wp-page-basics" style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '24px 16px 96px' }}>
-        <style>{`@media(min-width:640px){.wp-page-basics{padding:32px 24px 0 !important;}}`}</style>
+        <style>{`@media(min-width:640px){.wp-page-basics{padding:64px 24px 0 !important;}}`}</style>
         <div style={{ width: '100%', maxWidth: 760 }}>
 
           {/* Headline */}

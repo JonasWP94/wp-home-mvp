@@ -979,11 +979,12 @@ function ExtendedPrompt({ onContinue, onSkip }: { onContinue: () => void; onSkip
       fontFamily: "'Poppins', sans-serif",
     }}>
       <WpHeader showProgress progressPct={90} />
-      <div style={{
+      <div className="wp-extprompt" style={{
         flex: 1, display: 'flex', flexDirection: 'column',
         alignItems: 'center', justifyContent: 'center',
         padding: '32px 20px',
       }}>
+        <style>{`@media(min-width:640px){.wp-extprompt{justify-content:flex-start !important;padding-top:max(8vh, 56px) !important;}}`}</style>
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
