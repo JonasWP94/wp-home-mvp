@@ -781,6 +781,8 @@ export default function MvpWizard() {
                       style={{
                         flex: '0 0 auto',
                         width: 48, height: 48,
+                        boxSizing: 'border-box',
+                        padding: 0, lineHeight: 0,
                         background: active ? BLUE : WHITE,
                         color: active ? WHITE : GREY_700,
                         border: `1.5px solid ${active ? BLUE : BORDER}`,
@@ -790,6 +792,7 @@ export default function MvpWizard() {
                         display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
                         boxShadow: active ? '0 2px 10px rgba(87,130,176,0.30)' : 'none',
                         transition: 'background 0.15s, border-color 0.15s, color 0.15s, box-shadow 0.15s',
+                        verticalAlign: 'middle',
                       }}
                     >
                       {dir === 'left' ? <IconArrowLeft size={18} stroke={2.4} /> : <IconArrowRight size={18} stroke={2.4} />}
@@ -804,12 +807,14 @@ export default function MvpWizard() {
                         onClick={skip}
                         style={{
                           flex: '0 0 auto',
+                          height: 48, boxSizing: 'border-box',
                           background: 'transparent', color: GREY_700,
                           border: 'none',
-                          borderRadius: 999, padding: '11px 14px',
-                          fontSize: 13, fontWeight: FW_MEDIUM,
+                          borderRadius: 999, padding: '0 14px',
+                          fontSize: 13, fontWeight: FW_MEDIUM, lineHeight: 1,
                           cursor: 'pointer', fontFamily: 'inherit',
                           display: 'inline-flex', alignItems: 'center', gap: 4,
+                          verticalAlign: 'middle',
                         }}
                       >
                         Überspringen <IconArrowRight size={13} stroke={1.8} />
@@ -1255,7 +1260,11 @@ function ExtendedQuiz({
                   return (
                     <button
                       key={opt.value}
-                      onClick={() => setProfile(p => ({ ...p, equipment: { ...(p.equipment ?? {} as any), [s.key]: opt.value } }))}
+                      onClick={() => {
+                        setProfile(p => ({ ...p, equipment: { ...(p.equipment ?? {} as any), [s.key]: opt.value } }));
+                        // Auto-advance after short delay so selection state is visible
+                        setTimeout(() => { if (next === -1) onDone(); else setStep(next); }, 250);
+                      }}
                       style={{
                         background: isOn ? BLUE_VERY_BRIGHT : WHITE,
                         border: `1.5px solid ${isOn ? BLUE : BORDER}`,
@@ -1347,9 +1356,11 @@ function ExtendedQuiz({
               onClick={goBack}
               aria-label="Zurück"
               style={{
-                width: 48, height: 48, background: WHITE, color: PRIMARY,
+                width: 48, height: 48, boxSizing: 'border-box', padding: 0, lineHeight: 0,
+                background: WHITE, color: PRIMARY,
                 border: `1.5px solid ${BORDER}`, borderRadius: 999, cursor: 'pointer',
                 fontFamily: 'inherit', display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                verticalAlign: 'middle',
               }}
             >
               <IconArrowLeft size={18} stroke={2.4} />
@@ -1358,10 +1369,12 @@ function ExtendedQuiz({
             <button
               onClick={() => { if (isLast) onDone(); else if (next !== -1) setStep(next); }}
               style={{
+                height: 48, boxSizing: 'border-box',
                 background: 'transparent', color: GREY_700, border: 'none',
-                borderRadius: 999, padding: '11px 14px', fontSize: 13, fontWeight: FW_MEDIUM,
+                borderRadius: 999, padding: '0 14px', fontSize: 13, fontWeight: FW_MEDIUM, lineHeight: 1,
                 cursor: 'pointer', fontFamily: 'inherit',
                 display: 'inline-flex', alignItems: 'center', gap: 4,
+                verticalAlign: 'middle',
               }}
             >
               Überspringen <IconArrowRight size={13} stroke={1.8} />
@@ -1371,7 +1384,7 @@ function ExtendedQuiz({
               disabled={!canNext}
               aria-label={isLast ? 'Fertig' : 'Weiter'}
               style={{
-                width: 48, height: 48,
+                width: 48, height: 48, boxSizing: 'border-box', padding: 0, lineHeight: 0,
                 background: canNext ? BLUE : WHITE,
                 color: canNext ? WHITE : GREY_700,
                 border: `1.5px solid ${canNext ? BLUE : BORDER}`,
@@ -1380,6 +1393,7 @@ function ExtendedQuiz({
                 display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
                 boxShadow: canNext ? '0 2px 10px rgba(87,130,176,0.30)' : 'none',
                 transition: 'all 0.15s',
+                verticalAlign: 'middle',
               }}
             >
               <IconArrowRight size={18} stroke={2.4} />

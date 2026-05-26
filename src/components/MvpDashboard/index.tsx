@@ -359,7 +359,8 @@ const ALL_TIPS: MvpTip[] = [
     savingsHg2: 180, savingsHg3: 240,
     condition: (p) => {
       if (p.tenure === 'eigentum' && p.propertyType === 'haus') return false;
-      if (p.equipment?.balkon === false) return false;
+      // Nur empfehlen wenn Balkon explizit bestätigt (nicht bei null/undefined)
+      if (p.equipment?.balkon !== true) return false;
       if (p.equipment?.sunHours === 'wenig') return false;
       // Denkmalschutz + strenges Bundesland → BKW nicht empfehlen
       if (p.denkmalschutz === true) {
@@ -1605,18 +1606,31 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
     if (!el) return;
     function compute() {
       if (!el) return;
-      // Tatsächlich gerenderte Spalten aus der vom Browser aufgelösten
-      // grid-template-columns ablesen — robuster als Container-Breite teilen.
-      const tpl = getComputedStyle(el).gridTemplateColumns;
-      const cols = tpl && tpl !== 'none' ? tpl.split(' ').filter(Boolean).length : 1;
-      setGridCols(Math.max(1, cols));
+      // Tatsächlich genutzte Spalten = Anzahl Items in der ersten Reihe.
+      // Wir lesen die DOM-Positionen aus (top-Koordinaten clustern auf Reihen).
+      // Robuster als getComputedStyle bei auto-fill (das auch leere Tracks zählt).
+      // Die Feedback-Box selbst soll bei der Spalten-Erkennung NICHT mitzählen.
+      const children = Array.from(el.children).filter(
+        c => !(c as HTMLElement).dataset.feedbackBox,
+      ) as HTMLElement[];
+      if (children.length === 0) { setGridCols(1); return; }
+      const firstTop = children[0].offsetTop;
+      let count = 0;
+      for (const c of children) {
+        if (Math.abs(c.offsetTop - firstTop) < 2) count++;
+        else break;
+      }
+      setGridCols(Math.max(1, count));
     }
     compute();
     const ro = new ResizeObserver(compute);
     ro.observe(el);
+    // Re-detect cols whenever children are added/removed (modules ignored/restored)
+    const mo = new MutationObserver(compute);
+    mo.observe(el, { childList: true });
     // Recompute after fonts/layout settle
     const t = setTimeout(compute, 100);
-    return () => { ro.disconnect(); clearTimeout(t); };
+    return () => { ro.disconnect(); mo.disconnect(); clearTimeout(t); };
   }, []);
   // TEMP: always show overlay on every dashboard visit (dev/testing).
   // Revert by restoring the localStorage check.
@@ -2184,6 +2198,7 @@ export default function MvpDashboard({ initialProfile }: DashboardProps = {}) {
                   <motion.button
                     whileTap={{ scale: 0.98 }}
                     onClick={() => setShowFeedback(true)}
+                    data-feedback-box="1"
                     style={{
                       gridColumn: `span ${span}`,
                       background: 'linear-gradient(135deg, #243C47 0%, #3D5261 100%)',
